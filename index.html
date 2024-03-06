@@ -1,0 +1,41 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FileTube</title>
+  <link rel="stylesheet" href="link.css">
+</head>
+<body>
+  <div id="first">
+    <a href="Codes/index.html" draggable="false"><div id="sum1">Codes</div></a>
+    <a href="Projects/index.html" draggable="false"><div id="sum1">Projects</div></a>
+    <a href="Game Files/Index.html" draggable="false"><div id="sum1">Game Files</div></a>
+  </div>
+  <div id="second">
+    <a href="Online Games/index.html"><div id="sum2">Online Games</div></a>
+    <a href="https://mail.google.com/mail/u/1/#inbox?compose=GTvVlcSHxTblstmHXFzgCKvQSWzmrVjsbBJMHXNJkmllPdXXkFSZvXZMxLGrcnPGKZzjZzKPPQQjt"><div id="sum2">Report</div></a>
+    <a href="Installation/tutorial.html"><div id="sum2">How to Install</div></a>
+  </div>
+  <dialog id="moda">   
+               
+    <h3 align="center" id="h3"> Hello, Welcome to "FileTube"</h4>
+    
+<img src="filetube.jpg" alt="picture" id="linkr"><br><br><br>
+<button onclick="moda.close()" id="close">Let's GO</button>
+</dialog>
+<button onclick="moda.showModal()" id="autoClickButton"></button>
+
+<script>
+// Wait for the window to load
+window.onload = function() {
+    // Replace 'autoClickButton' with the actual ID of the button you want to click
+    var button = document.getElementById('autoClickButton');
+
+    // Trigger a click on the button
+    if (button) {
+        button.click();
+    }
+};
+</script>
+</body>
+</html>
