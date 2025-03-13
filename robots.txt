@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://filetube.netlify.app/sitemap.xml
