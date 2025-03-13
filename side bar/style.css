@@ -179,7 +179,7 @@ p{
 /* Sidebar Styling */
 .back {
   background-color: white;
-  height: 100vh;
+  height: 100%;
   width: 90px;
   position: fixed;
   overflow: hidden;
@@ -234,7 +234,7 @@ p{
 }
 @media (max-width:500px) {
   #top{
-    margin-left: 90px;
+    margin-left: 60px;
     
   }
   p{
@@ -242,6 +242,7 @@ p{
   }
   #python{
     font-size: 40px;
+    margin-left: 60px;
 
   }
   #btn{
@@ -249,5 +250,19 @@ p{
   }
   #moda{
     width: fit-content;
+  }
+  .slide{
+    width: 60px;
+    padding: 10px;
+    gap: 10px;
+  }
+  .back{
+    width: 60px;
+  }
+  img{
+    height: 40px;
+  }
+  h1{
+    margin-left: 60px;
   }
 }
