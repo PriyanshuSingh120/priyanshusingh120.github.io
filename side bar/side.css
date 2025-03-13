@@ -1,0 +1,64 @@
+/* Body Styling */
+body {
+    background-color: black;
+    margin: 0;
+    padding: 0;
+}
+
+/* Sidebar Styling */
+.back {
+    background-color: white;
+    height: 100vh;
+    width: 90px;
+    position: fixed;
+    overflow: hidden;
+    transition: width 0.4s ease-in-out;
+
+}
+
+/* Expand Sidebar on Hover */
+.back:hover {
+    width: 220px;
+}
+
+/* Sidebar Links (Icons + Text) */
+.slide {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    width: 90px;
+    overflow: hidden;
+    text-decoration: none;
+    position: relative;
+    transition: width 0.3s ease-in-out;
+}
+
+/* Expand Links when Sidebar is Hovered */
+.back:hover .slide {
+    width: 220px;
+}
+
+/* Icons */
+.slide img {
+    flex-shrink: 0;
+}
+
+/* Text Styling */
+.slide::after {
+    content: attr(data-text);
+    font-size:32px;
+    font-family: "Emblema One", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    color: #4361ee;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Show Text when Hovering on Sidebar */
+.back:hover .slide::after {
+    opacity: 1;
+}
+
