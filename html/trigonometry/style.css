@@ -1,0 +1,18 @@
+table, th, tr,td {
+    border:3px solid black ;
+}
+tr, th,td{
+    font-size: 30px;
+    color: #FC6736;
+    background-color: #102C57;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    width: 300px;
+}
+h1{
+    background-color: #393e46;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    color: #00adb5;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
