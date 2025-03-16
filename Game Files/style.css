@@ -1,43 +1,118 @@
 body{
-    background: url("pexels-stein-egil-liland-3374210.jpg")  no-repeat ;
-    background-size: 100% 100%;
-    background-attachment: fixed;
+    margin: 5px;
 }
-#image{
-    height: 40vh;
-    width: 40vh;
+a{
+    text-decoration: none;
 }
-button{
-    height: 60px;
-    width: 200px;
-    font-size: 25px;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-weight: 700;
-    border-radius: 20px;
-    border-color: #FF8080;
-    background-color: #FF8080;
-    color: #40A2E3;
-    transition-duration: 4s ease-in;
+#gta{
+    background-color: #E7E8D1;
+    height: 60%;
+    width: 100%;
+    overflow-y: scroll;
+    margin-left: 20px;
+    margin-right: 20px;
 }
-button:hover{
-    border-width: 2px;
-    border-color: #0A1D56;
+#rav{
+    background-color: #E7E8D1;
+    height: 40%;
+    width: 100%;
+    margin: 12px;
+    overflow-y: scroll;
+}
+#rav1{
+    display: flex;
+}
+#eye{
+    background-color: #E7E8D1;
+    height: 40%;
+    width: 100%;
+    margin: 12px;
+    overflow-y: scroll;
+}
+#eye1{
+    display: flex;
 }
 h1{
-    color: #37B5B6;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #FE7A36;
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 40px;
-}
-#image2{
-    height: 50vh;
-    width: 60vh;
+    display: flex;
+    justify-content: center;
+    color: wheat ;
+    background-color: gray;
+    font-family: "Monoton", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 h2{
-    background-color: #FE7A36;
-    color: #0A1D56;
-    width: fit-content;
+    display: flex;
+    justify-content: center;
+    background-color: #205781;
+    color: #4F959D;
+    font-size: 35px;
+    font-family: "Emblema One", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+#gta3l{
+    display:flex;
+}
+.sys{
+    background-color: white;
+    height: fit-content;
+    width: 1000px;
+    color: black;
+    margin-left: 30px;
+}
+.h3{
+    display: flex;
+    justify-content: center;
+    font-size: 35px;
+    font-family: "Rowdies", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    text-decoration: underline;
+
+}
+ol{
+    font-size: 20px;
+    font-family: "Caveat", cursive;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+#gtavc{
+    display: flex;
+}
+#gtasa{
+    display: flex;
+}
+.btn{
+    display: flex;
+    justify-content: center;
+    margin: 15px;
+}
+
+@media (max-width:650px){
+    .sys{
+        display: none;
+    }
+}
+button {
+    width: 200px;
+    height: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #007bff;
+    border: 4px solid transparent; /* Pehle koi border nahi */
+    border-bottom: 4px solid #004080; /* Sirf neeche ka dark blue border */
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out;
+}
+
+button:hover {
+    width: 220px; /* Button thoda bada hoga */
+    height: 55px;
+    background-color: #0056b3; /* Thoda dark blue shade */
+    border-bottom: 4px solid #002a80; /* Border color instantly change hoga */
 }
