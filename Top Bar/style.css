@@ -1,0 +1,37 @@
+body{
+    margin: 0 0 ;
+    background-color: black;
+}
+#top{
+    display: flex;
+    background-color:white;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+    
+}
+.toptap{
+    display: flex;
+    align-items: center;
+    margin-right: 25px;
+    font-size: 25px;
+    font-family: "Emblema One", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    gap: 10px;
+    text-decoration: none;
+}
+@media (max-width:800px){
+    #top{
+        width: fit-content;
+
+    }
+    .toptap{
+        margin-right: 9px;
+        gap: 3px;
+        font-size: 19px;
+    }
+    .img{
+        height: 25px;
+    }
+}
