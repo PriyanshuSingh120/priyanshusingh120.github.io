@@ -155,3 +155,8 @@ button:hover {
         font-size: 30px;
     }
 }
+@media (max-height:400px){
+    .etc{
+        height: 70%;
+    }
+}
