@@ -1,5 +1,7 @@
 body{
     margin: 0 0;
+    background-image: url("https://i.pinimg.com/736x/2c/71/f7/2c71f7fc1a57010f17beb9d1841060e1.jpg");
+    background-size: 100% 100%;
 }
 #top{
     background-color: rgb(71, 71, 71);
@@ -79,5 +81,165 @@ a{
     }
     #top4{
         margin-right: 22px;
+    }
+}
+
+
+/* Body */
+a{
+    text-decoration: none;
+}
+#gta{
+    background-color: #E7E8D1;
+    height: 60%;
+    width: 100%;
+    overflow-y: scroll;
+    margin-left: auto;
+    margin-right: auto;
+}
+#gta::-webkit-scrollbar{
+    width: 10px;
+}
+#gta::-webkit-scrollbar-thumb{
+    background: linear-gradient(to bottom, #ff5733, #ffcc00);
+    border-radius: 10px;
+}
+.etc{                       /* used to give background and create a div to put files */
+    background-color: #E7E8D1;
+    height: 50%;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 40px;
+    overflow-y: scroll;
+}
+.etc::-webkit-scrollbar{
+    width: 10px;
+
+}
+.etc::-webkit-scrollbar-thumb{
+    background: linear-gradient(to bottom,#FDB7EA, #B7B1F2);
+    border-radius: 10px;
+}
+#rav1{
+    display: flex;
+}
+/*#eye{
+    background-color: #E7E8D1;
+    height: 40%;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    overflow-y: scroll;
+    margin-top: 40px;
+}
+#eye::-webkit-scrollbar{
+    width: 10px;
+
+}
+#eye::-webkit-scrollbar-thumb{
+    background: linear-gradient(to bottom, #D91656, #640D5F);
+    border-radius: 10px;
+}
+#eye1{
+    display: flex;
+}*/
+h1{
+    display: flex;
+    justify-content: center;
+    color: 261FB3 ;
+    background-color: #FE4F2D;
+    font-family: "Jaini", system-ui;
+    font-weight: 800;
+    font-style: normal;
+    font-size: 45px;
+}
+h2{
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #F0BB78;
+    color: white;
+    font-size: 35px;
+    font-family: "Emblema One", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    width: fit-content;
+}
+
+.flex{       /* used to align the content in it in a line */
+    display:flex;
+}
+.sys{
+    background-color: white;
+    height: fit-content;
+    width: 1000px;
+    color: black;
+    margin-left: 30px;
+}
+.h3{
+    display: flex;
+    justify-content: center;
+    font-size: 35px;
+    font-family: "Rowdies", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    text-decoration: underline;
+
+}
+ol{
+    font-size: 20px;
+    font-family: "Caveat", cursive;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+.btn{
+    display: flex;
+    justify-content: center;
+    margin: 15px;
+}
+
+
+button {
+    width: 200px;
+    height: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #007bff;
+    border: 4px solid transparent; /* Pehle koi border nahi */
+    border-bottom: 4px solid #004080; /* Sirf neeche ka dark blue border */
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out;
+}
+
+button:hover {
+    width: 220px; /* Button thoda bada hoga */
+    height: 55px;
+    background-color: #0056b3; /* Thoda dark blue shade */
+    border-bottom: 4px solid #002a80; /* Border color instantly change hoga */
+}
+@media (max-width:650px){
+    .sys{
+        display: none;
+    }
+    #ravimg{
+        height: 150px;
+        width: 280px;
+    }
+    #eyeimg{
+        height: 160px;
+    }
+    h1{
+        font-size: 38px;
+    }
+    h2{
+        font-size: 30px;
+    }
+}
+@media (max-height:400px){
+    .etc{
+        height: 70%;
     }
 }
