@@ -1,5 +1,5 @@
 body{
-    margin: 5px;
+    margin: 0 0;
     background-image: url("https://i.pinimg.com/736x/2c/71/f7/2c71f7fc1a57010f17beb9d1841060e1.jpg");
     background-size: 100% 100%;
 }
@@ -158,5 +158,89 @@ button:hover {
 @media (max-height:400px){
     .etc{
         height: 70%;
+    }
+}
+
+
+
+
+#top{
+    background-color: rgb(71, 71, 71);
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+a{
+    text-decoration: none;
+}
+.topb{
+    display: flex;
+    font-size: 25px;
+    margin-left: 32px;
+    color: white;
+    height: 40px;
+    align-items: center;
+    width: fit-content;
+    font-weight: 700;
+}
+.topb:hover{
+    background-color: rgb(102, 102, 102);
+}
+#top1{
+    width: 70px;
+    display: flex;
+    justify-content: center;
+    
+}
+#top4{
+    width: 70px;
+    display: flex;
+    justify-content: center;
+    margin-right: 14px;
+}
+@media (min-width:523px) and (max-width:650px){
+    #top{
+        height: 70px;
+
+    }
+    .topb{
+        font-size: 25px;
+        font-weight: 600;
+        margin-left: auto;
+    }
+    #top1{
+        width: fit-content;
+    }
+}
+@media(min-width:650px) and (max-width:750px){
+    #top{
+        height: 70px;
+    }
+    .topb{
+        font-size: 32px;
+        font-weight: 650;
+        margin-left: auto;
+    }
+    #top1{
+        width: fit-content;
+    }
+    #top4{
+        margin-right: 20px;
+    }
+}
+@media (min-width:750px) and (max-width:850px){
+    #top1{
+        width: fit-content;
+    }
+    #top{
+        height: 75px;
+    }
+    .topb{
+        font-size: 37px;
+        font-weight: 700;
+        margin-left: auto;
+    }
+    #top4{
+        margin-right: 22px;
     }
 }
