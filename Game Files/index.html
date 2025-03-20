@@ -10,15 +10,66 @@
   <title>GamePro</title>
 </head>
 <body>
+  <script>
+    let links = [
+        { name: "GTA 3", url: "#gta3" },
+        { name: "GTA Vice City", url: "#gtavc" },
+        { name: "GTA San Andreas", url: "#gtasan" },
+        { name: "Ravenfield", url: "#rav" },
+        { name: "Eye: The Horror Game", url: "#eye" }
+    ];
+
+    function showDropdown() {
+        document.getElementById("dropdownList").style.display = "block";
+    }
+
+    function filterList() {
+        let searchValue = document.getElementById("searchBox").value.toLowerCase();
+        let dropdown = document.getElementById("dropdownList");
+        dropdown.innerHTML = "";
+
+        let filteredLinks = links.filter(link => link.name.toLowerCase().includes(searchValue));
+
+        if (filteredLinks.length === 0) {
+            dropdown.style.display = "none";
+            return;
+        }
+
+        dropdown.style.display = "block";
+
+        filteredLinks.forEach(link => {
+            let anchor = document.createElement("a");
+            anchor.href = link.url;
+            anchor.target = "_self";
+            anchor.textContent = link.name;
+            dropdown.appendChild(anchor);
+        });
+    }
+
+    document.addEventListener("click", function(event) {
+        if (!document.querySelector(".search-container").contains(event.target)) {
+            document.getElementById("dropdownList").style.display = "none";
+        }
+    });
+  </script>
+
+
+
+
+
   <div id="top">
         <a href="https://gamepro.soon.it/" class="topb" id="top1">Home</a>
-        <a href="https://gamepro.soon.it/Game%20Files/" class="topb" id="top2">Game Files</a>
-        <a href="https://gamepro.soon.it/Online%20Games/" class="topb" id="top3">Online Games</a>
-        <a href="https://gamepro.soon.it/Projects/" class="topb" id="top4">Others</a>
+        <a href="https://gamepro.soon.it/Game%20Files/index.html" class="topb" id="top2">Game Files</a>
+        <a href="https://gamepro.soon.it/Online%20Games/index.html" class="topb" id="top3">Online Games</a>
+        <a href="https://gamepro.soon.it/Projects/index.html" class="topb" id="top4">Others</a>
+        <div class="search-container" class="topb">
+          <input type="text" id="searchBox" placeholder="Search..." onkeyup="filterList()" onfocus="showDropdown()">
+          <div id="dropdownList" class="dropdown"></div>
+        </div>
     </div>
   <label for="gta">   
     <div id="gta">
-      <a href="#gta"><h1>GTA Games</h1></a>
+      <h1>GTA Games</h1>
       <div id="gta3">
         <h2>GTA 3</h2>
         <div class="flex">
@@ -41,52 +92,54 @@
         </div>
       </div>
 
-
-      <h2>VICE CITY</h2>
-      <div class="flex">
-        <img src="https://i.pinimg.com/564x/17/9a/8b/179a8be8d364c5cda4f87e75fb285b96.jpg" alt="vice city" id="image" height="310px" >
-        <div class="sys">
-          <h3 class="h3">System Requirement</h3>
-          <ol>
-            <li><b>OS:</b> Microsoft® Windows® 2000/XP</li>
-            <li><b>Processor:</b> 800 MHz Intel Pentium III or 800 MHz AMD Athlon or 1.2GHz Intel Celeron or 1.2 GHz AMD Duron processor</li>
-            <li><b>Memory:</b> 128 MB of RAM</li>
-            <li><b>Graphics:</b> 32 MB video card with DirectX 9.0 compatible drivers (“GeForce” or better)</li>
-            <li><b>DirectX Version:</b> Microsoft DirectX® 9.0</li>
-            <li><b>Hard Drive:</b> 915 MB of free hard disk space (+ 635 MB if video card does NOT support DirectX Texture Compression)</li>
-            <li><b>Sound Card:</b> Sound Card with DirectX 9.0
-            </li>
-          </ol>
+      <div id="gtavc">
+        <h2>VICE CITY</h2>
+        <div class="flex">
+          <img src="https://i.pinimg.com/564x/17/9a/8b/179a8be8d364c5cda4f87e75fb285b96.jpg" alt="vice city" id="image" height="310px" >
+          <div class="sys">
+            <h3 class="h3">System Requirement</h3>
+            <ol>
+              <li><b>OS:</b> Microsoft® Windows® 2000/XP</li>
+              <li><b>Processor:</b> 800 MHz Intel Pentium III or 800 MHz AMD Athlon or 1.2GHz Intel Celeron or 1.2 GHz AMD Duron processor</li>
+              <li><b>Memory:</b> 128 MB of RAM</li>
+              <li><b>Graphics:</b> 32 MB video card with DirectX 9.0 compatible drivers (“GeForce” or better)</li>
+              <li><b>DirectX Version:</b> Microsoft DirectX® 9.0</li>
+              <li><b>Hard Drive:</b> 915 MB of free hard disk space (+ 635 MB if video card does NOT support DirectX Texture Compression)</li>
+              <li><b>Sound Card:</b> Sound Card with DirectX 9.0
+              </li>
+            </ol>
+          </div>
+        </div>
+        <div class="btn">
+          <a href="Gta Vice City/Gta Vice City.html"><button>Download</button></a>
         </div>
       </div>
-      <div class="btn">
-        <a href="Gta Vice City/Gta Vice City.html"><button>Download</button></a>
-      </div>
 
-
-      <h2>San Andreas</h2>
-      <div class="flex">
-        <img src="Gta San Adreas/Gta San Adreas.jfif" alt="san andreas" height="310px" width="270px" >
-        <div class="sys">
-          <h3 class="h3">System Requirement</h3>
-          <ol>
-            <li><b>OS:</b> Microsoft® Windows® 2000/XP</li>
-            <li><b>Processor:</b> 1Ghz Pentium III or AMD Athlon Processor.</li>
-            <li><b>Memory:</b> 256MB of RAM</li>
-            <li><b>Graphics:</b> 64MB Video Card (Geforce 3 or better)</li>
-            <li><b>Hard Drive:</b> 3.6GB of free hard disk space (minimal install)</li>
-          </ol>
+      <div id="gtasan">
+        <h2>San Andreas</h2>
+        <div class="flex">
+          <img src="Gta San Adreas/Gta San Adreas.jfif" alt="san andreas" height="310px" width="270px" >
+          <div class="sys">
+            <h3 class="h3">System Requirement</h3>
+            <ol>
+              <li><b>OS:</b> Microsoft® Windows® 2000/XP</li>
+              <li><b>Processor:</b> 1Ghz Pentium III or AMD Athlon Processor.</li>
+              <li><b>Memory:</b> 256MB of RAM</li>
+              <li><b>Graphics:</b> 64MB Video Card (Geforce 3 or better)</li>
+              <li><b>Hard Drive:</b> 3.6GB of free hard disk space (minimal install)</li>
+            </ol>
+          </div>
         </div>
-      </div>
-      <div class="btn">
-        <a href="Gta San Adreas/Gta San Adreas.html"><button>Download</button></a>
+        <div class="btn">
+          <a href="Gta San Adreas/Gta San Adreas.html"><button>Download</button></a>
+        </div>
       </div>
     </div>
   </label>
 
 
   
-  <div class="etc">
+  <div class="etc" id="rav">
     <h1>RAVENFIELD</h1>
     <div class="flex">
       <img src="revenfield.jpg" alt="ravenfield image"    height="200px" width= "400px" id="ravimg">
@@ -107,7 +160,7 @@
     </div>
   </div>
   
-  <div class="etc">
+  <div class="etc" id="eye">
     <h1>EYE: THE HORROR GAME</h1>
     <div class="flex">
       <img src="eyes-the-horror-game-screenshot.avif" alt="eye:game" height="250px" id="eyeimg">
