@@ -179,7 +179,13 @@ button:hover {
 
 @media (max-height:400px){
     .etc{
-        height: 70%;
+        height: 200px;
+    }
+    #gta{
+        height: 200px;
+    }
+    #eyeimg{
+        width: 200px;
     }
 }
 
