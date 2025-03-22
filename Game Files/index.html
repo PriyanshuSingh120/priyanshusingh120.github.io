@@ -4,9 +4,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Emblema+One&family=Monoton&family=Rowdies&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Jaini&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Emblema+One&family=Monoton&family=Rowdies&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Jaini&display=swap" rel="stylesheet">
   <title>GamePro</title>
 </head>
 <body>
@@ -16,7 +16,8 @@
         { name: "GTA Vice City", url: "#gtavc" },
         { name: "GTA San Andreas", url: "#gtasan" },
         { name: "Ravenfield", url: "#rav" },
-        { name: "Eye: The Horror Game", url: "#eye" }
+        { name: "Eye: The Horror Game", url: "#eye" },
+        { name: "Mafia: The City of lost heaven", url: "#Mafia"}
     ];
 
     function showDropdown() {
@@ -62,11 +63,12 @@
         <a href="https://gamepro.soon.it/Game%20Files/index.html" class="topb" id="top2">Game Files</a>
         <a href="https://gamepro.soon.it/Online%20Games/index.html" class="topb" id="top3">Online Games</a>
         <a href="https://gamepro.soon.it/Projects/index.html" class="topb" id="top4">Others</a>
-        <div class="search-container" class="topb">
-          <input type="text" id="searchBox" placeholder="Search..." onkeyup="filterList()" onfocus="showDropdown()">
-          <div id="dropdownList" class="dropdown"></div>
-        </div>
-    </div>
+  </div>
+  <div class="search-container">
+    <input type="text" id="searchBox" placeholder="Search..." onkeyup="filterList()" onfocus="showDropdown()">
+    <div id="dropdownList" class="dropdown"></div>
+  </div>
+
   <label for="gta">   
     <div id="gta">
       <h1>GTA Games</h1>
@@ -160,6 +162,7 @@
     </div>
   </div>
   
+
   <div class="etc" id="eye">
     <h1>EYE: THE HORROR GAME</h1>
     <div class="flex">
@@ -178,6 +181,29 @@
     </div>
     <div class="btn">
       <a href="https://www.mediafire.com/file/e8h81j896qbei9j/eyes-2.2-windows.7z/file"><button>Download</button></a>
+    </div>
+  </div>
+
+  
+  <div class="etc" id="Mafia">
+    <h1>MAFIA: THE CITY OF LOST HEAVEN</h1>
+    <div class="flex">
+      <img src="Mafia/andlogo.png" alt="mafia img" height="350px" width="270px" id="">
+      <div class="sys">
+        <h3 class="h3">System Requirement</h3>
+        <ol>
+          <li><b>OS:</b> Windows XP / Vista / 7 / 8 / 10</li>
+          <li><b>Processor:</b> 1.4 GHz or faster.</li>
+          <li><b>Memory:</b>  2 GB RAM</li>
+          <li><b>Graphics:</b>  3D Graphics card compatible with DirectX 9.0.</li>
+          <li><b>Storage:</b> 3 GB available space.</li>
+          <li><b>DirectX:</b> Version 9.0</li>
+          <li><b>Sound Card:</b> DirectX 9.0c compatible sound card. Compatibility notice: Windows 8 and above require DirectPlay.</li>
+        </ol>
+      </div>
+    </div>
+    <div class="btn">
+      <a href="Mafia/index.html"><button>Download</button></a>
     </div>
   </div>
 </body>
