@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://filetube.netlify.app/sitemap.xml
+Sitemap: https://gamepro.soon.it/sitemap.xml
