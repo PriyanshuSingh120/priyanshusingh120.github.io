@@ -22,7 +22,6 @@
         { name: "GTA San Andreas", url: "#gtasan" },
         { name: "Ravenfield", url: "#rav" },
         { name: "Eye: The Horror Game", url: "#eye" },
-        { name: "Mafia: The City of lost heaven", url: "#Mafia"}
         { name: "Mafia: The City of lost heaven", url: "#Mafia"},
         { name: "Call Of Duty 1", url: "#cod"},
         { name: "Installation Tutorial", url: "#tutor"}
@@ -62,10 +61,25 @@
     });
   </script>
 
+<div class="overlay" id="overlay"></div>
 
+<div class="popup" id="popup">
+    <h2>Welcome to GamePro!</h2>
+    <p>Explore the best game files, code snippets, and online games.</p>
+    <button onclick="closePopup()">Let's Go</button>
+</div>
 
+<script>
+    window.onload = function() {
+        document.getElementById("popup").style.display = "block";
+        document.getElementById("overlay").style.display = "block";
+    };
 
-
+    function closePopup() {
+        document.getElementById("popup").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
+    }
+</script>
   <div id="top">
         <a href="https://gamepro.soon.it/" class="topb" id="top1">Home</a>
         <a href="https://gamepro.soon.it/Game%20Files/index.html" class="topb" id="top2">Game Files</a>
