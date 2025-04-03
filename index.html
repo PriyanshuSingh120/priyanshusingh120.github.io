@@ -14,12 +14,12 @@
       history.replaceState({}, "", "/");
   }
 </script>
-    <link rel="website icon" href="logo.webp">
+    <link rel="website icon" href="bg.png">
     <meta charset="UTF-8">
     <meta name="google-site-verification" content="zYl0JJBxePVIh4YTF6mVSevzPPDwLBXDVSc0yztr3d8" />
     <meta property="og:title" content="Download Highly Compressed PC Games & Play Online with GamePro">
     <meta property="og:description" content="Safe & 100% working game downloads. Play online games & explore game code snippets.">
-    <meta property="og:image" content="/logo.jpg">
+    <meta property="og:image" content="/bg.png">
 
     <meta name="description" content="Discover GamePro, the ultimate platform for downloading highly compressed PC games and enjoying online gaming. Explore safe, 100% working game files and dive into HTML & CSS game code snippets today!">
     <meta name="google-site-verification" content="fEn2hnseZ6W0SnakdNvWrQVvIX5bImAqn3tbvpCrtFc" />
@@ -29,8 +29,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GamePro</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Bungee+Tint&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Agbalumo&family=Lora:ital@1&family=Monoton&family=Truculenta:opsz,wght@12..72,100..900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Kreon:wght@300..700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Kreon:wght@300..700&family=Trade+Winds&display=swap" rel="stylesheet">
@@ -40,38 +42,41 @@
 </head>
 <body>
     <div class="back">
-        <a class="slide" data-text="Menu">
+        <a class="slide" data-text="Menu" id="menu">
             <img src="Stuff/menu.png" alt="menu" height="35px">
         </a>
         <a class="slide" href="/" data-text="Home">
             <img src="Stuff/home.gif" alt="home" height="50px">
         </a>
-        <a class="slide" href="/Game Files/" data-text="Files">
+        <a class="slide" href="/Game Files/" data-text="Game Files">
             <img src="Stuff/files.gif" alt="files" height="50px">
         </a>
-        <a class="slide" href="/Online Games/" data-text="Games">
+        <a class="slide" href="/Online Games/" data-text="Online Games">
             <img src="Stuff/games.gif" alt="games" height="50px">
         </a>
         <a class="slide" href="/Projects/" data-text="Others">
             <img src="Stuff/model.gif" alt="codes" height="50px">
         </a>
     </div>
-    <dialog id="moda">       
-        <h3 align="center" id="h3">Click on File Name to Download File.Like Alarm.py ,Diamond.py  </h4>
-    <button onclick="moda.close()" id="close">Okay</button>
-    </dialog>
-    <button onclick="moda.showModal()" id="autoClickButton"></button>
-    
-    <script>
-    // Wait for the window to load
+    <div class="overlay" id="overlay"></div>
+
+<div class="popup" id="popup">
+    <h2>Welcome to GamePro!</h2>
+    <p>Explore the best game files, code snippets, and online games.</p>
+    <button onclick="closePopup()">Let's Go</button>
+</div>
+
+<script>
     window.onload = function() {
-        var button = document.getElementById('autoClickButton');
-            // Trigger a click on the button
-        if (button) {
-            button.click();
-        }
+        document.getElementById("popup").style.display = "block";
+        document.getElementById("overlay").style.display = "block";
     };
-    </script>
+
+    function closePopup() {
+        document.getElementById("popup").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
+    }
+</script>
       
     <p align="center" id="top">Click On file name of python codes to download any python code file from this page</p>
     <h1><b>Python CODES</b></h1>
