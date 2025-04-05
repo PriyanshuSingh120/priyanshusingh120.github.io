@@ -14,7 +14,7 @@
       history.replaceState({}, "", "/");
   }
 </script>
-    <link rel="icon" type="image/png" href="bg.png">
+    <link rel="website icon" href="bg.png">
     <meta charset="UTF-8">
     <meta name="google-site-verification" content="zYl0JJBxePVIh4YTF6mVSevzPPDwLBXDVSc0yztr3d8" />
     <meta property="og:title" content="Download Highly Compressed PC Games & Play Online with GamePro">
@@ -41,6 +41,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Emblema+One&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div id="skeleton-loader" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;background:#121212;display:flex;flex-direction:column;gap:20px;justify-content:center;align-items:center;">
+        <div style="width:80%;max-width:600px;height:20px;background:#333;border-radius:4px;animation:pulse 1.5s infinite;"></div>
+        <div style="width:60%;max-width:400px;height:20px;background:#333;border-radius:4px;animation:pulse 1.5s infinite;"></div>
+        <div style="width:90%;max-width:500px;height:20px;background:#333;border-radius:4px;animation:pulse 1.5s infinite;"></div>
+    </div>
+    
     <div class="back">
         <a class="slide" data-text="Menu" id="menu">
             <img src="Stuff/menu.png" alt="menu" height="35px">
@@ -124,15 +130,11 @@
         <a href="html/Pop Up Message.rar"><button id="btn">Download</button></a></h5>
         <h2 id="hhtml"></h2>
     </div>
-    <!-- PushAlert Onsite Messaging -->
-<script type="text/javascript">
-    (function(d, t) {
-        var g = d.createElement(t),
-        s = d.getElementsByTagName(t)[0];
-        g.src = "https://cdn.inwebr.com/inwebr_7ff60eb412f90f7bb1832f0e3c30ae7c.js";
-        s.parentNode.insertBefore(g, s);
-    }(document, "script"));
-</script>
-<!-- End PushAlert Onsite Messaging -->
+    <script>
+        window.addEventListener("load", function () {
+          const loader = document.getElementById("skeleton-loader");
+          if (loader) loader.style.display = "none";
+        });
+      </script>
 </body>
 </html>
