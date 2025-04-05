@@ -33,6 +33,7 @@ h1{
   font-weight: 400;
   font-style: normal;
   margin-left: 90px;
+  text-shadow: 2px 2px 8px #000;
   
 }
 h2{
@@ -300,4 +301,32 @@ a{
   #top{
     width: fit-content;
   }  
+}
+
+
+#Python, #html {
+  position: relative;
+}
+#Python::before, #html::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 0;
+}
+#Python > *, #html > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes pulse {
+  0% {
+    background-color: #333;
+  }
+  50% {
+    background-color: #444;
+  }
+  100% {
+    background-color: #333;
+  }
 }
