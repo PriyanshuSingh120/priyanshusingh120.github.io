@@ -1,3 +1,1 @@
-User-agent: *
-Disallow: /admin/
-Sitemap: https://gamepro.soon.it/sitemap.xml
+Sitemap: https://gamepro.soon.it/sitemap.xml.txt
