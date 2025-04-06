@@ -86,22 +86,26 @@
         <a href="https://gamepro.soon.it/Game%20Files/index.html" class="topb" id="top2">Game Files</a>
         <a href="https://gamepro.soon.it/Online%20Games/index.html" class="topb" id="top3">Online Games</a>
         <a href="https://gamepro.soon.it/Projects/index.html" class="topb" id="top4">Others</a>
+        <div class="search-container" id="pcsearch" class="topb">
+          <input type="text" id="searchBox" placeholder="Search..." onkeyup="filterList()" onfocus="showDropdown()">
+          <div id="dropdownList" class="dropdown"></div>
+        </div>
   </div>
-  <div class="search-container">
+  <div class="search-container" id="andsearch">
     <input type="text" id="searchBox" placeholder="Search..." onkeyup="filterList()" onfocus="showDropdown()">
     <div id="dropdownList" class="dropdown"></div>
   </div>
 
   <label for="gta">   
-    <div id="gta">
+    <div id="gta" class="etc">
       <h1>GTA Games</h1>
       <div id="gta3">
         <h2>GTA 3</h2>
         <div class="flex">
-          <img src="https://i.pinimg.com/564x/6a/88/66/6a8866d611934bf7d2df312a6d56ee61.jpg" alt="gta3" height="350px" >
+          <img class="img" src="https://i.pinimg.com/564x/6a/88/66/6a8866d611934bf7d2df312a6d56ee61.jpg" alt="gta3" height="350px" >
           <div class="sys">
             <h3 class="h3">System Requirement</h3>
-            <ol>
+            <ul>
               <li><b>OS:</b> Microsoft® Windows® 2000/XP</li>
               <li><b>Processor:</b>  Pentium III® 450 MHz CPU</li>
               <li><b>Memory:</b>  96 MB RAM</li>
@@ -109,7 +113,7 @@
               <li><b>DirectX Version:</b> Microsoft DirectX® 8.1</li>
               <li><b>Hard Drive:</b>  500 MB uncompressed free hard disk space</li>
               <li><b>Sound Card:</b>Fully DirectX compatible Sound Card </li>
-            </ol>
+            </ul>
           </div>
         </div>
         <div class="btn">
@@ -120,10 +124,10 @@
       <div id="gtavc">
         <h2>VICE CITY</h2>
         <div class="flex">
-          <img src="https://i.pinimg.com/564x/17/9a/8b/179a8be8d364c5cda4f87e75fb285b96.jpg" alt="vice city" id="image" height="310px" >
+          <img class="img" src="https://i.pinimg.com/564x/17/9a/8b/179a8be8d364c5cda4f87e75fb285b96.jpg" alt="vice city" id="image" height="310px" >
           <div class="sys">
             <h3 class="h3">System Requirement</h3>
-            <ol>
+            <ul>
               <li><b>OS:</b> Microsoft® Windows® 2000/XP</li>
               <li><b>Processor:</b> 800 MHz Intel Pentium III or 800 MHz AMD Athlon or 1.2GHz Intel Celeron or 1.2 GHz AMD Duron processor</li>
               <li><b>Memory:</b> 128 MB of RAM</li>
@@ -132,7 +136,7 @@
               <li><b>Hard Drive:</b> 915 MB of free hard disk space (+ 635 MB if video card does NOT support DirectX Texture Compression)</li>
               <li><b>Sound Card:</b> Sound Card with DirectX 9.0
               </li>
-            </ol>
+            </ul>
           </div>
         </div>
         <div class="btn">
@@ -143,16 +147,16 @@
       <div id="gtasan">
         <h2>San Andreas</h2>
         <div class="flex">
-          <img src="Gta San Adreas/Gta San Adreas.jfif" alt="san andreas" height="310px" width="270px" >
+          <img class="img" src="Gta San Adreas/Gta San Adreas.jfif" alt="san andreas" height="310px" width="270px" >
           <div class="sys">
             <h3 class="h3">System Requirement</h3>
-            <ol>
+            <ul>
               <li><b>OS:</b> Microsoft® Windows® 2000/XP</li>
               <li><b>Processor:</b> 1Ghz Pentium III or AMD Athlon Processor.</li>
               <li><b>Memory:</b> 256MB of RAM</li>
               <li><b>Graphics:</b> 64MB Video Card (Geforce 3 or better)</li>
               <li><b>Hard Drive:</b> 3.6GB of free hard disk space (minimal install)</li>
-            </ol>
+            </ul>
           </div>
         </div>
         <div class="btn">
@@ -167,17 +171,17 @@
   <div class="etc" id="rav">
     <h1>RAVENFIELD</h1>
     <div class="flex">
-      <img src="revenfield.jpg" alt="ravenfield image"    height="200px" width= "400px" id="ravimg">
+      <img class="img" src="revenfield.jpg" alt="ravenfield image"    height="200px" width= "400px" id="ravimg">
       <div class="sys">
         <h3 class="h3">System Requirement</h3>
-        <ol>
+        <ul>
           <li><b>OS:</b> Windows XP SP2        </li>
           <li><b>CPU:</b> 32-bit, 2 GHz or Faster</li>
           <li><b>Memory:</b> 4 GB RAM</li>
           <li><b>GPU:</b> Intel HD 3000</li>
           <li><b>Hard Drive:</b> 1 GB available space</li>
           <li><b>DX:</b> Version 9.0c</li>
-        </ol>
+        </ul>
       </div>
     </div>
     <div class="btn">
@@ -189,17 +193,17 @@
   <div class="etc" id="eye">
     <h1>EYE: THE HORROR GAME</h1>
     <div class="flex">
-      <img src="eyes-the-horror-game-screenshot.avif" alt="eye:game" height="250px" id="eyeimg">
+      <img class="img" src="eyes-the-horror-game-screenshot.avif" alt="eye:game" height="250px" id="eyeimg">
       <div class="sys">
         <h3 class="h3">System Requirement</h3>
-        <ol>
+        <ul>
           <li><b>OS:</b> Windows XP SP2        </li>
           <li><b>CPU:</b> 32-bit, 2 GHz or Faster</li>
           <li><b>Memory:</b> 4 GB RAM</li>
           <li><b>GPU:</b> Intel HD 3000</li>
           <li><b>Hard Drive:</b> 1 GB available space</li>
           <li><b>DX:</b> Version 9.0c</li>
-        </ol>
+        </ul>
       </div>
     </div>
     <div class="btn">
@@ -211,10 +215,10 @@
   <div class="etc" id="Mafia">
     <h1>MAFIA: THE CITY OF LOST HEAVEN</h1>
     <div class="flex">
-      <img src="Mafia/andlogo.png" alt="mafia img" height="350px" width="270px" id="">
+      <img class="img" src="Mafia/andlogo.png" alt="mafia img" height="350px" width="270px" id="">
       <div class="sys">
         <h3 class="h3">System Requirement</h3>
-        <ol>
+        <ul>
           <li><b>OS:</b> Windows XP / Vista / 7 / 8 / 10</li>
           <li><b>Processor:</b> 1.4 GHz or faster.</li>
           <li><b>Memory:</b>  2 GB RAM</li>
@@ -222,7 +226,7 @@
           <li><b>Storage:</b> 3 GB available space.</li>
           <li><b>DirectX:</b> Version 9.0</li>
           <li><b>Sound Card:</b> DirectX 9.0c compatible sound card. Compatibility notice: Windows 8 and above require DirectPlay.</li>
-        </ol>
+        </ul>
       </div>
     </div>
     <div class="btn">
@@ -232,10 +236,10 @@
   <div class="etc" id="cod">
     <h1>CALL OF DUTY 1</h1>
     <div class="flex">
-      <img src="cod/icon.jpg" alt="call of duty">
+      <img class="img" src="cod/icon.jpg" alt="call of duty">
       <div class="sys">
         <h3 class="h3">System Requirement</h3>
-        <ol>
+        <ul>
           <li><b>OS:</b> Windows 98 / ME / 2000 / XP</li>
           <li><b>Processor:</b> Pentium III 600 MHz or Athlon 600 MHz processor or higher</li>
           <li><b>Memory:</b>  128 MB RAM</li>
@@ -243,7 +247,7 @@
           </li>
           <li><b>Storage:</b> 1.4 GB of uncompressed free hard disk space (plus 400 MB for Windows 98/ME swap file, 600 MB for Windows 2000 / XP swap file)</li>
           <li><b>Sound Card:</b> 100% DirectX 9.0b compatible 16-bit sound card and latest drivers</li>
-        </ol>
+        </ul>
       </div>
     </div>
     <div class="btn">
@@ -254,17 +258,17 @@
   <div class="etc" id="farcry">
     <h1>FAR CRY 2</h1>
     <div class="flex">
-      <img src="farcry2/logo.webp" alt="farcry2img" height="370px">
+      <img class="img" src="farcry2/logo.webp" alt="farcry2img" height="370px">
       <div class="sys">
         <h3 class="h3">System Requirement</h3>
-        <ol>
+        <ul>
           <li><b>OS:</b>Microsoft Windows XP or Windows Vista (64 is supported)</li>
           <li><b>Processor:</b> Pentium 4 3.2 Ghz, Pentium D 2.66 Ghz, AMD Athlon 64 3500+ or better</li>
           <li><b>Memory:</b>  1 GB</li>
           <li><b>Graphics:</b>  256 MB, Shader Model 3 required, NVidia 6800 or ATI X1650 or better*
           </li>
           <li><b>Storage:</b> 3.5 GB (Multiple saves and user created maps will increase the amount of needed hard disk space.)</li>
-        </ol>
+        </ul>
       </div>
     </div>
     <p>Note: If You are facing any error then some working solution on Download Page</p>
