@@ -279,14 +279,14 @@ a{
 }
 
 #top1{
-    width: 70px;
+    width: fit-content;
     display: flex;
     justify-content: center;
     
 }
 
 #top4{
-    width: 70px;
+    width: fit-content;
     display: flex;
     justify-content: center;
     margin-right: 14px;
@@ -304,6 +304,7 @@ a{
     }
     #top1{
         width: fit-content;
+
     }
 }
 
