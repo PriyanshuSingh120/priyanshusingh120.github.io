@@ -2,10 +2,15 @@ html{
     scroll-behavior: smooth;
 }
 
-body{
-    margin: 0 0;
-    background-image: url("https://i.pinimg.com/736x/2c/71/f7/2c71f7fc1a57010f17beb9d1841060e1.jpg");
-    background-size: 100% 100%;
+body {
+    background-image: url('https://i.pinimg.com/736x/e2/f9/31/e2f931b19ed72d82e04f6d0aaf9d98e4.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* smooth scrolling effect */
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
 }
 
 a{
@@ -13,7 +18,6 @@ a{
 }
 
 #gta{
-    background-color: #E7E8D1;
     height: 60%;
     width: 100%;
     overflow-y: scroll;
@@ -33,7 +37,7 @@ a{
 }
 
 .etc{                       /* used to give background and create a div to put files */
-    background-color: #E7E8D1;
+    background-color: #F8F4E1;
     height: 55%;
     width: 100%;
     margin-left: auto;
@@ -41,6 +45,7 @@ a{
     margin-top: 40px;
     margin-bottom: 40px;
     overflow-y: scroll;
+    border-radius: 15px;
 }
 
 .etc::-webkit-scrollbar{
@@ -81,7 +86,7 @@ a{
 h1{
     display: flex;
     justify-content: center;
-    color: 261FB3 ;
+    color: #261FB3 ;
     background-color: #FE4F2D;
     font-family: "Jaini", system-ui;
     font-weight: 800;
@@ -106,11 +111,15 @@ h2{
 }
 
 .sys{
-    background-color: white;
+    background-color: #AFDDFF;
     height: fit-content;
     width: 1000px;
     color: black;
-    margin-left: 30px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.img{
+    margin-right: 20px;
 }
 
 .h3{
@@ -123,12 +132,12 @@ h2{
     text-decoration: underline;
 
 }
-ol{
-    font-size: 20px;
+ul{
+    font-size: 17px;
     font-family: "Caveat", cursive;
-  font-optical-sizing: auto;
-  font-weight: 600;
-  font-style: normal;
+    font-optical-sizing: auto;
+    font-weight: 100;
+    font-style: normal;
 }
 
 .btn{
@@ -331,9 +340,12 @@ a{
         margin-right: 22px;
     }
 }
-@media (max-width:430px) {
+@media (max-width:427px) {
     .topb{
         margin: auto;
+    }
+    #top1{
+        margin-right: 18px;
     }
 }
 
@@ -413,11 +425,28 @@ iframe {
     background: linear-gradient(to bottom, lightgray, darkgray);
     box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.5);
 }
+
 p{
     font-size: 18px;
     font-weight: 600;
 }
 
+/*search box */
+#pcsearch{
+    width: 400px;
+    margin-right: 0;
+    margin-top: auto;
+    margin-bottom: auto;
 
+}
+@media (min-width:860px){
+    #andsearch{
+        display: none;
+    }
 
-
+}
+@media (max-width:859px){
+    #pcsearch{
+        display: none;
+    }
+}
