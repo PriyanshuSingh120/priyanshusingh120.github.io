@@ -1,1 +1,1 @@
-Sitemap: https://gamepro.soon.it/sitemap.xml.txt
+Sitemap: https://gamepro.soon.it/sitemap.xml
