@@ -48,6 +48,8 @@ h2{
   font-size: 35px;
   font-family: "Kreon", serif;
   border-radius: 20px;
+  filter: drop-shadow(0 0 5px #000);
+  text-shadow: 2px 2px 8px #000;
 }
 p{
   color: wheat;
@@ -57,22 +59,25 @@ p{
   width: 80%;
   margin-left: 10%;
   text-align: center;
+  filter: drop-shadow(0 0 5px #000);
+  text-shadow: 2px 2px 8px #000;
 }
 #Python{
-  background: url("Python.jpg") ;
+  background: url("python2.jpg") ;
   overflow: auto;
   height: 60%;
   overflow-x: hidden;
   margin-left: 90px;
+  background-size: 50%;
 }
-#python::-webkit-scrollbar{
+#Python::-webkit-scrollbar{
   width: 10px;
 }
-#python::-webkit-scrollbar-thumb{
+#Python::-webkit-scrollbar-thumb{
   background: linear-gradient(to bottom, #ffcc00, #ff6600);
   border-radius: 6px;
 }
-#python::-webkit-scrollbar-track {
+#Python::-webkit-scrollbar-track {
   background-color: #f0f0f0; /* Track color */
   border-radius: 6px; /* Rounded corners */
 }
@@ -93,6 +98,18 @@ p{
   height: 60%;
   overflow-x: hidden;
   margin-left: 90px;
+}
+#hhtml{
+  background-color: #fc3a52;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#html a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 12px;
 }
 #h3{
   background-color: red;
@@ -173,9 +190,7 @@ a{
 #btn:active{
   border-color: #ff6600;
 }
-#hhtml{
-  background-color: #fc3a52;
-}
+
 
 /* Sidebar Styling */
 .back {
@@ -249,7 +264,7 @@ a{
   p{
     font-size: 30px;
   }
-  #python{
+  #Python{
     font-size: 40px;
     margin-left: 60px;
     background-image: url('https://i.pinimg.com/736x/44/d4/04/44d4049bb0cea0723e61dce8403ef1ff.jpg');
@@ -284,7 +299,7 @@ a{
   #top{
     margin-left: 90px;
   }
-  #python{
+  #Python{
     background-image: url('https://i.pinimg.com/736x/d5/e8/86/d5e88644c0a2c2dee0f1bbb7ab4a2365.jpg');
     background-size: 100% 100%;
     background-attachment: fixed;
@@ -292,7 +307,7 @@ a{
 
 }
 @media (max-height:450px) {
-  #python{
+  #Python{
     height: 280px;
   }
   #html{
@@ -302,6 +317,7 @@ a{
     width: fit-content;
   }  
 }
+
 
 
 
