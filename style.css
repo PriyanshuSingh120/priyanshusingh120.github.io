@@ -234,8 +234,15 @@ a{
   position: fixed;
   overflow: hidden;
   transition: width 0.4s ease-in-out;
-  z-index: 9999; /* 👈 Yeh line add ya update karo */
+  z-index: 1;
 }
+
+.overlay,
+.popup,
+.skeleton-loader {  /* id ya class jo bhi use kar rahe ho */
+  z-index: 1000;  /* High enough to be on top */
+}
+
 
 /* Expand Sidebar on Hover */
 .back:hover {
