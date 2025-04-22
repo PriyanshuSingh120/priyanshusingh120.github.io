@@ -15,6 +15,11 @@
   <title>GamePro</title>
 </head>
 <body>
+  <div id="skeleton-loader" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;background:#121212;display:flex;flex-direction:column;gap:20px;justify-content:center;align-items:center;">
+    <div style="width:80%;max-width:600px;height:20px;background:#333;border-radius:4px;animation:pulse 1.5s infinite;"></div>
+    <div style="width:60%;max-width:400px;height:20px;background:#333;border-radius:4px;animation:pulse 1.5s infinite;"></div>
+    <div style="width:90%;max-width:500px;height:20px;background:#333;border-radius:4px;animation:pulse 1.5s infinite;"></div>
+  </div>
   <script>
     let links = [
         { name: "GTA 3", url: "#gta3" },
@@ -284,5 +289,11 @@
       <a href="https://gamepro.soon.it/Installation/tutorial.html" target="_blank" class="view-more">View Tutorial</a>
     </div>
   </div>
+  <script>
+    window.addEventListener("load", function () {
+      const loader = document.getElementById("skeleton-loader");
+      if (loader) loader.style.display = "none";
+    });
+</script>
 </body>
 </html>
