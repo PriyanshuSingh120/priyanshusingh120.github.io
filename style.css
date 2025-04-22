@@ -19,6 +19,8 @@ body{
   margin: 0;
   cursor: url("normal.cur"), auto;
   scroll-behavior:smooth;
+  position: relative;
+  z-index: 1; /* 👈 Yeh add karo */
 }
 
 
@@ -58,12 +60,21 @@ p{
   height: fit-content;
   width: 80%;
   margin-left: 10%;
+  border-radius: 22px;
   text-align: center;
   filter: drop-shadow(0 0 5px #000);
   text-shadow: 2px 2px 8px #000;
 }
+#top {
+  font-size: 21px;
+  position: relative;
+  top: 20px; /* Yeh line spacing degi upar se bina sidebar ko effect kiye */
+  padding: 5px;
+}
+
+
 #Python{
-  background: url("https://i.pinimg.com/736x/da/f4/02/daf4027eaf3aacde32a61369ce293a00.jpg") ;
+  background: url("python2.jpg") ;
   overflow: auto;
   height: 60%;
   overflow-x: hidden;
@@ -99,21 +110,30 @@ p{
   overflow-x: hidden;
   margin-left: 90px;
 }
-#hhtml{
+#html h2{
   background-color: #fc3a52;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
+#html div{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
 #html a {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 12px;
-  margin-left: auto;
-  margin-right: auto;
   width: fit-content;
   text-decoration: none;
+  margin: 8px;
+}
+#html a button {
+  font-weight: 550;
+  font-size: 25px;
 }
 #h3{
   background-color: red;
@@ -121,6 +141,16 @@ p{
   color: blue;
   font-size: 25px;
   font-size: 35px;
+}
+
+#Python,
+#html,
+h1,
+p,
+.overlay,
+.popup {
+  position: relative;
+  z-index: 1; /* 👈 Add this */
 }
 
 
@@ -204,7 +234,7 @@ a{
   position: fixed;
   overflow: hidden;
   transition: width 0.4s ease-in-out;
-
+  z-index: 9999; /* 👈 Yeh line add ya update karo */
 }
 
 /* Expand Sidebar on Hover */
@@ -296,6 +326,13 @@ a{
   }
   #html{
     margin-left: 60px;
+  }
+  #html div{
+    display: contents;
+  }
+  #html a{
+    margin-left: auto;
+    margin-right: auto;
   }
 
 }

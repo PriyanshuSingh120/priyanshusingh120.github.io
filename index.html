@@ -47,42 +47,44 @@
         <div style="width:90%;max-width:500px;height:20px;background:#333;border-radius:4px;animation:pulse 1.5s infinite;"></div>
     </div>
     
-    <div class="back">
-        <a class="slide" data-text="Menu" id="menu">
-            <img src="Stuff/menu.png" alt="menu" height="35px">
-        </a>
-        <a class="slide" href="/" data-text="Home">
-            <img src="Stuff/home.gif" alt="home" height="50px">
-        </a>
-        <a class="slide" href="/Game Files/" data-text="Game Files">
-            <img src="Stuff/files.gif" alt="files" height="50px">
-        </a>
-        <a class="slide" href="/Online Games/" data-text="Online Games">
-            <img src="Stuff/games.gif" alt="games" height="50px">
-        </a>
-        <a class="slide" href="/Projects/" data-text="Others">
-            <img src="Stuff/model.gif" alt="codes" height="50px">
-        </a>
-    </div>
-    <div class="overlay" id="overlay"></div>
-
-<div class="popup" id="popup">
-    <h2>Welcome to GamePro!</h2>
-    <p>Explore the best game files, code snippets, and online games.</p>
-    <button onclick="closePopup()">Let's Go</button>
+<div class="back">
+    <a class="slide" data-text="Menu" id="menu">
+        <img src="Stuff/menu.png" alt="menu" height="35px">
+    </a>
+    <a class="slide" href="/" data-text="Home">
+        <img src="Stuff/home.gif" alt="home" height="50px">
+    </a>
+    <a class="slide" href="/Game Files/" data-text="Game Files">
+        <img src="Stuff/files.gif" alt="files" height="50px">
+    </a>
+    <a class="slide" href="/Online Games/" data-text="Online Games">
+        <img src="Stuff/games.gif" alt="games" height="50px">
+    </a>
+    <a class="slide" href="/Projects/" data-text="Others">
+        <img src="Stuff/model.gif" alt="codes" height="50px">
+    </a>
 </div>
+    <div class="overlay" id="overlay">
+        <div class="popup" id="popup">
+            <h2>Welcome to GamePro!</h2>
+            <p>Explore the best game files, code snippets, and online games.</p>
+            <button onclick="closePopup()">Let's Go</button>
+        </div>
+    </div>
 
-<script>
-    window.onload = function() {
-        document.getElementById("popup").style.display = "block";
-        document.getElementById("overlay").style.display = "block";
-    };
-
-    function closePopup() {
-        document.getElementById("popup").style.display = "none";
-        document.getElementById("overlay").style.display = "none";
-    }
-</script>
+    
+    
+    <script>
+        window.onload = function() {
+            document.getElementById("popup").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+        };
+    
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
+        }
+    </script>
       
     <p align="center" id="top">Click On file name of python codes to download any python code file from this page</p>
     <h1><b>Python CODES</b></h1>
@@ -112,32 +114,32 @@
     </div>
     <h1><b>HTML CODES</b></h1>
     <div id="html">
-        <h2 id="hhtml">Chess</h2>
-
-        <a href="html/Chess/index.html"><button id="btn">Preview</button></a>
-        <a href="html/Chess.rar"><button id="btn">Download</button></a>
-
-        <h2 id="hhtml">Different Cursors</h2>
-
-        <a href="html/Different Cursors/Different Cursors.html"><button id="btn">Preview</button></a>
-        <a href="html/Different Cursors.rar"><button id="btn">Download</button></a>
-
-        <h2 id="hhtml">Website Icon</h2>
-
-        <a href="html/Website icon/index.html"><button id="btn">Preview</button></a>
-        <a href="html/Website icon.rar"><button id="btn">Download</button></a>
-
-        <h2 id="hhtml">Popup Message</h2>
-
-        <a href="html/Pop Up Message/index.html"><button id="btn">Preview</button></a>
-        <a href="html/Pop Up Message.rar"><button id="btn">Download</button></a>
-
+        <h2 >Chess</h2>
+        <div>        
+            <a href="html/Chess/index.html"><button id="btn">Preview</button></a>
+            <a href="html/Chess.rar"><button id="btn">Download</button></a>
+        </div>
+        <h2 >Different Cursors</h2>
+        <div>
+            <a href="html/Different Cursors/Different Cursors.html"><button id="btn">Preview</button></a>
+            <a href="html/Different Cursors.rar"><button id="btn">Download</button></a>
+        </div>
+        <h2 >Website Icon</h2>
+        <div>
+            <a href="html/Website icon/index.html"><button id="btn">Preview</button></a>
+            <a href="html/Website icon.rar"><button id="btn">Download</button></a>
+        </div>
+        <h2 >Popup Message</h2>
+        <div>
+            <a href="html/Pop Up Message/index.html"><button id="btn">Preview</button></a>
+            <a href="html/Pop Up Message.rar"><button id="btn">Download</button></a>
+        </div>
     </div>
     <script>
         window.addEventListener("load", function () {
           const loader = document.getElementById("skeleton-loader");
           if (loader) loader.style.display = "none";
         });
-      </script>
+    </script>
 </body>
 </html>
