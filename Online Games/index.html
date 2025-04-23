@@ -1,0 +1,50 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1444px, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Kreon:wght@300..700&family=Trade+Winds&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>Online Games -Gamepro</title>
+</head>
+<body>
+    <div class="overlay" id="overlay">
+        <div class="popup" id="popup">
+            <h2>Welcome to GamePro!</h2>
+            <p>Explore the best game files, code snippets, and online games.</p>
+            <button onclick="closePopup()">Let's Go</button>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            document.getElementById("popup").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+        };
+    
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
+        }
+    </script>
+    <div id="top">
+        <a href="https://gamepro.soon.it/" class="topb" id="top1">Home</a>
+        <a href="https://gamepro.soon.it/Game%20Files/index.html" class="topb" id="top2">Game Files</a>
+        <a href="https://gamepro.soon.it/Online%20Games/index.html" class="topb" id="top3">Online Games</a>
+        <a href="https://gamepro.soon.it/Projects/index.html" class="topb" id="top4">Others</a>
+  </div>
+
+    <h1>Online Games</h1>
+    <p>Click On Images To Play</p>
+    <a href="2048 Game/index.html"><img id="img1" src="images/2048.jpg" alt="2048"></a>
+    <a href="Memory Card Game/mainGame.html"><img id="img2" src="images/card.jfif" alt="memory card" width="370px"></a>
+    <a href="DRUM/index.html"><img id="img3" src="images/drum.png" alt="drum play"></a>
+    <a href="Flappy Bird/game.html"><img id="img4" src="images/flappy.jpg" alt="flappy bird"></a>
+    <a href="Lets practice/index.html"><img id="img5" src="images/maths.jfif" alt="basic maths"></a>
+    <a href="Rock-Paper-Scissor Game/index.html"><img id="img6" src="images/rock.png" alt="rock paper scissor"></a>
+    <a href="Tic Tac Toe/index.html"><img id="img7" src="images/Tictactoe-min.jpg" alt="tictactoe"></a>
+    <a href="White-Board/index.html"><img id="img8" src="images/whiteboard.jfif" alt="whiteboard"></a>
+    <a href="Chess/index.html"><img id="img9" src="images/chess" alt="missing"></a>
+</body>
+</html>
