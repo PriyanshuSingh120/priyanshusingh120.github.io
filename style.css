@@ -432,3 +432,27 @@ a{
   top: -30%;
   height: 50px;
 }
+.footer{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(110, 110, 110);
+    align-items: center;
+}
+.footer img{
+    margin-left: 18px;
+    height: 45px;
+    width: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease-in-out;
+    
+}
+.footer img:hover{
+    background-color: rgb(151, 151, 150);
+}
