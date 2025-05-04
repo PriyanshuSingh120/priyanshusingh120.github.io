@@ -121,6 +121,16 @@ h2{
 .img{
     margin-right: 20px;
 }
+.img1{
+    margin-left: 10px;
+    height: 350px;
+    min-width: 270px;
+    max-width: 270px;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-image: url("Mafia/andlogo.png");
+    margin-right: 10px;
+}
 
 .h3{
     display: flex;
@@ -171,6 +181,11 @@ button:hover {
     .sys{
         display: none;
     }
+    .img1{
+        background-image: url("Mafia/pclogo.avif");
+        height: 200px;
+        width: 500px;
+    }
     #ravimg{
         height: 150px;
         width: 280px;
@@ -183,6 +198,9 @@ button:hover {
     }
     h2{
         font-size: 30px;
+    }
+    .etc{
+        height: fit-content;
     }
 }
 
