@@ -109,6 +109,7 @@ p{
   height: 60%;
   overflow-x: hidden;
   margin-left: 90px;
+  margin-bottom: 30px;
 }
 #html h2{
   background-color: #fc3a52;
@@ -234,7 +235,7 @@ a{
   position: fixed;
   overflow: hidden;
   transition: width 0.4s ease-in-out;
-  z-index: 999;
+  z-index: 998;
 }
 
 .overlay,
@@ -296,6 +297,10 @@ a{
 /* Show Text when Hovering on Sidebar */
 .back:hover .slide::after {
   opacity: 1;
+}
+.slide:hover{
+  background-color: white;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
 }
 @media (max-width:500px) {
   #top{
@@ -433,26 +438,27 @@ a{
   height: 50px;
 }
 .footer{
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 55px;
-    display: flex;
-    justify-content: center;
-    background-color: rgb(110, 110, 110);
-    align-items: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 55px;
+  display: flex;
+  justify-content: center;
+  background-color: rgb(110, 110, 110);
+  align-items: center;
+  z-index: 999;
 }
 .footer img{
-    margin-left: 18px;
-    height: 45px;
-    width: 45px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background-color 0.3s ease-in-out;
-    
+  margin-left: 18px;
+  height: 45px;
+  width: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease-in-out;
+  
 }
 .footer img:hover{
-    background-color: rgb(151, 151, 150);
+  background-color: rgb(151, 151, 150);
 }
