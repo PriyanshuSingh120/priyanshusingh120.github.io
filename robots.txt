@@ -1,1 +1,3 @@
-Sitemap: https://gamepro.soon.it/sitemap.xml
+User-agent: *
+Allow: /
+Sitemap: https://prigames.netlify.app/sitemap.xml
