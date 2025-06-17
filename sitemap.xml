@@ -28,26 +28,6 @@
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://prigames.netlify.app/html/chess/</loc>
-  <lastmod>2025-06-16T17:10:41+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://prigames.netlify.app/html/different%20cursors/different%20cursors</loc>
-  <lastmod>2025-06-16T17:10:41+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://prigames.netlify.app/html/website%20icon/</loc>
-  <lastmod>2025-06-16T17:10:41+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://prigames.netlify.app/html/pop%20up%20message/</loc>
-  <lastmod>2025-06-16T17:10:41+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
   <loc>https://prigames.netlify.app/online%20games/hextris/</loc>
   <lastmod>2025-06-16T17:10:41+00:00</lastmod>
   <priority>0.80</priority>
@@ -79,11 +59,6 @@
 </url>
 <url>
   <loc>https://prigames.netlify.app/game%20files/farcry2/</loc>
-  <lastmod>2025-06-16T17:10:41+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://prigames.netlify.app/game%20files/iframe/tutorial.html</loc>
   <lastmod>2025-06-16T17:10:41+00:00</lastmod>
   <priority>0.64</priority>
 </url>
@@ -132,11 +107,4 @@
   <lastmod>2025-06-16T17:10:41+00:00</lastmod>
   <priority>0.64</priority>
 </url>
-<url>
-  <loc>https://prigames.netlify.app/projects/diwali/</loc>
-  <lastmod>2025-06-16T17:10:41+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-
-
 </urlset>
