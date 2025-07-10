@@ -30,13 +30,16 @@ body {
 }
 h1 {
     color: #2563eb;
-    font-size: 2.5rem;
+    font-size: 55px;
     letter-spacing: 1px;
     margin: 0 0 0.5rem 0;
     background: linear-gradient(90deg, #2563eb, #38bdf8);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: textGlow 2s infinite alternate;
+    font-family: "Pacifico", cursive;
+    font-weight: 600;
+    font-style: normal;
 }
 @keyframes textGlow {
     from { text-shadow: 0 0 8px #38bdf8; }
