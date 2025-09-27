@@ -1,20 +1,56 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects -Prigames</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Protest+Guerrilla&family=Rubik+Glitch&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Kreon:wght@300..700&family=Trade+Winds&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>Projects -Prigames</title>
 </head>
 <body>
-    <div class="container">
-        <h1>
-            Nothing to see here <span class="wave">👋</span> bro
-        </h1>
-        <div class="subtitle">But something is cooking!</div>
+    <div class="overlay" id="overlay">
+        <div class="popup" id="popup">
+            <h2>Welcome to Others-Prigames</h2>
+            <p>This page consists some of my old codes.</p>
+            <button onclick="closePopup()">Let's Go</button>
+        </div>
     </div>
+
+    <script>
+        window.onload = function() {
+            document.getElementById("popup").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+        };
+    
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
+        }
+    </script>
+    <div id="top">
+        <a href="https://prigames.netlify.app/" class="topb" id="top1">Home</a>
+        <a href="https://prigames.netlify.app/Game%20Files/index.html" class="topb" id="top2">Game Files</a>
+        <a href="https://prigames.netlify.app/Online%20Games/index.html" class="topb" id="top3">Web Games</a>
+        <a href="https://prigames.netlify.app/Projects/index.html" class="topb" id="top4">Others</a>
+    </div>
+    <div class="part" id="diw">
+        <h1>DIWALI</h1>
+        <img src="files/diwali.jpeg" alt="diwali_image" id="image">
+        <a href="#diwali"><button>Visit Site</button></a>
+    </div>
+
+    <div class="part" id="main">
+        <h1>OLD SITE</h1>
+        <img src="files/mainpages.png" alt="main_image" id="image">
+        <a href="https://prigames.netlify.app/mainpages"><button>Visit Site</button></a>
+    </div>
+    <div class="part" id="new">
+        <h1>REDIRECTING SITE </h1>
+        <img src="files/redirect.png" alt="new_image" id="image">
+        <a href="https://prigames.netlify.app/Login/"><button>Visit Site</button></a>
 </body>
 </html>
