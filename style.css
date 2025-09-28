@@ -514,4 +514,48 @@ a{
   color:white;
 }
 
+.apk-download-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:14px 20px;
+  margin:30px auto;
+  width:fit-content;
+  background:#3DDC84;       /* Android green */
+  color:#fff;
+  font-size:20px;
+  font-weight:600;
+  text-decoration:none;
+  border-radius:12px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.2);
+  transition:background .25s ease, transform .25s ease;
+  font-family:"Roboto","Segoe UI",system-ui,sans-serif;
+}
+.apk-download-btn img{
+  width:32px;
+  height:32px;
+}
+.apk-download-btn:hover{
+  background:#32b76b;
+  transform:translateY(-2px);
+}
+.apk-download-btn:active{
+  background:#289b59;
+}
+
+/* Mobile Friendly */
+@media (max-width:600px){
+  .apk-download-btn{
+    font-size:18px;
+    padding:14px 18px;
+    gap:8px;
+    margin-left: 90px;
+  }
+  .apk-download-btn img{
+    width:28px;
+    height:28px;
+  }
+}
+
 
