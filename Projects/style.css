@@ -218,6 +218,7 @@ button:hover{
     color: black;
     cursor: pointer;
     border-radius: 5px;
+    font-family:normal;
 }
 .popup button:hover {
     background: #00997a;
@@ -231,4 +232,5 @@ button:hover{
     background: rgba(0, 0, 0, 0.7);
     z-index: 999;
     display: none;
+
 }
