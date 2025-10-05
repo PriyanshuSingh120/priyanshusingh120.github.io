@@ -56,6 +56,9 @@ body{
     z-index: 999;
     display: none;
 }
+a{
+  text-decoration: none;
+}
 h1{
     background-color: rgb(71, 71, 71);
     color: whitesmoke;
@@ -243,5 +246,6 @@ body {
     margin: 2px auto;
   }
 }
+
 
 
