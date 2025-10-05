@@ -295,21 +295,20 @@ button:hover {
 /* 🎮 Individual menu items */
 #top1::after {
   content: " Home";
-  background-image: url("Stuff/home.gif");
+  background-image: url("prigames.netlify.app/Stuff/home.gif");
 }
 #top2::after {
   content: " Game Files";
-  background-image: url("Stuff/files.gif");
+  background-image: url("prigames.netlify.app/Stuff/files.gif");
 }
 #top3::after {
   content: " Web Games";
-  background-image: url("Stuff/games.gif");
+  background-image: url("prigames.netlify.app/Stuff/games.gif");
 }
 #top4::after {
   content: " Others";
-  background-image: url("Stuff/html.gif");
+  background-image: url("prigames.netlify.app/Stuff/html.gif");
 }
-
 /* ✨ Hover Effects */
 .top div:hover::after {
   filter: brightness(1.2);
@@ -502,5 +501,6 @@ p{
         display: none;
     }
 }
+
 
 
