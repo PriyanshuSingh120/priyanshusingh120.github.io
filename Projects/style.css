@@ -5,6 +5,10 @@ body{
     background-attachment: fixed;
 }
 
+a{
+  text-decoration: none;
+}
+
 h1{
     display: flex;
     justify-content: center;
@@ -262,5 +266,6 @@ body {
     z-index: 999;
     display: none;
 }
+
 
 
