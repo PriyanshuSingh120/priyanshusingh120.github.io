@@ -107,19 +107,19 @@ body {
 /* 🎮 Individual menu items */
 #top1::after {
   content: " Home";
-  background-image: url("prigames.netlify.app/Stuff/home.gif");
+  background-image: url("https://prigames.netlify.app/stuff/home.gif");
 }
 #top2::after {
   content: " Game Files";
-  background-image: url("prigames.netlify.app/Stuff/files.gif");
+  background-image: url("https://prigames.netlify.app/stuff/files.gif");
 }
 #top3::after {
   content: " Web Games";
-  background-image: url("prigames.netlify.app/Stuff/games.gif");
+  background-image: url("https://prigames.netlify.app/stuff/games.gif");
 }
 #top4::after {
   content: " Others";
-  background-image: url("prigames.netlify.app/Stuff/html.gif");
+  background-image: url("https://prigames.netlify.app/stuff/html.gif");
 }
 
 /* ✨ Hover Effects */
@@ -262,4 +262,5 @@ body {
     z-index: 999;
     display: none;
 }
+
 
