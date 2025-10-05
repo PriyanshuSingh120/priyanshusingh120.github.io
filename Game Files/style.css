@@ -271,7 +271,7 @@ button:hover {
   align-items: center;
   justify-content: center;
   background-color: white;
-  color: #4E56C0;
+  color: #1055C9;
   font-size: 32px;
   gap: 30px;
   height: 65px;
@@ -501,6 +501,7 @@ p{
         display: none;
     }
 }
+
 
 
 
