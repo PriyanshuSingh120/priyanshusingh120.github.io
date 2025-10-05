@@ -107,112 +107,139 @@ a{
 }
 
 
-#top{
-    background-color: rgb(71, 71, 71);
+/* 🌈 Global Styles */
+body {
+  margin: 0;
+  font-family: "Creepster", system-ui;
+}
+
+/* 🌟 Top Navigation */
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: black;
+  font-size: 32px;
+  gap: 30px;
+  height: 65px;
+  font-weight: 400;
+  font-style: normal;
+  transition: all 0.3s ease;
+}
+
+/* 🏠 Common icon styling */
+.top div::after {
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 40px 40px;
+  padding-left: 45px;
+  line-height: 60px;
+  transition: all 0.3s ease;
+}
+
+/* 🎮 Individual menu items */
+#top1::after {
+  content: " Home";
+  background-image: url("prigames.netlify.app/Stuff/home.gif");
+}
+#top2::after {
+  content: " Game Files";
+  background-image: url("prigames.netlify.app/Stuff/files.gif");
+}
+#top3::after {
+  content: " Web Games";
+  background-image: url("prigames.netlify.app/Stuff/games.gif");
+}
+#top4::after {
+  content: " Others";
+  background-image: url("prigames.netlify.app/Stuff/html.gif");
+}
+
+/* ✨ Hover Effects */
+.top div:hover::after {
+  filter: brightness(1.2);
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+/* 📱 Tablet View */
+@media (max-width: 628px) {
+  .top {
+    font-size: 26px;
+    gap: 15px;
     height: 60px;
-    display: flex;
-    align-items: center;
-    text-shadow: 2px 2px 8px #000;
-
+  }
+  .top div::after {
+    background-size: 30px 30px;
+    padding-left: 35px;
+  }
 }
-.topb{
-    display: flex;
-    font-size: 28px;
-    margin-left: 32px;
-    color: white;
+
+/* 📲 Small Phones */
+@media (max-width: 504px) {
+  .top {
+    font-size: 20px;
+    gap: 10px;
+    height: 55px;
+  }
+  .top div::after {
+    background-size: 25px 25px;
+    padding-left: 30px;
+  }
+}
+
+/* 📱 Extra Small (Icon-only mode) */
+@media (max-width: 420px) {
+  .top {
+    justify-content: space-around;
+    font-size: 0; /* hide text spacing */
+    height: 60px;
+  }
+
+  .top div::after {
+    content: "";
+    background-size: 50px 50px;
+    padding-left: 50px;
+    width: 50px;
+    height: 50px;
+  }
+
+  /* Optional: Slight bounce animation */
+  .top div:hover::after {
+    transform: scale(1.1);
+  }
+}
+@media (max-width: 386px) {
+  .top {
+    gap: 8px;
+    height: 55px;
+  }
+  .top div::after {
+    background-size: 40px 40px;
+    padding-left: 40px;
+    width: 40px;
     height: 40px;
-    align-items: center;
-    width: fit-content;
-    font-weight: 700;
+  }
 }
 
-.topb:hover{
-    background-color: rgb(102, 102, 102);
-    transition-duration: 0.3s;
-    transition-timing-function: ease-in-out;
-    transition-property: height width background-color;
-    font-size: 30px;
-}
-
-#top1{
-    width: fit-content;
-    display: flex;
+/* 📟 Mini Screens (Up to 220px width) */
+@media (max-width: 292px) {
+  .top {
+    flex-wrap: wrap;
     justify-content: center;
-    
-}
-
-#top4{
-    width: fit-content;
-    display: flex;
-    justify-content: center;
-    margin-right: 14px;
-}
-@media (min-width:523px) and (max-width:650px){
-    #top{
-        height: 70px;
-
-    }
-    .topb{
-        font-size: 25px;
-        font-weight: 600;
-        margin-left: auto;
-        justify-content: center;
-    }
-    #top1{
-        width: fit-content;
-
-    }
-}
-
-@media(min-width:650px) and (max-width:750px){
-    #top{
-        height: 70px;
-    }
-    .topb{
-        font-size: 32px;
-        font-weight: 650;
-        margin-left: auto;
-    }
-    #top1{
-        width: fit-content;
-    }
-    #top4{
-        margin-right: 20px;
-    }
-}
-
-@media (min-width:750px) and (max-width:850px){
-    #top1{
-        width: fit-content;
-    }
-    #top{
-        height: 75px;
-    }
-    .topb{
-        font-size: 37px;
-        font-weight: 700;
-        margin-left: auto;
-    }
-    #top4{
-        margin-right: 22px;
-    }
-}
-@media (max-width:427px) {
-    .topb{
-        margin: auto;
-    }
-    #top1{
-        margin-right: 18px;
-    }
-}
-
-@keyframes appear{
-    from{
-        opacity: 0;
-        scale: 0.4;
-    }
-    to{
-        opacity: 1;
-        scale: 1;
-    }
+    height: auto;
+    gap: 20px;
+    padding: 5px 0;
+  }
+  .top div::after {
+    content: "";
+    display: block;
+    background-size: 35px 35px;
+    padding-left: 0;
+    width: 35px;
+    height: 35px;
+    margin: 2px auto;
+  }
 }
