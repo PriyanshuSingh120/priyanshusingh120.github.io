@@ -15,6 +15,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Emblema+One&family=Monoton&family=Rowdies&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Jaini&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
   <title>Prigames</title>
 </head>
 <body >
@@ -89,16 +90,16 @@
         document.getElementById("overlay").style.display = "none";
     }
 </script>
-  <div id="top">
-        <a href="https://Prigames.netlify.app/" class="topb" id="top1">Home</a>
-        <a href="https://Prigames.netlify.app/Game%20Files/index.html" class="topb" id="top2">Game Files</a>
-        <a href="https://Prigames.netlify.app/Online%20Games/index.html" class="topb" id="top3">Web Games</a>
-        <a href="https://Prigames.netlify.app/Projects/index.html" class="topb" id="top4">Others</a>
-        <div class="search-container" id="pcsearch" class="topb">
-          <input type="text" id="searchBox" placeholder="Search..." onkeyup="filterList()" onfocus="showDropdown()">
-          <div id="dropdownList" class="dropdown"></div>
-        </div>
-  </div>
+  <div class="top">
+    <div id="top1"></div>
+    <div id="top2"></div>
+    <div id="top3"></div>
+    <div id="top4"></div>
+      <div class="search-container" id="pcsearch" class="top">
+        <input type="text" id="searchBox" placeholder="Search..." onkeyup="filterList()" onfocus="showDropdown()">
+        <div id="dropdownList" class="dropdown"></div>
+      </div>
+   </div>
   <div class="search-container" id="andsearch">
     <input type="text" id="searchBox" placeholder="Search..." onkeyup="filterList()" onfocus="showDropdown()">
     <div id="dropdownList" class="dropdown"></div>
@@ -300,5 +301,6 @@
 </script>
 </body>
 </html>
+
 
 
