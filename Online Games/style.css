@@ -2,6 +2,7 @@ body{
     margin: 0;
     overflow-x: hidden;
     background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
+  
 }
 .popup {
     position: fixed;
@@ -105,16 +106,8 @@ img{
 img{
     width: 330px;
 }
-a{
-    text-decoration: none;
-}
 
-
-/* 🌈 Global Styles */
-body {
-  margin: 0;
-  font-family: "Creepster", system-ui;
-}
+/* 🌈 Global Styles *
 
 /* 🌟 Top Navigation */
 .top {
@@ -122,13 +115,14 @@ body {
   align-items: center;
   justify-content: center;
   background-color: white;
-  color: #6E8CFB;
+  color:  #1055C9;
   font-size: 32px;
   gap: 30px;
   height: 65px;
   font-weight: 400;
   font-style: normal;
   transition: all 0.3s ease;
+  font-family: "Creepster", system-ui;
 }
 
 /* 🏠 Common icon styling */
@@ -246,6 +240,7 @@ body {
     margin: 2px auto;
   }
 }
+
 
 
 
