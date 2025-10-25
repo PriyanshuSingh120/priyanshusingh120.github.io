@@ -26,7 +26,7 @@ body{
 
 
 h1{
-  background-color: rgb(92, 93, 94);
+  background-color:#000080 ;
   color: whitesmoke;
   text-align: center;
   height: fit-content;
@@ -557,5 +557,6 @@ a{
     height:28px;
   }
 }
+
 
 
