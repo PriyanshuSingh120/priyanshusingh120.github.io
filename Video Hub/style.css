@@ -1,49 +1,110 @@
-body{
+/* RESET AND BASE STYLES */
+* {
+    box-sizing: border-box; /* Crucial for better sizing and padding control */
+}
+
+body {
     margin: 0;
-    background-color: #37353E;
+    background-color: #2c3e50; /* Darker, modern background color */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #ecf0f1; /* Light text color */
+}
 
-}
-.unit{
-    background-color: #44444E;
-    height: 210px;
-    width: 220px;
-    margin-left: auto;
-    margin-right: auto;
-    display: inline-block;
-    border-radius: 10px;
-    box-shadow: 2px 2px 10px black;
-    margin-bottom: 10px;
-    margin-top: 10px;
-}
-img{
-    height: 133px;
-    width: 220px;
-    display: flex;
-    margin-left: auto;
-    margin-right: auto;
-}
-h1{
+/* HEADER STYLES */
+.page-header {
+    background-color: #34495e;
+    padding: 20px;
     text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 23px;
-    margin-top:-23px;
-    color: #16476A;
-    cursor: default;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
 
+.page-header h1 {
+    margin: 0;
+    color: #e67e22; /* Accent color for the main title */
+    font-size: 2em;
 }
-p{
-    text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 15px;
-    cursor: default;
-    color: white;
+
+/* CONTAINER (GRID) STYLES */
+.container {
+    padding: 20px;
+    /* Use CSS Grid for a better, responsive layout */
+    display: grid;
+    /* Automatically creates columns for a responsive design */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px; /* Space between grid items */
+    max-width: 1200px; /* Limit the width for large screens */
+    margin: 20px auto; /* Center the container */
 }
-.unit:hover{
-    transform: scale(1.1);
-    transition: 0.3s;
-    box-shadow: 4px 4px 20px black;
-}
-a{
+
+/* LINK STYLES */
+.card-link {
     text-decoration: none;
-    color: default;
+    color: inherit; /* Inherit color from the parent for text inside */
+}
+
+/* UNIT (CARD) STYLES */
+.unit {
+    /* Changed to article for semantic clarity */
+    background-color: #34495e;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    overflow: hidden; /* Ensures image corners are rounded */
+    display: flex; /* Use flex for internal content alignment */
+    flex-direction: column;
+    height: 100%; /* Fill the grid cell height */
+    text-align: center;
+}
+
+/* IMAGE STYLES */
+.unit img {
+    width: 100%; /* Fill the width of the card */
+    height: 180px; /* Standardized image height */
+    object-fit: cover; /* Ensures the image covers the area without distortion */
+    border-bottom: 3px solid #e67e22; /* Separator line */
+}
+
+/* HEADING STYLES (H2 is more appropriate for a card title) */
+.unit h2 {
+    font-size: 1.5em;
+    color: #f1c40f; /* Brighter accent color */
+    margin: 15px 10px 5px; /* Top, horizontal, bottom spacing */
+    flex-grow: 0; /* Prevents heading from taking extra space */
+}
+
+/* PARAGRAPH STYLES */
+.unit p {
+    font-size: 1em;
+    color: #bdc3c7;
+    padding: 0 10px;
+    margin-bottom: 10px;
+    flex-grow: 1; /* Allows paragraph to take up remaining vertical space */
+}
+
+/* CATEGORY TAG */
+.category {
+    display: block;
+    background-color: #e67e22;
+    color: white;
+    padding: 5px 10px;
+    font-size: 0.8em;
+    font-weight: bold;
+    border-radius: 0 0 10px 10px; /* Rounded only at the bottom */
+}
+
+/* HOVER EFFECT */
+.card-link:hover .unit {
+    /* Hover applies to the unit element when the link is hovered */
+    transform: translateY(-5px); /* Lift the card slightly */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* FOOTER STYLES */
+footer {
+    text-align: center;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #2c3e50;
+    border-top: 1px solid #34495e;
+    color: #7f8c8d;
 }
