@@ -1,0 +1,227 @@
+/* General Reset and Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #141414; /* Deep dark background */
+    color: #EAEAEA; /* Light text color */
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* --- Header Styling --- */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5%;
+    background-color: #1F1F1F;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #E50914; /* Netflix Red accent */
+}
+
+.nav-links a {
+    margin-left: 25px;
+    font-size: 1.1em;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #E50914;
+}
+
+.menu-toggle {
+    display: none; /* Hide on desktop */
+    background: none;
+    border: none;
+    color: #EAEAEA;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+/* --- Hero Section Styling --- */
+.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('hero-bg.jpg'); /* Placeholder image */
+    background-size: cover;
+    background-position: center;
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.hero-title {
+    font-size: 2.5em;
+    margin-bottom: 25px;
+}
+
+/* Search Box Styling */
+.search-box {
+    display: flex;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 50px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.search-input {
+    flex-grow: 1;
+    padding: 15px 20px;
+    border: none;
+    font-size: 1em;
+    outline: none;
+    background-color: #2D2D2D;
+    color: #EAEAEA;
+}
+
+.search-button {
+    padding: 15px 20px;
+    background-color: #E50914;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.search-button:hover {
+    background-color: #F40F1F;
+}
+
+/* --- Movie Grid and Cards --- */
+.movie-section {
+    padding: 40px 5%;
+}
+
+.section-title {
+    font-size: 2em;
+    margin-bottom: 30px;
+    border-left: 5px solid #E50914;
+    padding-left: 15px;
+}
+
+.movie-grid {
+    display: grid;
+    /* Default: 2 columns for smaller screens */
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+    gap: 20px;
+}
+
+.movie-card {
+    background-color: #1F1F1F;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.movie-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(229, 9, 20, 0.4);
+}
+
+.movie-poster {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+.movie-info {
+    padding: 15px;
+}
+
+.movie-info h3 {
+    font-size: 1.1em;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.movie-info p {
+    font-size: 0.9em;
+    color: #A0A0A0;
+}
+
+/* --- Footer Styling --- */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #1F1F1F;
+    color: #A0A0A0;
+    margin-top: 30px;
+}
+
+/* --- Responsive Adjustments (Desktop) --- */
+@media (min-width: 768px) {
+    .movie-grid {
+        /* Larger screens: 4 columns */
+        grid-template-columns: repeat(4, 1fr); 
+    }
+    
+    .hero-title {
+        font-size: 3.5em;
+    }
+}
+
+/* Responsive Adjustments (Mobile/Tablet) */
+@media (max-width: 767px) {
+    .nav-links {
+        display: none; /* Hide desktop navigation */
+    }
+    
+    .menu-toggle {
+        display: block; /* Show menu toggle button */
+    }
+}
+/* --- Add this to your style.css --- */
+
+@media (max-width: 767px) {
+    /* ... existing mobile styles ... */
+    
+    .main-header {
+        flex-wrap: wrap; /* Allow items to wrap */
+        padding: 15px 5%;
+    }
+
+    .nav-links {
+        display: none; /* Hidden by default */
+        width: 100%; /* Take full width */
+        flex-direction: column;
+        text-align: center;
+        padding-top: 10px;
+        background-color: #1F1F1F;
+    }
+    
+    .nav-links a {
+        margin: 10px 0;
+        padding: 10px;
+        border-bottom: 1px solid #2d2d2d;
+    }
+    
+    /* When the 'active' class is added by JavaScript */
+    .nav-links.active {
+        display: flex; /* Show the navigation links */
+    }
+}
