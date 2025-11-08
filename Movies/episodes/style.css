@@ -1,0 +1,318 @@
+/* General Reset and Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #141414; /* Deep dark background */
+    color: #EAEAEA; /* Light text color */
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* --- Header Styling (Main Site Header) --- */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5%;
+    background-color: #1F1F1F;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+/* --- NEW: Site-wide Title Banner (More prominent than before) --- */
+.site-title-banner { 
+    background-color: #0d0d0d; /* Even darker to distinguish from header */
+    padding: 25px 5%;
+    display: flex;
+    flex-direction: column; /* Stack title and details info */
+    justify-content: center;
+    align-items: flex-start; /* Align text to the left */
+    border-bottom: 5px solid #E50914; /* Stronger accent line */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
+    text-align: left;
+    margin-bottom: 20px; /* Space before main content */
+}
+
+.site-title-banner h1 {
+    font-size: 2.8em; /* Larger title */
+    color: #EAEAEA;
+    margin-bottom: 8px; /* Space between title and details */
+}
+
+.site-details-info {
+    font-size: 1.1em;
+    color: #A0A0A0;
+}
+
+/* --- Episode Page Content Layout --- */
+.episode-page-content {
+    padding: 30px 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* --- Player Wrapper for combined player and episode title bar --- */
+.player-wrapper {
+    margin-bottom: 40px; /* Space below the entire player block */
+    background-color: #1F1F1F; /* Background for the whole unit */
+    border-radius: 12px;
+    overflow: hidden; /* Ensures rounded corners */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8); /* Deep shadow for 3D effect */
+}
+
+/* --- Video Player Container (16:9 Responsive - Revamped Graphics) --- */
+.video-container {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    background-color: #000; /* Black background for player area */
+    display: flex; /* For centering overlay content */
+    justify-content: center;
+    align-items: center;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    z-index: 1; /* Below overlay */
+}
+
+/* Player Overlay for visual effects */
+.player-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%);
+    z-index: 2; /* Above iframe, below controls */
+    pointer-events: none; /* Allows clicks to pass through to iframe */
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* Optional: Hide overlay on hover for a cleaner look */
+/*
+.video-container:hover .player-overlay {
+    opacity: 0;
+}
+*/
+
+.player-controls-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3; /* Above everything */
+    pointer-events: none; /* Allows clicks to iframe */
+}
+
+.play-button-icon {
+    font-size: 4em; /* Large play button */
+    color: rgba(229, 9, 20, 0.8); /* Netflix Red, semi-transparent */
+    text-shadow: 0 0 15px rgba(229, 9, 20, 0.6);
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+    pointer-events: all; /* Make icon clickable */
+}
+
+.play-button-icon:hover {
+    transform: scale(1.1);
+    color: #F40F1F; /* Brighter red on hover */
+}
+
+/* Hide actual play button once video starts playing (requires JS for this part) */
+/* This is a visual element for now. To truly hide it on play, JS is needed */
+/* Example: .video-container.playing .play-button-icon { display: none; } */
+
+
+/* --- NEW: Episode Title Bar (Replaces old synopsis top) --- */
+.episode-title-bar {
+    background-color: #2D2D2D; /* Darker background for distinction */
+    padding: 18px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Allows wrapping on smaller screens */
+    gap: 15px; /* Space between elements */
+    border-top: 1px solid #3a3a3a;
+}
+
+.episode-info-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.current-episode-title {
+    font-size: 1.6em;
+    color: #EAEAEA;
+    margin: 0;
+}
+
+.current-episode-number {
+    font-size: 0.95em;
+    color: #A0A0A0;
+    margin-top: 5px;
+}
+
+.episode-selector-dropdown label {
+    display: none; /* Hide label on desktop, shown on mobile if needed */
+}
+
+.episode-selector-dropdown select {
+    padding: 10px 20px;
+    background-color: #383838;
+    color: #EAEAEA;
+    border: 1px solid #555;
+    border-radius: 6px;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    appearance: none; 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center; 
+    background-size: 14px;
+}
+
+.episode-selector-dropdown select:hover {
+    background-color: #444;
+    border-color: #E50914;
+}
+
+.episode-selector-dropdown select:focus {
+    outline: none;
+    border-color: #E50914;
+    box-shadow: 0 0 8px rgba(229, 9, 20, 0.6);
+}
+
+/* --- Main Synopsis Block (moved below player/title bar) --- */
+.episode-synopsis-block { 
+    background-color: #1F1F1F;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    border-left: 5px solid #E50914; 
+    margin-top: 30px; 
+}
+
+.episode-synopsis-block h2 {
+    color: #E50914;
+    font-size: 1.8em;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #2D2D2D;
+}
+
+.episode-synopsis-block p {
+    margin-bottom: 8px;
+    font-size: 1em;
+}
+
+.episode-synopsis-block .description {
+    color: #A0A0A0;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+/* --- Footer Styling (Retained) --- */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #1F1F1F;
+    color: #A0A0A0;
+    margin-top: 50px; /* More space for the new player unit */
+}
+
+/* --- Mobile Adjustments (Enhanced & Tuned) --- */
+@media (max-width: 768px) {
+    .site-title-banner {
+        padding: 20px 5%;
+    }
+    .site-title-banner h1 {
+        font-size: 2em;
+    }
+    .site-details-info {
+        font-size: 1em;
+    }
+
+    .player-wrapper {
+        margin-bottom: 30px;
+    }
+
+    .play-button-icon {
+        font-size: 3em;
+    }
+
+    .episode-title-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px 20px;
+        gap: 10px;
+    }
+
+    .current-episode-title {
+        font-size: 1.4em;
+    }
+
+    .current-episode-number {
+        font-size: 0.9em;
+    }
+
+    .episode-selector-dropdown {
+        width: 100%; /* Make dropdown container full width */
+    }
+
+    .episode-selector-dropdown select {
+        width: 100%; /* Make select box full width */
+        font-size: 0.9em;
+        background-position: right 8px center; /* Adjust arrow position */
+        background-size: 10px;
+    }
+
+    .episode-synopsis-block {
+        padding: 20px;
+    }
+    .episode-synopsis-block h2 {
+        font-size: 1.6em;
+    }
+}
+
+@media (max-width: 480px) {
+    .site-title-banner h1 {
+        font-size: 1.6em;
+    }
+    .site-details-info {
+        font-size: 0.9em;
+    }
+    .current-episode-title {
+        font-size: 1.2em;
+    }
+    .current-episode-number {
+        font-size: 0.8em;
+    }
+    .play-button-icon {
+        font-size: 2.5em;
+    }
+}

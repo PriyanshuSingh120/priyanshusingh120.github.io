@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">The Kapil Sharma Show | Episode 1 - CineView</title>
+    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    
+    <header class="main-header">
+        </header>
+
+    <div class="site-title-banner"> 
+        <h1>The Kapil Sharma Show (Season 3)</h1>
+        <p class="site-details-info">14 Episodes | Comedy | 2022 | Starring: Kapil Sharma, Krushna Abhishek</p>
+    </div>
+
+    <main>
+        <section class="episode-page-content">
+            
+            <div class="player-wrapper">
+                <div class="video-container">
+                    <iframe 
+                        id="episode-iframe"
+                        src="" 
+                        title="The Kapil Sharma Show Player" 
+                        allow="autoplay; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                    <div class="player-overlay"></div> 
+                </div>
+
+                <div class="episode-title-bar">
+                    <div class="episode-info-left">
+                        <h2 id="current-episode-title" class="current-episode-title">Episode 1: Salman Khan</h2>
+                        <span id="current-episode-number" class="current-episode-number">Episode 1 of 14</span>
+                    </div>
+                    <div class="episode-selector-dropdown">
+                        <label for="episode-select" class="sr-only">Change Episode:</label> 
+                        <select id="episode-select" onchange="changeEpisode(this.value);">
+                            <option value="0" selected>E01: Salman Khan</option>
+                            <option value="1">E02: Metro Fun</option>
+                            <option value="2">E03: Coach and the Cricketers</option>
+                            <option value="3">E04:  Streaming Superstars</option>
+                            <option value="4">E05: Sardaron Ka Swag</option>
+                            <option value="5">E06: Mic Drop with Podcasters</option>
+                            <option value="6">E07: Parineeti - Raghav ki Prem Sabha</option>
+                            <option value="7">E08: Dil Dosti Bhai-Behen</option>
+                            <option value="8">E09: Musical Mehfil</option>
+                            <option value="9">E10: Business Ke Gamechangers</option>
+                            <option value="10">E11: Love and Laughs with Param Sundari</option>
+                            <option value="11">E12: Yaaron Ka Adda</option>
+                            <option value="12">E13: South Superstars</option>
+                            <option value="13">E14:  Khiladi Returns</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="episode-synopsis-block"> 
+                <h2>About This Episode</h2>
+                <p id="episode-description" class="description">Placeholder description. This will be updated dynamically.</p>
+                <p><strong>Genre:</strong> Comedy, Talk Show | <strong>Year:</strong> 2022</p>
+            </div>
+
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 CineView. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        const EPISODES = [
+            { index: 0, name: "Salman Khan", videoUrl: "https://short.icu/xVfDacuLX7", description: "Salman Khan" },
+            { index: 1, name: "Metro Fun", videoUrl: "https://short.icu/uj4eBNozm", description: "Anupam Kher, Neena Gupta, Ali Fazal, Konkona Sen Sharma, Pankaj Tripathi, Anurag Basu, Fatima Sana Shaikh, Aditya Roy Kapur and Sara Ali Khan" },
+            { index: 2, name: "Coach and the Cricketers", videoUrl: "https://short.icu/0xsHh_sy0", description: "Gautam Gambhir, Rishabh Pant, Yuzvendra Chahal and Abhishek Sharma" },
+            { index: 3, name: "Streaming Superstars", videoUrl: "https://short.icu/9sfprsaaj", description: "Jaideep Ahlawat, Vijay Varma, Pratik Gandhi, Jitendra Kumar and Jackson Wang." },
+            { index: 4, name: "Sardaron Ka Swag", videoUrl: "https://short.icu/qfwY2Q1Is", description: "Ajay Devgn, Mrunal Thakur, Vindu Dara Singh, Sanjay Mishra, Ravi Kishan, Kubbra Sait and Deepak Dobriyal" },
+            { index: 5, name: "Mic Drop with Podcasters", videoUrl: "https://short.icu/1zNYJWhqv", description: "The 'Bhaijaan' of Bollywood, Salman Khan, arrives with the cast of *Antim*, providing unmatched fun and comedy to the show." },
+            { index: 6, name: " Parineeti - Raghav ki Prem Sabha", videoUrl: "https://short.icu/RCLhytk2_", description: "This episode is currently being processed. Check back soon for the synopsis!" },
+            { index: 7, name: "Dil Dosti Bhai-Behen", videoUrl: "YOUR_EPISODE_8_EMBED_URL_HERE", description: "Details for Episode 8 will be available shortly." },
+            { index: 8, name: "(Guest Name/Title TBD)", videoUrl: "YOUR_EPISODE_9_EMBED_URL_HERE", description: "Details for Episode 9 will be available shortly." },
+            { index: 9, name: "(Guest Name/Title TBD)", videoUrl: "YOUR_EPISODE_10_EMBED_URL_HERE", description: "Details for Episode 10 will be available shortly." },
+            { index: 10, name: "(Guest Name/Title TBD)", videoUrl: "YOUR_EPISODE_11_EMBED_URL_HERE", description: "Details for Episode 11 will be available shortly." },
+            { index: 11, name: "(Guest Name/Title TBD)", videoUrl: "YOUR_EPISODE_12_EMBED_URL_HERE", description: "Details for Episode 12 will be available shortly." },
+            { index: 12, name: "(Guest Name/Title TBD)", videoUrl: "YOUR_EPISODE_13_EMBED_URL_HERE", description: "Details for Episode 13 will be available shortly." },
+            { index: 13, name: "(Guest Name/Title TBD)", videoUrl: "YOUR_EPISODE_14_EMBED_URL_HERE", description: "Details for Episode 14 will be available shortly." }
+        ];
+
+        function changeEpisode(episodeIndex) {
+            const episode = EPISODES[parseInt(episodeIndex)]; 
+            if (!episode) return; 
+
+            document.getElementById('episode-iframe').src = episode.videoUrl;
+            document.getElementById('current-episode-title').textContent = episode.name;
+            document.getElementById('current-episode-number').textContent = `Episode ${episode.index + 1} of ${EPISODES.length}`;
+            document.getElementById('episode-description').textContent = episode.description;
+            document.getElementById('page-title').textContent = `The Kapil Sharma Show | E${episode.index + 1}: ${episode.name} - CineView`;
+            document.getElementById('episode-select').value = episodeIndex;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            changeEpisode(0); 
+        });
+    </script>
+</body>
+</html>
