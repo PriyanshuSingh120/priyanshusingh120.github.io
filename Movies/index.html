@@ -3,53 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CineView - Your Free Hub to discover and stream new and classic movies, web games, and more.">
     <title>🎬 CineView - Free Movie Hub</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0wLpftMhD9e8v+L81NqD1+0X1UoO/97PzL39Fj6qD48B31LpP2Z8t3g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
 
     <header class="main-header">
         <div class="logo">CineView</div>
-        <nav class="nav-links">
-            <a href="https://prigames.netlify.app/">Home</a>
-            <a href="https://prigames.netlify.app/game%20files/">Game Files</a>
-            <a href="https://prigames.netlify.app/online%20games/">Web Games</a>
-            <a href="https://prigames.netlify.app/movies/">Movies</a>
-            <a href="https://prigames.netlify.app/ai/">Ai</a>
+        <nav class="nav-links" aria-label="Main Navigation">
+            <a href="/">Home</a>
+            <a href="/game files/">Game Files</a>
+            <a href="/online games/">Web Games</a>
+            <a href="/movies/">Movies</a>
+            <a href="/ai/">Ai</a>
         </nav>
-        <button class="menu-toggle"><i class="fas fa-bars"></i></button>
+        <button class="menu-toggle" type="button" aria-label="Toggle navigation menu"><i class="fas fa-bars"></i></button>
     </header>
 
     <main>
-        <section class="hero-section">
-            <h1 class="hero-title">Discover Your Next Favorite Film</h1>
-            <div class="search-box">
-                <input type="text" placeholder="Search movies..." class="search-input">
-                <button class="search-button"><i class="fas fa-search"></i></button>
+        <section class="hero-section" aria-labelledby="hero-heading">
+            <h1 class="hero-title" id="hero-heading">Discover Your Next Favorite Film</h1>
+            <div class="search-box" role="search">
+                <input type="text" placeholder="Search movies..." class="search-input" aria-label="Search movies">
+                <button class="search-button" type="button" aria-label="Perform search"><i class="fas fa-search"></i></button>
             </div>
         </section>
 
-        <section class="movie-section">
-            <h2 class="section-title">✨ New Uploads</h2>
+        <section class="movie-section" aria-labelledby="new-uploads-title">
+            <h2 class="section-title" id="new-uploads-title">✨ New Uploads</h2>
             <div class="movie-grid">
                 
-                <a href="Insider/chhava.html" class="movie-link">
+                <a href="Insider/chhava.html" class="movie-link" aria-label="View details for the movie Chhava">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="https://image.tmdb.org/t/p/w500/9F4lPRLjfBjsu0zjWNOZQMa8a4V.jpg" alt="Echoes of Space poster" class="movie-poster">
+                            <img src="https://image.tmdb.org/t/p/w500/9F4lPRLjfBjsu0zjWNOZQMa8a4V.jpg" alt="Chhava movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>Chhava</h3>
-                            <p>History| Thriller | Action | 2025</p>
+                            <p>History | Thriller | Action | 2025</p>
                         </div>
                     </div>
                 </a>
 
-                <a href="Insider/msd.html" class="movie-link">
+                <a href="Insider/msd.html" class="movie-link" aria-label="View details for the movie MS Dhoni: The Untold Story">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="https://pix1.wapkizfile.info/download/7e07118c9ad8223a2d1d005fd3fdc96e/filmy4wap+wapkizs+com/M-S-Dhoni-The-Untold-Story-2016-Bollywood-Hindi-Full-Movie-BluRay-HD-ESub-(filmyfly.observer).jpg" alt="Echoes of Space poster" class="movie-poster">
+                            <img src="https://pix1.wapkizfile.info/download/7e07118c9ad8223a2d1d005fd3fdc96e/filmy4wap+wapkizs+com/M-S-Dhoni-The-Untold-Story-2016-Bollywood-Hindi-Full-Movie-BluRay-HD-ESub-(filmyfly.observer).jpg" alt="M.S. Dhoni: The Untold Story movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>MS Dhoni :The Untold Story</h3>
@@ -58,10 +59,10 @@
                     </div>
                 </a>
                 
-                <a href="Insider/theboy.html" class="movie-link">
+                <a href="Insider/theboy.html" class="movie-link" aria-label="View details for the movie The Boy">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="https://imgshare.info/images/2025/07/20/The-Boy-2016.jpg" alt="Echoes of Space poster" class="movie-poster">
+                            <img src="https://imgshare.info/images/2025/07/20/The-Boy-2016.jpg" alt="The Boy movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>The Boy</h3>
@@ -70,22 +71,34 @@
                     </div>
                 </a>
 
-                <a href="Insider/elio.html" class="movie-link">
+                <a href="Insider/elio.html" class="movie-link" aria-label="View details for the movie Elio">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="https://image.tmdb.org/t/p/w400/w2ARwtc1zoh0pyfwmyhpZHwuXgK.jpg" alt="Echoes of Space poster" class="movie-poster">
+                            <img src="https://image.tmdb.org/t/p/w400/w2ARwtc1zoh0pyfwmyhpZHwuXgK.jpg" alt="Elio movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>Elio</h3>
-                            <p>Acnimated | Funny | Drama | Suspence | 2015</p>
+                            <p>Animated | Funny | Drama | Suspense | 2015</p>
                         </div>
                     </div>
                 </a>
 
-                <a href="Insider/Kaalidhar Laapata.html" class="movie-link">
+                <a href="episodes/kapils3.html" class="movie-link" aria-label="View details for the movie Vash Level 2">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="https://image.tmdb.org/t/p/w500/a7ctu6C6f7tN87ve4HFDoELp7cH.jpg" alt="Echoes of Space poster" class="movie-poster">
+                            <img src="https://catimages.org/images/2025/06/21/The-Great-Indian-Kapil-Show-2025-S03-HDHub4u.Ms.jpg" alt="Vash Level 2 movie poster" class="movie-poster" loading="lazy">
+                        </div>
+                        <div class="movie-info">
+                            <h3>The Kapil Sharma Show : Season 3</h3>
+                            <p>Comedy | Drama || 2022</p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="Insider/Kaalidhar Laapata.html" class="movie-link" aria-label="View details for the movie Kaalidhar Laapata">
+                    <div class="movie-card">
+                        <div class="movie-poster-container">
+                            <img src="https://image.tmdb.org/t/p/w500/a7ctu6C6f7tN87ve4HFDoELp7cH.jpg" alt="Kaalidhar Laapata movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>Kaalidhar Laapata</h3>
@@ -94,10 +107,10 @@
                     </div>
                 </a>
 
-                <a href="Insider/Bahubali.html" class="movie-link">
+                <a href="Insider/Bahubali.html" class="movie-link" aria-label="View details for the movie Bahubali: The Epic">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="images/2.jpg" alt="Echoes of Space poster" class="movie-poster">
+                            <img src="images/2.jpg" alt="Bahubali: The Epic movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>Bahubali :The Epic</h3>
@@ -106,22 +119,22 @@
                     </div>
                 </a>
                 
-                <a href="Insider/Enemy.html" class="movie-link">
+                <a href="Insider/Enemy.html" class="movie-link" aria-label="View details for the movie Enemy">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="images/3.jpg" alt="Lost in Rome poster" class="movie-poster">
+                            <img src="images/3.jpg" alt="Enemy movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>Enemy</h3>
-                            <p>Thriller | Mystery | Drama | Suspence | 2021</p>
+                            <p>Thriller | Mystery | Drama | Suspense | 2021</p>
                         </div>
                     </div>
                 </a>
                 
-                <a href="Insider/Ferdinand.html" class="movie-link">
+                <a href="Insider/Ferdinand.html" class="movie-link" aria-label="View details for the movie Ferdinand">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="images/4.jpg" alt="Echoes of Space poster" class="movie-poster">
+                            <img src="images/4.jpg" alt="Ferdinand movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>Ferdinand</h3>
@@ -129,10 +142,10 @@
                         </div>
                     </div>
                 </a>
-                <a href="Insider/Idlikadai.html" class="movie-link">
+                <a href="Insider/Idlikadai.html" class="movie-link" aria-label="View details for the movie Idli Kadai">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="images/5.jpg" alt="Echoes of Space poster" class="movie-poster">
+                            <img src="images/5.jpg" alt="Idli Kadai movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>Idli Kadai</h3>
@@ -140,10 +153,10 @@
                         </div>
                     </div>
                 </a>
-                <a href="Insider/jester.html" class="movie-link">
+                <a href="Insider/jester.html" class="movie-link" aria-label="View details for the movie The Jester 2">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="images/6.jpg" alt="Echoes of Space poster" class="movie-poster">
+                            <img src="images/6.jpg" alt="The Jester 2 movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>The Jester 2</h3>
@@ -151,32 +164,32 @@
                         </div>
                     </div>
                 </a>
-                <a href="Insider/Kadaram.html" class="movie-link">
+                <a href="Insider/Kadaram.html" class="movie-link" aria-label="View details for the movie Kadaram Kondan">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="images/7.jpg" alt="Echoes of Space poster" class="movie-poster">
+                            <img src="images/7.jpg" alt="Kadaram Kondan movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>Kadaram Kondan</h3>
-                            <p>Action | Thriller | Drama | Suspence | 2019</p>
+                            <p>Action | Thriller | Drama | Suspense | 2019</p>
                         </div>
                     </div>
                 </a>
-                <a href="Insider/Kanata.html" class="movie-link">
+                <a href="Insider/Kanata.html" class="movie-link" aria-label="View details for the movie Kantara">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="images/8.jpg" alt="Echoes of Space poster" class="movie-poster">
+                            <img src="images/8.jpg" alt="Kantara movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>Kantara</h3>
-                            <p>Action | Thriller | Adventure | Drama | Mystery | Suspence | 2022</p>
+                            <p>Action | Thriller | Adventure | Drama | Mystery | Suspense | 2022</p>
                         </div>
                     </div>
                 </a>
-                <a href="Insider/Kishkindhapuri.html" class="movie-link">
+                <a href="Insider/Kishkindhapuri.html" class="movie-link" aria-label="View details for the movie Kishkindhapuri">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="images/9.jpg" alt="Echoes of Space poster" class="movie-poster">
+                            <img src="images/9.jpg" alt="Kishkindhapuri movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>Kishkindhapuri</h3>
@@ -184,10 +197,10 @@
                         </div>
                     </div>
                 </a>
-                <a href="Insider/Kuruchetra.html" class="movie-link">
+                <a href="Insider/Kuruchetra.html" class="movie-link" aria-label="View details for the movie Kuruchetra">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="images/10.jpg" alt="Echoes of Space poster" class="movie-poster">
+                            <img src="images/10.jpg" alt="Kuruchetra movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>Kuruchetra</h3>
@@ -195,10 +208,10 @@
                         </div>
                     </div>
                 </a>
-                <a href="Insider/mahavtar.html" class="movie-link">
+                <a href="Insider/mahavtar.html" class="movie-link" aria-label="View details for the movie Mahavtar Narsimha">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="images/11.jpg" alt="Echoes of Space poster" class="movie-poster">
+                            <img src="images/11.jpg" alt="Mahavtar Narsimha movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>Mahavtar Narsimha</h3>
@@ -206,10 +219,10 @@
                         </div>
                     </div>
                 </a>
-                <a href="Insider/Stand By me Doremon 2.html" class="movie-link">
+                <a href="Insider/Stand By me Doremon 2.html" class="movie-link" aria-label="View details for the movie Stand By Me Doraemon 2">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="images/12.jpg" alt="Echoes of Space poster" class="movie-poster">
+                            <img src="images/12.jpg" alt="Stand By Me Doraemon 2 movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>Stand By Me Doraemon 2</h3>
@@ -217,21 +230,21 @@
                         </div>
                     </div>
                 </a>
-                <a href="Insider/Texas Chainsaw.html" class="movie-link">
+                <a href="Insider/Texas Chainsaw.html" class="movie-link" aria-label="View details for the movie Texas Chainsaw">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="images/13.jpg" alt="Echoes of Space poster" class="movie-poster">
+                            <img src="images/13.jpg" alt="Texas Chainsaw movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>Texas Chainsaw</h3>
-                            <p>Horror | Suspence | Stasher | Thriller | Mystery | 2013</p>
+                            <p>Horror | Suspense | Slasher | Thriller | Mystery | 2013</p>
                         </div>
                     </div>
                 </a>
-                <a href="Insider/vash.html" class="movie-link">
+                <a href="Insider/vash.html" class="movie-link" aria-label="View details for the movie Vash">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="images/14.jpg" alt="Echoes of Space poster" class="movie-poster">
+                            <img src="images/14.jpg" alt="Vash movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>Vash</h3>
@@ -239,10 +252,10 @@
                         </div>
                     </div>
                 </a>
-                <a href="Insider/Vash2.html" class="movie-link">
+                <a href="Insider/Vash2.html" class="movie-link" aria-label="View details for the movie Vash Level 2">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="images/15.jpg" alt="Echoes of Space poster" class="movie-poster">
+                            <img src="images/15.jpg" alt="Vash Level 2 movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>Vash Level 2</h3>
@@ -250,21 +263,21 @@
                         </div>
                     </div>
                 </a>
-                <a href="Insider/goat.html" class="movie-link">
+                <a href="Insider/goat.html" class="movie-link" aria-label="View details for the movie Greatest Of All Time">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="images/18.jpg" alt="Echoes of Space poster" class="movie-poster">
+                            <img src="images/18.jpg" alt="Greatest Of All Time movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>Greatest Of All TIme</h3>
-                            <p>Horror | Action | Drama | Thriller | 2025</p>
+                            <p>Action | Drama | Thriller | 2025</p>
                         </div>
                     </div>
                 </a>
-                <a href="Insider/Saiyara.html" class="movie-link">
+                <a href="Insider/Saiyara.html" class="movie-link" aria-label="View details for the movie Saiyaara">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="images/17.jpg" alt="Echoes of Space poster" class="movie-poster">
+                            <img src="images/17.jpg" alt="Saiyaara movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>Saiyaara</h3>
@@ -272,10 +285,10 @@
                         </div>
                     </div>
                 </a>
-                <a href="Insider/ekdiwanekidiwaniyat.html" class="movie-link">
+                <a href="Insider/ekdiwanekidiwaniyat.html" class="movie-link" aria-label="View details for the movie Ek Deewane Ki Deewaniyat">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="images/16.jpg" alt="Echoes of Space poster" class="movie-poster">
+                            <img src="images/16.jpg" alt="Ek Deewane Ki Deewaniyat movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>Ek Deewane Ki Deewaniyat</h3>
@@ -284,10 +297,10 @@
                     </div>
                 </a>
 
-                <a href="Insider/2.html" class="movie-link">
+                <a href="Insider/2.html" class="movie-link" aria-label="View details for the movie Free Birds">
                     <div class="movie-card">
                         <div class="movie-poster-container">
-                            <img src="images/1.jpg" alt="Free Birds poster" class="movie-poster">
+                            <img src="images/1.jpg" alt="Free Birds movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
                             <h3>Free Birds</h3>
@@ -305,10 +318,6 @@
         <p>&copy; 2025 CineView. All rights reserved.</p>
     </footer>
     
-    <script src="app.js"></script> 
+    <script src="app.js"></script>    
 </body>
 </html>
-
-
-
-
