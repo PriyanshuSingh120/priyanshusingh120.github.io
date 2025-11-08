@@ -36,6 +36,12 @@ a {
     color: #E50914; /* Netflix Red accent */
 }
 
+/* Desktop Navigation */
+.nav-links {
+    display: flex; /* Ensure horizontal layout on desktop */
+    align-items: center;
+}
+
 .nav-links a {
     margin-left: 25px;
     font-size: 1.1em;
@@ -47,19 +53,21 @@ a {
 }
 
 .menu-toggle {
-    display: none; /* Hide on desktop */
+    display: none; /* Hide on desktop, shown in mobile media query */
     background: none;
     border: none;
     color: #EAEAEA;
     font-size: 1.5em;
     cursor: pointer;
+    padding: 0; /* Clean up padding */
 }
 
 /* --- Hero Section Styling --- */
 .hero-section {
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('hero-bg.jpg'); /* Placeholder image */
-    background-size: cover;
-    background-position: center;
+    /* Always ensure a fallback color for the background */
+    background: #000 url('hero-bg.jpg') center/cover no-repeat; 
+    background-blend-mode: multiply; /* Helps darkening the image */
+    background-color: rgba(0, 0, 0, 0.7); /* Darkening layer */
     height: 60vh;
     display: flex;
     flex-direction: column;
@@ -107,7 +115,7 @@ a {
     background-color: #F40F1F;
 }
 
-/* --- Movie Grid and Cards - REVISED FOR FIXED HEIGHT --- */
+/* --- Movie Grid and Cards --- */
 .movie-section {
     padding: 40px 5%;
 }
@@ -124,7 +132,7 @@ a {
     /* Default: 2 columns for smaller screens */
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
     gap: 20px;
-    /* This makes all rows (and thus, all cards) in the grid the same height */
+    /* Forces cards to fill the available height in their grid cell */
     grid-auto-rows: 1fr; 
 }
 
@@ -135,10 +143,10 @@ a {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s, box-shadow 0.3s;
     cursor: pointer;
-    /* Display flex column to push the footer to the bottom of the card */
+    /* Display flex column to push the movie-info to the bottom of the card */
     display: flex;
     flex-direction: column;
-    height: 100%; /* Important for grid-auto-rows: 1fr */
+    height: 100%; /* Important for grid-auto-rows: 1fr to work */
 }
 
 .movie-card:hover {
@@ -146,7 +154,7 @@ a {
     box-shadow: 0 8px 25px rgba(229, 9, 20, 0.4);
 }
 
-/* NEW: Aspect Ratio Container */
+/* Aspect Ratio Container for Poster */
 .movie-poster-container {
     position: relative;
     width: 100%;
@@ -155,20 +163,20 @@ a {
     overflow: hidden;
 }
 
-/* REVISED: The image fills the container */
+/* The image fills the container */
 .movie-poster {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%; /* Fills the padded container */
+    height: 100%; 
     display: block;
     object-fit: cover; /* Ensures image covers the area without distorting */
 }
 
 .movie-info {
     padding: 15px;
-    /* Use margin-top: auto to push the info block to the bottom of the card */
+    /* Pushes the info block to the bottom of the card, accommodating variable image heights */
     margin-top: auto; 
 }
 
@@ -194,11 +202,17 @@ footer {
     margin-top: 30px;
 }
 
-/* --- Responsive Adjustments (Desktop) --- */
+/*
+============================================================
+           Responsive Adjustments
+============================================================
+*/
+
+/* Desktop and Larger Tablets */
 @media (min-width: 768px) {
     .movie-grid {
         /* Larger screens: 4 columns */
-        grid-template-columns: repeat(4, 1fr); 
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
     }
     
     .hero-title {
@@ -206,30 +220,19 @@ footer {
     }
 }
 
-
-/* Responsive Adjustments (Mobile/Tablet) */
+/* Mobile and Smaller Tablets */
 @media (max-width: 767px) {
-    .nav-links {
-        display: none; /* Hide desktop navigation */
-    }
-    
-    .menu-toggle {
-        display: block; /* Show menu toggle button */
-    }
-}
-/* --- Add this to your style.css --- */
-
-@media (max-width: 767px) {
-    /* ... existing mobile styles ... */
-    
+    /* --- Header & Navigation for Mobile --- */
     .main-header {
-        flex-wrap: wrap; /* Allow items to wrap */
+        /* Allow logo and toggle button to sit on the first line, menu below */
+        flex-wrap: wrap; 
         padding: 15px 5%;
     }
 
     .nav-links {
-        display: none; /* Hidden by default */
-        width: 100%; /* Take full width */
+        /* Overriding desktop display:flex */
+        display: none; 
+        width: 100%; 
         flex-direction: column;
         text-align: center;
         padding-top: 10px;
@@ -239,11 +242,42 @@ footer {
     .nav-links a {
         margin: 10px 0;
         padding: 10px;
+        margin-left: 0; /* Remove left margin for block display */
         border-bottom: 1px solid #2d2d2d;
     }
+
+    .nav-links a:last-child {
+        border-bottom: none;
+    }
+
+    .menu-toggle {
+        display: block; /* Show the hamburger icon */
+    }
     
-    /* When the 'active' class is added by JavaScript */
+    /* JavaScript will add the 'active' class to show the menu */
     .nav-links.active {
-        display: flex; /* Show the navigation links */
+        display: flex; /* Show the navigation links stacked vertically */
+    }
+
+    /* --- Other Mobile Adjustments --- */
+    .hero-section {
+        height: 50vh;
+    }
+
+    .hero-title {
+        font-size: 2em;
+    }
+
+    .search-box {
+        max-width: 90%;
+    }
+
+    .section-title {
+        font-size: 1.5em;
+    }
+
+    .movie-grid {
+        /* Make columns slightly smaller on very small screens */
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
     }
 }
