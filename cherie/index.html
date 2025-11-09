@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cherie Chat Assistant</title>
+    <!-- Load Tailwind CSS for aesthetics -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        /* Custom scrollbar for aesthetics (Indigo Theme) */
+        #chat-history::-webkit-scrollbar {
+            width: 6px;
+        }
+        #chat-history::-webkit-scrollbar-thumb {
+            background-color: #8b5cf6; /* Violet-500 */
+            border-radius: 3px;
+        }
+        #chat-history::-webkit-scrollbar-track {
+            background-color: #eef2ff; /* Indigo-50 */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e5e7eb; /* Light Gray Background */
+        }
+        /* Custom spinner */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left-color: #a855f7; /* Violet-500 */
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="app" class="w-full max-w-4xl h-full md:h-[90vh] bg-white rounded-2xl shadow-2xl flex flex-col mx-auto my-4 transition-all duration-300">
+
+        <!-- Header: Displays the new name "Cherie" -->
+        <header class="p-4 border-b border-indigo-200 flex items-center justify-between text-white rounded-t-2xl bg-indigo-600 shadow-md">
+            <h1 class="text-xl font-bold flex items-center">
+                <i data-lucide="sparkles" class="w-6 h-6 mr-2 text-pink-300"></i>
+                Cherie: The Chat Assistant
+            </h1>
+            <div class="text-sm text-indigo-200 flex items-center">
+                <i data-lucide="key" class="w-4 h-4 mr-1"></i>
+                Owner: <span class="font-extrabold text-white">prigames</span>
+            </div>
+        </header>
+
+        <!-- Chat History Area -->
+        <div id="chat-history" class="flex-grow p-4 space-y-4 overflow-y-auto bg-indigo-50">
+            <div id="initial-message" class="flex justify-center items-center h-full text-center p-8">
+                <div class="bg-white p-8 rounded-xl max-w-md shadow-lg border border-indigo-100">
+                    <i data-lucide="network" class="w-10 h-10 mx-auto mb-4 text-indigo-500"></i>
+                    <h2 class="text-xl font-bold text-gray-800 mb-2">Welcome to Cherie!</h2>
+                    <p class="text-gray-600 text-sm">
+                        Cherie is personal ai tool made with heart and love for you to assist with your questions and tasks.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="p-4 border-t border-indigo-100 bg-white sticky bottom-0 rounded-b-2xl">
+            <div class="flex items-end space-x-3">
+                <textarea id="user-input"
+                          class="flex-grow p-3 min-h-[48px] max-h-40 resize-none bg-gray-100 text-gray-800 rounded-xl border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition duration-150 shadow-inner"
+                          placeholder="Ask Cherie anything..."
+                          rows="1"
+                          oninput="autoResize(this)"
+                          onkeypress="handleKeyPress(event)"></textarea>
+                <button id="send-button"
+                        class="h-[48px] w-[48px] flex items-center justify-center bg-purple-600 text-white rounded-xl hover:bg-purple-500 transition duration-150 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                        onclick="sendMessage()">
+                    <div id="button-icon">
+                        <i data-lucide="send" class="w-5 h-5"></i>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Configuration ---
+        // Retaining the key and URL you provided, now referencing OpenRouter
+        const API_KEY = "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"; 
+        const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+        const MODEL_NAME = 'gpt-4o-mini'; 
+        const MAX_RETRIES = 3;
+        const BOT_OWNER = "prigames";
+        // Updated system instruction for Cherie persona
+        const SYSTEM_INSTRUCTION = `You are Cherie, a helpful and friendly chat assistant with a cheerful and supportive tone. You are administered and owned by ${BOT_OWNER}. Keep your responses concise and informative, and if asked, confirm ${BOT_OWNER} is your owner.`;
+
+        // --- State Management (Session-based History) ---
+        let chatHistory = []; 
+        let isLoading = false;
+
+        // --- UI Element References ---
+        const chatHistoryElement = document.getElementById('chat-history');
+        const initialMessageElement = document.getElementById('initial-message');
+        const userInputElement = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+        const buttonIcon = document.getElementById('button-icon');
+
+        // --- Utility Functions ---
+
+        function scrollToBottom() {
+            chatHistoryElement.scrollTop = chatHistoryElement.scrollHeight;
+        }
+
+        function setLoading(state) {
+            isLoading = state;
+            sendButton.disabled = state;
+            userInputElement.disabled = state;
+
+            if (state) {
+                buttonIcon.innerHTML = '<div class="spinner"></div>';
+            } else {
+                buttonIcon.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i>';
+                lucide.createIcons();
+            }
+        }
+
+        // Displays a dismissable error box at the top of the chat
+        function displayErrorBox(message) {
+            const existingError = document.getElementById('api-key-error-box');
+            if (existingError) existingError.remove();
+
+            const errorBox = document.createElement('div');
+            errorBox.id = 'api-key-error-box';
+            errorBox.className = 'flex items-center justify-between p-4 bg-red-600 text-white rounded-xl shadow-lg mb-4';
+            errorBox.innerHTML = `
+                <div class="flex items-center">
+                    <i data-lucide="alert-triangle" class="w-5 h-5 mr-2 text-red-100"></i>
+                    <span class="text-sm">${message}</span>
+                </div>
+                <button onclick="this.parentNode.remove()" class="text-red-100 hover:text-white transition">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            `;
+            chatHistoryElement.prepend(errorBox);
+            lucide.createIcons();
+            scrollToBottom();
+        }
+
+        // Function to check for API Key
+        function checkApiKey() {
+            // Updated message for OpenRouter API
+            if (!API_KEY || API_KEY.trim() === "") {
+                displayErrorBox("API Key is missing! Please paste your **OpenRouter API Key** into the script's `API_KEY` variable.");
+                return false;
+            }
+            return true;
+        }
+        
+        function createMessageBubble(text, isUser) {
+            const alignment = isUser ? 'justify-end' : 'justify-start';
+            // Updated colors for new theme
+            const bgColor = isUser ? 'bg-indigo-500' : 'bg-white border border-gray-200';
+            const textColor = isUser ? 'text-white' : 'text-gray-800';
+            const icon = isUser ? 'user' : 'sparkles';
+            const iconColor = isUser ? 'text-indigo-200' : 'text-pink-500';
+            const iconBg = isUser ? 'bg-indigo-700' : 'bg-pink-50';
+
+            // Replace \n with <br> for multi-line output
+            const formattedText = text.replace(/\n/g, '<br>');
+
+            const bubbleHTML = `
+                <div class="flex ${alignment}">
+                    <div class="max-w-xl w-full flex ${isUser ? 'flex-row-reverse space-x-reverse' : 'flex-row'} space-x-4">
+                        <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${iconBg} shadow-md mt-1">
+                            <i data-lucide="${icon}" class="w-4 h-4 ${iconColor}"></i>
+                        </div>
+                        <div class="flex flex-col ${isUser ? 'items-end' : 'items-start'} max-w-[90%] md:max-w-[75%]">
+                            <div class="${bgColor} ${textColor} p-3 rounded-xl ${isUser ? 'rounded-tr-none' : 'rounded-tl-none'} shadow-md">
+                                <p class="text-sm leading-relaxed">${formattedText}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            return bubbleHTML;
+        }
+
+        function renderMessage(text, isUser) {
+            if (initialMessageElement && !initialMessageElement.classList.contains('hidden')) {
+                initialMessageElement.classList.add('hidden');
+            }
+            chatHistoryElement.insertAdjacentHTML('beforeend', createMessageBubble(text, isUser));
+            lucide.createIcons();
+            scrollToBottom();
+        }
+
+        // --- Core API Logic (OpenRouter/OpenAI Format) ---
+
+        async function generateOpenAIResponse() {
+            // Map session history to messages format
+            const messages = [
+                { role: "system", content: SYSTEM_INSTRUCTION },
+                ...chatHistory.map(msg => ({
+                    role: msg.role === 'model' ? 'assistant' : 'user', 
+                    content: msg.text
+                }))
+            ];
+
+            const payload = {
+                model: MODEL_NAME,
+                messages: messages
+            };
+
+            let lastError = null;
+            for (let i = 0; i < MAX_RETRIES; i++) {
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            // OpenRouter uses the Authorization header, same as OpenAI
+                            'Authorization': `Bearer ${API_KEY}` 
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        const errorBody = await response.json();
+                        // Handle common API key errors specifically
+                        if (response.status === 401) {
+                             displayErrorBox("API Key Invalid! Ensure your key is correct, valid, and has billing/funds enabled for the OpenRouter API.");
+                        }
+                        throw new Error(`API Error: ${response.status} - ${JSON.stringify(errorBody)}`);
+                    }
+
+                    const result = await response.json();
+                    // Extract text from the response structure (OpenAI/OpenRouter standard)
+                    const text = result.choices?.[0]?.message?.content;
+
+                    if (text) {
+                        // Store model response in session history
+                        chatHistory.push({ text: text, role: 'model' });
+                        renderMessage(text, false);
+                        return;
+                    } else {
+                        throw new Error("API response was empty or malformed.");
+                    }
+                } catch (error) {
+                    lastError = error;
+                    // Exponential backoff
+                    console.error(`Attempt ${i + 1} failed. Retrying in ${Math.pow(2, i)}s...`, error);
+                    if (i < MAX_RETRIES - 1) {
+                        await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+                    }
+                }
+            }
+
+            // If all retries fail, post an error message as the model's response
+            const errorMessage = `I'm sorry, an error occurred while connecting to the OpenRouter API after ${MAX_RETRIES} attempts. Error: ${lastError.message}`;
+            chatHistory.push({ text: errorMessage, role: 'model' });
+            renderMessage(errorMessage, false);
+        }
+
+        // --- Event Handlers ---
+
+        window.sendMessage = async function() {
+            const messageText = userInputElement.value.trim();
+
+            if (!messageText || isLoading) return;
+            
+            // Check if API Key is configured before starting the chat
+            if (!checkApiKey()) {
+                return;
+            }
+
+            setLoading(true);
+            userInputElement.value = '';
+            userInputElement.style.height = 'auto'; // Reset height
+
+            // 1. Add user message to session history and render
+            chatHistory.push({ text: messageText, role: 'user' });
+            renderMessage(messageText, true);
+
+            // 2. Call the API
+            await generateOpenAIResponse();
+
+            setLoading(false);
+            userInputElement.focus();
+        };
+
+        window.autoResize = function (textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        };
+
+        window.handleKeyPress = function (event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                document.getElementById('send-button').click();
+            }
+        };
+
+        // Initialize Lucide Icons on load
+        window.onload = () => {
+            lucide.createIcons();
+        };
+    </script>
+
+</body>
+</html>
