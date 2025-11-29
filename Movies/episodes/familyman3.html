@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">The Family Man | Episode 1 - CineView</title>
+    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    
+    <header class="main-header">
+        </header>
+
+    <div class="site-title-banner"> 
+        <h1>The Family Man (Season 3)</h1>
+        <p class="site-details-info">7 Episodes | Action | Crime | Drama | Thriller |</p>
+    </div>
+
+    <main>
+        <section class="episode-page-content">
+            
+            <div class="player-wrapper">
+                <div class="video-container">
+                    <iframe 
+                        id="episode-iframe"
+                        src="" 
+                        title="The Kapil Sharma Show Player" 
+                        allow="autoplay; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                    <div class="player-overlay"></div> 
+                </div>
+
+                <div class="episode-title-bar">
+                    <div class="episode-info-left">
+                        <h2 id="current-episode-title" class="current-episode-title">Episode 1</h2>
+                        <span id="current-episode-number" class="current-episode-number">Episode 1 of 14</span>
+                    </div>
+                    <div class="episode-selector-dropdown">
+                        <label for="episode-select" class="sr-only">Change Episode:</label> 
+                        <select id="episode-select" onchange="changeEpisode(this.value);">
+                            <option value="0" selected>E01 .</option>
+                            <option value="1">E02 </option>
+                            <option value="2">E03 </option>
+                            <option value="3">E04 </option>
+                            <option value="4">E05 </option>
+                            <option value="5">E06 </option>
+                            <option value="6">E07 </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="episode-synopsis-block"> 
+                <h2>About This Episode</h2>
+                <p id="episode-description" class="description">Placeholder description. This will be updated dynamically.</p>
+                <p><strong>Genre:</strong> Action | Crime | Drama | Thriller | <strong>Year:</strong> 2025</p>
+            </div>
+
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 CineView. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        const EPISODES = [
+            { index: 0, name: "", videoUrl: "https://short.icu/OzcIkav01", description: "" },
+            { index: 1, name: "", videoUrl: "https://short.icu/hvs4iLHuM", description: "" },
+            { index: 2, name: "", videoUrl: "https://short.icu/A3S4gqYx4", description: "" },
+            { index: 3, name: "", videoUrl: "https://short.icu/u42XsM7xb", description: "" },
+            { index: 4, name: "", videoUrl: "https://short.icu/d1uqiv21f", description: "" },
+            { index: 5, name: "", videoUrl: "https://short.icu/UDEuAwdmI", description: "" },
+            { index: 6, name: "", videoUrl: "https://short.icu/LhM_9VDym", description: "" },
+        ];
+
+        function changeEpisode(episodeIndex) {
+            const episode = EPISODES[parseInt(episodeIndex)]; 
+            if (!episode) return; 
+
+            document.getElementById('episode-iframe').src = episode.videoUrl;
+            document.getElementById('current-episode-title').textContent = episode.name;
+            document.getElementById('current-episode-number').textContent = `Episode ${episode.index + 1} of ${EPISODES.length}`;
+            document.getElementById('episode-description').textContent = episode.description;
+            document.getElementById('page-title').textContent = `The Family Man | E${episode.index + 1}: ${episode.name} - CineView`;
+            document.getElementById('episode-select').value = episodeIndex;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            changeEpisode(0); 
+        });
+    </script>
+</body>
+</html>

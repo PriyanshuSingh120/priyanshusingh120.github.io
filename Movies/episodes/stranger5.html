@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">The Stranger Things 5- CineView</title>
+    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    
+    <header class="main-header">
+        </header>
+
+    <div class="site-title-banner"> 
+        <h1>The Stranger Things 5</h1>
+        <p class="site-details-info">6 Episodes | Action | Adventure | Mystery | Fantasy | Sci-Fi | 2025 | </p>
+    </div>
+
+    <main>
+        <section class="episode-page-content">
+            
+            <div class="player-wrapper">
+                <div class="video-container">
+                    <iframe 
+                        id="episode-iframe"
+                        src="" 
+                        title="The stragner things 5 Player" 
+                        allow="autoplay; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                    <div class="player-overlay"></div> 
+                </div>
+
+                <div class="episode-title-bar">
+                    <div class="episode-info-left">
+                        <h2 id="current-episode-title" class="current-episode-title">Episode 1: The Crawl</h2>
+                        <span id="current-episode-number" class="current-episode-number">Episode 1 of 6</span>
+                    </div>
+                    <div class="episode-selector-dropdown">
+                        <label for="episode-select" class="sr-only">Change Episode:</label> 
+                        <select id="episode-select" onchange="changeEpisode(this.value);">
+                            <option value="0" selected>E01: The Crawl</option>
+                            <option value="1">E02: The Vanishing of</option>
+                            <option value="2">E03: The Turnbow Trap</option>
+                            <option value="3">E04: Sorcerer</option>
+                            <option value="4">E05: Shock Jock</option>
+                            <option value="5">E06: Escape from camazotz</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="episode-synopsis-block"> 
+                <h2>About This Episode</h2>
+                <p id="episode-description" class="description">Placeholder description. This will be updated dynamically.</p>
+                <p><strong>Genre:</strong> Action | Fantasy | Adventure | Sci-Fi | Mystery | <strong>Year:2025</strong> 2022</p>
+            </div>
+
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 CineView. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        const EPISODES = [
+            { index: 0, name: "The Crawl", videoUrl: "https://short.icu/RrBB6-79l", description: "" },
+            { index: 1, name: "The Vanishing Of", videoUrl: "https://short.icu/YcwrZOAyz", description: "" },
+            { index: 2, name: "The turnbow Trap", videoUrl: "https://short.icu/U8oxvfuW2", description: "" },
+            { index: 3, name: "Sorcerer", videoUrl: "https://short.icu/pBvuStnhl", description: "" },
+            { index: 4, name: "Shock Jock", videoUrl: "", description: "" },
+            { index: 5, name: "Escape From Camazotz", videoUrl: "", description: "" },
+            
+        ];
+
+        function changeEpisode(episodeIndex) {
+            const episode = EPISODES[parseInt(episodeIndex)]; 
+            if (!episode) return; 
+
+            document.getElementById('episode-iframe').src = episode.videoUrl;
+            document.getElementById('current-episode-title').textContent = episode.name;
+            document.getElementById('current-episode-number').textContent = `Episode ${episode.index + 1} of ${EPISODES.length}`;
+            document.getElementById('episode-description').textContent = episode.description;
+            document.getElementById('episode-select').value = episodeIndex;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            changeEpisode(0); 
+        });
+    </script>
+</body>
+</html>
