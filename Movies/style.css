@@ -184,7 +184,6 @@ a {
     font-size: 1.1em;
     margin-bottom: 5px;
     
-    text-overflow: ellipsis;
 }
 
 .movie-info p {
@@ -280,4 +279,5 @@ footer {
         grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
     }
 }
+
 
