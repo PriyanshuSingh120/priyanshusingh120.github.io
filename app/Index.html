@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus APK | Premium Mobile Downloads</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #0a0a0c;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-4px);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .search-glow:focus-within {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a0c; }
+        ::-webkit-scrollbar-thumb { background: #1e1e24; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #312e81; }
+
+        .modal-enter { animation: modalIn 0.3s ease-out forwards; }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+    </style>
+</head>
+<body class="pb-20">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 glass-card border-b border-white/5 px-6 py-4 flex items-center justify-between backdrop-blur-xl">
+        <div class="flex items-center gap-2">
+            <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                <i data-lucide="layers" class="text-white"></i>
+            </div>
+            <span class="text-xl font-bold tracking-tight">Nexus<span class="text-indigo-500">APK</span></span>
+        </div>
+        <div class="flex items-center gap-4">
+            <button onclick="toggleAdmin()" class="p-2 hover:bg-white/5 rounded-full transition-colors text-zinc-400 hover:text-white" title="Admin Panel">
+                <i data-lucide="settings"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative pt-16 pb-12 px-6 text-center overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-indigo-600/20 blur-[120px] rounded-full -z-10"></div>
+        <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">
+            Discover Premium <br><span class="gradient-text">Android Experiences</span>
+        </h1>
+        <p class="text-zinc-400 max-w-xl mx-auto mb-8">
+            Safe, verified, and high-speed APK downloads for your favorite mobile tools and games.
+        </p>
+
+        <!-- Search Bar -->
+        <div class="max-w-2xl mx-auto relative group search-glow rounded-2xl overflow-hidden transition-all">
+            <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                <i data-lucide="search" class="w-5 h-5 text-zinc-500"></i>
+            </div>
+            <input 
+                type="text" 
+                id="searchInput"
+                placeholder="Search apps, games, tools..." 
+                class="w-full bg-white/5 border border-white/10 py-4 pl-12 pr-4 outline-none focus:border-indigo-500 transition-all text-white placeholder:text-zinc-600 rounded-2xl"
+                onkeyup="filterApps()"
+            >
+        </div>
+    </header>
+
+    <!-- Categories -->
+    <section class="max-w-6xl mx-auto px-6 mb-12 flex gap-3 overflow-x-auto pb-4 no-scrollbar">
+        <button onclick="setCategory('All')" class="category-btn px-6 py-2 rounded-full glass-card whitespace-nowrap text-sm font-medium border-indigo-500/50 text-indigo-400">All Apps</button>
+        <button onclick="setCategory('Games')" class="category-btn px-6 py-2 rounded-full glass-card whitespace-nowrap text-sm font-medium">Games</button>
+        <button onclick="setCategory('Tools')" class="category-btn px-6 py-2 rounded-full glass-card whitespace-nowrap text-sm font-medium">Tools</button>
+        <button onclick="setCategory('Social')" class="category-btn px-6 py-2 rounded-full glass-card whitespace-nowrap text-sm font-medium">Social</button>
+        <button onclick="setCategory('Media')" class="category-btn px-6 py-2 rounded-full glass-card whitespace-nowrap text-sm font-medium">Media</button>
+    </section>
+
+    <!-- App Grid -->
+    <main class="max-w-6xl mx-auto px-6">
+        <div id="appGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Apps will be injected here -->
+        </div>
+        <div id="noResults" class="hidden text-center py-20">
+            <i data-lucide="search-x" class="w-16 h-16 text-zinc-700 mx-auto mb-4"></i>
+            <h3 class="text-xl font-semibold text-zinc-500">No apps found matching your search</h3>
+        </div>
+    </main>
+
+    <!-- App Details Modal -->
+    <div id="detailsModal" class="fixed inset-0 z-[60] hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-card w-full max-w-2xl rounded-3xl overflow-hidden modal-enter">
+            <div id="modalContent" class="p-8">
+                <!-- Modal content injected dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel Modal -->
+    <div id="adminModal" class="fixed inset-0 z-[60] hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-card w-full max-w-lg rounded-3xl overflow-hidden modal-enter">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Add New APK</h2>
+                    <button onclick="toggleAdmin()" class="text-zinc-500 hover:text-white"><i data-lucide="x"></i></button>
+                </div>
+                <form id="uploadForm" class="space-y-4" onsubmit="handleUpload(event)">
+                    <div>
+                        <label class="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-1 block">App Name</label>
+                        <input type="text" id="appName" required class="w-full bg-white/5 border border-white/10 p-3 rounded-xl outline-none focus:border-indigo-500">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-1 block">Category</label>
+                            <select id="appCategory" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl outline-none focus:border-indigo-500">
+                                <option value="Games">Games</option>
+                                <option value="Tools">Tools</option>
+                                <option value="Social">Social</option>
+                                <option value="Media">Media</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-1 block">Version</label>
+                            <input type="text" id="appVersion" placeholder="e.g. 1.0.4" required class="w-full bg-white/5 border border-white/10 p-3 rounded-xl outline-none focus:border-indigo-500">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-1 block">Icon URL (or Emoji)</label>
+                        <input type="text" id="appIcon" placeholder="https://... or 🎮" required class="w-full bg-white/5 border border-white/10 p-3 rounded-xl outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-1 block">Description</label>
+                        <textarea id="appDesc" rows="3" required class="w-full bg-white/5 border border-white/10 p-3 rounded-xl outline-none focus:border-indigo-500"></textarea>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-1 block">APK Download URL</label>
+                        <input type="text" id="appUrl" placeholder="./apks/filename.apk" required class="w-full bg-white/5 border border-white/10 p-3 rounded-xl outline-none focus:border-indigo-500">
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-indigo-600/20">
+                        Upload to Local Library
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initial Mock Database
+        const initialApps = [
+            { id: 1, name: "Cyber Dash", category: "Games", version: "2.1.0", icon: "🚀", desc: "A high-speed neon runner game with amazing synthwave tracks.", url: "#", size: "45 MB" },
+            { id: 2, name: "Vision Editor", category: "Tools", version: "5.4.2", icon: "📸", desc: "Professional photo editing tools for mobile photographers.", url: "#", size: "120 MB" },
+            { id: 3, name: "Socialize", category: "Social", version: "1.0.0", icon: "💬", desc: "A privacy-focused social network for close friends.", url: "#", size: "32 MB" },
+            { id: 4, name: "Flow Music", category: "Media", version: "3.2.1", icon: "🎵", desc: "Stream high-fidelity audio without any interruptions.", url: "#", size: "18 MB" }
+        ];
+
+        let apps = JSON.parse(localStorage.getItem('nexus_apps')) || initialApps;
+        let currentCategory = 'All';
+
+        function init() {
+            lucide.createIcons();
+            renderApps();
+        }
+
+        function renderApps() {
+            const grid = document.getElementById('appGrid');
+            const filtered = apps.filter(app => {
+                const matchesCat = currentCategory === 'All' || app.category === currentCategory;
+                const search = document.getElementById('searchInput').value.toLowerCase();
+                const matchesSearch = app.name.toLowerCase().includes(search) || app.desc.toLowerCase().includes(search);
+                return matchesCat && matchesSearch;
+            });
+
+            grid.innerHTML = '';
+            
+            if (filtered.length === 0) {
+                document.getElementById('noResults').classList.remove('hidden');
+            } else {
+                document.getElementById('noResults').classList.add('hidden');
+                filtered.forEach(app => {
+                    const card = document.createElement('div');
+                    card.className = 'glass-card rounded-2xl p-5 cursor-pointer flex flex-col h-full';
+                    card.onclick = () => showDetails(app.id);
+                    card.innerHTML = `
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center text-3xl shadow-inner">
+                                ${app.icon.startsWith('http') ? `<img src="${app.icon}" class="w-full h-full object-cover rounded-2xl" onerror="this.innerHTML='📦'">` : app.icon}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="font-bold text-lg truncate">${app.name}</h3>
+                                <p class="text-xs text-indigo-400 font-semibold">${app.category}</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-zinc-400 line-clamp-2 mb-6 flex-grow">${app.desc}</p>
+                        <div class="flex items-center justify-between mt-auto pt-4 border-t border-white/5">
+                            <span class="text-xs text-zinc-500 font-medium">v${app.version}</span>
+                            <span class="text-xs text-zinc-500 font-medium">${app.size || 'N/A'}</span>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+            lucide.createIcons();
+        }
+
+        function filterApps() {
+            renderApps();
+        }
+
+        function setCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('border-indigo-500/50', 'text-indigo-400');
+                if (btn.innerText.includes(cat)) {
+                    btn.classList.add('border-indigo-500/50', 'text-indigo-400');
+                }
+            });
+            renderApps();
+        }
+
+        function showDetails(id) {
+            const app = apps.find(a => a.id === id);
+            const modal = document.getElementById('detailsModal');
+            const content = document.getElementById('modalContent');
+
+            content.innerHTML = `
+                <div class="flex flex-col sm:flex-row gap-6 mb-8">
+                    <div class="w-32 h-32 bg-white/5 rounded-3xl flex items-center justify-center text-6xl flex-shrink-0">
+                        ${app.icon.startsWith('http') ? `<img src="${app.icon}" class="w-full h-full object-cover rounded-3xl">` : app.icon}
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <h2 class="text-3xl font-bold mb-1">${app.name}</h2>
+                            <button onclick="closeDetails()" class="p-2 text-zinc-500 hover:text-white"><i data-lucide="x"></i></button>
+                        </div>
+                        <p class="text-indigo-400 font-bold mb-4">${app.category} • Version ${app.version}</p>
+                        <div class="flex gap-4">
+                            <div class="bg-white/5 px-4 py-2 rounded-xl text-center">
+                                <p class="text-[10px] uppercase text-zinc-500 font-bold tracking-widest">Size</p>
+                                <p class="text-sm font-bold">${app.size || 'Unknown'}</p>
+                            </div>
+                             <div class="bg-white/5 px-4 py-2 rounded-xl text-center">
+                                <p class="text-[10px] uppercase text-zinc-500 font-bold tracking-widest">Type</p>
+                                <p class="text-sm font-bold">APK</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="text-sm font-bold text-zinc-500 uppercase tracking-widest mb-2">Description</h4>
+                        <p class="text-zinc-300 leading-relaxed">${app.desc}</p>
+                    </div>
+                    <div class="pt-6 border-t border-white/5 flex gap-4">
+                        <a href="${app.url}" download class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl text-center transition-all flex items-center justify-center gap-2">
+                            <i data-lucide="download" class="w-5 h-5"></i>
+                            Download APK
+                        </a>
+                        <button onclick="deleteApp(${app.id})" class="p-4 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-2xl transition-colors">
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeDetails() {
+            document.getElementById('detailsModal').classList.add('hidden');
+        }
+
+        function toggleAdmin() {
+            const modal = document.getElementById('adminModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function handleUpload(e) {
+            e.preventDefault();
+            const newApp = {
+                id: Date.now(),
+                name: document.getElementById('appName').value,
+                category: document.getElementById('appCategory').value,
+                version: document.getElementById('appVersion').value,
+                icon: document.getElementById('appIcon').value,
+                desc: document.getElementById('appDesc').value,
+                url: document.getElementById('appUrl').value,
+                size: (Math.random() * 50 + 10).toFixed(1) + " MB"
+            };
+
+            apps.unshift(newApp);
+            localStorage.setItem('nexus_apps', JSON.stringify(apps));
+            renderApps();
+            toggleAdmin();
+            e.target.reset();
+        }
+
+        function deleteApp(id) {
+            if(confirm('Are you sure you want to remove this app?')) {
+                apps = apps.filter(a => a.id !== id);
+                localStorage.setItem('nexus_apps', JSON.stringify(apps));
+                renderApps();
+                closeDetails();
+            }
+        }
+
+        // Close modals on backdrop click
+        window.onclick = function(event) {
+            if (event.target.id.includes('Modal')) {
+                event.target.classList.add('hidden');
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
+
