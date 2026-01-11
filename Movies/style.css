@@ -7,9 +7,11 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #141414; /* Deep dark background */
-    color: #EAEAEA; /* Light text color */
+    background-color: #141414;
+    color: #EAEAEA; 
     line-height: 1.6;
+    cursor: url("https://prigames.netlify.app/normal.cur"), auto;
+    scroll-behavior:smooth;
 }
 
 a {
@@ -17,7 +19,7 @@ a {
     color: inherit;
 }
 
-/* --- Header Styling --- */
+
 .main-header {
     display: flex;
     justify-content: space-between;
@@ -33,12 +35,12 @@ a {
 .logo {
     font-size: 1.8em;
     font-weight: bold;
-    color: #E50914; /* Netflix Red accent */
+    color: #E50914;
 }
 
-/* Desktop Navigation */
+
 .nav-links {
-    display: flex; /* Ensure horizontal layout on desktop */
+    display: flex; 
     align-items: center;
 }
 
@@ -53,21 +55,21 @@ a {
 }
 
 .menu-toggle {
-    display: none; /* Hide on desktop, shown in mobile media query */
+    display: none; 
     background: none;
     border: none;
     color: #EAEAEA;
     font-size: 1.5em;
     cursor: pointer;
-    padding: 0; /* Clean up padding */
+    padding: 0; 
 }
 
-/* --- Hero Section Styling --- */
+
 .hero-section {
-    /* Always ensure a fallback color for the background */
+    
     background: #000 url('hero-bg.jpg') center/cover no-repeat; 
-    background-blend-mode: multiply; /* Helps darkening the image */
-    background-color: rgba(0, 0, 0, 0.7); /* Darkening layer */
+    background-blend-mode: multiply; 
+    background-color: rgba(0, 0, 0, 0.7);
     height: 60vh;
     display: flex;
     flex-direction: column;
@@ -82,7 +84,7 @@ a {
     margin-bottom: 25px;
 }
 
-/* Search Box Styling */
+
 .search-box {
     display: flex;
     width: 100%;
@@ -129,10 +131,8 @@ a {
 
 .movie-grid {
     display: grid;
-    /* Default: 2 columns for smaller screens */
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
     gap: 20px;
-    /* Forces cards to fill the available height in their grid cell */
     grid-auto-rows: 1fr; 
 }
 
@@ -146,7 +146,7 @@ a {
     /* Display flex column to push the movie-info to the bottom of the card */
     display: flex;
     flex-direction: column;
-    height: 100%; /* Important for grid-auto-rows: 1fr to work */
+    height: 100%;
 }
 
 .movie-card:hover {
@@ -154,7 +154,7 @@ a {
     box-shadow: 0 8px 25px rgba(229, 9, 20, 0.4);
 }
 
-/* Aspect Ratio Container for Poster */
+
 .movie-poster-container {
     position: relative;
     width: 100%;
@@ -163,7 +163,6 @@ a {
     overflow: hidden;
 }
 
-/* The image fills the container */
 .movie-poster {
     position: absolute;
     top: 0;
@@ -171,12 +170,11 @@ a {
     width: 100%;
     height: 100%; 
     display: block;
-    object-fit: cover; /* Ensures image covers the area without distorting */
+    object-fit: cover; 
 }
 
 .movie-info {
     padding: 15px;
-    /* Pushes the info block to the bottom of the card, accommodating variable image heights */
     margin-top: auto; 
 }
 
@@ -191,7 +189,7 @@ a {
     color: #A0A0A0;
 }
 
-/* --- Footer Styling --- */
+
 footer {
     text-align: center;
     padding: 20px;
@@ -200,13 +198,7 @@ footer {
     margin-top: 30px;
 }
 
-/*
-============================================================
-           Responsive Adjustments
-============================================================
-*/
 
-/* Desktop and Larger Tablets */
 @media (min-width: 768px) {
     .movie-grid {
         /* Larger screens: 4 columns */
@@ -218,7 +210,6 @@ footer {
     }
 }
 
-/* Mobile and Smaller Tablets */
 @media (max-width: 767px) {
     /* --- Header & Navigation for Mobile --- */
     .main-header {
@@ -249,15 +240,15 @@ footer {
     }
 
     .menu-toggle {
-        display: block; /* Show the hamburger icon */
+        display: block; 
     }
     
-    /* JavaScript will add the 'active' class to show the menu */
+
     .nav-links.active {
-        display: flex; /* Show the navigation links stacked vertically */
+        display: flex; 
     }
 
-    /* --- Other Mobile Adjustments --- */
+
     .hero-section {
         height: 50vh;
     }
@@ -275,9 +266,9 @@ footer {
     }
 
     .movie-grid {
-        /* Make columns slightly smaller on very small screens */
         grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
     }
 }
+
 
 
