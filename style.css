@@ -20,7 +20,7 @@ body{
   cursor: url("normal.cur"), auto;
   scroll-behavior:smooth;
   position: relative;
-  z-index: 1; /* 👈 Yeh add karo */
+  z-index: 1;
 }
 
 
@@ -89,8 +89,8 @@ p{
   border-radius: 6px;
 }
 #Python::-webkit-scrollbar-track {
-  background-color: #f0f0f0; /* Track color */
-  border-radius: 6px; /* Rounded corners */
+  background-color: #f0f0f0;
+  border-radius: 6px;
 }
 #html::-webkit-scrollbar{
   width: 10px;
@@ -100,8 +100,8 @@ p{
   border-radius: 6px;
 }
 #html::-webkit-scrollbar-track {
-  background-color: #f0f0f0; /* Track color */
-  border-radius: 6px; /* Rounded corners */
+  background-color: #f0f0f0; 
+  border-radius: 6px; 
 }
 #html{
   background: url("Html.jpg");
@@ -151,7 +151,7 @@ p,
 .overlay,
 .popup {
   position: relative;
-  z-index: 1; /* 👈 Add this */
+  z-index: 1; 
 }
 
 
@@ -240,17 +240,17 @@ a{
 
 .overlay,
 .popup,
-.skeleton-loader {  /* id ya class jo bhi use kar rahe ho */
-  z-index: 1000;  /* High enough to be on top */
+.skeleton-loader { 
+  z-index: 1000; 
 }
 
 
-/* Expand Sidebar on Hover */
+
 .back:hover {
   width: 220px;
 }
 
-/* Sidebar Links (Icons + Text) */
+
 .slide {
   display: flex;
   align-items: center;
@@ -265,17 +265,17 @@ a{
   word-wrap: break-word;
 }
 
-/* Expand Links when Sidebar is Hovered */
+
 .back:hover .slide {
   width: 240px;
 }
 
-/* Icons */
+
 .slide img {
   flex-shrink: 0;
 }
 
-/* Text Styling */
+
 .slide::after {
   content: attr(data-text);
   font-size:31px;
@@ -288,13 +288,14 @@ a{
   white-space: normal;
   word-wrap: break-word;
 }
+
 #menu::after{
   font-size: 32px;
   font-family: "Emblema One", system-ui;
   font-weight: 400;
   font-style: normal;
 }
-/* Show Text when Hovering on Sidebar */
+
 .back:hover .slide::after {
   opacity: 1;
 }
@@ -557,6 +558,7 @@ a{
     height:28px;
   }
 }
+
 
 
 
