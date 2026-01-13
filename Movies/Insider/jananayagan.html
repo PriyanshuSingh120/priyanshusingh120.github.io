@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JANA NAYAGAN | Thalapathy Vijay | CineView</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;700;900&display=swap');
+
+        :root {
+            --gold: #fbbf24;
+            --gold-glow: rgba(251, 191, 36, 0.3);
+            --bg: #0a0a0a;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .font-mass {
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 0.05em;
+        }
+
+        /* Particle Canvas */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Gold Gradient Text */
+        .text-leader {
+            background: linear-gradient(to bottom, #fff 20%, #fbbf24 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px var(--gold-glow));
+        }
+
+        /* Glass Cards */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(251, 191, 36, 0.1);
+        }
+
+        /* Poster Glow */
+        .poster-glow::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, transparent, var(--gold), transparent);
+            z-index: -1;
+            filter: blur(10px);
+            opacity: 0.5;
+        }
+
+        /* Animations */
+        @keyframes title-reveal {
+            0% { transform: scale(0.9); opacity: 0; filter: blur(20px); }
+            100% { transform: scale(1); opacity: 1; filter: blur(0); }
+        }
+
+        .reveal-title {
+            animation: title-reveal 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .timer-box {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timer-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.1), transparent);
+            animation: sweep 3s infinite;
+        }
+
+        @keyframes sweep {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+    </style>
+</head>
+<body class="selection:bg-yellow-500 selection:text-black">
+
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Nav -->
+    <nav class="relative z-50 flex justify-between items-center px-8 py-8 max-w-7xl mx-auto">
+        <div class="flex items-center gap-3 group cursor-pointer">
+            <div class="w-12 h-12 bg-yellow-500 rounded-xl flex items-center justify-center rotate-3 group-hover:rotate-0 transition-transform shadow-lg shadow-yellow-500/20">
+                <span class="font-black italic text-black text-xl">CV</span>
+            </div>
+            <span class="font-mass text-2xl tracking-widest">CINE<span class="text-yellow-500">VIEW</span></span>
+        </div>
+        
+        <div class="hidden md:flex gap-10 items-center text-[11px] font-bold tracking-[0.3em] text-gray-400">
+            <a href="#" class="hover:text-yellow-500 transition-colors uppercase">The Saga</a>
+            <a href="#" class="hover:text-yellow-500 transition-colors uppercase">Gallery</a>
+            <a href="#" class="hover:text-yellow-500 transition-colors uppercase">Credits</a>
+        </div>
+
+        <button class="bg-white/5 border border-white/10 px-6 py-2 rounded-lg text-[10px] font-bold tracking-widest hover:bg-yellow-500 hover:text-black transition-all">
+            LOGIN
+        </button>
+    </nav>
+
+    <!-- Hero Content -->
+    <main class="relative z-10 max-w-7xl mx-auto px-8 pt-10 pb-20">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            
+            <div class="space-y-10 reveal-title">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-[2px] bg-yellow-500"></span>
+                        <span class="text-xs font-bold tracking-[0.5em] uppercase text-yellow-500">A Cinematic Revolution</span>
+                    </div>
+                    <h1 class="font-mass text-8xl md:text-[10rem] leading-[0.8] text-leader">
+                        JANA <br> NAYAGAN
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-400 font-light max-w-md italic border-l-2 border-yellow-500 pl-6 py-2">
+                        "The People's Voice. The King's Choice."
+                    </p>
+                </div>
+
+                <!-- Persistent Timer -->
+                <div class="space-y-4">
+                    <h3 class="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500">The Coronation Begins In:</h3>
+                    <div class="flex gap-4">
+                        <div class="timer-box glass-panel w-24 h-28 rounded-2xl flex flex-col items-center justify-center">
+                            <span id="days" class="text-4xl font-mass text-white">00</span>
+                            <span class="text-[9px] uppercase tracking-widest text-yellow-500/60 font-bold">Days</span>
+                        </div>
+                        <div class="timer-box glass-panel w-24 h-28 rounded-2xl flex flex-col items-center justify-center">
+                            <span id="hours" class="text-4xl font-mass text-white">00</span>
+                            <span class="text-[9px] uppercase tracking-widest text-yellow-500/60 font-bold">Hours</span>
+                        </div>
+                        <div class="timer-box glass-panel w-24 h-28 rounded-2xl flex flex-col items-center justify-center">
+                            <span id="mins" class="text-4xl font-mass text-white">00</span>
+                            <span class="text-[9px] uppercase tracking-widest text-yellow-500/60 font-bold">Mins</span>
+                        </div>
+                        <div class="timer-box glass-panel w-24 h-28 rounded-2xl flex flex-col items-center justify-center border-yellow-500/30">
+                            <span id="secs" class="text-4xl font-mass text-yellow-500">00</span>
+                            <span class="text-[9px] uppercase tracking-widest text-white/40 font-bold">Secs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA -->
+                <div class="flex flex-wrap gap-6 items-center">
+                    <button class="group relative px-10 py-5 bg-yellow-500 text-black font-black text-xs tracking-[0.2em] uppercase rounded-xl hover:scale-105 transition-all shadow-xl shadow-yellow-500/20">
+                        Join the Movement
+                        <div class="absolute -inset-1 border border-yellow-500/50 rounded-xl animate-pulse"></div>
+                    </button>
+                    <div class="flex items-center gap-4 text-xs font-bold text-gray-400 hover:text-white cursor-pointer transition-all">
+                        <div class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center">
+                            <i data-lucide="play" class="w-4 h-4 fill-white"></i>
+                        </div>
+                        WATCH TEASER
+                    </div>
+                </div>
+            </div>
+
+            <!-- Poster Side -->
+            <div class="relative reveal-title" style="animation-delay: 0.3s;">
+                <div class="absolute -inset-20 bg-yellow-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+                
+                <div class="relative z-10 w-full max-w-[480px] mx-auto aspect-[3/4] rounded-[2rem] overflow-hidden poster-glow border border-white/10 group">
+                    <img src="https://images.unsplash.com/photo-1542156822-6924d1a71ace?auto=format&fit=crop&q=80&w=1000" class="w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-[8s] grayscale hover:grayscale-0" alt="Leader Poster">
+                    
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+                    
+                    <div class="absolute bottom-12 left-12 right-12">
+                        <div class="space-y-1">
+                            <div class="text-[10px] font-bold text-yellow-500 uppercase tracking-[0.4em]">Starring</div>
+                            <h2 class="font-mass text-5xl text-white">THALAPATHY VIJAY</h2>
+                        </div>
+                    </div>
+
+                    <!-- Floating Badge -->
+                    <div class="absolute top-10 right-10 w-24 h-24 glass-panel rounded-full flex items-center justify-center text-center animate-bounce">
+                        <div>
+                            <div class="text-[8px] uppercase font-black text-gray-500">JUNE</div>
+                            <div class="text-2xl font-mass text-yellow-500">2026</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Social Proof -->
+    <footer class="relative z-10 py-10 px-8 border-t border-white/5 bg-black/50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="flex gap-10">
+                <div class="text-center">
+                    <div class="text-2xl font-mass">4.8M</div>
+                    <div class="text-[9px] uppercase tracking-widest text-gray-500">TEASER VIEWS</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-mass">1.2M</div>
+                    <div class="text-[9px] uppercase tracking-widest text-gray-500">FAN REGISTRATIONS</div>
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <div class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all cursor-pointer">
+                    <i data-lucide="instagram" class="w-4 h-4 text-gray-400"></i>
+                </div>
+                <div class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all cursor-pointer">
+                    <i data-lucide="twitter" class="w-4 h-4 text-gray-400"></i>
+                </div>
+                <div class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all cursor-pointer">
+                    <i data-lucide="youtube" class="w-4 h-4 text-gray-400"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // --- Persistent Real-Time Countdown ---
+        // Anchored to June 22, 2026 (Vijay's Birthday)
+        const targetDate = new Date("June 22, 2026 00:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                document.getElementById('secs').parentElement.innerHTML = '<span class="text-xl font-mass">ARRIVED</span>';
+                return;
+            }
+
+            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = String(d).padStart(2, '0');
+            document.getElementById('hours').innerText = String(h).padStart(2, '0');
+            document.getElementById('mins').innerText = String(m).padStart(2, '0');
+            document.getElementById('secs').innerText = String(s).padStart(2, '0');
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // --- Animated Embers Background ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function initParticles() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            for (let i = 0; i < 100; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2,
+                    speedY: -Math.random() * 1.5 - 0.5,
+                    opacity: Math.random()
+                });
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                ctx.fillStyle = `rgba(251, 191, 36, ${p.opacity})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                p.y += p.speedY;
+                if (p.y < -10) p.y = canvas.height + 10;
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', initParticles);
+        initParticles();
+        animate();
+    </script>
+</body>
+</html>
+
+              
