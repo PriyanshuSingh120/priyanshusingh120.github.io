@@ -3,267 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JANA NAYAGAN | Thalapathy Vijay | CineView</title>
+    <title>JANA NAYAGAN | THE UPRISING</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Outfit:wght@200;900&display=swap');
 
         :root {
-            --gold: #fbbf24;
-            --gold-glow: rgba(251, 191, 36, 0.3);
-            --bg: #0a0a0a;
+            --accent: #fbbf24;
+            --bg: #030303;
         }
 
         body {
             background-color: var(--bg);
             color: white;
             font-family: 'Outfit', sans-serif;
-            overflow-x: hidden;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
 
-        .font-mass {
-            font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 0.05em;
-        }
-
-        /* Particle Canvas */
         #bg-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             z-index: 0;
             pointer-events: none;
         }
 
-        /* Gold Gradient Text */
-        .text-leader {
-            background: linear-gradient(to bottom, #fff 20%, #fbbf24 100%);
+        /* Title Style */
+        .font-mass {
+            font-family: 'Syncopate', sans-serif;
+            letter-spacing: 0.5em;
+        }
+
+        /* Coming Soon Shine */
+        .coming-soon-edit {
+            font-weight: 900;
+            font-size: clamp(2rem, 8vw, 6rem);
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #111, #fff, #111);
+            background-size: 80% 100%;
+            background-repeat: no-repeat;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 15px var(--gold-glow));
+            animation: shine 4s linear infinite;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
+            line-height: 1;
         }
 
-        /* Glass Cards */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(251, 191, 36, 0.1);
+        @keyframes shine {
+            0% { background-position: -500%; }
+            100% { background-position: 500%; }
         }
 
-        /* Poster Glow */
-        .poster-glow::after {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            background: linear-gradient(45deg, transparent, var(--gold), transparent);
-            z-index: -1;
-            filter: blur(10px);
-            opacity: 0.5;
-        }
-
-        /* Animations */
-        @keyframes title-reveal {
-            0% { transform: scale(0.9); opacity: 0; filter: blur(20px); }
-            100% { transform: scale(1); opacity: 1; filter: blur(0); }
-        }
-
-        .reveal-title {
-            animation: title-reveal 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .timer-box {
+        /* Poster Visual */
+        .poster-container {
             position: relative;
-            overflow: hidden;
+            z-index: 10;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
 
-        .timer-box::before {
+        .poster-frame {
+            width: 320px;
+            aspect-ratio: 2/3;
+            background: #0a0a0a;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 1), 0 0 20px rgba(251, 191, 36, 0.1);
+            transition: transform 0.5s ease;
+        }
+
+        /* Reflection Effect */
+        .poster-frame::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.1), transparent);
-            animation: sweep 3s infinite;
+            inset: 0;
+            background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.05) 45%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 55%, transparent 60%);
+            z-index: 2;
         }
 
-        @keyframes sweep {
-            0% { left: -100%; }
-            100% { left: 100%; }
+        /* Minimalist Timer */
+        .timer-grid {
+            display: grid;
+            grid-template-cols: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .timer-val {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            display: block;
+        }
+
+        .timer-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: #444;
+            margin-top: 0.5rem;
+        }
+
+        /* Vignette */
+        .vignette {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.8) 100%);
+            z-index: 5;
+            pointer-events: none;
         }
     </style>
 </head>
-<body class="selection:bg-yellow-500 selection:text-black">
+<body>
 
     <canvas id="bg-canvas"></canvas>
+    <div class="vignette"></div>
 
-    <!-- Nav -->
-    <nav class="relative z-50 flex justify-between items-center px-8 py-8 max-w-7xl mx-auto">
-        <div class="flex items-center gap-3 group cursor-pointer">
-            <div class="w-12 h-12 bg-yellow-500 rounded-xl flex items-center justify-center rotate-3 group-hover:rotate-0 transition-transform shadow-lg shadow-yellow-500/20">
-                <span class="font-black italic text-black text-xl">CV</span>
-            </div>
-            <span class="font-mass text-2xl tracking-widest">CINE<span class="text-yellow-500">VIEW</span></span>
-        </div>
+    <div class="relative z-20 flex flex-col items-center">
         
-        <div class="hidden md:flex gap-10 items-center text-[11px] font-bold tracking-[0.3em] text-gray-400">
-            <a href="#" class="hover:text-yellow-500 transition-colors uppercase">The Saga</a>
-            <a href="#" class="hover:text-yellow-500 transition-colors uppercase">Gallery</a>
-            <a href="#" class="hover:text-yellow-500 transition-colors uppercase">Credits</a>
+        <!-- Header Text -->
+        <div class="mb-10 text-center space-y-2">
+            <h2 class="font-mass text-[10px] text-yellow-500/60 uppercase animate-pulse">CineView Original Presentation</h2>
+            <h1 class="font-mass text-xl font-bold tracking-[1em] text-white">JANA NAYAGAN</h1>
         </div>
 
-        <button class="bg-white/5 border border-white/10 px-6 py-2 rounded-lg text-[10px] font-bold tracking-widest hover:bg-yellow-500 hover:text-black transition-all">
-            LOGIN
-        </button>
-    </nav>
-
-    <!-- Hero Content -->
-    <main class="relative z-10 max-w-7xl mx-auto px-8 pt-10 pb-20">
-        <div class="grid lg:grid-cols-2 gap-16 items-center">
-            
-            <div class="space-y-10 reveal-title">
-                <div class="space-y-4">
-                    <div class="flex items-center gap-3">
-                        <span class="w-8 h-[2px] bg-yellow-500"></span>
-                        <span class="text-xs font-bold tracking-[0.5em] uppercase text-yellow-500">A Cinematic Revolution</span>
-                    </div>
-                    <h1 class="font-mass text-8xl md:text-[10rem] leading-[0.8] text-leader">
-                        JANA <br> NAYAGAN
-                    </h1>
-                    <p class="text-lg md:text-xl text-gray-400 font-light max-w-md italic border-l-2 border-yellow-500 pl-6 py-2">
-                        "The People's Voice. The King's Choice."
-                    </p>
-                </div>
-
-                <!-- Persistent Timer -->
-                <div class="space-y-4">
-                    <h3 class="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500">The Coronation Begins In:</h3>
-                    <div class="flex gap-4">
-                        <div class="timer-box glass-panel w-24 h-28 rounded-2xl flex flex-col items-center justify-center">
-                            <span id="days" class="text-4xl font-mass text-white">00</span>
-                            <span class="text-[9px] uppercase tracking-widest text-yellow-500/60 font-bold">Days</span>
-                        </div>
-                        <div class="timer-box glass-panel w-24 h-28 rounded-2xl flex flex-col items-center justify-center">
-                            <span id="hours" class="text-4xl font-mass text-white">00</span>
-                            <span class="text-[9px] uppercase tracking-widest text-yellow-500/60 font-bold">Hours</span>
-                        </div>
-                        <div class="timer-box glass-panel w-24 h-28 rounded-2xl flex flex-col items-center justify-center">
-                            <span id="mins" class="text-4xl font-mass text-white">00</span>
-                            <span class="text-[9px] uppercase tracking-widest text-yellow-500/60 font-bold">Mins</span>
-                        </div>
-                        <div class="timer-box glass-panel w-24 h-28 rounded-2xl flex flex-col items-center justify-center border-yellow-500/30">
-                            <span id="secs" class="text-4xl font-mass text-yellow-500">00</span>
-                            <span class="text-[9px] uppercase tracking-widest text-white/40 font-bold">Secs</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CTA -->
-                <div class="flex flex-wrap gap-6 items-center">
-                    <button class="group relative px-10 py-5 bg-yellow-500 text-black font-black text-xs tracking-[0.2em] uppercase rounded-xl hover:scale-105 transition-all shadow-xl shadow-yellow-500/20">
-                        Join the Movement
-                        <div class="absolute -inset-1 border border-yellow-500/50 rounded-xl animate-pulse"></div>
-                    </button>
-                    <div class="flex items-center gap-4 text-xs font-bold text-gray-400 hover:text-white cursor-pointer transition-all">
-                        <div class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center">
-                            <i data-lucide="play" class="w-4 h-4 fill-white"></i>
-                        </div>
-                        WATCH TEASER
-                    </div>
-                </div>
-            </div>
-
-            <!-- Poster Side -->
-            <div class="relative reveal-title" style="animation-delay: 0.3s;">
-                <div class="absolute -inset-20 bg-yellow-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+        <!-- Poster Visual -->
+        <div class="poster-container group">
+            <div class="poster-frame">
+                <img src="https://images.unsplash.com/photo-1533928298208-27ff66555d8d?auto=format&fit=crop&q=80&w=600" 
+                     class="w-full h-full object-cover grayscale opacity-80 transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105" 
+                     alt="Thalapathy Vijay Poster">
                 
-                <div class="relative z-10 w-full max-w-[480px] mx-auto aspect-[3/4] rounded-[2rem] overflow-hidden poster-glow border border-white/10 group">
-                    <img src="https://images.unsplash.com/photo-1542156822-6924d1a71ace?auto=format&fit=crop&q=80&w=1000" class="w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-[8s] grayscale hover:grayscale-0" alt="Leader Poster">
-                    
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
-                    
-                    <div class="absolute bottom-12 left-12 right-12">
-                        <div class="space-y-1">
-                            <div class="text-[10px] font-bold text-yellow-500 uppercase tracking-[0.4em]">Starring</div>
-                            <h2 class="font-mass text-5xl text-white">THALAPATHY VIJAY</h2>
-                        </div>
-                    </div>
-
-                    <!-- Floating Badge -->
-                    <div class="absolute top-10 right-10 w-24 h-24 glass-panel rounded-full flex items-center justify-center text-center animate-bounce">
-                        <div>
-                            <div class="text-[8px] uppercase font-black text-gray-500">JUNE</div>
-                            <div class="text-2xl font-mass text-yellow-500">2026</div>
-                        </div>
-                    </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+                
+                <div class="absolute bottom-6 left-0 w-full text-center">
+                    <p class="font-mass text-[8px] text-white/40 mb-1">Starring</p>
+                    <p class="font-mass text-xs text-white tracking-widest">THALAPATHY VIJAY</p>
                 </div>
             </div>
-
+            
+            <!-- Glow background for poster -->
+            <div class="absolute -inset-4 bg-yellow-500/5 blur-3xl -z-10 group-hover:bg-yellow-500/10 transition-colors"></div>
         </div>
-    </main>
 
-    <!-- Social Proof -->
-    <footer class="relative z-10 py-10 px-8 border-t border-white/5 bg-black/50 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-            <div class="flex gap-10">
-                <div class="text-center">
-                    <div class="text-2xl font-mass">4.8M</div>
-                    <div class="text-[9px] uppercase tracking-widest text-gray-500">TEASER VIEWS</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-2xl font-mass">1.2M</div>
-                    <div class="text-[9px] uppercase tracking-widest text-gray-500">FAN REGISTRATIONS</div>
-                </div>
+        <!-- Coming Soon Edit -->
+        <div class="mt-12 text-center">
+            <div class="coming-soon-edit">COMING SOON</div>
+        </div>
+
+        <!-- Timer -->
+        <div class="timer-grid">
+            <div>
+                <span id="days" class="timer-val">00</span>
+                <span class="timer-label">Days</span>
             </div>
-
-            <div class="flex gap-4">
-                <div class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all cursor-pointer">
-                    <i data-lucide="instagram" class="w-4 h-4 text-gray-400"></i>
-                </div>
-                <div class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all cursor-pointer">
-                    <i data-lucide="twitter" class="w-4 h-4 text-gray-400"></i>
-                </div>
-                <div class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all cursor-pointer">
-                    <i data-lucide="youtube" class="w-4 h-4 text-gray-400"></i>
-                </div>
+            <div>
+                <span id="hours" class="timer-val">00</span>
+                <span class="timer-label">Hours</span>
+            </div>
+            <div>
+                <span id="mins" class="timer-val">00</span>
+                <span class="timer-label">Mins</span>
+            </div>
+            <div>
+                <span id="secs" class="timer-val">00</span>
+                <span class="timer-label">Secs</span>
             </div>
         </div>
-    </footer>
+
+    </div>
 
     <script>
-        lucide.createIcons();
-
-        // --- Persistent Real-Time Countdown ---
-        // Anchored to June 22, 2026 (Vijay's Birthday)
-        const targetDate = new Date("June 22, 2026 00:00:00").getTime();
-
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-
-            if (distance < 0) {
-                document.getElementById('secs').parentElement.innerHTML = '<span class="text-xl font-mass">ARRIVED</span>';
-                return;
-            }
-
-            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById('days').innerText = String(d).padStart(2, '0');
-            document.getElementById('hours').innerText = String(h).padStart(2, '0');
-            document.getElementById('mins').innerText = String(m).padStart(2, '0');
-            document.getElementById('secs').innerText = String(s).padStart(2, '0');
-        }
-
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
-
-        // --- Animated Embers Background ---
+        // --- Particle Background (Embers) ---
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -272,35 +190,68 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             particles = [];
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < 60; i++) {
                 particles.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
-                    size: Math.random() * 2,
-                    speedY: -Math.random() * 1.5 - 0.5,
-                    opacity: Math.random()
+                    size: Math.random() * 1.5,
+                    speedY: -Math.random() * 0.8 - 0.2,
+                    alpha: Math.random() * 0.5
                 });
             }
         }
 
-        function animate() {
+        function drawParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => {
-                ctx.fillStyle = `rgba(251, 191, 36, ${p.opacity})`;
+                ctx.fillStyle = `rgba(251, 191, 36, ${p.alpha})`;
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
                 ctx.fill();
                 p.y += p.speedY;
                 if (p.y < -10) p.y = canvas.height + 10;
             });
-            requestAnimationFrame(animate);
+            requestAnimationFrame(drawParticles);
         }
 
         window.addEventListener('resize', initParticles);
         initParticles();
-        animate();
+        drawParticles();
+
+        // --- Persistent Real-Time Countdown ---
+        // Anchored to June 22, 2026
+        const targetDate = new Date("June 22, 2026 00:00:00").getTime();
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const gap = targetDate - now;
+
+            if (gap <= 0) {
+                document.querySelector('.coming-soon-edit').innerText = "LIVE NOW";
+                return;
+            }
+
+            const d = Math.floor(gap / (1000 * 60 * 60 * 24));
+            const h = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((gap % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = String(d).padStart(2, '0');
+            document.getElementById('hours').innerText = String(h).padStart(2, '0');
+            document.getElementById('mins').innerText = String(m).padStart(2, '0');
+            document.getElementById('secs').innerText = String(s).padStart(2, '0');
+        }
+
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // Mouse Move tilt effect
+        document.addEventListener('mousemove', (e) => {
+            const poster = document.querySelector('.poster-frame');
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            poster.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
     </script>
 </body>
 </html>
-
-              
