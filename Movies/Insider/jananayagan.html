@@ -61,7 +61,7 @@
         /* Poster Visual */
         .poster-container {
             position: relative;
-            z-index: 10;
+            
             transform-style: preserve-3d;
             perspective: 1000px;
         }
@@ -122,7 +122,6 @@
     </style>
 </head>
 <body>
-    <br><br><br>
 
     <canvas id="bg-canvas"></canvas>
     <div class="vignette"></div>
@@ -221,7 +220,7 @@
 
         // --- Persistent Real-Time Countdown ---
         // Anchored to June 22, 2026
-        const targetDate = new Date("June 22, 2026 00:00:00").getTime();
+        const targetDate = new Date("January 29, 2026 00:00:00").getTime();
 
         function updateTimer() {
             const now = new Date().getTime();
