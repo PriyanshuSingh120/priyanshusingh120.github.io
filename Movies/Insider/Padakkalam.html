@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Padakkalam Movie - Cineview free watch online</title>
+    <!-- Use a professional font like Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Define a cleaner, modern dark theme palette */
+        :root {
+            --bg-dark: #121212;
+            --surface-dark: #1e1e1e;
+            --accent-main: #00bcd4; /* Cyan/Teal for a professional tech look */
+            --text-light: #e0e0e0;
+            --text-muted: #a0a0a0;
+        }
+
+        /* Basic Reset and Professional Background */
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* --- 1. Video Player Container --- */
+        .video-player-container {
+            width: 100%;
+            max-width: 900px;
+            border-radius: 16px;
+            overflow: hidden;
+            /* Premium, subtle box shadow */
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7),
+                        0 0 5px rgba(0, 188, 212, 0.4); /* Subtle teal glow */
+            background-color: var(--surface-dark);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Optional: Adding a hover effect */
+        .video-player-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8),
+                        0 0 10px var(--accent-main);
+        }
+
+        /* --- 2. Video Frame Area --- */
+        .video-frame-area {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+        }
+
+        .video-frame-area iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 16px 16px 0 0;
+        }
+
+        /* --- 3. Custom Graphics/Controls Area --- */
+        .player-content-area {
+            /* Adjusted padding now that controls are removed */
+            padding: 20px 30px; 
+            background-color: var(--surface-dark);
+        }
+
+        .player-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px; /* Reduced gap below title */
+            color: var(--text-light);
+        }
+
+        .player-metadata {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            gap: 25px;
+            /* Added small margin to bottom for breathing room */
+            padding-bottom: 5px; 
+        }
+
+        /* Styling for the icons/separators in metadata for visual separation */
+        .player-metadata span:not(:last-child)::after {
+            content: "•";
+            color: var(--text-muted);
+            margin-left: 15px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="video-player-container">
+        <!-- Video Frame Area (Top 16:9 section) - This uses the external player -->
+        <div class="video-frame-area">
+            <iframe
+                src="https://short.icu/bAiih2lxmQ"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <!-- Metadata Section -->
+        <div class="player-content-area">
+            <!-- Title -->
+            <div class="player-title">Padakkalam</div>
+            
+            <!-- Metadata Details -->
+            <div class="player-metadata">
+                <span class="views">👁️ 20K Views</span>
+                <span class="duration">📅  2025</span>
+                <span class="resolution"> 1080p | 720p | 360p</span>
+            </div>
+            
+
+        </div>
+
+    </div>
+
+</body>
+</html>
