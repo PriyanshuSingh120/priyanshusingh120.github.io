@@ -1,20 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <script async custom-element="amp-auto-ads"
-        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
-    </script>
-    
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7112692067569722"
-     crossorigin="anonymous"></script>
-    
+<head>   
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Experience cinema like never before. Cineview on Prigames offers a curated selection of movies, tech reviews, and filmmaker insights. Dive into the action today!">
     <meta name="Keywoards" content="Prigames,Cineview pri games, Pri game , Cine view,Watch Free movies,cine view pri games,cineview progames,Cineview Netlify,Cineview, prigames netlify">
     <title>🎬 CineView - Free Movie Hub</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0wLpftMhD9e8v+L81NqD1+0X1UoO/97PzL39Fj6qD48B31LpP2Z8t3g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <amp-auto-ads type="adsense"
@@ -22,25 +15,38 @@
 </amp-auto-ads>
 
     <header class="main-header">
+    <div class="logo-group">
         <div class="logo">CineView</div>
-        <nav class="nav-links" aria-label="Main Navigation">
-            <a href="https://prigames.netlify.app/">Home</a>
-            <a href="https://prigames.netlify.app/game files/">Game Files</a>
-            <a href="https://prigames.netlify.app/online games/">Web Games</a>
-            <a href="https://prigames.netlify.app/movies/">Movies</a>
-            <a href="https://cherieai.netlify.app/">Ai</a>
-        </nav>
-        <button class="menu-toggle" type="button" aria-label="Toggle navigation menu"><i class="fas fa-bars"></i></button>
-    </header>
+        <div class="search-box header-search" role="search">
+            <input type="text" placeholder="Search..." class="search-input">
+            <button class="search-button"><i class="fas fa-search"></i></button>
+        </div>
+    </div>
+    <nav class="nav-links">
+        <a href="https://prigames.netlify.app/">Home</a>
+        <a href="https://prigames.netlify.app/movies/">Movies</a>
+        <a href="https://cherieai.netlify.app/">Ai</a>
+    </nav>
+    <button class="menu-toggle"><i class="fas fa-bars"></i></button>
+</header>
 
-    <main>
-        <section class="hero-section" aria-labelledby="hero-heading">
-            <h1 class="hero-title" id="hero-heading">Discover Your Next Favorite Film</h1>
-            <div class="search-box" role="search">
-                <input type="text" placeholder="Search movies..." class="search-input" aria-label="Search movies">
-                <button class="search-button" type="button" aria-label="Perform search"><i class="fas fa-search"></i></button>
-            </div>
-        </section>
+<main>
+    <section class="hero-slider-section">
+    <div class="slider-content">
+        <div id="sliderBg" class="slider-bg-blur"></div>
+        <img id="sliderImg" src="" alt="Featured Poster">
+        
+        <div class="slider-overlay">
+            <span class="trending-tag">🔥 Trending Now</span>
+            <h1 id="sliderTitle">Loading...</h1>
+            <p id="sliderTags"><span id="movieRating"></span></p> 
+            
+            <a href="#" id="playBtn" class="play-btn-circle">
+                <i class="fas fa-play"></i>
+            </a>
+        </div>
+    </div>
+</section>
 
         <section class="movie-section" aria-labelledby="new-uploads-title">
             <h2 class="section-title" id="new-uploads-title">✨ New Uploads</h2>
@@ -59,13 +65,13 @@
                     </div>
                 </a>
                 
-                <a href="Insider/chhava.html" class="movie-link" aria-label="View details for the movie Chhava">
+                <a href="Insider/chhava.html" class="movie-link" aria-label="View details for the movie Chhava" data-id="tt27922706">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://image.tmdb.org/t/p/w500/9F4lPRLjfBjsu0zjWNOZQMa8a4V.jpg" alt="Chhava movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
-                            <h3>Chhava</h3>
+                            <h3>Chhaava</h3>
                             <p>History| Thriller | Action | 2025</p>
                         </div>
                     </div>
@@ -83,7 +89,7 @@
                     </div>
                 </a>
 
-                <a href="Insider/beast.html" class="movie-link" aria-label="View details for the movie Elio">
+                <a href="Insider/beast.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt11301946">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT86juoHqNu02UX1Zg_bnnd4GlN7T847IC6Z5ohKJA9GX-xxSUTWDdIGeU&s=10 min" alt="final destination movie poster" class="movie-poster" loading="lazy">
@@ -131,19 +137,19 @@
                     </div>
                 </a>
 
-                <a href="Insider/kiskiskopyarkaru2.html" class="movie-link" aria-label="View details for the movie haq">
+                <a href="Insider/kiskiskopyarkaru2.html" class="movie-link" aria-label="View details for the movie haq" data-id="tt33307516">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://m.media-amazon.com/images/M/MV5BOTJkZDAxNTUtNGZhYy00Mjg5LTlhZTctZDQ3MjRhODRmYzI4XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="wall e movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
-                            <h3>Kis Kis Ko Pyar Karu 2</h3>
+                            <h3>Kis Kisko Pyaar Karoon 2</h3>
                             <p>Comedy | Drama | Action | 2025</p>
                         </div>
                     </div>
                 </a>
 
-                <a href="Insider/dhurandhar.html" class="movie-link" aria-label="View details for the movie">
+                <a href="Insider/dhurandhar.html" class="movie-link" aria-label="View details for the movie" data-id="tt33014583">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://m.media-amazon.com/images/M/MV5BMTNmNjM0OTktNmQ5NC00MWY1LWE4MDEtYWM0MjU4M2U0NTdiXkEyXkFqcGc@._V1_.jpg" alt="hjonhy english movie poster" class="movie-poster" loading="lazy">
@@ -155,7 +161,7 @@
                     </div>
                 </a>
 
-                <a href="episodes/familyman3.html" class="movie-link" aria-label="View details for the movie Elio">
+                <a href="episodes/familyman3.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt9544034">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://catimages.org/images/2025/11/21/The-Family-Man-S03-Hindi-HDRip-ALL-Episodes.jpg" alt="Elio movie poster" class="movie-poster" loading="lazy">
@@ -227,7 +233,7 @@
                     </div>
                 </a>
 
-                <a href="episodes/panchayats3.html" class="movie-link" aria-label="View details for the movie haq">
+                <a href="episodes/panchayats3.html" class="movie-link" aria-label="View details for the movie haq" data-id="tt12004706">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYnHIyZn59WEBrdmnjj6XQIchRvDPV2HWvdRWpbgDWOwalJzrKAcF-DkEh&s=10" alt="wall e movie poster" class="movie-poster" loading="lazy">
@@ -239,7 +245,7 @@
                     </div>
                 </a>
 
-                <a href="Insider/teesmaarkhan.html" class="movie-link" aria-label="View details for the movie Elio">
+                <a href="Insider/teesmaarkhan.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt21301666">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://m.media-amazon.com/images/M/MV5BYjJiZmZkZGYtYjA1OC00MjRkLWFlYTgtYjM4ODBlYWI1MjQwXkEyXkFqcGc@._V1_.jpg" alt="final destination movie poster" class="movie-poster" loading="lazy">
@@ -263,7 +269,7 @@
                     </div>
                 </a>
 
-                <a href="Insider/bengalfiles.html" class="movie-link" aria-label="View details for the movie haq">
+                <a href="Insider/bengalfiles.html" class="movie-link" aria-label="View details for the movie haq" data-id="tt15416342">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://m.media-amazon.com/images/M/MV5BM2ViMGI2NmYtNmIyYS00MDA1LTg2MTgtMjY2ODJhYTllNWRhXkEyXkFqcGc@._V1_.jpg" alt="wall e movie poster" class="movie-poster" loading="lazy">
@@ -275,7 +281,7 @@
                     </div>
                 </a>
 
-                <a href="Insider/bomb.html" class="movie-link" aria-label="View details for the movie haq">
+                <a href="Insider/bomb.html" class="movie-link" aria-label="View details for the movie haq" data-id="tt28717622">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlrAQUy4_NjW-qXq0i7b1y9T7Jr71YPige7_KdDPvWBlfnzaz0Oi-8jTY&s=10" alt=" Bomb movie poster" class="movie-poster" loading="lazy">
@@ -299,7 +305,7 @@
                     </div>
                 </a>
 
-                <a href="Insider/akhanda2.html" class="movie-link" aria-label="View details for the movie Elio">
+                <a href="Insider/akhanda2.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt15387182">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0SooyoLyOkvEgwlLQt8gDEgnVfZLul3k9NoTpTrk8sYWieHdkE2GR8tI&s=10" alt="final destination movie poster" class="movie-poster" loading="lazy">
@@ -329,19 +335,19 @@
                             <img src="https://m.media-amazon.com/images/M/MV5BYTUwZTNjY2MtNmRjOC00YmI1LThlNWUtZTFkMDgzNTc5ODAwXkEyXkFqcGc@._V1_.jpg" alt="final destination movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
-                            <h3>The Kishmir Files</h3>
+                            <h3>The Kashmir Files</h3>
                             <p> Action | Drama | Thriller | 2025</p>
                         </div>
                     </div>
                 </a>
 
-                <a href="Insider/pravintambe.html" class="movie-link" aria-label="View details for the movie Elio">
+                <a href="Insider/pravintambe.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt18568902">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-jRvsYLBHQiOq0oiH4QHgOomTQfp213ym7jgzmxJxdF2OD7geyy89t0cO&s=10" alt="final destination movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
-                            <h3>Kaun Praveen Tambe</h3>
+                            <h3>Kaun Praveen Tambe?</h3>
                             <p> Action | Biography | Drama | 2022</p>
                         </div>
                     </div>
@@ -361,7 +367,7 @@
                     </div>
                 </a>
 
-                <a href="Insider/memoriesofmurder.html" class="movie-link" aria-label="View details for the movie Elio">
+                <a href="Insider/memoriesofmurder.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt0353969">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p89594_p_v8_ag.jpg" alt="final destination movie poster" class="movie-poster" loading="lazy">
@@ -425,7 +431,7 @@
                     </div>
                 </a>
 
-                <a href="Insider/udaipur.html" class="movie-link" aria-label="View details for the movie haq">
+                <a href="Insider/udaipur.html" class="movie-link" aria-label="View details for the movie haq" data-id="tt28630806">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSR9j0YPFQWnZQ9EQuwPg-fmmUWplio8H1JwhuQgMq2s6V9DZv9uUFhH0qi&s=10" alt="Uadipur files movie poster" class="movie-poster" loading="lazy">
@@ -437,7 +443,7 @@
                     </div>
                 </a>
 
-                <a href="Insider/og.html" class="movie-link" aria-label="View details for the movie haq">
+                <a href="Insider/og.html" class="movie-link" aria-label="View details for the movie haq" data-id="tt24060892">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://m.media-amazon.com/images/M/MV5BM2IwMmZmZjYtZTQzMi00MWNlLWFlZTUtNTI4ZDdhZWE0OTFmXkEyXkFqcGc@._V1_.jpg" alt=" og movie poster" class="movie-poster" loading="lazy">
@@ -461,19 +467,8 @@
                         </div>
                     </div>
                 </a>
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7112692067569722"
-     crossorigin="anonymous"></script>
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-format="fluid"
-     data-ad-layout-key="+29+sa-1g-4q+e1"
-     data-ad-client="ca-pub-7112692067569722"
-     data-ad-slot="1077358421"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script><br>
 
-                <a href="Insider/despicable4.html" class="movie-link" aria-label="View details for the movie">
+                <a href="Insider/despicable4.html" class="movie-link" aria-label="View details for the movie" data-id="tt7510222">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://m.media-amazon.com/images/M/MV5BNzY0ZTlhYzgtOTgzZC00ZTg2LTk4NTEtZDllM2E2NGE5Njg2XkEyXkFqcGc@._V1_.jpg" alt="hjonhy english movie poster" class="movie-poster" loading="lazy">
@@ -497,7 +492,7 @@
                     </div>
                 </a> 
 
-                <a href="episodes/stranger5.html" class="movie-link" aria-label="View details for the movie Elio">
+                <a href="episodes/stranger5.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt4574334" >
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://image.tmdb.org/t/p/w500/AaLrOh33YLkK1WLEB8Uml7FL8fm.jpg" alt="Elio movie poster" class="movie-poster" loading="lazy">
@@ -509,7 +504,7 @@
                     </div>
                 </a>
 
-                <a href="episodes/stranger3.html" class="movie-link" aria-label="View details for the movie Elio">
+                <a href="episodes/stranger3.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt4574334">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://images-cdn.ubuy.co.in/65f1068a040c0d18bb2bc623-netflix-stranger-things-season-3-one.jpg" alt="Stranger things 3 movie poster" class="movie-poster" loading="lazy">
@@ -521,7 +516,7 @@
                     </div>
                 </a>
 
-                <a href="episodes/stranger2.html" class="movie-link" aria-label="View details for the movie Elio">
+                <a href="episodes/stranger2.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt4574334">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://rukminim2.flixcart.com/image/480/640/jnamvm80/poster/h/w/r/large-stranger-things-season-2-poster-a3-13-x-19-inches-original-imafay3m5fddv8pg.jpeg?q=90" alt="Stranger things 1 movie poster" class="movie-poster" loading="lazy">
@@ -533,7 +528,7 @@
                     </div>
                 </a>
 
-                <a href="episodes/stranger1.html" class="movie-link" aria-label="View details for the movie Elio">
+                <a href="episodes/stranger1.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt4574334">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://upload.wikimedia.org/wikipedia/en/b/b1/Stranger_Things_season_1.jpg" alt="Stranger things 1 movie poster" class="movie-poster" loading="lazy">
@@ -618,13 +613,13 @@
                     </div>
                 </a>
 
-                <a href="Insider/pushinboots.html" class="movie-link" aria-label="View details for the movie">
+                <a href="Insider/pushinboots.html" class="movie-link" aria-label="View details for the movie" data-id="tt3915174">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://upload.wikimedia.org/wikipedia/en/7/78/Puss_in_Boots_The_Last_Wish_poster.jpg" alt="hjonhy english movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
-                            <h3>Push IN Boots: The last wish</h3>
+                            <h3>Puss In Boots: The last wish</h3>
                             <p>Animated  | Funny | Comedy | Action | 2022</p>
                         </div>
                     </div>
@@ -666,7 +661,7 @@
                     </div>
                 </a>
 
-                <a href="Insider/v.html" class="movie-link" aria-label="View details for the movie Elio">
+                <a href="Insider/v.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt11385128">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://upload.wikimedia.org/wikipedia/en/b/b5/V_%28film%29.jpg" alt="Elio movie poster" class="movie-poster" loading="lazy">
@@ -678,7 +673,7 @@
                     </div>
                 </a>
                 
-                <a href="Insider/haq.html" class="movie-link" aria-label="View details for the movie haq">
+                <a href="Insider/haq.html" class="movie-link" aria-label="View details for the movie haq" data-id="tt36642456">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://catimages.org/images/2025/11/07/HAQ-2025-HDHub4u.Ms.jpg" alt="haq movie poster" class="movie-poster" loading="lazy">
@@ -726,7 +721,7 @@
                     </div>
                 </a>
 
-                <a href="Insider/chidiya.html" class="movie-link" aria-label="View details for the movie Enemy">
+                <a href="Insider/chidiya.html" class="movie-link" aria-label="View details for the movie Enemy" data-id="tt4826742">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://catimages.org/images/2025/11/12/Chidiya-2016-HDHub4u.Ms.jpg" alt="chidiya movie poster" class="movie-poster" loading="lazy">
@@ -738,19 +733,9 @@
                     </div>
                 </a>
 
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7112692067569722"
-     crossorigin="anonymous"></script>
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-format="fluid"
-     data-ad-layout-key="+29+sa-1g-4q+e1"
-     data-ad-client="ca-pub-7112692067569722"
-     data-ad-slot="1077358421"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script><br>
 
-                <a href="Insider/tholu.html" class="movie-link" aria-label="View details for the movie Elio">
+
+                <a href="Insider/tholu.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt10910822">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://m.media-amazon.com/images/M/MV5BZTQ1MmE3MjgtN2E4ZC00MTNlLThlZWQtYjIzZjIxZjI1YTkxXkEyXkFqcGc@._V1_.jpg" alt="tholu movie poster" class="movie-poster" loading="lazy">
@@ -835,7 +820,7 @@
                     </div>
                 </a>
 
-                <a href="Insider/jollyllb3.html" class="movie-link" aria-label="View details for the movie Jolly LLB 3">
+                <a href="Insider/jollyllb3.html" class="movie-link" aria-label="View details for the movie Jolly LLB 3" data-id="tt27996020">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://image.tmdb.org/t/p/w500/bwRoU9p5GvjxgPfmIgsfcJ4ydng.jpg" alt="jolly llb 3 movie poster" class="movie-poster" loading="lazy">
@@ -847,13 +832,13 @@
                     </div>
                 </a>
 
-                <a href="Insider/interstallar.html" class="movie-link" aria-label="View details for the movie Elio">
+                <a href="Insider/interstallar.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt0816692">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://upload.wikimedia.org/wikipedia/en/b/bc/Interstellar_film_poster.jpg" alt="Elio movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
-                            <h3>interstallar</h3>
+                            <h3>Interstellar</h3>
                             <p>Action | Suspence | Science Fiction | Mystery | 2014</p>
                         </div>
                     </div>
@@ -883,7 +868,7 @@
                     </div>
                 </a>
 
-                <a href="Insider/Bahubali.html" class="movie-link" aria-label="View details for the movie Bahubali: The Epic">
+                <a href="Insider/Bahubali.html" class="movie-link" aria-label="View details for the movie Bahubali: The Epic" data-id="tt37893389">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="images/2.jpg" alt="Bahubali: The Epic movie poster" class="movie-poster" loading="lazy">
@@ -895,7 +880,7 @@
                     </div>
                 </a>
                 
-                <a href="Insider/Enemy.html" class="movie-link" aria-label="View details for the movie Enemy">
+                <a href="Insider/Enemy.html" class="movie-link" aria-label="View details for the movie Enemy" data-id="tt13131186">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="images/3.jpg" alt="Enemy movie poster" class="movie-poster" loading="lazy">
@@ -930,7 +915,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="Insider/Idlikadai.html" class="movie-link" aria-label="View details for the movie Idli Kadai">
+                <a href="Insider/Idlikadai.html" class="movie-link" aria-label="View details for the movie Idli Kadai" data-id="tt33029024">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="images/5.jpg" alt="Idli Kadai movie poster" class="movie-poster" loading="lazy">
@@ -942,13 +927,13 @@
                     </div>
                 </a>
 
-                <a href="Insider/goat.html" class="movie-link" aria-label="View details for the movie Greatest Of All Time">
+                <a href="Insider/goat.html" class="movie-link" aria-label="View details for the movie Greatest Of All Time" data-id="tt27487934">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="images/18.jpg" alt="Greatest Of All Time movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
-                            <h3>Greatest Of All TIme</h3>
+                            <h3>The Greatest Of All TIme</h3>
                             <p>Action | Drama | Thriller | 2025</p>
                         </div>
                     </div>
@@ -999,19 +984,19 @@
                         </div>
                     </div>
                 </a>
-                <a href="Insider/Kuruchetra.html" class="movie-link" aria-label="View details for the movie Kuruchetra">
+                <a href="Insider/Kuruchetra.html" class="movie-link" aria-label="View details for the movie Kuruchetra" data-id="tt38235589">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="images/10.jpg" alt="Kuruchetra movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
-                            <h3>Kuruchetra</h3>
+                            <h3>Kurukshetra</h3>
                             <p>War | Animated | Action | 2025</p>
                         </div>
                     </div>
                 </a>
 
-                <a href="Insider/johnyenglish.html" class="movie-link" aria-label="View details for the movie haq">
+                <a href="Insider/johnyenglish.html" class="movie-link" aria-label="View details for the movie haq" data-id="tt6921996">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="https://image.tmdb.org/t/p/w400/tCBxnZwLiY1BOKw3tH6AxHZdqPh.jpg" alt="hjonhy english movie poster" class="movie-poster" loading="lazy">
@@ -1022,13 +1007,13 @@
                         </div>
                     </div>
                 </a>
-                <a href="Insider/mahavtar.html" class="movie-link" aria-label="View details for the movie Mahavtar Narsimha">
+                <a href="Insider/mahavtar.html" class="movie-link" aria-label="View details for the movie Mahavtar Narsimha" data-id="tt34365591">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="images/11.jpg" alt="Mahavtar Narsimha movie poster" class="movie-poster" loading="lazy">
                         </div>
                         <div class="movie-info">
-                            <h3>Mahavtar Narsimha</h3>
+                            <h3>Mahavatar Narsimha</h3>
                             <p>Animated | Action | War | 2024</p>
                         </div>
                     </div>
@@ -1089,7 +1074,7 @@
                         </div>
                     </div>
                 </a>
-                <a href="Insider/ekdiwanekidiwaniyat.html" class="movie-link" aria-label="View details for the movie Ek Deewane Ki Deewaniyat">
+                <a href="Insider/ekdiwanekidiwaniyat.html" class="movie-link" aria-label="View details for the movie Ek Deewane Ki Deewaniyat" data-id="tt35727678">
                     <div class="movie-card">
                         <div class="movie-poster-container">
                             <img src="images/16.jpg" alt="Ek Deewane Ki Deewaniyat movie poster" class="movie-poster" loading="lazy">
@@ -1137,67 +1122,6 @@
     <script src="app.js"></script>    
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

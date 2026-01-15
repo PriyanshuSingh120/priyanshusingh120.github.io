@@ -99,3 +99,66 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+const OMDB_API_KEY = '15bccaef'; 
+let movieData = [];
+
+document.addEventListener('DOMContentLoaded', () => {
+    const movieCards = document.querySelectorAll('.movie-link');
+    
+    movieData = Array.from(movieCards).map(card => {
+        const originalTitle = card.querySelector('h3').innerText.trim();
+        return {
+            link: card.getAttribute('href'),
+            title: originalTitle, // Keep your original name safe here
+            imdbId: card.getAttribute('data-id'), 
+            // Only remove bracket tags like [18+], keep the rest
+            searchTitle: originalTitle.replace(/\[.*?\]/g, '').trim()
+        };
+    }).sort(() => 0.5 - Math.random());
+
+    if (movieData.length > 0) {
+        updateSlider(); 
+        setInterval(updateSlider, 6000); 
+    }
+});
+
+async function updateSlider() {
+    const randomIndex = Math.floor(Math.random() * movieData.length);
+    const movie = movieData[randomIndex];
+
+    const sliderImg = document.getElementById('sliderImg');
+    const sliderBg = document.getElementById('sliderBg');
+    const sliderTitle = document.getElementById('sliderTitle');
+    const ratingLabel = document.getElementById('movieRating');
+    const playBtn = document.getElementById('playBtn');
+
+    let apiUrl = movie.imdbId 
+        ? `https://www.omdbapi.com/?i=${movie.imdbId}&apikey=${OMDB_API_KEY}`
+        : `https://www.omdbapi.com/?t=${encodeURIComponent(movie.searchTitle)}&apikey=${OMDB_API_KEY}`;
+
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        if (data.Response === "True" && data.Poster !== "N/A") {
+            sliderImg.src = data.Poster;
+            sliderBg.style.backgroundImage = `url('${data.Poster}')`;
+            ratingLabel.innerHTML = `⭐ IMDb: ${data.imdbRating} | ${data.Genre}`;
+            
+            // LOGIC: If we have a data-id, we trust the API name.
+            // IF NOT, we keep YOUR original name from the card to prevent wrong renaming.
+            sliderTitle.innerText = movie.imdbId ? data.Title : movie.title;
+        } else {
+            // Static Fallback if API completely fails
+            sliderImg.src = "16.jpg"; 
+            sliderBg.style.backgroundImage = "url('16.jpg')";
+            sliderTitle.innerText = movie.title;
+            ratingLabel.innerText = "Trending Movie | 2025";
+        }
+    } catch (err) {
+        sliderTitle.innerText = movie.title;
+    }
+
+    playBtn.href = movie.link; 
+}

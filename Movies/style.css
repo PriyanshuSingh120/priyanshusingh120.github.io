@@ -7,11 +7,9 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #141414;
-    color: #EAEAEA; 
+    background-color: #141414; /* Deep dark background */
+    color: #EAEAEA; /* Light text color */
     line-height: 1.6;
-    cursor: url("https://prigames.netlify.app/normal.cur"), auto;
-    scroll-behavior:smooth;
 }
 
 a {
@@ -19,7 +17,7 @@ a {
     color: inherit;
 }
 
-
+/* --- Header Styling --- */
 .main-header {
     display: flex;
     justify-content: space-between;
@@ -35,12 +33,12 @@ a {
 .logo {
     font-size: 1.8em;
     font-weight: bold;
-    color: #E50914;
+    color: #E50914; /* Netflix Red accent */
 }
 
-
+/* Desktop Navigation */
 .nav-links {
-    display: flex; 
+    display: flex; /* Ensure horizontal layout on desktop */
     align-items: center;
 }
 
@@ -55,21 +53,21 @@ a {
 }
 
 .menu-toggle {
-    display: none; 
+    display: none; /* Hide on desktop, shown in mobile media query */
     background: none;
     border: none;
     color: #EAEAEA;
     font-size: 1.5em;
     cursor: pointer;
-    padding: 0; 
+    padding: 0; /* Clean up padding */
 }
 
-
+/* --- Hero Section Styling --- */
 .hero-section {
-    
+    /* Always ensure a fallback color for the background */
     background: #000 url('hero-bg.jpg') center/cover no-repeat; 
-    background-blend-mode: multiply; 
-    background-color: rgba(0, 0, 0, 0.7);
+    background-blend-mode: multiply; /* Helps darkening the image */
+    background-color: rgba(0, 0, 0, 0.7); /* Darkening layer */
     height: 60vh;
     display: flex;
     flex-direction: column;
@@ -84,7 +82,17 @@ a {
     margin-bottom: 25px;
 }
 
+.slider-bg-blur {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-size: cover;
+    background-position: center;
+    filter: blur(50px) brightness(0.3);
+    z-index: 1;
+}
 
+/* Search Box Styling */
 .search-box {
     display: flex;
     width: 100%;
@@ -131,8 +139,10 @@ a {
 
 .movie-grid {
     display: grid;
+    /* Default: 2 columns for smaller screens */
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
     gap: 20px;
+    /* Forces cards to fill the available height in their grid cell */
     grid-auto-rows: 1fr; 
 }
 
@@ -146,7 +156,7 @@ a {
     /* Display flex column to push the movie-info to the bottom of the card */
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: 100%; /* Important for grid-auto-rows: 1fr to work */
 }
 
 .movie-card:hover {
@@ -154,7 +164,7 @@ a {
     box-shadow: 0 8px 25px rgba(229, 9, 20, 0.4);
 }
 
-
+/* Aspect Ratio Container for Poster */
 .movie-poster-container {
     position: relative;
     width: 100%;
@@ -163,6 +173,7 @@ a {
     overflow: hidden;
 }
 
+/* The image fills the container */
 .movie-poster {
     position: absolute;
     top: 0;
@@ -170,18 +181,21 @@ a {
     width: 100%;
     height: 100%; 
     display: block;
-    object-fit: cover; 
+    object-fit: cover; /* Ensures image covers the area without distorting */
 }
 
 .movie-info {
     padding: 15px;
+    /* Pushes the info block to the bottom of the card, accommodating variable image heights */
     margin-top: auto; 
 }
 
 .movie-info h3 {
     font-size: 1.1em;
     margin-bottom: 5px;
-    
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .movie-info p {
@@ -189,7 +203,7 @@ a {
     color: #A0A0A0;
 }
 
-
+/* --- Footer Styling --- */
 footer {
     text-align: center;
     padding: 20px;
@@ -198,7 +212,7 @@ footer {
     margin-top: 30px;
 }
 
-
+/* Desktop and Larger Tablets */
 @media (min-width: 768px) {
     .movie-grid {
         /* Larger screens: 4 columns */
@@ -210,6 +224,7 @@ footer {
     }
 }
 
+/* Mobile and Smaller Tablets */
 @media (max-width: 767px) {
     /* --- Header & Navigation for Mobile --- */
     .main-header {
@@ -240,15 +255,15 @@ footer {
     }
 
     .menu-toggle {
-        display: block; 
+        display: block; /* Show the hamburger icon */
     }
     
-
+    /* JavaScript will add the 'active' class to show the menu */
     .nav-links.active {
-        display: flex; 
+        display: flex; /* Show the navigation links stacked vertically */
     }
 
-
+    /* --- Other Mobile Adjustments --- */
     .hero-section {
         height: 50vh;
     }
@@ -266,9 +281,87 @@ footer {
     }
 
     .movie-grid {
+        /* Make columns slightly smaller on very small screens */
         grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
     }
 }
 
+/* Header Search Adjustment */
+.logo-group { display: flex; align-items: center; gap: 20px; flex-grow: 1; }
+.header-search { max-width: 250px; height: 35px; border-radius: 5px; }
+.header-search .search-input { padding: 5px 10px; font-size: 0.9em; }
 
+/* Hero Slider Section */
+.hero-slider-section {
+    height: 500px;
+    width: 100%;
+    position: relative;
+    background: #000;
+    overflow: hidden;
+}
 
+.slider-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+/* THE LANDSCAPE FILLER (Blurred) */
+#sliderBg {
+    position: absolute;
+    top: -10%; left: -10%;
+    width: 120%; height: 120%;
+    background-size: cover;
+    background-position: center;
+    filter: blur(50px) brightness(0.3); /* High blur creates the 'landscape' feel */
+    z-index: 1;
+}
+
+/* THE SHARP POSTER (Middle) */
+#sliderImg {
+    position: relative;
+    z-index: 2;
+    height: 85%; /* Keeps it sharp and contained */
+    width: auto;
+    border-radius: 12px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.9);
+}
+
+.slider-overlay {
+    position: absolute;
+    bottom: 10%;
+    left: 5%;
+    z-index: 10;
+    text-shadow: 2px 2px 10px rgba(0,0,0,1);
+}
+
+#movieRating {
+    color: #f5c518; /* IMDb Yellow */
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* PLAY BUTTON STYLING */
+.play-btn-circle {
+    display: flex;
+    width: 60px;
+    height: 60px;
+    background: #fff;
+    color: #000;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 1.5rem;
+    margin-top: 15px;
+    transition: 0.3s;
+    position: relative;
+}
+
+.play-btn-circle:hover {
+    background: #E50914;
+    color: #fff;
+    transform: scale(1.1);
+}
