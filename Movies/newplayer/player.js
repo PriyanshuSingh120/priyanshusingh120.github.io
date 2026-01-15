@@ -21,6 +21,7 @@ const movieDatabase = {
     "ekdiwanekidiwaniyat": { "title": "Ek Deewane Ki Deewaniyat", "src": "https://short.icu/JHZdlHHzWL", "year": "2025", "img": "https://prigames.netlify.app/movies/images/16.jpg" },
     "elio": { "title": "Elio", "src": "https://short.icu/bVlKuxwS6", "year": "2025", "img": "https://image.tmdb.org/t/p/w400/w2ARwtc1zoh0pyfwmyhpZHwuXgK.jpg" },
     "enemy": { "title": "Enemy", "src": "https://short.icu/ZNj4md4uv4", "year": "2021", "img": "https://prigames.netlify.app/movies/images/3.jpg" },
+    "vritta": { "title": "Vritta", "src": "https://short.icu/N2lYEchkf", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/oNPao9volH0jAA1jULlQ6hCOmAe.jpg" },
     "ferdinand": { "title": "Ferdinand", "src": "https://short.icu/scPyaf-ML", "year": "2017", "img": "https://prigames.netlify.app/movies/images/4.jpg" },
     "finaldestination": { "title": "The Final Destination", "src": "https://short.icu/RzUsMNFwh", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/6WxhEvFsauuACfv8HyoVX6mZKFj.jpg" },
     "goat": { "title": "The Greatest Of All Time", "src": "https://short.icu/MJYR2azA3", "year": "2024", "img": "https://prigames.netlify.app/movies/images/18.jpg" },
@@ -181,4 +182,5 @@ function generateRecommendations(currentId) {
         `;
         grid.appendChild(card);
     });
+
 }
