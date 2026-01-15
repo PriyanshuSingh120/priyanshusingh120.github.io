@@ -1,14 +1,14 @@
 const TMDB_API_KEY = 'dc691868b09daaabe9acc238ed898cf7';
 
-// --- YOUR DATABASE (Same as before) ---
+// --- YOUR DATABASE ---
 const movieDatabase = {
-    "3idiots": { "title": "3 Idiots", "src": "https://short.icu/V550M_IBX", "year": "2009", "img": "https://m.media-amazon.com/images/I/81TeJPHjP-L._AC_UF1000,1000_QL80_.jpg" },
+    "3idiots": { "title": "3Idiots", "src": "https://short.icu/V550M_IBX", "year": "2009", "img": "https://m.media-amazon.com/images/I/81TeJPHjP-L._AC_UF1000,1000_QL80_.jpg" },
     "ajey": { "title": "Ajey: The Untold Story of a Yogi", "src": "https://short.icu/7IHRfjVYh", "year": "2024", "img": "https://upload.wikimedia.org/wikipedia/en/b/b7/Ajey-Poster.jpg" },
     "akhanda2": { "title": "Akhanda 2", "src": "https://short.icu/nmVnnZszs", "year": "2025", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0SooyoLyOkvEgwlLQt8gDEgnVfZLul3k9NoTpTrk8sYWieHdkE2GR8tI&s=10" },
     "avatarfaa": { "title": "Avatar: Fire And Ash", "src": "https://short.icu/5K--e2ETQ", "year": "2025", "img": "https://m.media-amazon.com/images/M/MV5BZDYxY2I1OGMtN2Y4MS00ZmU1LTgyNDAtODA0MzAyYjI0N2Y2XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" },
     "babyjohn": { "title": "Baby John", "src": "https://short.icu/3Jyzu6nxg", "year": "2024", "img": "https://upload.wikimedia.org/wikipedia/en/2/29/Baby_John_%28title_card%29.jpg" },
     "badguy2": { "title": "The Bad Guys 2", "src": "https://short.icu/Sx2MGzBMN", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/5DJbIWxIotQYUnRrRGhSxjxmvye.jpg" },
-    "bahubali": { "title": "Bahubali", "src": "https://short.icu/W7nBMAmEU", "year": "2015", "img": "https://prigames.netlify.app/movies/images/2.jpg" },
+    "bahubali": { "title": "Bahubali: The Epic", "src": "https://short.icu/W7nBMAmEU", "year": "2015", "img": "https://prigames.netlify.app/movies/images/2.jpg" },
     "beast": { "title": "Beast", "src": "https://short.icu/D7RA4p5IJ", "year": "2022", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT86juoHqNu02UX1Zg_bnnd4GlN7T847IC6Z5ohKJA9GX-xxSUTWDdIGeU&s=10" },
     "bengalfiles": { "title": "The Bengal Files", "src": "https://short.icu/DR1jx5Krn", "year": "2024", "img": "https://m.media-amazon.com/images/M/MV5BM2ViMGI2NmYtNmIyYS00MDA1LTg2MTgtMjY2ODJhYTllNWRhXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" },
     "bomb": { "title": "Bomb", "src": "https://short.icu/fbvoDeEHK", "year": "2024", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlrAQUy4_NjW-qXq0i7b1y9T7Jr71YPige7_KdDPvWBlfnzaz0Oi-8jTY&s=10" },
@@ -22,7 +22,7 @@ const movieDatabase = {
     "elio": { "title": "Elio", "src": "https://short.icu/bVlKuxwS6", "year": "2025", "img": "https://image.tmdb.org/t/p/w400/w2ARwtc1zoh0pyfwmyhpZHwuXgK.jpg" },
     "enemy": { "title": "Enemy", "src": "https://short.icu/ZNj4md4uv4", "year": "2021", "img": "https://prigames.netlify.app/movies/images/3.jpg" },
     "ferdinand": { "title": "Ferdinand", "src": "https://short.icu/scPyaf-ML", "year": "2017", "img": "https://prigames.netlify.app/movies/images/4.jpg" },
-    "finaldestination": { "title": "Final Destination", "src": "https://short.icu/RzUsMNFwh", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/6WxhEvFsauuACfv8HyoVX6mZKFj.jpg" },
+    "finaldestination": { "title": "The Final Destination", "src": "https://short.icu/RzUsMNFwh", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/6WxhEvFsauuACfv8HyoVX6mZKFj.jpg" },
     "goat": { "title": "The Greatest Of All Time", "src": "https://short.icu/MJYR2azA3", "year": "2024", "img": "https://prigames.netlify.app/movies/images/18.jpg" },
     "haq": { "title": "Haq", "src": "https://short.icu/jSykePxJJ", "year": "2024", "img": "https://catimages.org/images/2025/11/07/HAQ-2025-HDHub4u.Ms.jpg" },
     "iceage": { "title": "Ice Age", "src": "https://short.icu/rH53VwZtO", "year": "2002", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg9dnUnh40xWuzfWR7k3V8WiB2_I55MTpihu9gq8tYywWZiDA4xkwMiGA&s=10" },
@@ -74,58 +74,95 @@ const movieDatabase = {
     "war2": { "title": "War 2", "src": "https://short.icu/SaG_GCj5S", "year": "2025", "img": "https://prigames.netlify.app/movies/images/war2.jpg" },
     "wildrobot": { "title": "The Wild Robot", "src": "https://short.icu/gFViv8_Sw", "year": "2024", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFRDKmZfWky_Has4nb59nxC6Ta6Wlk_JFRraBgx4z0NaelG0cLseiInnI&s=10" },
     "zootopia": { "title": "Zootopia", "src": "https://short.icu/yKobje7Xb", "year": "2016", "img": "https://catimages.org/images/2025/04/03/Zootopia.2016..jpg" },
-    "zootopia2": { "title": "Zootopia 2", "src": "https://short.icu/gpH1bu08s", "year": "2025", "img": "https://images.justwatch.com/poster/336822920/s718/zootopia-2.jpg" }
+    "zootopia2": { "title": "Zootopia 2", "src": "https://short.icu/gpH1bu08s", "year": "2025", "img": "https://images.justwatch.com/poster/336822920/s718/zootopia-2.jpg" },
+    "raat-akeli-hai-the-bansal-murders": { "title": "Raat Akeli Hai - The Bansal Murders", "src": "https://short.icu/FYIdgZzZ7", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/8EpDSwnjMBc9dmTPEYBF4Bixmwf.jpg" }
 };
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const movieId = urlParams.get('id');
+    const manualTmdbId = urlParams.get('tmdb');
+
     const movie = movieDatabase[movieId];
 
     if (movie) {
-        // 1. Set basic info immediately
         document.getElementById('mainVideoPlayer').src = movie.src;
         document.getElementById('displayTitle').innerText = movie.title;
-        document.title = `${movie.title} - Watch Free on CineView`;
-
-        // 2. Fetch Real IMDb Rating and Year from API
-        fetchMetaData(movie.title);
         
-        // 3. Generate Recommendations
+        // Pass to integrated fetcher
+        fetchMetaData(movie.title, manualTmdbId);
+        
+        // NEW: Generate recommendations here
         generateRecommendations(movieId);
     } else {
         document.getElementById('displayTitle').innerText = "Movie Not Found";
     }
 });
 
-async function fetchMetaData(title) {
+async function fetchMetaData(displayTitle, manualId) {
     const ratingEl = document.getElementById('imdbRatingDisplay');
     const yearEl = document.getElementById('displayYear');
+    const descEl = document.getElementById('movieDescription');
+    const titleEl = document.getElementById('displayTitle');
+
+    const originalTitle = displayTitle;
+    let url;
+    
+    // Priority check for ID passed via URL
+    if (manualId) {
+        url = `https://api.themoviedb.org/3/movie/${manualId}?api_key=${TMDB_API_KEY}`;
+    } else {
+        const searchQuery = originalTitle.replace(/\[.*?\]/g, '').trim();
+        url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(searchQuery)}`;
+    }
 
     try {
-        // Clean title for search (remove season info for better match)
-        const cleanTitle = title.split('Season')[0].trim();
-        const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(cleanTitle)}`);
+        const response = await fetch(url);
         const data = await response.json();
         
-        if (data.results && data.results.length > 0) {
-            const result = data.results[0];
-            const rating = result.vote_average ? result.vote_average.toFixed(1) : "N/A";
-            const year = result.release_date ? result.release_date.split('-')[0] : "2025";
+        if (manualId || (data.results && data.results.length > 0)) {
+            // If search, filter results for best match
+            let bestMatch = manualId ? data : data.results.sort((a, b) => {
+                const aIsIndian = a.original_language === 'hi' || a.original_language === 'te';
+                const bIsIndian = b.original_language === 'hi' || b.original_language === 'te';
+                if (aIsIndian && !bIsIndian) return -1;
+                if (!aIsIndian && bIsIndian) return 1;
+                return b.popularity - a.popularity;
+            })[0];
+
+            // TITLE LOGIC: Use API name if original is short/filename-like
+            if (originalTitle.length < 5 || originalTitle.toLowerCase().includes('.html')) {
+                titleEl.innerText = bestMatch.title;
+            } else {
+                titleEl.innerText = originalTitle;
+            }
+
+            // Apply Metadata
+            const rating = bestMatch.vote_average ? bestMatch.vote_average.toFixed(1) : "N/A";
+            const year = (bestMatch.release_date || "2025").split('-')[0];
 
             ratingEl.innerHTML = `<i class="fab fa-imdb" style="color: #f5c518;"></i> IMDb: ${rating}`;
             yearEl.innerText = `📅 ${year}`;
+            descEl.innerText = bestMatch.overview || "Overview not available.";
+            
+        } else {
+            titleEl.innerText = originalTitle;
+            descEl.innerText = "Enjoy the stream on CineView!";
         }
     } catch (e) {
-        ratingEl.innerText = "⭐ Rating: 8.5"; // Fallback
+        console.error("API Error", e);
+        titleEl.innerText = originalTitle;
     }
 }
 
 function generateRecommendations(currentId) {
     const grid = document.getElementById('recommendationGrid');
     if (!grid) return;
+    
     const keys = Object.keys(movieDatabase).filter(key => key !== currentId);
     const randomMovies = keys.sort(() => 0.5 - Math.random()).slice(0, 8);
+
+    grid.innerHTML = ""; // Clear grid before injecting
 
     randomMovies.forEach(key => {
         const item = movieDatabase[key];
@@ -135,7 +172,7 @@ function generateRecommendations(currentId) {
         card.innerHTML = `
             <div class="movie-card">
                 <div class="movie-poster-container">
-                    <img src="${item.img}" class="movie-poster" loading="lazy">
+                    <img src="${item.img}" class="movie-poster" loading="lazy" onerror="this.src='https://via.placeholder.com/500x750?text=Poster+Missing'">
                 </div>
                 <div class="movie-info">
                     <h3>${item.title}</h3>
