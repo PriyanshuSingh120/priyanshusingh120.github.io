@@ -291,52 +291,58 @@ footer {
 .header-search { max-width: 250px; height: 35px; border-radius: 5px; }
 .header-search .search-input { padding: 5px 10px; font-size: 0.9em; }
 
-/* Hero Slider Section */
+/* 1. Force the Hero Section to have a physical size */
 .hero-slider-section {
-    height: 500px;
-    width: 100%;
-    position: relative;
-    background: #000;
+    position: relative !important;
+    width: 100% !important;
+    height: 500px !important; /* Adjust this to your liking */
+    background: #000 !important;
+    overflow: hidden !important;
+    display: block !important;
+}
+
+/* 2. Force the Background Blur to appear */
+#sliderBg {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background-size: cover !important;
+    background-position: center !important;
+    filter: blur(40px) brightness(0.4) !important;
+    z-index: 1 !important; /* Lowest layer */
+    display: block !important;
+    transition: background-image 1s ease-in-out, opacity 1s ease-in-out !important;
+}
+
+/* Ensure the slider container actually occupies space */
+.slider-content {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important; /* This uses the 60vh from the hero section */
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
 }
 
-.slider-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-}
-
-/* THE LANDSCAPE FILLER (Blurred) */
-#sliderBg {
-    position: absolute;
-    top: -10%; left: -10%;
-    width: 120%; height: 120%;
-    background-size: cover;
-    background-position: center;
-    filter: blur(50px) brightness(0.3); /* High blur creates the 'landscape' feel */
-    z-index: 1;
-}
-
-/* THE SHARP POSTER (Middle) */
+/* Force sharp image to be visible */
 #sliderImg {
+    max-height: 80% !important;
+    width: auto !important;
+    z-index: 5;
     position: relative;
-    z-index: 2;
-    height: 85%; /* Keeps it sharp and contained */
-    width: auto;
-    border-radius: 12px;
-    box-shadow: 0 0 40px rgba(0,0,0,0.9);
+    opacity: 1 !important;
+    transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out !important;
 }
-
+/* 5. Ensure text is on the very top */
 .slider-overlay {
-    position: absolute;
-    bottom: 10%;
-    left: 5%;
-    z-index: 10;
-    text-shadow: 2px 2px 10px rgba(0,0,0,1);
+    position: absolute !important;
+    bottom: 10% !important;
+    left: 5% !important;
+    z-index: 10 !important; /* Highest layer */
 }
-
 #movieRating {
     color: #f5c518; /* IMDb Yellow */
     font-weight: 700;

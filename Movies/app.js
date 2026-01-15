@@ -1,164 +1,94 @@
+// 1. Move these to the TOP (Global Scope)
+const TMDB_API_KEY = 'dc691868b09daaabe9acc238ed898cf7'; 
+const BACKDROP_BASE = "https://image.tmdb.org/t/p/w1280"; 
+const POSTER_BASE = "https://image.tmdb.org/t/p/w500"; 
+let movieData = []; // This MUST be outside
+
 document.addEventListener('DOMContentLoaded', () => {
-    // --- 1. Mobile Menu Toggle Functionality (Unchanged - Perfect) ---
+    // --- Mobile Menu Toggle ---
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
-
     if (menuToggle && navLinks) {
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
+        menuToggle.addEventListener('click', () => navLinks.classList.toggle('active'));
     }
 
-    // --- 2. Enhanced Live/Button Search Functionality (Refined) ---
-
-    const searchInput = document.querySelector('.search-input');
-    const searchButton = document.querySelector('.search-button'); 
-    const movieGrid = document.querySelector('.movie-grid'); 
-    
-    // Store the original movie cards (anchor tags)
-    const initialMovieLinks = Array.from(document.querySelectorAll('.movie-grid > .movie-link'));
-
-    if (searchInput && initialMovieLinks.length > 0 && movieGrid) {
-        
-        /**
-         * Core search and filtering function.
-         * Hides non-matching elements and re-orders the DOM to bring matches to the top.
-         */
-        const executeSearch = () => {
-            const searchTerm = searchInput.value.toLowerCase().trim();
-            const fragment = document.createDocumentFragment();
-            
-            // Temporary arrays to hold elements based on match status
-            const matchedLinks = [];
-            const nonMatchedLinks = [];
-
-            // 1. Iterate and determine match status
-            initialMovieLinks.forEach(link => {
-                const titleElement = link.querySelector('.movie-info h3');
-                // Use the link's text content for a broader search (title + genres + year)
-                const cardContent = link.textContent.toLowerCase(); 
-
-                // Note: The logic below searches the entire card content, 
-                // which is better than just the title.
-                if (searchTerm === '' || cardContent.includes(searchTerm)) {
-                    // MATCH FOUND (or search is empty)
-                    link.style.display = ''; // Show
-                    matchedLinks.push(link);
-                } else {
-                    // NO MATCH FOUND
-                    link.style.display = 'none'; // Hide
-                    nonMatchedLinks.push(link);
-                }
-            });
-
-            // 2. Re-append in the desired order (Matched first, then Hidden non-matched)
-            // Use the DOM's native ability to move existing nodes with appendChild
-            
-            // Append all matched links (moves them to the top of the fragment)
-            matchedLinks.forEach(link => {
-                fragment.appendChild(link);
-            });
-            
-            // Append all non-matched links (moves them to the bottom of the fragment, hidden)
-            nonMatchedLinks.forEach(link => {
-                fragment.appendChild(link);
-            });
-
-            // 3. Update the DOM with the new, sorted fragment in one operation
-            // This is the cleanest and most efficient re-ordering/update.
-            movieGrid.appendChild(fragment);
-
-            // Optional: Add a check for "No Results Found"
-            if (matchedLinks.length === 0 && searchTerm !== '') {
-                // You would typically insert a "No results found" message here
-                console.log("No movies found for: " + searchTerm);
-                // Example: movieGrid.innerHTML = '<p class="no-results">No movies found...</p>'; 
-                // However, inserting this would remove all movie links, requiring a full re-append later.
-                // Keeping the code as is (using display: none) is simpler if you don't need a custom message.
-            }
-        };
-
-        // A. Live Input Listener (for real-time filtering)
-        // Using 'input' is correct for immediate response
-        searchInput.addEventListener('input', executeSearch);
-
-        // B. Search Button Listener (runs search on click)
-        if (searchButton) {
-            searchButton.addEventListener('click', (e) => {
-                e.preventDefault(); 
-                executeSearch();
-            });
-        }
-        
-        // C. Allow 'Enter' key to trigger search
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault(); 
-                executeSearch();
-            }
-        });
-    }
-});
-
-const OMDB_API_KEY = '15bccaef'; 
-let movieData = [];
-
-document.addEventListener('DOMContentLoaded', () => {
+    // --- Collect and Randomize Movies ---
     const movieCards = document.querySelectorAll('.movie-link');
-    
     movieData = Array.from(movieCards).map(card => {
-        const originalTitle = card.querySelector('h3').innerText.trim();
         return {
             link: card.getAttribute('href'),
-            title: originalTitle, // Keep your original name safe here
+            title: card.querySelector('h3').innerText.trim(),
             imdbId: card.getAttribute('data-id'), 
-            // Only remove bracket tags like [18+], keep the rest
-            searchTitle: originalTitle.replace(/\[.*?\]/g, '').trim()
+            searchTitle: card.querySelector('h3').innerText.replace(/\[.*?\]/g, '').trim()
         };
-    }).sort(() => 0.5 - Math.random());
+    });
 
+    // START THE SLIDER
     if (movieData.length > 0) {
-        updateSlider(); 
-        setInterval(updateSlider, 6000); 
+        updateSlider(); // Start first one immediately
+        setInterval(updateSlider, 6000); // Change every 6 seconds
+    }
+
+    // --- Search Logic ---
+    const searchInput = document.querySelector('.search-input');
+    const searchButton = document.querySelector('.search-button');
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            const term = searchInput.value.toLowerCase();
+            document.querySelectorAll('.movie-link').forEach(link => {
+                const isMatch = link.textContent.toLowerCase().includes(term);
+                link.style.display = isMatch ? '' : 'none';
+            });
+        });
     }
 });
 
+
 async function updateSlider() {
-    const randomIndex = Math.floor(Math.random() * movieData.length);
-    const movie = movieData[randomIndex];
+    if (movieData.length === 0) return;
 
     const sliderImg = document.getElementById('sliderImg');
     const sliderBg = document.getElementById('sliderBg');
-    const sliderTitle = document.getElementById('sliderTitle');
-    const ratingLabel = document.getElementById('movieRating');
-    const playBtn = document.getElementById('playBtn');
 
-    let apiUrl = movie.imdbId 
-        ? `https://www.omdbapi.com/?i=${movie.imdbId}&apikey=${OMDB_API_KEY}`
-        : `https://www.omdbapi.com/?t=${encodeURIComponent(movie.searchTitle)}&apikey=${OMDB_API_KEY}`;
+    sliderImg.style.opacity = "0";
+
+
+    const movie = movieData[Math.floor(Math.random() * movieData.length)];
+
+    let url = movie.imdbId 
+        ? `https://api.themoviedb.org/3/find/${movie.imdbId}?api_key=${TMDB_API_KEY}&external_source=imdb_id`
+        : `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(movie.searchTitle)}`;
 
     try {
-        const response = await fetch(apiUrl);
+        const response = await fetch(url);
         const data = await response.json();
+        let result = movie.imdbId ? data.movie_results[0] : data.results[0];
 
-        if (data.Response === "True" && data.Poster !== "N/A") {
-            sliderImg.src = data.Poster;
-            sliderBg.style.backgroundImage = `url('${data.Poster}')`;
-            ratingLabel.innerHTML = `⭐ IMDb: ${data.imdbRating} | ${data.Genre}`;
-            
-            // LOGIC: If we have a data-id, we trust the API name.
-            // IF NOT, we keep YOUR original name from the card to prevent wrong renaming.
-            sliderTitle.innerText = movie.imdbId ? data.Title : movie.title;
-        } else {
-            // Static Fallback if API completely fails
-            sliderImg.src = "16.jpg"; 
-            sliderBg.style.backgroundImage = "url('16.jpg')";
-            sliderTitle.innerText = movie.title;
-            ratingLabel.innerText = "Trending Movie | 2025";
+        if (result) {
+            const backdropLink = result.backdrop_path ? BACKDROP_BASE + result.backdrop_path : "";
+            const posterLink = result.poster_path ? POSTER_BASE + result.poster_path : "";
+
+            setTimeout(() => {
+                if (backdropLink) sliderBg.style.backgroundImage = `url('${backdropLink}')`;
+                if (posterLink) sliderImg.src = posterLink;
+                
+                document.getElementById('sliderTitle').innerText = movie.title;
+                document.getElementById('movieRating').innerHTML = `⭐ Rating: ${result.vote_average.toFixed(1)}`;
+                document.getElementById('playBtn').href = movie.link;
+                const imgPreloader = new Image();
+                imgPreloader.src = posterLink;
+                imgPreloader.onload = () => {
+                    sliderImg.src = posterLink;
+                    sliderImg.style.opacity = "1";
+                };
+
+                // 3. FADE BACK IN
+                sliderImg.style.opacity = "1";
+                // sliderBg.style.opacity = "1";
+            }, 400); // This matches the 0.4s in your CSS
         }
     } catch (err) {
-        sliderTitle.innerText = movie.title;
+        console.error("Animation Error:", err);
+        sliderImg.style.opacity = "1"; // Ensure it doesn't stay invisible
     }
-
-    playBtn.href = movie.link; 
 }
