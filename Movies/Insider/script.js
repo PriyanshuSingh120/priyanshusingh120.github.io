@@ -43,9 +43,9 @@ const movieData = [
         { title: "MS Dhoni", link: "Insider/msd.html", img: "https://pix1.wapkizfile.info/download/7e07118c9ad8223a2d1d005fd3fdc96e/filmy4wap+wapkizs+com/M-S-Dhoni-The-Untold-Story-2016-Bollywood-Hindi-Full-Movie-BluRay-HD-ESub-(filmyfly.observer).jpg", tags: "Sports | Story | 2016" },
         { title: "Leo", link: "Insider/leo.html", img: "https://upload.wikimedia.org/wikipedia/en/7/75/Leo_%282023_Indian_film%29.jpg", tags: "Action | Thriller | 2023" },
         { title: "Zootopia 2", link: "Insider/zootopia2.html", img: "https://images.justwatch.com/poster/336822920/s718/zootopia-2.jpg", tags: "Animated | Mystery | 2025" },
-        { title: "War 2", link: "Insider/war2.html", img: "images/war2.jpg", tags: "Action | Thriller | 2025" },
-        { title: "Bahubali: The Epic", link: "Insider/Bahubali.html", img: "images/2.jpg", tags: "War | Action | 2025" },
-        { title: "Free Birds", link: "Insider/2.html", img: "images/1.jpg", tags: "Animated | Comedy | 2024" }
+        { title: "War 2", link: "Insider/war2.html", img: "https://prigames.netlify.app/movies/images/images/war2.jpg", tags: "Action | Thriller | 2025" },
+        { title: "Bahubali: The Epic", link: "Insider/Bahubali.html", img: "https://prigames.netlify.app/movies/images/images/2.jpg", tags: "War | Action | 2025" },
+        { title: "Free Birds", link: "Insider/2.html", img: "https://prigames.netlify.app/movies/images/images/1.jpg", tags: "Animated | Comedy | 2024" }
     ];
 
     function generateCards() {
@@ -75,5 +75,6 @@ const movieData = [
             grid.innerHTML += cardHTML;
         });
     }
+
 
     window.onload = generateCards;
