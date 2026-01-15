@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CineView Pro Scanner</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; padding: 40px; background: #0a0a0a; color: #fff; text-align: center; }
+        .container { max-width: 800px; margin: auto; background: #111; padding: 30px; border-radius: 15px; border: 1px solid #333; }
+        input[type="file"] { margin: 20px 0; padding: 10px; background: #222; border-radius: 8px; border: 1px solid #444; color: #fff; cursor: pointer; }
+        #log { margin-top: 20px; height: 150px; overflow-y: auto; background: #000; padding: 10px; font-family: monospace; font-size: 12px; text-align: left; border-radius: 8px; color: #888; }
+        textarea { width: 100%; height: 300px; margin-top: 20px; background: #161616; color: #00ff00; border: 1px solid #333; padding: 15px; border-radius: 10px; font-family: 'Courier New', monospace; }
+        .btn { background: #e50914; color: #fff; padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        .btn:hover { background: #ff0a16; }
+        .stats { margin-top: 10px; font-weight: bold; color: #e50914; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CineView Pro Scanner</h1>
+        <p>Select your <b>"Insider"</b> folder to build your master database.</p>
+        <input type="file" id="folderInput" webkitdirectory directory multiple>
+        <div id="stats" class="stats">Ready to scan...</div>
+        <div id="log"></div>
+        <textarea id="result" placeholder="Database code will appear here..."></textarea>
+        <button class="btn" onclick="copyToClipboard()">Copy Master Database</button>
+    </div>
+
+    <script>
+        const log = document.getElementById('log');
+        const stats = document.getElementById('stats');
+        const resField = document.getElementById('result');
+
+        // Logic to fix common title errors automatically
+        function cleanTitle(raw) {
+            return raw
+                .replace(/\.html/g, '')
+                .replace(/faa/g, ': Fire And Ash')
+                .replace(/([a-z])([A-Z])/g, '$1 $2') // Add space between CamelCase
+                .replace(/-/g, ' ')
+                .replace(/_/g, ' ')
+                .split(' ')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                .join(' ');
+        }
+
+        document.getElementById('folderInput').addEventListener('change', async (e) => {
+            const files = Array.from(e.target.files).filter(f => f.name.endsWith('.html'));
+            const db = {};
+            let processed = 0;
+
+            log.innerHTML = "Starting scan...<br>";
+
+            for (let file of files) {
+                try {
+                    const text = await file.text();
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(text, 'text/html');
+                    
+                    // Look for Iframe SRC
+                    const iframe = doc.querySelector('iframe');
+                    const abyssSrc = iframe ? iframe.src : "";
+
+                    // Look for Title in H1, H2, H3, or <title>
+                    const titleEl = doc.querySelector('h1, h2, h3, title');
+                    let movieTitle = titleEl ? titleEl.innerText : file.name;
+
+                    if (abyssSrc && abyssSrc.includes('short.icu')) {
+                        const id = file.name.replace('.html', '').toLowerCase();
+                        db[id] = {
+                            title: cleanTitle(movieTitle),
+                            src: abyssSrc,
+                            year: "2025" // Default
+                        };
+                        log.innerHTML += `✅ Scanned: ${file.name}<br>`;
+                    } else {
+                        log.innerHTML += `<span style="color:orange">⚠️ Missing Link: ${file.name}</span><br>`;
+                    }
+                } catch (err) {
+                    log.innerHTML += `<span style="color:red">❌ Error in ${file.name}</span><br>`;
+                }
+                
+                processed++;
+                stats.innerText = `Scanning: ${processed} / ${files.length} files`;
+                log.scrollTop = log.scrollHeight;
+            }
+
+            resField.value = "const movieDatabase = " + JSON.stringify(db, null, 4) + ";";
+            stats.innerText = `Scan Complete! Found ${Object.keys(db).length} movies.`;
+        });
+
+        function copyToClipboard() {
+            resField.select();
+            document.execCommand('copy');
+            alert("Database copied! Replace your movieDatabase in script.js now.");
+        }
+    </script>
+</body>
+</html>
