@@ -2,6 +2,79 @@ const TMDB_API_KEY = 'dc691868b09daaabe9acc238ed898cf7';
 
 // --- YOUR DATABASE ---
 const movieDatabase = {
+    // --- SERIES DATABASE ADDITION ---
+    "familyman3": { 
+        "title": "The Family Man Season 3", 
+        "img": "https://catimages.org/images/2025/11/21/The-Family-Man-S03-Hindi-HDRip-ALL-Episodes.jpg",
+        "tmdb": "95440",
+        "episodes": ["https://short.icu/OzcIkav01","https://short.icu/hvs4iLHuM","https://short.icu/A3S4gqYx4","https://short.icu/u42XsM7xb","https://short.icu/d1uqiv21f","https://short.icu/UDEuAwdmI","https://short.icu/LhM_9VDym"]
+    },
+    "got1": { 
+        "title": "Game Of Thrones Season 1", 
+        "img": "https://i.pinimg.com/736x/cb/13/3d/cb133d3ccd5dd67463513d892173753c.jpg",
+        "tmdb": "1399",
+        "episodes": ["https://short.icu/h2B8qM3lG","https://short.icu/no_u3ua8-","https://short.icu/wIdcX5hFw","https://short.icu/taNL76E-D","https://short.icu/VROKYQ2Qi","https://short.icu/Z65Ic8gUl","https://short.icu/C2t7B60T6","https://short.icu/L7K7Bm4Ei","https://short.icu/sxCOYY6-z","https://short.icu/0izCNMFmG"]
+    },
+    "got2": { 
+        "title": "Game Of Thrones Season 2", 
+        "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXcc4myHHLydYJrshVYmbcZMq-KgKTzHiBO9C1gETAu93BTTxxiA57dkk&s=10",
+        "tmdb": "1399",
+        "episodes": ["https://short.icu/iCoJ7LxST","https://short.icu/HDBdhe2r2","https://short.icu/KFfmh0oAX","https://short.icu/FPNbWnfQI","https://short.icu/nki1MkRAB6","https://short.icu/rsTXTuU1Qt","https://short.icu/jQ-ai9T6K","https://short.icu/yL89Eg2QV","https://short.icu/-RaIXDOaz","https://short.icu/KtwsCC_iV"]
+    },
+    "got3": { 
+        "title": "Game Of Thrones Season 3", 
+        "img": "https://upload.wikimedia.org/wikipedia/en/1/1d/Game_of_Thrones_Season_3.jpg",
+        "tmdb": "1399",
+        "episodes": ["https://short.icu/HWzUOfgpw","https://short.icu/X6F_qpnJn","https://short.icu/w33oywFGy","https://short.icu/MCy5_F8oA","https://short.icu/5mMZa1Jp8J","https://short.icu/EdcmsxTUS6","https://short.icu/BXK8RyCIX","https://short.icu/SzVEQFNmS","https://short.icu/vSRBxADZxe","https://short.icu/d-xFc6TKc"]
+    },
+    "kapils3": { 
+        "title": "The Kapil Sharma Show Season 3", 
+        "img": "https://catimages.org/images/2025/06/21/The-Great-Indian-Kapil-Show-2025-S03-HDHub4u.Ms.jpg",
+        "tmdb": "254558",
+        "episodes": ["https://short.icu/xVfDacuLX7","https://short.icu/uj4eBNozm","https://short.icu/0xsHh_sy0","https://short.icu/9sfprsaaj","https://short.icu/qfwY2Q1Is","https://short.icu/1zNYJWhqv","https://short.icu/RCLhytk2_"]
+    },
+    "panchayats1": { 
+        "title": "Panchayat Season 1", 
+        "img": "https://image.tmdb.org/t/p/w500/hmjIgLSh2bVcHDQqQ0f0xeen24x.jpg",
+        "tmdb": "100147",
+        "episodes": ["https://short.icu/k0yxHyLcD","https://short.icu/X4iK9DLrO","https://short.icu/IOhU7xfQx","https://short.icu/kD9Omk0qB","https://short.icu/DoLn2KrAp","https://short.icu/G0Ef-WA0r","https://short.icu/ZXDyvQaOP","https://short.icu/XrPdo8Lfh"]
+    },
+    "panchayats2": { 
+        "title": "Panchayat Season 2", 
+        "img": "https://image.tmdb.org/t/p/w500/gRKDEpUPd2pp2msmwdgEW34V0SL.jpg",
+        "tmdb": "100147",
+        "episodes": ["https://short.icu/DFMFBYw4O","https://short.icu/276sG4v3U","https://short.icu/aIWwkKsde","https://short.icu/UGi8ht-Jo","https://short.icu/jLoccqc_L","https://short.icu/7Gmq0saQg","https://short.icu/AY-YfajxG","https://short.icu/75cf0cYUH"]
+    },
+    "panchayats3": { 
+        "title": "Panchayat Season 3", 
+        "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYnHIyZn59WEBrdmnjj6XQIchRvDPV2HWvdRWpbgDWOwalJzrKAcF-DkEh&s=10",
+        "tmdb": "100147",
+        "episodes": ["https://short.icu/-vTX_z3xn","https://short.icu/hhDMWIDB2o","https://short.icu/uiwMOHpiF","https://short.icu/57tVp9O_d","https://short.icu/npCKPiZtx","https://short.icu/n840f2I4Om","https://short.icu/DIuaDb7xL","https://short.icu/h6BegcHTn"]
+    },
+    "stranger1": { 
+        "title": "Stranger Things Season 1", 
+        "img": "https://upload.wikimedia.org/wikipedia/en/b/b1/Stranger_Things_season_1.jpg",
+        "tmdb": "66732",
+        "episodes": ["https://short.icu/dhm7Qju2Y","https://short.icu/-jIY7Q0Jd","https://short.icu/duBAiUxLr","https://short.icu/ZVdWUzMSQ","https://short.icu/NQUwO_Vcs","https://short.icu/oAO22IYtJ","https://short.icu/fvsycrib8","https://short.icu/qXYiBfIkc"]
+    },
+    "stranger2": { 
+        "title": "Stranger Things Season 2", 
+        "img": "https://rukminim2.flixcart.com/image/480/640/jnamvm80/poster/h/w/r/large-stranger-things-season-2-poster-a3-13-x-19-inches-original-imafay3m5fddv8pg.jpeg?q=90",
+        "tmdb": "66732",
+        "episodes": ["https://short.icu/Hv98JtXqP","https://short.icu/u7yaLWyeU","https://short.icu/qy98uByTu","https://short.icu/X3C7Hrkg4w","https://short.icu/4t7j9LcKS","https://short.icu/8j2Ka8G3f","https://short.icu/U29a48Pbp","https://short.icu/cjKqCFwtM","https://short.icu/59aHcRazI"]
+    },
+    "stranger3": { 
+        "title": "Stranger Things Season 3", 
+        "img": "https://images-cdn.ubuy.co.in/65f1068a040c0d18bb2bc623-netflix-stranger-things-season-3-one.jpg",
+        "tmdb": "66732",
+        "episodes": ["https://short.icu/PpRii_0c4","https://short.icu/KqhyEdjjP","https://short.icu/DYsqEF6x-","https://short.icu/hrQX01zqW","https://short.icu/LBVcRP5Be","https://short.icu/nXza7aCU0","https://short.icu/nnCAcMbVK","https://short.icu/T4fQjs7Hq"]
+    },
+    "stranger5": { 
+        "title": "Stranger Things Season 5", 
+        "img": "https://image.tmdb.org/t/p/w500/AaLrOh33YLkK1WLEB8Uml7FL8fm.jpg",
+        "tmdb": "66732",
+        "episodes": ["https://short.icu/RrBB6-79l","https://short.icu/YcwrZOAyz","https://short.icu/U8oxvfuW2","https://short.icu/pBvuStnhl"]
+    },
     "3idiots": { "title": "3Idiots", "src": "https://short.icu/V550M_IBX", "year": "2009", "img": "https://m.media-amazon.com/images/I/81TeJPHjP-L._AC_UF1000,1000_QL80_.jpg" },
     "ajey": { "title": "Ajey: The Untold Story of a Yogi", "src": "https://short.icu/7IHRfjVYh", "year": "2024", "img": "https://upload.wikimedia.org/wikipedia/en/b/b7/Ajey-Poster.jpg" },
     "akhanda2": { "title": "Akhanda 2", "src": "https://short.icu/nmVnnZszs", "year": "2025", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0SooyoLyOkvEgwlLQt8gDEgnVfZLul3k9NoTpTrk8sYWieHdkE2GR8tI&s=10" },
@@ -21,7 +94,6 @@ const movieDatabase = {
     "ekdiwanekidiwaniyat": { "title": "Ek Deewane Ki Deewaniyat", "src": "https://short.icu/JHZdlHHzWL", "year": "2025", "img": "https://prigames.netlify.app/movies/images/16.jpg" },
     "elio": { "title": "Elio", "src": "https://short.icu/bVlKuxwS6", "year": "2025", "img": "https://image.tmdb.org/t/p/w400/w2ARwtc1zoh0pyfwmyhpZHwuXgK.jpg" },
     "enemy": { "title": "Enemy", "src": "https://short.icu/ZNj4md4uv4", "year": "2021", "img": "https://prigames.netlify.app/movies/images/3.jpg" },
-    "vritta": { "title": "Vritta", "src": "https://short.icu/N2lYEchkf", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/oNPao9volH0jAA1jULlQ6hCOmAe.jpg" },
     "ferdinand": { "title": "Ferdinand", "src": "https://short.icu/scPyaf-ML", "year": "2017", "img": "https://prigames.netlify.app/movies/images/4.jpg" },
     "finaldestination": { "title": "The Final Destination", "src": "https://short.icu/RzUsMNFwh", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/6WxhEvFsauuACfv8HyoVX6mZKFj.jpg" },
     "goat": { "title": "The Greatest Of All Time", "src": "https://short.icu/MJYR2azA3", "year": "2024", "img": "https://prigames.netlify.app/movies/images/18.jpg" },
@@ -82,23 +154,43 @@ const movieDatabase = {
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const movieId = urlParams.get('id');
-    const manualTmdbId = urlParams.get('tmdb');
-
     const movie = movieDatabase[movieId];
 
     if (movie) {
-        document.getElementById('mainVideoPlayer').src = movie.src;
-        document.getElementById('displayTitle').innerText = movie.title;
-        
-        // Pass to integrated fetcher
-        fetchMetaData(movie.title, manualTmdbId);
-        
-        // NEW: Generate recommendations here
+        const player = document.getElementById('mainVideoPlayer');
+        const titleEl = document.getElementById('displayTitle');
+        const selectorArea = document.getElementById('episodeSelectorArea');
+        const dropdown = document.getElementById('episodeDropdown');
+
+        titleEl.innerText = movie.title;
+
+        // CHECK IF IT IS A SERIES
+        if (movie.episodes && movie.episodes.length > 0) {
+            selectorArea.style.display = 'block'; // Show dropdown
+            dropdown.innerHTML = ""; // Clear
+            
+            movie.episodes.forEach((url, index) => {
+                let opt = document.createElement('option');
+                opt.value = url;
+                opt.innerText = `Episode ${index + 1}`;
+                dropdown.appendChild(opt);
+            });
+            
+            player.src = movie.episodes[0]; // Load Ep 1 by default
+        } else {
+            player.src = movie.src; // Just a regular movie
+            selectorArea.style.display = 'none';
+        }
+
+        fetchMetaData(movie.title, urlParams.get('tmdb'));
         generateRecommendations(movieId);
-    } else {
-        document.getElementById('displayTitle').innerText = "Movie Not Found";
     }
 });
+
+// Helper for Dropdown
+function loadSpecificEpisode(url) {
+    document.getElementById('mainVideoPlayer').src = url;
+}
 
 async function fetchMetaData(displayTitle, manualId) {
     const ratingEl = document.getElementById('imdbRatingDisplay');
@@ -182,5 +274,4 @@ function generateRecommendations(currentId) {
         `;
         grid.appendChild(card);
     });
-
 }
