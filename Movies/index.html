@@ -3,1114 +3,159 @@
 <head>   
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Experience cinema like never before. Cineview on Prigames offers a curated selection of movies, tech reviews, and filmmaker insights. Dive into the action today!">
-    <meta name="Keywoards" content="Prigames,Cineview pri games, Pri game , Cine view,Watch Free movies,cine view pri games,cineview progames,Cineview Netlify,Cineview, prigames netlify">
-    <title>🎬 CineView - Free Movie Hub</title>
+    <meta name="description" content="Watch the latest movies and series for free on CineView.">
+    <title>🎬 CineView - Complete Library</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <amp-auto-ads type="adsense"
-        data-ad-client="ca-pub-7112692067569722">
-</amp-auto-ads>
-
     <header class="main-header">
-    <div class="logo-group">
-        <div class="logo">CineView</div>
-        <div class="search-box header-search" role="search">
-            <input type="text" placeholder="Search..." class="search-input">
-            <button class="search-button"><i class="fas fa-search"></i></button>
+        <div class="logo-group">
+            <div class="logo">CineView</div>
+            <div class="search-box header-search">
+                <input type="text" placeholder="Search 70+ movies..." class="search-input">
+                <button class="search-button"><i class="fas fa-search"></i></button>
+            </div>
         </div>
-    </div>
-    <nav class="nav-links">
-        <a href="https://prigames.netlify.app/">Home</a>
-        <a href="https://prigames.netlify.app/movies/">Movies</a>
-        <a href="https://cherieai.netlify.app/">Ai</a>
-    </nav>
-    <button class="menu-toggle"><i class="fas fa-bars"></i></button>
-</header>
+        <nav class="nav-links">
+            <a href="https://prigames.netlify.app/">Home</a>
+            <a href="https://prigames.netlify.app/movies/">Movies</a>
+        </nav>
+        <button class="menu-toggle"><i class="fas fa-bars"></i></button>
+    </header>
 
-<main>
-    <section class="hero-slider-section">
-    <div class="slider-content">
-        <div id="sliderBg" class="slider-bg-blur"></div>
-        <img id="sliderImg" src="" alt="Featured Poster">
-        
-        <div class="slider-overlay">
-            <span class="trending-tag">🔥 Trending Now</span>
-            <h1 id="sliderTitle">Loading...</h1>
-            <p id="sliderTags"><span id="movieRating"></span></p> 
-            
-            <a href="#" id="playBtn" class="play-btn-circle">
-                <i class="fas fa-play"></i>
-            </a>
-        </div>
-    </div>
-</section>
+    <main>
+        <section class="hero-slider-section">
+            <div class="slider-content">
+                <div id="sliderBg" class="slider-bg-blur"></div>
+                <img id="sliderImg" src="" alt="Featured">
+                <div class="slider-overlay">
+                    <span class="trending-tag">🔥 Now Trending</span>
+                    <h1 id="sliderTitle">Loading...</h1>
+                    <p id="sliderTags"><span id="movieRating"></span></p> 
+                    <a href="#" id="playBtn" class="play-btn-circle"><i class="fas fa-play"></i></a>
+                </div>
+            </div>
+        </section>
 
-        <section class="movie-section" aria-labelledby="new-uploads-title">
-            <h2 class="section-title" id="new-uploads-title">✨ New Uploads</h2>
+        <section class="movie-section">
+            <h2 class="section-title">✨ All Movies & Series</h2>
             <div class="movie-grid">
 
-                
-                <a href="Insider/avatarfaa.html" class="movie-link" aria-label="View details for the movie Chhava">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://m.media-amazon.com/images/M/MV5BZDYxY2I1OGMtN2Y4MS00ZmU1LTgyNDAtODA0MzAyYjI0N2Y2XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Chhava movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Avatar: Fire And Ash</h3>
-                            <p>Action | Thriller | Sci-Fi | Fantasy | 2025</p>
-                        </div>
-                    </div>
-                </a>
-                
-                <a href="Insider/chhava.html" class="movie-link" aria-label="View details for the movie Chhava" data-id="tt27922706">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://image.tmdb.org/t/p/w500/9F4lPRLjfBjsu0zjWNOZQMa8a4V.jpg" alt="Chhava movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Chhaava</h3>
-                            <p>History| Thriller | Action | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/jananayagan.html" class="movie-link" aria-label="View details for the movie Elio">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://cdn.district.in/movies-assets/images/cinema/jana--6c8caf60-dbdd-11f0-a680-332b345d0f23.jpg" alt="final destination movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Jana Nayagan </h3>
-                            <p> Action | Adventure | Thriller | 2026</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/beast.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt11301946">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT86juoHqNu02UX1Zg_bnnd4GlN7T847IC6Z5ohKJA9GX-xxSUTWDdIGeU&s=10 min" alt="final destination movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Beast</h3>
-                            <p> Action | Comdey | Thriller | 2022</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="episodes/got3.html" class="movie-link" aria-label="View details for the movie Elio">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://upload.wikimedia.org/wikipedia/en/1/1d/Game_of_Thrones_Season_3.jpg" alt="final destination movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>[18+]Game Of Thrones Season 3</h3>
-                            <p> Action | Drama | Fantasy | Adventure | 2013</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="episodes/got2.html" class="movie-link" aria-label="View details for the movie Elio">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXcc4myHHLydYJrshVYmbcZMq-KgKTzHiBO9C1gETAu93BTTxxiA57dkk&s=10" alt="final destination movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>[18+]Game Of Thrones Season 2</h3>
-                            <p> Action | Drama | Fantasy | Adventure | 2012</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="episodes/got1.html" class="movie-link" aria-label="View details for the movie Elio">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://i.pinimg.com/736x/cb/13/3d/cb133d3ccd5dd67463513d892173753c.jpg" alt="final destination movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>[18+]Game Of Thrones Season 1</h3>
-                            <p> Action | Drama | Fantasy | Adventure | 2011</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/kiskiskopyarkaru2.html" class="movie-link" aria-label="View details for the movie haq" data-id="tt33307516">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://m.media-amazon.com/images/M/MV5BOTJkZDAxNTUtNGZhYy00Mjg5LTlhZTctZDQ3MjRhODRmYzI4XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="wall e movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Kis Kisko Pyaar Karoon 2</h3>
-                            <p>Comedy | Drama | Action | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/dhurandhar.html" class="movie-link" aria-label="View details for the movie" data-id="tt33014583">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://m.media-amazon.com/images/M/MV5BMTNmNjM0OTktNmQ5NC00MWY1LWE4MDEtYWM0MjU4M2U0NTdiXkEyXkFqcGc@._V1_.jpg" alt="hjonhy english movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Dhurandhar</h3>
-                            <p>Action | Thriller | suspence | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="episodes/familyman3.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt9544034">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://catimages.org/images/2025/11/21/The-Family-Man-S03-Hindi-HDRip-ALL-Episodes.jpg" alt="Elio movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>The Family Man 3</h3>
-                            <p> Action | Crime | Drama | Thriller | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/padakkalam.html" class="movie-link" aria-label="View details for the movie Elio">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_PBYt7QTtcJ-FhDCqHiDd84_lw2bFve8I_jqPLx-m_asz7YLX80ALs2E&s=10" alt="padakkalam movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Padakkalam</h3>
-                            <p> Drama | Comedy | Thriller | Fantasy | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/finaldestination.html" class="movie-link" aria-label="View details for the movie Elio">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://image.tmdb.org/t/p/w500/6WxhEvFsauuACfv8HyoVX6mZKFj.jpg" alt="final destination movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>The Final Destination</h3>
-                            <p> Action | Horror | Drama | Thriller | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/walle.html" class="movie-link" aria-label="View details for the movie haq">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://upload.wikimedia.org/wikipedia/en/4/4c/WALL-E_poster.jpg" alt="wall e movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Wall-E</h3>
-                            <p>Adventure | Animated | Action | 2008</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="episodes/panchayats1.html" class="movie-link" aria-label="View details for the movie haq">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://image.tmdb.org/t/p/w500/hmjIgLSh2bVcHDQqQ0f0xeen24x.jpg" alt="wall e movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Panchayat Season 1</h3>
-                            <p>Adventure | Drama | Comedy | Thriller | 2020</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="episodes/panchayats2.html" class="movie-link" aria-label="View details for the movie haq">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://image.tmdb.org/t/p/w500/gRKDEpUPd2pp2msmwdgEW34V0SL.jpg" alt="wall e movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Panchayat Season 2</h3>
-                            <p>Adventure | Drama | Comedy | Thriller | 2022</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="episodes/panchayats3.html" class="movie-link" aria-label="View details for the movie haq" data-id="tt12004706">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYnHIyZn59WEBrdmnjj6XQIchRvDPV2HWvdRWpbgDWOwalJzrKAcF-DkEh&s=10" alt="wall e movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Panchayat Season 3</h3>
-                            <p>Adventure | Drama | Comedy | Thriller | 2024</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/teesmaarkhan.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt21301666">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://m.media-amazon.com/images/M/MV5BYjJiZmZkZGYtYjA1OC00MjRkLWFlYTgtYjM4ODBlYWI1MjQwXkEyXkFqcGc@._V1_.jpg" alt="final destination movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Tees Maar Khan</h3>
-                            <p> Action | Drama | Thriller | 2022</p>
-                        </div>
-                    </div>
-                </a>
-                
-                <a href="Insider/transformer.html" class="movie-link" aria-label="View details for the movie haq">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://m.media-amazon.com/images/M/MV5BZWI1ZDY1YTQtMjRkNy00ZDZhLWE3OTItMTIwNzliY2Y1MTZhXkEyXkFqcGc@._V1_.jpg" alt="wall e movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Transformers</h3>
-                            <p>Animated | Thriller | Action | 2024</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/bengalfiles.html" class="movie-link" aria-label="View details for the movie haq" data-id="tt15416342">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://m.media-amazon.com/images/M/MV5BM2ViMGI2NmYtNmIyYS00MDA1LTg2MTgtMjY2ODJhYTllNWRhXkEyXkFqcGc@._V1_.jpg" alt="wall e movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>The Bengal Files</h3>
-                            <p>History | Horror | Action | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/bomb.html" class="movie-link" aria-label="View details for the movie haq" data-id="tt28717622">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlrAQUy4_NjW-qXq0i7b1y9T7Jr71YPige7_KdDPvWBlfnzaz0Oi-8jTY&s=10" alt=" Bomb movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Bomb </h3>
-                            <p>Adventure | Comedy | Drama | Family | 2025</p>
-                        </div>
-                    </div>
-                </a>
-                
-                <a href="Insider/chhichhore.html" class="movie-link" aria-label="View details for the movie Elio">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://m.media-amazon.com/images/M/MV5BMjFkYThiNDMtMmFhYS00ZjQ5LWJjZjMtZmQ3ODAxYmIwM2RlXkEyXkFqcGc@._V1_.jpg" alt="chhichhore movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Chhichhore</h3>
-                            <p> Story | Comedy | Drama | Drama | 2019</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/akhanda2.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt15387182">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0SooyoLyOkvEgwlLQt8gDEgnVfZLul3k9NoTpTrk8sYWieHdkE2GR8tI&s=10" alt="final destination movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Akhanda 2</h3>
-                            <p> Action | Drama | Fantasy | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/3idiots.html" class="movie-link" aria-label="View details for the movie Elio">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://m.media-amazon.com/images/I/81TeJPHjP-L._AC_UF1000,1000_QL80_.jpg" alt="final destination movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>3 Idiots</h3>
-                            <p> Action | Drama | Comedy | 2009</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/kashmirfiles.html" class="movie-link" aria-label="View details for the movie Elio">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://m.media-amazon.com/images/M/MV5BYTUwZTNjY2MtNmRjOC00YmI1LThlNWUtZTFkMDgzNTc5ODAwXkEyXkFqcGc@._V1_.jpg" alt="final destination movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>The Kashmir Files</h3>
-                            <p> Action | Drama | Thriller | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/pravintambe.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt18568902">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-jRvsYLBHQiOq0oiH4QHgOomTQfp213ym7jgzmxJxdF2OD7geyy89t0cO&s=10" alt="final destination movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Kaun Praveen Tambe?</h3>
-                            <p> Action | Biography | Drama | 2022</p>
-                        </div>
-                    </div>
-                </a>
-
-                
-                
-                <a href="Insider/stephen.html" class="movie-link" aria-label="View details for the movie Elio">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://m.media-amazon.com/images/M/MV5BMTdiOTNhNjItMzk3ZC00YTBlLWE2YjQtZDQ4ZjYyOWNjZjA4XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="final destination movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Stephen</h3>
-                            <p> Action | Horror | Thriller | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/memoriesofmurder.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt0353969">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p89594_p_v8_ag.jpg" alt="final destination movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>2 Memories Of Murder</h3>
-                            <p> Action | Mystery | Crime | Thriller | 2003</p>
-                        </div>
-                    </div>
-                </a>
-
-
-                <a href="Insider/vanvaas.html" class="movie-link" aria-label="View details for the movie Elio">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://images.justwatch.com/poster/323472518/s718/vanvaas.jpg" alt="final destination movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Vanvaas</h3>
-                            <p> Family | Comedy | Drama | Romance | 2024</p>
-                        </div>
-                    </div>
-                </a>
-
-
-                <a href="Insider/salimohabbat.html" class="movie-link" aria-label="View details for the movie Elio">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbhf_bUrTITA4rlncGcv7Yn8iJWJ_QZ65mDmaFnOwTr0OQiIpG0fDg0Trj&s=10" alt="final destination movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Saali Mohabbat</h3>
-                            <p> Action | Crime | Mystery | Drama | Thriller | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-
-                <a href="Insider/it.html" class="movie-link" aria-label="View details for the movie haq">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS50mRvA5Tb9MHlM4iesO23IQmsM3_EY3YaRhcuTUo4BXkW0DSeXTAbGkk&s=10" alt=" Madagascar movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>IT</h3>
-                            <p>Action | Thriller | Horror | 2017</p>
-                        </div>
-                    </div>
-                </a>
-
-
-                <a href="Insider/cuttputlli.html" class="movie-link" aria-label="View details for the movie haq">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4zMxl8JPG8OH_SCEaoNeKPzmFDqXjNG1G86Chgauf-d_ODm5SvmvK8YNt&s=10" alt=" Cuttputlli movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Cuttputlli </h3>
-                            <p>Action | Horror | Crime | Suspense | Thriller  | 2022</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/udaipur.html" class="movie-link" aria-label="View details for the movie haq" data-id="tt28630806">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSR9j0YPFQWnZQ9EQuwPg-fmmUWplio8H1JwhuQgMq2s6V9DZv9uUFhH0qi&s=10" alt="Uadipur files movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>UdaiPur Files </h3>
-                            <p>Action | Crime | Thriller | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/og.html" class="movie-link" aria-label="View details for the movie haq" data-id="tt24060892">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://m.media-amazon.com/images/M/MV5BM2IwMmZmZjYtZTQzMi00MWNlLWFlZTUtNTI4ZDdhZWE0OTFmXkEyXkFqcGc@._V1_.jpg" alt=" og movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>They Call Him OG </h3>
-                            <p>Action | Crime | Thriller | 2025</p>
-                        </div>
-                    </div>
-                </a>
-                
-                
-                <a href="Insider/madagascar.html" class="movie-link" aria-label="View details for the movie haq">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://upload.wikimedia.org/wikipedia/en/3/36/Madagascar_Theatrical_Poster.jpg" alt=" Madagascar movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Madagascar </h3>
-                            <p>Adventure | Comedy | Animated | 2005</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/despicable4.html" class="movie-link" aria-label="View details for the movie" data-id="tt7510222">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://m.media-amazon.com/images/M/MV5BNzY0ZTlhYzgtOTgzZC00ZTg2LTk4NTEtZDllM2E2NGE5Njg2XkEyXkFqcGc@._V1_.jpg" alt="hjonhy english movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Despicable 4</h3>
-                            <p>Animated  | Funny | Comedy | Action | 2024</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/strikingrescue.html" class="movie-link" aria-label="View details for the movie">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4eS6As9vD1v9dj49GMGk25nRQ6j0UqaTsRDYRr4h4dc63jSsF7iFf4cU&s=10" alt="Striking Rescue movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Striking Rescue</h3>
-                            <p>Action  | Thriller | Suspense | Crime | 2024</p>
-                        </div>
-                    </div>
-                </a> 
-
-                <a href="episodes/stranger5.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt4574334" >
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://image.tmdb.org/t/p/w500/AaLrOh33YLkK1WLEB8Uml7FL8fm.jpg" alt="Elio movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Stranger Things 5</h3>
-                            <p>Action | Fantasy | Adventure | Sci-Fi | Mystery | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="episodes/stranger3.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt4574334">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://images-cdn.ubuy.co.in/65f1068a040c0d18bb2bc623-netflix-stranger-things-season-3-one.jpg" alt="Stranger things 3 movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Stranger Things 3</h3>
-                            <p>Action | Fantasy | Adventure | Sci-Fi | Mystery | 2019</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="episodes/stranger2.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt4574334">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://rukminim2.flixcart.com/image/480/640/jnamvm80/poster/h/w/r/large-stranger-things-season-2-poster-a3-13-x-19-inches-original-imafay3m5fddv8pg.jpeg?q=90" alt="Stranger things 1 movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Stranger Things 2</h3>
-                            <p>Action | Fantasy | Adventure | Sci-Fi | Mystery | 2017</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="episodes/stranger1.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt4574334">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://upload.wikimedia.org/wikipedia/en/b/b1/Stranger_Things_season_1.jpg" alt="Stranger things 1 movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Stranger Things 1</h3>
-                            <p>Action | Fantasy | Adventure | Sci-Fi | Mystery | 2016</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/thamma.html" class="movie-link" aria-label="View details for the movie">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrNTel1Jb41WgqCGnOBv-8n6f_z0UfhMsL_dlyXqnE9Z-6Q6Phx5PzjmU&s=10" alt="Thamma movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Thamma</h3>
-                            <p>Horror  | Funny | Comedy | Action | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/ratatouille.html" class="movie-link" aria-label="View details for the movie">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwnPmqAEdTgVyXk6jr93TfwiUzkAEyQSueyxLN7Z8eYaNmKlXBrWv2wW8&s=10" alt="Thamma movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Ratatouille</h3>
-                            <p>Animated  | Funny | Romantic | Action | 2007</p>
-                        </div>
-                    </div>
-                </a>
-                
-
-                <a href="Insider/nezha.html" class="movie-link" aria-label="View details for the movie">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://m.media-amazon.com/images/S/pv-target-images/29f1a9e3bb05411727c8327813a1c58c928e780338c4f1de55936b67780d8572.jpg" alt="ne zha movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Ne ZHA</h3>
-                            <p>Animated  | Funny | Comedy | Action | 2019</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/iceage.html" class="movie-link" aria-label="View details for the movie">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg9dnUnh40xWuzfWR7k3V8WiB2_I55MTpihu9gq8tYywWZiDA4xkwMiGA&s=10" alt=" movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>ICE AGE</h3>
-                            <p>Animated  | Funny | Comedy | Action | 2002</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/raid.html" class="movie-link" aria-label="View details for the movie">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://m.media-amazon.com/images/M/MV5BZDcwMWZiYjgtYWE5Zi00NDk0LTkyMDctYzgzMzA4YTZlZjBlXkEyXkFqcGc@._V1_.jpg" alt="raid movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Raid</h3>
-                            <p>Action | Thriller | suspence | Crime | 2018</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/raid2.html" class="movie-link" aria-label="View details for the movie">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSt3lM5lf1ze5Yx8nw1IOGK72HxXEWzSNfEJqdugPMHyD94hEVvHR5Hfxm&s=10" alt="raid 2 movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Raid 2</h3>
-                            <p>Action | Thriller | suspence | Crime | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/pushinboots.html" class="movie-link" aria-label="View details for the movie" data-id="tt3915174">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://upload.wikimedia.org/wikipedia/en/7/78/Puss_in_Boots_The_Last_Wish_poster.jpg" alt="hjonhy english movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Puss In Boots: The last wish</h3>
-                            <p>Animated  | Funny | Comedy | Action | 2022</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/wildrobot.html" class="movie-link" aria-label="View details for the movie">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFRDKmZfWky_Has4nb59nxC6Ta6Wlk_JFRraBgx4z0NaelG0cLseiInnI&s=10" alt="hjonhy english movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>The Wild Robot</h3>
-                            <p>Animated  | Thriller | Action | 2024</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/msd.html" class="movie-link" aria-label="View details for the movie MS Dhoni: The Untold Story">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://pix1.wapkizfile.info/download/7e07118c9ad8223a2d1d005fd3fdc96e/filmy4wap+wapkizs+com/M-S-Dhoni-The-Untold-Story-2016-Bollywood-Hindi-Full-Movie-BluRay-HD-ESub-(filmyfly.observer).jpg" alt="M.S. Dhoni: The Untold Story movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>MS Dhoni :The Untold Story</h3>
-                            <p>Story | Sports | Drama | 2016</p>
-                        </div>
-                    </div>
-                </a>
-                
-                <a href="Insider/theboy.html" class="movie-link" aria-label="View details for the movie The Boy">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://imgshare.info/images/2025/07/20/The-Boy-2016.jpg" alt="The Boy movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>The Boy</h3>
-                            <p>Action | Horror | Drama | Suspence | 2016</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/v.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt11385128">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://upload.wikimedia.org/wikipedia/en/b/b5/V_%28film%29.jpg" alt="Elio movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>V</h3>
-                            <p>Action | Thriller | Adventure | Drama | Mystery | 2020</p>
-                        </div>
-                    </div>
-                </a>
-                
-                <a href="Insider/haq.html" class="movie-link" aria-label="View details for the movie haq" data-id="tt36642456">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://catimages.org/images/2025/11/07/HAQ-2025-HDHub4u.Ms.jpg" alt="haq movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>HAQ</h3>
-                            <p>History | Thriller | Action | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/elio.html" class="movie-link" aria-label="View details for the movie Elio">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://image.tmdb.org/t/p/w400/w2ARwtc1zoh0pyfwmyhpZHwuXgK.jpg" alt="Elio movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Elio</h3>
-                            <p>Animated | Funny | Drama | Suspense | 2015</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="episodes/kapils3.html" class="movie-link" aria-label="View details for the movie Vash Level 2">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://catimages.org/images/2025/06/21/The-Great-Indian-Kapil-Show-2025-S03-HDHub4u.Ms.jpg" alt="Vash Level 2 movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>The Kapil Sharma Show : Season 3</h3>
-                            <p>Comedy | Drama | 2022</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/leo.html" class="movie-link" aria-label="View details for the movie Elio">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://upload.wikimedia.org/wikipedia/en/7/75/Leo_%282023_Indian_film%29.jpg" alt="Elio movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Leo</h3>
-                            <p>Action | Thriller | Adventure | Drama | Mystery | 2019</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/chidiya.html" class="movie-link" aria-label="View details for the movie Enemy" data-id="tt4826742">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://catimages.org/images/2025/11/12/Chidiya-2016-HDHub4u.Ms.jpg" alt="chidiya movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Chidiya</h3>
-                            <p>Thriller | Adventure | Drama | Family | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-
-
-                <a href="Insider/tholu.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt10910822">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://m.media-amazon.com/images/M/MV5BZTQ1MmE3MjgtN2E4ZC00MTNlLThlZWQtYjIzZjIxZjI1YTkxXkEyXkFqcGc@._V1_.jpg" alt="tholu movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Tholu bommalata</h3>
-                            <p> Drama | Comedy | Family | 2019</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/badguy2.html" class="movie-link" aria-label="View details for the movie Enemy">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://image.tmdb.org/t/p/w500/5DJbIWxIotQYUnRrRGhSxjxmvye.jpg" alt="the bad guy 2 movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>The Bad Guy 2</h3>
-                            <p>Action | Adventure | Animated | Comedy | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/kungfupanda.html" class="movie-link" aria-label="View details for the movie Enemy">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://catimages.org/images/2025/06/23/Kung.Fu.Panda.2008.jpg" alt="the bad guy 2 movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Kung Fu Panda</h3>
-                            <p>Action | Adventure | Animated | Comedy | 2008</p>
-                        </div>
-                    </div>
-                </a>
-
-
-                <a href="Insider/ajey.html" class="movie-link" aria-label="View details for the movie Elio">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://upload.wikimedia.org/wikipedia/en/b/b7/Ajey-Poster.jpg" alt="Elio movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Ajey :The Untold Story of a Yogi</h3>
-                            <p>Action | Story | Drama | Political | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/zootopia2.html" class="movie-link" aria-label="View details for the movie zootopia 2">
-                    <div class="movie-card">
-                       <div class="movie-poster-container">
-                            <img src="https://images.justwatch.com/poster/336822920/s718/zootopia-2.jpg" alt="Zootopia 2 movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>zootopia 2</h3>
-                            <p>Animated | Suspence | Comedy | Mystery | 2025</p>
-                        </div>
-                    </div> 
-                </a>
-
-                <a href="Insider/zootopia.html" class="movie-link" aria-label="View details for the movie Elio">
-                    <div class="movie-card">
-                       <div class="movie-poster-container">
-                            <img src="https://catimages.org/images/2025/04/03/Zootopia.2016..jpg" alt="Elio movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>zootopia</h3>
-                            <p>Animated | Suspence | Comedy | Mystery | 2024</p>
-                        </div>
-                    </div> 
-                </a> 
-
-                <a href="Insider/war2.html" class="movie-link" aria-label="View details for the movie Elio">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="images/war2.jpg" alt="Elio movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>War 2</h3>
-                            <p>Action | Thriller | Crime | Adventure | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/jollyllb3.html" class="movie-link" aria-label="View details for the movie Jolly LLB 3" data-id="tt27996020">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://image.tmdb.org/t/p/w500/bwRoU9p5GvjxgPfmIgsfcJ4ydng.jpg" alt="jolly llb 3 movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Jolly LLB 3</h3>
-                            <p>Story | Comedy | Drama | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/interstallar.html" class="movie-link" aria-label="View details for the movie Elio" data-id="tt0816692">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://upload.wikimedia.org/wikipedia/en/b/bc/Interstellar_film_poster.jpg" alt="Elio movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Interstellar</h3>
-                            <p>Action | Suspence | Science Fiction | Mystery | 2014</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/babyJohn.html" class="movie-link" aria-label="View details for the movie Elio">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://upload.wikimedia.org/wikipedia/en/2/29/Baby_John_%28title_card%29.jpg" alt="Elio movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Baby John</h3>
-                            <p>Action | Thriller | Crime | Mystery | 2024</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/Kaalidhar Laapata.html" class="movie-link" aria-label="View details for the movie Kaalidhar Laapata">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://image.tmdb.org/t/p/w500/a7ctu6C6f7tN87ve4HFDoELp7cH.jpg" alt="Kaalidhar Laapata movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Kaalidhar Laapata</h3>
-                            <p>Story | Thriller | Drama | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/Bahubali.html" class="movie-link" aria-label="View details for the movie Bahubali: The Epic" data-id="tt37893389">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="images/2.jpg" alt="Bahubali: The Epic movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Bahubali :The Epic</h3>
-                            <p>War | Action | Historical | Romance | 2025</p>
-                        </div>
-                    </div>
-                </a>
-                
-                <a href="Insider/Enemy.html" class="movie-link" aria-label="View details for the movie Enemy" data-id="tt13131186">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="images/3.jpg" alt="Enemy movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Enemy</h3>
-                            <p>Thriller | Mystery | Drama | Suspense | 2021</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/tomandjerry.html" class="movie-link" aria-label="View details for the movie Enemy">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://imgshare.info/images/2025/08/11/Tom.and.Jerry.2021..jpg" alt="Enemy movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Tom and Jerry</h3>
-                            <p>Animated |Comedy | Drama | Adventure | 2021</p>
-                        </div>
-                    </div>
-                </a>
-                
-                <a href="Insider/Ferdinand.html" class="movie-link" aria-label="View details for the movie Ferdinand">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="images/4.jpg" alt="Ferdinand movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Ferdinand</h3>
-                            <p>Comedy | Animated | Adventure | 2014</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="Insider/Idlikadai.html" class="movie-link" aria-label="View details for the movie Idli Kadai" data-id="tt33029024">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="images/5.jpg" alt="Idli Kadai movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Idli Kadai</h3>
-                            <p>Drama | Action | Family | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/goat.html" class="movie-link" aria-label="View details for the movie Greatest Of All Time" data-id="tt27487934">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="images/18.jpg" alt="Greatest Of All Time movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>The Greatest Of All TIme</h3>
-                            <p>Action | Drama | Thriller | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                
-                <a href="Insider/jester.html" class="movie-link" aria-label="View details for the movie The Jester 2">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="images/6.jpg" alt="The Jester 2 movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>The Jester 2</h3>
-                            <p>Horror | Slasher | Survival | 2025</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="Insider/Kadaram.html" class="movie-link" aria-label="View details for the movie Kadaram Kondan">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="images/7.jpg" alt="Kadaram Kondan movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Kadaram Kondan</h3>
-                            <p>Action | Thriller | Drama | Suspense | 2019</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="Insider/Kanata.html" class="movie-link" aria-label="View details for the movie Kantara">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="images/8.jpg" alt="Kantara movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Kantara</h3>
-                            <p>Action | Thriller | Adventure | Drama | Mystery | Suspense | 2022</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="Insider/Kishkindhapuri.html" class="movie-link" aria-label="View details for the movie Kishkindhapuri">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="images/9.jpg" alt="Kishkindhapuri movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Kishkindhapuri</h3>
-                            <p>Horror | Mystery | Thriller | 2025</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="Insider/Kuruchetra.html" class="movie-link" aria-label="View details for the movie Kuruchetra" data-id="tt38235589">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="images/10.jpg" alt="Kuruchetra movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Kurukshetra</h3>
-                            <p>War | Animated | Action | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/johnyenglish.html" class="movie-link" aria-label="View details for the movie haq" data-id="tt6921996">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://image.tmdb.org/t/p/w400/tCBxnZwLiY1BOKw3tH6AxHZdqPh.jpg" alt="hjonhy english movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Johny English Strikes Again</h3>
-                            <p>Adventure | Comedy | Action | 2018</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="Insider/mahavtar.html" class="movie-link" aria-label="View details for the movie Mahavtar Narsimha" data-id="tt34365591">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="images/11.jpg" alt="Mahavtar Narsimha movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Mahavatar Narsimha</h3>
-                            <p>Animated | Action | War | 2024</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="Insider/Stand By me Doremon 2.html" class="movie-link" aria-label="View details for the movie Stand By Me Doraemon 2">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="images/12.jpg" alt="Stand By Me Doraemon 2 movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Stand By Me Doraemon 2</h3>
-                            <p>Anime | Animated | Adventure | Action | Comedy | Drama | 2020</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="Insider/Texas Chainsaw.html" class="movie-link" aria-label="View details for the movie Texas Chainsaw">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="images/13.jpg" alt="Texas Chainsaw movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Texas Chainsaw</h3>
-                            <p>Horror | Suspense | Slasher | Thriller | Mystery | 2013</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="Insider/vash.html" class="movie-link" aria-label="View details for the movie Vash">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="images/14.jpg" alt="Vash movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Vash</h3>
-                            <p>Horror | Mystery | Thriller | 2023</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="Insider/Vash2.html" class="movie-link" aria-label="View details for the movie Vash Level 2">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="images/15.jpg" alt="Vash Level 2 movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Vash Level 2</h3>
-                            <p>Horror | Action | Drama | Thriller | 2025</p>
-                        </div>
-                    </div>
-                </a>
-            
-                <a href="Insider/Saiyara.html" class="movie-link" aria-label="View details for the movie Saiyaara">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="images/17.jpg" alt="Saiyaara movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Saiyaara</h3>
-                            <p>Romantic | Musical | Drama | 2025</p>
-                        </div>
-                    </div>
-                </a>
-                <a href="Insider/ekdiwanekidiwaniyat.html" class="movie-link" aria-label="View details for the movie Ek Deewane Ki Deewaniyat" data-id="tt35727678">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="images/16.jpg" alt="Ek Deewane Ki Deewaniyat movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Ek Deewane Ki Deewaniyat</h3>
-                            <p>Romantic | Thriller | Drama | 2025</p>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="Insider/2.html" class="movie-link" aria-label="View details for the movie Free Birds">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="images/1.jpg" alt="Free Birds movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Free Birds</h3>
-                            <p>Action | Comedy | Animated | 2024</p>
-                        </div>
-                    </div>
-                </a>
-                
-                <a href="Insider/dhol.html" class="movie-link" aria-label="View details for the movie Elio">
-                    <div class="movie-card">
-                        <div class="movie-poster-container">
-                            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/2/20/Dhol1.jpg/250px-Dhol1.jpg" alt="dhol movie poster" class="movie-poster" loading="lazy">
-                        </div>
-                        <div class="movie-info">
-                            <h3>Dhol</h3>
-                            <p>Comedy | Funny | Drama | Suspense | 2007</p>
-                        </div>
-                    </div>
-                </a>
+                <a href="newplayer/player.html?id=avatarfaa" class="movie-link">
+                    <div class="movie-card"><div class="movie-poster-container"><img src="https://m.media-amazon.com/images/M/MV5BZDYxY2I1OGMtN2Y4MS00ZmU1LTgyNDAtODA0MzAyYjI0N2Y2XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" class="movie-poster"></div>
+                    <div class="movie-info"><h3>Avatar: Fire And Ash</h3><p>Action | 2025</p></div></div>
+                </a>
+                <a href="newplayer/player.html?id=chhava" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://image.tmdb.org/t/p/w500/9F4lPRLjfBjsu0zjWNOZQMa8a4V.jpg" class="movie-poster"></div>
+                    <div class="movie-info"><h3>Chhaava</h3><p>History | 2025</p></div></div>
+                </a>
+                <a href="newplayer/player.html?id=babyjohn" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://upload.wikimedia.org/wikipedia/en/2/29/Baby_John_%28title_card%29.jpg" class="movie-poster"></div>
+                    <div class="movie-info"><h3>Baby John</h3><p>Action | 2024</p></div></div>
+                </a>
+                <a href="newplayer/player.html?id=og" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://m.media-amazon.com/images/M/MV5BM2IwMmZmZjYtZTQzMi00MWNlLWFlZTUtNTI4ZDdhZWE0OTFmXkEyXkFqcGc@._V1_.jpg" class="movie-poster"></div>
+                    <div class="movie-info"><h3>They Call Him OG</h3><p>Action | 2025</p></div></div>
+                </a>
+
+                <a href="newplayer/player.html?id=got1" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://i.pinimg.com/736x/cb/13/3d/cb133d3ccd5dd67463513d892173753c.jpg" class="movie-poster"></div>
+                    <div class="movie-info"><h3>Game Of Thrones S1</h3><p>Fantasy | Series</p></div></div>
+                </a>
+                <a href="newplayer/player.html?id=got2" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXcc4myHHLydYJrshVYmbcZMq-KgKTzHiBO9C1gETAu93BTTxxiA57dkk&s=10" class="movie-poster"></div>
+                    <div class="movie-info"><h3>Game Of Thrones S2</h3><p>Fantasy | Series</p></div></div>
+                </a>
+                <a href="newplayer/player.html?id=got3" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://upload.wikimedia.org/wikipedia/en/1/1d/Game_of_Thrones_Season_3.jpg" class="movie-poster"></div>
+                    <div class="movie-info"><h3>Game Of Thrones S3</h3><p>Fantasy | Series</p></div></div>
+                </a>
+                <a href="newplayer/player.html?id=stranger1" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://upload.wikimedia.org/wikipedia/en/b/b1/Stranger_Things_season_1.jpg" class="movie-poster"></div>
+                    <div class="movie-info"><h3>Stranger Things S1</h3><p>Sci-Fi | Series</p></div></div>
+                </a>
+
+                <a href="newplayer/player.html?id=kungfupanda" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://catimages.org/images/2025/06/23/Kung.Fu.Panda.2008.jpg" class="movie-poster"></div>
+                    <div class="movie-info"><h3>Kung Fu Panda</h3><p>Animated | 2008</p></div></div>
+                </a>
+                <a href="newplayer/player.html?id=ratatouille" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwnPmqAEdTgVyXk6jr93TfwiUzkAEyQSueyxLN7Z8eYaNmKlXBrWv2wW8&s=10" class="movie-poster"></div>
+                    <div class="movie-info"><h3>Ratatouille</h3><p>Animated | 2007</p></div></div>
+                </a>
+                <a href="newplayer/player.html?id=walle" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://upload.wikimedia.org/wikipedia/en/4/4c/WALL-E_poster.jpg" class="movie-poster"></div>
+                    <div class="movie-info"><h3>Wall-E</h3><p>Animated | 2008</p></div></div>
+                </a>
+                <a href="newplayer/player.html?id=zootopia" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://catimages.org/images/2025/04/03/Zootopia.2016..jpg" class="movie-poster"></div>
+                    <div class="movie-info"><h3>Zootopia</h3><p>Animated | 2016</p></div></div>
+                </a>
+
+                <a href="newplayer/player.html?id=bahubali" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="images/2.jpg" class="movie-poster"></div>
+                    <div class="movie-info"><h3>Bahubali</h3><p>Action | War</p></div></div>
+                </a>
+                <a href="newplayer/player.html?id=leo" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://upload.wikimedia.org/wikipedia/en/7/75/Leo_%282023_Indian_film%29.jpg" class="movie-poster"></div>
+                    <div class="movie-info"><h3>Leo</h3><p>Action | Crime</p></div></div>
+                </a>
+                <a href="newplayer/player.html?id=3idiots" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://m.media-amazon.com/images/I/81TeJPHjP-L._AC_UF1000,1000_QL80_.jpg" class="movie-poster"></div>
+                    <div class="movie-info"><h3>3 Idiots</h3><p>Comedy | Drama</p></div></div>
+                </a>
+                <a href="newplayer/player.html?id=interstallar" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://upload.wikimedia.org/wikipedia/en/b/bc/Interstellar_film_poster.jpg" class="movie-poster"></div>
+                    <div class="movie-info"><h3>Interstellar</h3><p>Sci-Fi | Mystery</p></div></div>
+                </a>
+
+                <a href="newplayer/player.html?id=2" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="images/1.jpg" class="movie-poster"></div><div class="movie-info"><h3>Free Birds</h3><p>Animated</p></div></div></a>
+                <a href="newplayer/player.html?id=ajey" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://upload.wikimedia.org/wikipedia/en/b/b7/Ajey-Poster.jpg" class="movie-poster"></div><div class="movie-info"><h3>Ajey</h3><p>Drama</p></div></div></a>
+                <a href="newplayer/player.html?id=akhanda2" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0SooyoLyOkvEgwlLQt8gDEgnVfZLul3k9NoTpTrk8sYWieHdkE2GR8tI&s=10" class="movie-poster"></div><div class="movie-info"><h3>Akhanda 2</h3><p>Action</p></div></div></a>
+                <a href="newplayer/player.html?id=beast" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT86juoHqNu02UX1Zg_bnnd4GlN7T847IC6Z5ohKJA9GX-xxSUTWDdIGeU&s=10" class="movie-poster"></div><div class="movie-info"><h3>Beast</h3><p>Action</p></div></div></a>
+                <a href="newplayer/player.html?id=bengalfiles" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://m.media-amazon.com/images/M/MV5BM2ViMGI2NmYtNmIyYS00MDA1LTg2MTgtMjY2ODJhYTllNWRhXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" class="movie-poster"></div><div class="movie-info"><h3>The Bengal Files</h3><p>History</p></div></div></a>
+                <a href="newplayer/player.html?id=bomb" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlrAQUy4_NjW-qXq0i7b1y9T7Jr71YPige7_KdDPvWBlfnzaz0Oi-8jTY&s=10" class="movie-poster"></div><div class="movie-info"><h3>Bomb</h3><p>Adventure</p></div></div></a>
+                <a href="newplayer/player.html?id=chhichhore" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://m.media-amazon.com/images/M/MV5BMjFkYThiNDMtMmFhYS00ZjQ5LWJjZjMtZmQ3ODAxYmIwM2RlXkEyXkFqcGc@._V1_.jpg" class="movie-poster"></div><div class="movie-info"><h3>Chhichhore</h3><p>Drama</p></div></div></a>
+                <a href="newplayer/player.html?id=cuttputlli" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4zMxl8JPG8OH_SCEaoNeKPzmFDqXjNG1G86Chgauf-d_ODm5SvmvK8YNt&s=10" class="movie-poster"></div><div class="movie-info"><h3>Cuttputlli</h3><p>Thriller</p></div></div></a>
+                <a href="newplayer/player.html?id=despicable4" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://m.media-amazon.com/images/M/MV5BNzY0ZTlhYzgtOTgzZC00ZTg2LTk4NTEtZDllM2E2NGE5Njg2XkEyXkFqcGc@._V1_.jpg" class="movie-poster"></div><div class="movie-info"><h3>Despicable 4</h3><p>Animated</p></div></div></a>
+                <a href="newplayer/player.html?id=dhol" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/2/20/Dhol1.jpg/250px-Dhol1.jpg" class="movie-poster"></div><div class="movie-info"><h3>Dhol</h3><p>Comedy</p></div></div></a>
+                <a href="newplayer/player.html?id=ekdiwanekidiwaniyat" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="images/16.jpg" class="movie-poster"></div><div class="movie-info"><h3>Ek Diwane Ki Diwaniyat</h3><p>Romance</p></div></div></a>
+                <a href="newplayer/player.html?id=elio" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://image.tmdb.org/t/p/w400/w2ARwtc1zoh0pyfwmyhpZHwuXgK.jpg" class="movie-poster"></div><div class="movie-info"><h3>Elio</h3><p>Animated</p></div></div></a>
+                <a href="newplayer/player.html?id=enemy" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="images/3.jpg" class="movie-poster"></div><div class="movie-info"><h3>Enemy</h3><p>Action</p></div></div></a>
+                <a href="newplayer/player.html?id=ferdinand" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="images/4.jpg" class="movie-poster"></div><div class="movie-info"><h3>Ferdinand</h3><p>Animated</p></div></div></a>
+                <a href="newplayer/player.html?id=finaldestination" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://image.tmdb.org/t/p/w500/6WxhEvFsauuACfv8HyoVX6mZKFj.jpg" class="movie-poster"></div><div class="movie-info"><h3>Final Destination</h3><p>Horror</p></div></div></a>
+                <a href="newplayer/player.html?id=goat" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="images/18.jpg" class="movie-poster"></div><div class="movie-info"><h3>GOAT</h3><p>Action</p></div></div></a>
+                <a href="newplayer/player.html?id=haq" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://catimages.org/images/2025/11/07/HAQ-2025-HDHub4u.Ms.jpg" class="movie-poster"></div><div class="movie-info"><h3>HAQ</h3><p>Drama</p></div></div></a>
+                <a href="newplayer/player.html?id=iceage" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrg9dnUnh40xWuzfWR7k3V8WiB2_I55MTpihu9gq8tYywWZiDA4xkwMiGA&s=10" class="movie-poster"></div><div class="movie-info"><h3>Ice Age</h3><p>Animated</p></div></div></a>
+                <a href="newplayer/player.html?id=idlikadai" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="images/5.jpg" class="movie-poster"></div><div class="movie-info"><h3>Idli Kadai</h3><p>Drama</p></div></div></a>
+                <a href="newplayer/player.html?id=it" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS50mRvA5Tb9MHlM4iesO23IQmsM3_EY3YaRhcuTUo4BXkW0DSeXTAbGkk&s=10" class="movie-poster"></div><div class="movie-info"><h3>IT</h3><p>Horror</p></div></div></a>
+                <a href="newplayer/player.html?id=jester" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="images/6.jpg" class="movie-poster"></div><div class="movie-info"><h3>The Jester</h3><p>Horror</p></div></div></a>
+                <a href="newplayer/player.html?id=johnyenglish" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://image.tmdb.org/t/p/w400/tCBxnZwLiY1BOKw3tH6AxHZdqPh.jpg" class="movie-poster"></div><div class="movie-info"><h3>Johnny English</h3><p>Comedy</p></div></div></a>
+                <a href="newplayer/player.html?id=jollyllb3" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://image.tmdb.org/t/p/w500/bwRoU9p5GvjxgPfmIgsfcJ4ydng.jpg" class="movie-poster"></div><div class="movie-info"><h3>Jolly LLB 3</h3><p>Comedy</p></div></div></a>
+                <a href="newplayer/player.html?id=kaalidhar-laapata" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://image.tmdb.org/t/p/w500/a7ctu6C6f7tN87ve4HFDoELp7cH.jpg" class="movie-poster"></div><div class="movie-info"><h3>Kaalidhar Laapata</h3><p>Drama</p></div></div></a>
+                <a href="newplayer/player.html?id=kadaram" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="images/7.jpg" class="movie-poster"></div><div class="movie-info"><h3>Kadaram Kondan</h3><p>Action</p></div></div></a>
+                <a href="newplayer/player.html?id=kanata" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="images/8.jpg" class="movie-poster"></div><div class="movie-info"><h3>Kantara</h3><p>Action</p></div></div></a>
+                <a href="newplayer/player.html?id=kashmirfiles" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://m.media-amazon.com/images/M/MV5BYTUwZTNjY2MtNmRjOC00YmI1LThlNWUtZTFkMDgzNTc5ODAwXkEyXkFqcGc@._V1_.jpg" class="movie-poster"></div><div class="movie-info"><h3>The Kashmir Files</h3><p>Drama</p></div></div></a>
+                <a href="newplayer/player.html?id=kishkindhapuri" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="images/9.jpg" class="movie-poster"></div><div class="movie-info"><h3>Kishkindhapuri</h3><p>Drama</p></div></div></a>
+                <a href="newplayer/player.html?id=kiskiskopyarkaru2" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://m.media-amazon.com/images/M/MV5BOTJkZDAxNTUtNGZhYy00Mjg5LTlhZTctZDQ3MjRhODRmYzI4XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" class="movie-poster"></div><div class="movie-info"><h3>Kiskis 2</h3><p>Comedy</p></div></div></a>
+                <a href="newplayer/player.html?id=kuruchetra" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="images/10.jpg" class="movie-poster"></div><div class="movie-info"><h3>Kuruchetra</h3><p>Action</p></div></div></a>
+                <a href="newplayer/player.html?id=madagascar" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://upload.wikimedia.org/wikipedia/en/3/36/Madagascar_Theatrical_Poster.jpg" class="movie-poster"></div><div class="movie-info"><h3>Madagascar</h3><p>Animated</p></div></div></a>
+                <a href="newplayer/player.html?id=mahavtar" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="images/11.jpg" class="movie-poster"></div><div class="movie-info"><h3>Mahavatar</h3><p>Animated</p></div></div></a>
+                <a href="newplayer/player.html?id=memoriesofmurder" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p89594_p_v8_ag.jpg" class="movie-poster"></div><div class="movie-info"><h3>Memories of Murder</h3><p>Crime</p></div></div></a>
+                <a href="newplayer/player.html?id=msd" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://pix1.wapkizfile.info/download/7e07118c9ad8223a2d1d005fd3fdc96e/filmy4wap+wapkizs+com/M-S-Dhoni-The-Untold-Story-2016-Bollywood-Hindi-Full-Movie-BluRay-HD-ESub-(filmyfly.observer).jpg" class="movie-poster"></div><div class="movie-info"><h3>MS Dhoni</h3><p>Biography</p></div></div></a>
+                <a href="newplayer/player.html?id=nezha" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://m.media-amazon.com/images/S/pv-target-images/29f1a9e3bb05411727c8327813a1c58c928e780338c4f1de55936b67780d8572.jpg" class="movie-poster"></div><div class="movie-info"><h3>Ne Zha</h3><p>Animated</p></div></div></a>
+                <a href="newplayer/player.html?id=padakkalam" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_PBYt7QTtcJ-FhDCqHiDd84_lw2bFve8I_jqPLx-m_asz7YLX80ALs2E&s=10" class="movie-poster"></div><div class="movie-info"><h3>Padakkalam</h3><p>Drama</p></div></div></a>
+                <a href="newplayer/player.html?id=pravintambe" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-jRvsYLBHQiOq0oiH4QHgOomTQfp213ym7jgzmxJxdF2OD7geyy89t0cO&s=10" class="movie-poster"></div><div class="movie-info"><h3>Pravin Tambe</h3><p>Sports</p></div></div></a>
+                <a href="newplayer/player.html?id=pushinboots" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://upload.wikimedia.org/wikipedia/en/7/78/Puss_in_Boots_The_Last_Wish_poster.jpg" class="movie-poster"></div><div class="movie-info"><h3>Puss in Boots</h3><p>Animated</p></div></div></a>
+                <a href="newplayer/player.html?id=raid" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://m.media-amazon.com/images/M/MV5BZDcwMWZiYjgtYWE5Zi00NDk0LTkyMDctYzgzMzA4YTZlZjBlXkEyXkFqcGc@._V1_.jpg" class="movie-poster"></div><div class="movie-info"><h3>Raid</h3><p>Action</p></div></div></a>
+                <a href="newplayer/player.html?id=raid2" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSt3lM5lf1ze5Yx8nw1IOGK72HxXEWzSNfEJqdugPMHyD94hEVvHR5Hfxm&s=10" class="movie-poster"></div><div class="movie-info"><h3>Raid 2</h3><p>Action</p></div></div></a>
+                <a href="newplayer/player.html?id=saiyara" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="images/17.jpg" class="movie-poster"></div><div class="movie-info"><h3>Saiyara</h3><p>Romance</p></div></div></a>
+                <a href="newplayer/player.html?id=salimohabbat" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbhf_bUrTITA4rlncGcv7Yn8iJWJ_QZ65mDmaFnOwTr0OQiIpG0fDg0Trj&s=10" class="movie-poster"></div><div class="movie-info"><h3>Saali Mohabbat</h3><p>Action</p></div></div></a>
+                <a href="newplayer/player.html?id=stand-by-me-doremon-2" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="images/12.jpg" class="movie-poster"></div><div class="movie-info"><h3>Doraemon 2</h3><p>Animated</p></div></div></a>
+                <a href="newplayer/player.html?id=stephen" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://m.media-amazon.com/images/M/MV5BMTdiOTNhNjItMzk3ZC00YTBlLWE2YjQtZDQ4ZjYyOWNjZjA4XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" class="movie-poster"></div><div class="movie-info"><h3>Stephen</h3><p>Horror</p></div></div></a>
+                <a href="newplayer/player.html?id=strikingrescue" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4eS6As9vD1v9dj49GMGk25nRQ6j0UqaTsRDYRr4h4dc63jSsF7iFf4cU&s=10" class="movie-poster"></div><div class="movie-info"><h3>Striking Rescue</h3><p>Action</p></div></div></a>
+                <a href="newplayer/player.html?id=teesmaarkhan" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://m.media-amazon.com/images/M/MV5BYjJiZmZkZGYtYjA1OC00MjRkLWFlYTgtYjM4ODBlYWI1MjQwXkEyXkFqcGc@._V1_.jpg" class="movie-poster"></div><div class="movie-info"><h3>Tees Maar Khan</h3><p>Comedy</p></div></div></a>
+                <a href="newplayer/player.html?id=texas-chainsaw" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="images/13.jpg" class="movie-poster"></div><div class="movie-info"><h3>Texas Chainsaw</h3><p>Horror</p></div></div></a>
+                <a href="newplayer/player.html?id=thamma" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrNTel1Jb41WgqCGnOBv-8n6f_z0UfhMsL_dlyXqnE9Z-6Q6Phx5PzjmU&s=10" class="movie-poster"></div><div class="movie-info"><h3>Thamma</h3><p>Horror</p></div></div></a>
+                <a href="newplayer/player.html?id=theboy" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://imgshare.info/images/2025/07/20/The-Boy-2016.jpg" class="movie-poster"></div><div class="movie-info"><h3>The Boy</h3><p>Horror</p></div></div></a>
+                <a href="newplayer/player.html?id=tholu" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://m.media-amazon.com/images/M/MV5BZTQ1MmE3MjgtN2E4ZC00MTNlLThlZWQtYjIzZjIxZjI1YTkxXkEyXkFqcGc@._V1_.jpg" class="movie-poster"></div><div class="movie-info"><h3>Tholu Bommalata</h3><p>Drama</p></div></div></a>
+                <a href="newplayer/player.html?id=tomandjerry" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://imgshare.info/images/2025/08/11/Tom.and.Jerry.2021..jpg" class="movie-poster"></div><div class="movie-info"><h3>Tom & Jerry</h3><p>Animated</p></div></div></a>
+                <a href="newplayer/player.html?id=transformer" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://m.media-amazon.com/images/M/MV5BZWI1ZDY1YTQtMjRkNy00ZDZhLWE3OTItMTIwNzliY2Y1MTZhXkEyXkFqcGc@._V1_.jpg" class="movie-poster"></div><div class="movie-info"><h3>Transformers</h3><p>Animated</p></div></div></a>
+                <a href="newplayer/player.html?id=udaipur" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSR9j0YPFQWnZQ9EQuwPg-fmmUWplio8H1JwhuQgMq2s6V9DZv9uUFhH0qi&s=10" class="movie-poster"></div><div class="movie-info"><h3>Udaipur Files</h3><p>Drama</p></div></div></a>
+                <a href="newplayer/player.html?id=v" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://upload.wikimedia.org/wikipedia/en/b/b5/V_%28film%29.jpg" class="movie-poster"></div><div class="movie-info"><h3>V</h3><p>Thriller</p></div></div></a>
+                <a href="newplayer/player.html?id=vanvaas" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://images.justwatch.com/poster/323472518/s718/vanvaas.jpg" class="movie-poster"></div><div class="movie-info"><h3>Vanvaas</h3><p>Drama</p></div></div></a>
+                <a href="newplayer/player.html?id=vash" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="images/14.jpg" class="movie-poster"></div><div class="movie-info"><h3>Vash</h3><p>Horror</p></div></div></a>
+                <a href="newplayer/player.html?id=vash2" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="images/15.jpg" class="movie-poster"></div><div class="movie-info"><h3>Vash Level 2</h3><p>Horror</p></div></div></a>
+                <a href="newplayer/player.html?id=war2" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="images/war2.jpg" class="movie-poster"></div><div class="movie-info"><h3>War 2</h3><p>Action</p></div></div></a>
+                <a href="newplayer/player.html?id=wildrobot" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFRDKmZfWky_Has4nb59nxC6Ta6Wlk_JFRraBgx4z0NaelG0cLseiInnI&s=10" class="movie-poster"></div><div class="movie-info"><h3>Wild Robot</h3><p>Animated</p></div></div></a>
+                <a href="newplayer/player.html?id=zootopia2" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://images.justwatch.com/poster/336822920/s718/zootopia-2.jpg" class="movie-poster"></div><div class="movie-info"><h3>Zootopia 2</h3><p>Animated</p></div></div></a>
 
-                
             </div>
         </section>
     </main>
@@ -1122,7 +167,3 @@
     <script src="app.js"></script>    
 </body>
 </html>
-
-
-
-
