@@ -64,70 +64,108 @@
                 <label>Add to <u>index.html</u></label>
                 <textarea id="outHTML"></textarea>
             </div>
+            <button class="btn" style="background: #0088cc; margin-top: 10px;" onclick="sendToTelegram()">
+           📤 Post to Telegram Channel
+           </button>
+          <p id="telStatus" style="font-size: 12px; margin-top: 5px;"></p>
         </div>
     </div>
 
     <script>
         const API_KEY = 'dc691868b09daaabe9acc238ed898cf7';
-        const IMG_PATH = 'https://image.tmdb.org/t/p/w500';
+const IMG_PATH = 'https://image.tmdb.org/t/p/w500';
 
-        async function searchTMDB() {
-            const query = document.getElementById('apiSearch').value;
-            const resultsDiv = document.getElementById('results');
+// TELEGRAM CONFIG - Fill these in once!
+const TELEGRAM_TOKEN = '7287243554:AAHa43wD_V2roGLep1aQgKHn0vqXHYlFp-M';
+const TELEGRAM_CHAT_ID = '-1003605866054';
+
+async function searchTMDB() {
+    const query = document.getElementById('apiSearch').value;
+    const resultsDiv = document.getElementById('results');
+    if (query.length < 2) return;
+
+    try {
+        const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
+        const data = await res.json();
+        
+        resultsDiv.innerHTML = '';
+        data.results.slice(0, 10).forEach(movie => {
+            const poster = movie.poster_path ? IMG_PATH + movie.poster_path : 'https://via.placeholder.com/200x300';
+            const year = movie.release_date ? movie.release_date.split('-')[0] : 'N/A';
             
-            if (query.length < 2) return;
-
-            try {
-                const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
-                const data = await res.json();
-                
-                resultsDiv.innerHTML = '';
-                data.results.slice(0, 10).forEach(movie => {
-                    const poster = movie.poster_path ? IMG_PATH + movie.poster_path : 'https://via.placeholder.com/200x300?text=No+Poster';
-                    const year = movie.release_date ? movie.release_date.split('-')[0] : 'N/A';
-                    
-                    const div = document.createElement('div');
-                    div.className = 'tmdb-card';
-                    div.innerHTML = `
-                        <img src="${poster}">
-                        <p>${movie.title} (${year})</p>
-                    `;
-                    div.onclick = () => selectMovie(movie, poster, year);
-                    resultsDiv.appendChild(div);
-                });
-            } catch (e) { console.error("Search failed"); }
-        }
-
-        function selectMovie(movie, poster, year) {
-            // Fill Form
-            document.getElementById('mName').value = movie.title;
-            document.getElementById('mId').value = movie.title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
-            document.getElementById('mTmdb').value = movie.id;
-            document.getElementById('mImg').value = poster;
-            document.getElementById('mYear').value = `${year} | Bollywood | HD`;
+            const div = document.createElement('div');
+            div.className = 'tmdb-card';
+            div.innerHTML = `<img src="${poster}"><p>${movie.title} (${year})</p>`;
             
-            updateOutputs();
+            // On click, it fills the form AND sends to Telegram
+            div.onclick = () => {
+                selectMovie(movie, poster, year);
+                sendToTelegram(movie, poster, year);
+            };
+            resultsDiv.appendChild(div);
+        });
+    } catch (e) { console.error("Search failed"); }
+}
+
+function selectMovie(movie, poster, year) {
+    document.getElementById('mName').value = movie.title;
+    document.getElementById('mId').value = movie.title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+    document.getElementById('mTmdb').value = movie.id;
+    document.getElementById('mImg').value = poster;
+    document.getElementById('mYear').value = `${year} | Bollywood | HD`;
+    updateOutputs();
+}
+
+async function sendToTelegram(movie, poster, year) {
+    const rating = movie.vote_average ? movie.vote_average.toFixed(1) : "N/A";
+    const movieId = movie.title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+    
+    // 1. GENRE TO HASHTAG MAPPING
+    const genreMap = {
+        28: "#Action", 12: "#Adventure", 16: "#Animation", 35: "#Comedy", 
+        80: "#Crime", 99: "#Documentary", 18: "#Drama", 10751: "#Family", 
+        14: "#Fantasy", 36: "#History", 27: "#Horror", 10402: "#Music", 
+        9648: "#Mystery", 10749: "#Romance", 878: "#SciFi", 53: "#Thriller"
+    };
+
+    // Generate hashtags based on TMDB data
+    let hashtags = movie.genre_ids.map(id => genreMap[id]).filter(h => h).join(" ");
+    
+    // Add Bollywood tag if language is Hindi
+    if (movie.original_language === 'hi') hashtags += " #Bollywood";
+    if (rating >= 8) hashtags += " #MustWatch";
+
+    // 2. CONSTRUCT MESSAGE
+    const message = `🎬 *New Upload on CineView!* \n\n` +
+                    `🍿 *Title:* ${movie.title}\n` +
+                    `⭐ *IMDb Rating:* ${rating}/10\n` +
+                    `📅 *Year:* ${year}\n\n` +
+                    `📝 *Story:* ${movie.overview.substring(0, 160)}...\n\n` +
+                    `🔗 [Watch Now](https://prigames.netlify.app/newplayer/player.html?id=${movieId}&tmdb=${movie.id})\n\n` +
+                    `${hashtags} #Prigames #CineView`;
+
+    // 3. POST TO API
+    try {
+        const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendPhoto`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: TELEGRAM_CHAT_ID,
+                photo: poster,
+                caption: message,
+                parse_mode: 'Markdown'
+            })
+        });
+
+        if (response.ok) {
+            alert("🔥 Code generated & Posted to Telegram with Hashtags!");
         }
+    } catch (e) {
+        alert("Automation error. Check console.");
+    }
+}
 
-        function updateOutputs() {
-            const name = document.getElementById('mName').value;
-            const id = document.getElementById('mId').value;
-            const src = document.getElementById('mSrc').value || 'LINK_HERE';
-            const img = document.getElementById('mImg').value;
-            const tmdb = document.getElementById('mTmdb').value;
-            const year = document.getElementById('mYear').value;
-
-            // JS Output
-            document.getElementById('outJS').value = `"${id}": { "title": "${name}", "src": "${src}", "year": "${year.split(' ')[0]}", "img": "${img}" },`;
-
-            // HTML Output
-            document.getElementById('outHTML').value = `<a href="newplayer/player.html?id=${id}&tmdb=${tmdb}" class="movie-link" data-id="${tmdb}">
-    <div class="movie-card">
-        <div class="movie-poster-container"><img src="${img}" class="movie-poster" loading="lazy"></div>
-        <div class="movie-info"><h3>${name}</h3><p>${year}</p></div>
-    </div>
-</a>`;
-        }
     </script>
 </body>
+
 </html>
