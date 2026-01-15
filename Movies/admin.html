@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CineView Pro Admin - TMDB Search</title>
+    <style>
+        :root { --primary: #e50914; --bg: #0a0a0a; --card: #161616; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; padding: 20px; }
+        .container { max-width: 1000px; margin: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        
+        /* Search Section */
+        .search-area { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid #333; }
+        .search-results { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; max-height: 500px; overflow-y: auto; padding-right: 5px; }
+        .tmdb-card { background: #000; border-radius: 8px; cursor: pointer; transition: 0.3s; border: 2px solid transparent; overflow: hidden; }
+        .tmdb-card:hover { border-color: var(--primary); transform: scale(0.98); }
+        .tmdb-card img { width: 100%; display: block; }
+        .tmdb-card p { font-size: 11px; padding: 5px; margin: 0; text-align: center; }
+
+        /* Form Section */
+        .form-area { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid #333; position: sticky; top: 20px; }
+        label { color: var(--primary); font-weight: bold; font-size: 13px; display: block; margin-top: 10px; }
+        input { width: 100%; padding: 10px; background: #222; border: 1px solid #444; border-radius: 5px; color: #fff; margin-bottom: 5px; }
+        textarea { width: 100%; height: 80px; background: #000; color: #0f0; border-radius: 5px; padding: 10px; font-family: monospace; font-size: 12px; border: 1px solid #333; margin-top: 5px; }
+        h2 { margin-top: 0; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
+        .btn-copy { background: #333; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; float: right; font-size: 11px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="search-area">
+            <h2>1. Find Movie</h2>
+            <input type="text" id="apiSearch" placeholder="Type movie name (e.g. Inception)..." oninput="searchTMDB()">
+            <div id="results" class="search-results">
+                <p style="color: #666;">Results will appear here...</p>
+            </div>
+        </div>
+
+        <div class="form-area">
+            <h2>2. Finalize Code</h2>
+            
+            <label>Abyss/Short.icu Link (Add manually)</label>
+            <input type="text" id="mSrc" placeholder="https://short.icu/xxxxxx" oninput="updateOutputs()">
+
+            <label>Movie Title</label>
+            <input type="text" id="mName" readonly>
+
+            <label>Auto-ID (Matching Key)</label>
+            <input type="text" id="mId" readonly>
+
+            <label>TMDB ID</label>
+            <input type="text" id="mTmdb" readonly>
+
+            <label>Poster Image</label>
+            <input type="text" id="mImg" readonly>
+
+            <label>Year / Metadata</label>
+            <input type="text" id="mYear" readonly>
+
+            <div style="margin-top: 20px;">
+                <label>Add to <u>player.js</u></label>
+                <textarea id="outJS"></textarea>
+                
+                <label>Add to <u>index.html</u></label>
+                <textarea id="outHTML"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = 'dc691868b09daaabe9acc238ed898cf7';
+        const IMG_PATH = 'https://image.tmdb.org/t/p/w500';
+
+        async function searchTMDB() {
+            const query = document.getElementById('apiSearch').value;
+            const resultsDiv = document.getElementById('results');
+            
+            if (query.length < 2) return;
+
+            try {
+                const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
+                const data = await res.json();
+                
+                resultsDiv.innerHTML = '';
+                data.results.slice(0, 10).forEach(movie => {
+                    const poster = movie.poster_path ? IMG_PATH + movie.poster_path : 'https://via.placeholder.com/200x300?text=No+Poster';
+                    const year = movie.release_date ? movie.release_date.split('-')[0] : 'N/A';
+                    
+                    const div = document.createElement('div');
+                    div.className = 'tmdb-card';
+                    div.innerHTML = `
+                        <img src="${poster}">
+                        <p>${movie.title} (${year})</p>
+                    `;
+                    div.onclick = () => selectMovie(movie, poster, year);
+                    resultsDiv.appendChild(div);
+                });
+            } catch (e) { console.error("Search failed"); }
+        }
+
+        function selectMovie(movie, poster, year) {
+            // Fill Form
+            document.getElementById('mName').value = movie.title;
+            document.getElementById('mId').value = movie.title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+            document.getElementById('mTmdb').value = movie.id;
+            document.getElementById('mImg').value = poster;
+            document.getElementById('mYear').value = `${year} | Bollywood | HD`;
+            
+            updateOutputs();
+        }
+
+        function updateOutputs() {
+            const name = document.getElementById('mName').value;
+            const id = document.getElementById('mId').value;
+            const src = document.getElementById('mSrc').value || 'LINK_HERE';
+            const img = document.getElementById('mImg').value;
+            const tmdb = document.getElementById('mTmdb').value;
+            const year = document.getElementById('mYear').value;
+
+            // JS Output
+            document.getElementById('outJS').value = `"${id}": { "title": "${name}", "src": "${src}", "year": "${year.split(' ')[0]}", "img": "${img}" },`;
+
+            // HTML Output
+            document.getElementById('outHTML').value = `<a href="newplayer/player.html?id=${id}&tmdb=${tmdb}" class="movie-link" data-id="${tmdb}">
+    <div class="movie-card">
+        <div class="movie-poster-container"><img src="${img}" class="movie-poster" loading="lazy"></div>
+        <div class="movie-info"><h3>${name}</h3><p>${year}</p></div>
+    </div>
+</a>`;
+        }
+    </script>
+</body>
+</html>

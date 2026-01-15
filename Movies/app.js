@@ -92,3 +92,14 @@ async function updateSlider() {
         sliderImg.style.opacity = "1"; // Ensure it doesn't stay invisible
     }
 }
+
+
+document.querySelectorAll('.movie-link').forEach(link => {
+    const tmdbId = link.getAttribute('data-id');
+    const currentHref = link.getAttribute('href');
+    
+
+    if (tmdbId && !currentHref.includes('&tmdb=')) {
+        link.setAttribute('href', `${currentHref}&tmdb=${tmdbId}`);
+    }
+});
