@@ -71,7 +71,7 @@
         </div>
     </div>
 
-    <script>
+   <script>
 const API_KEY = 'dc691868b09daaabe9acc238ed898cf7';
 const IMG_PATH = 'https://image.tmdb.org/t/p/w500';
 
@@ -79,65 +79,41 @@ const IMG_PATH = 'https://image.tmdb.org/t/p/w500';
 const TELEGRAM_TOKEN = '7287243554:AAHa43wD_V2roGLep1aQgKHn0vqXHYlFp-M';
 const TELEGRAM_CHAT_ID = '-1003605866054';
 
-// 1. Added a timer variable for debouncing
-let debounceTimer;
-
 async function searchTMDB() {
-    const query = document.getElementById('apiSearch').value.trim();
+    const query = document.getElementById('apiSearch').value;
     const resultsDiv = document.getElementById('results');
+    if (query.length < 2) return;
 
-    // Clear the timer every time the user types a new character
-    clearTimeout(debounceTimer);
-
-    if (query.length < 2) {
+    try {
+        const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
+        const data = await res.json();
+        
         resultsDiv.innerHTML = '';
-        return;
-    }
-
-    // 2. Wrap the fetch in a setTimeout (Debounce of 500ms)
-    debounceTimer = setTimeout(async () => {
-        try {
-            const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
+        data.results.slice(0, 10).forEach(movie => {
+            const poster = movie.poster_path ? IMG_PATH + movie.poster_path : 'https://via.placeholder.com/200x300';
+            const year = movie.release_date ? movie.release_date.split('-')[0] : 'N/A';
             
-            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+            const div = document.createElement('div');
+            div.className = 'tmdb-card';
+            div.innerHTML = `<img src="${poster}"><p>${movie.title} (${year})</p>`;
             
-            const data = await res.json();
-            
-            resultsDiv.innerHTML = '';
-            if (!data.results || data.results.length === 0) {
-                resultsDiv.innerHTML = '<p style="color:white; padding:10px;">No movies found.</p>';
-                return;
-            }
-
-            data.results.slice(0, 10).forEach(movie => {
-                const poster = movie.poster_path ? IMG_PATH + movie.poster_path : 'https://via.placeholder.com/200x300';
-                const year = movie.release_date ? movie.release_date.split('-')[0] : 'N/A';
-                
-                const div = document.createElement('div');
-                div.className = 'tmdb-card';
-                div.innerHTML = `<img src="${poster}"><p>${movie.title} (${year})</p>`;
-                
-                div.onclick = () => {
-                    selectMovie(movie, poster, year);
-                    sendToTelegram(movie, poster, year); 
-                };
-                resultsDiv.appendChild(div);
-            });
-        } catch (e) { 
-            console.error("Search failed:", e);
-            // Help identify if an adblocker is the cause
-            if (e.message.includes("Failed to fetch")) {
-                resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Network Blocked (Try disabling AdBlock)</p>';
-            }
-        }
-    }, 500); // 500ms delay
+            div.onclick = () => {
+                // 1. Select the movie and populate inputs
+                selectMovie(movie, poster, year);
+                // 2. Send to Telegram using the generated ID
+                sendToTelegram(movie, poster, year); 
+            };
+            resultsDiv.appendChild(div);
+        });
+    } catch (e) { console.error("Search failed"); }
 }
 
 function selectMovie(movie, poster, year) {
     document.getElementById('mName').value = movie.title;
-    // Improved ID generation to be cleaner
-    const cleanId = movie.title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-    document.getElementById('mId').value = cleanId;
+    // Generates the ID (e.g., "chhaava")
+    const generatedId = movie.title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    document.getElementById('mId').value = generatedId;
+    
     document.getElementById('mTmdb').value = movie.id;
     document.getElementById('mImg').value = poster;
     document.getElementById('mYear').value = `${year} | Bollywood | HD`;
@@ -152,9 +128,10 @@ function updateOutputs() {
     const tmdb = document.getElementById('mTmdb').value;
     const year = document.getElementById('mYear').value;
 
+    // Updated path to /newplayer/index?id=
     document.getElementById('outJS').value = `"${id}": { "title": "${name}", "src": "${src}", "year": "${year.split(' ')[0]}", "img": "${img}" },`;
 
-    document.getElementById('outHTML').value = `<a href="newplayer/player.html?id=${id}&tmdb=${tmdb}" class="movie-link" data-id="${tmdb}">
+    document.getElementById('outHTML').value = `<a href="newplayer/index.html?id=${id}&tmdb=${tmdb}" class="movie-link" data-id="${tmdb}">
     <div class="movie-card">
         <div class="movie-poster-container"><img src="${img}" class="movie-poster" loading="lazy"></div>
         <div class="movie-info"><h3>${name}</h3><p>${year}</p></div>
@@ -164,7 +141,9 @@ function updateOutputs() {
 
 async function sendToTelegram(movie, poster, year) {
     const rating = movie.vote_average ? movie.vote_average.toFixed(1) : "N/A";
-    const movieId = document.getElementById('mId').value; // Use the cleaned ID from the input
+    
+    // Get the ID exactly as it appears in the Admin Panel input
+    const movieId = document.getElementById('mId').value;
     
     const genreMap = { 28: "#Action", 12: "#Adventure", 16: "#Animation", 35: "#Comedy", 80: "#Crime", 18: "#Drama", 14: "#Fantasy", 27: "#Horror", 878: "#SciFi", 53: "#Thriller" };
     let hashtags = movie.genre_ids ? movie.genre_ids.map(id => genreMap[id]).filter(h => h).join(" ") : "";
@@ -175,7 +154,7 @@ async function sendToTelegram(movie, poster, year) {
                     `⭐ *IMDb:* ${rating}/10\n` +
                     `📅 *Year:* ${year}\n\n` +
                     `📝 *Story:* ${movie.overview ? movie.overview.substring(0, 120) : "Enjoy the stream!"}...\n\n` +
-                    `🔗 [Watch Now](https://prigames.netlify.app/movies/newplayer/player?id=${movieId}&tmdb=${movie.id})\n\n` +
+                    `🔗 [Watch Now](https://prigames.netlify.app/movies/newplayer/index?id=${movieId})\n\n` +
                     `${hashtags} #Prigames`;
 
     try {
@@ -190,13 +169,14 @@ async function sendToTelegram(movie, poster, year) {
             })
         });
     } catch (e) {
-        console.error("Telegram Send Failed:", e);
+        console.error("Telegram Error:", e);
     }
 }
 </script>
 </body>
 
 </html>
+
 
 
 
