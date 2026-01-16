@@ -124,8 +124,8 @@ const movieDatabase = {
     "padakkalam": { "title": "Padakkalam", "src": "https://short.icu/bAiih2lxmQ", "year": "2024", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_PBYt7QTtcJ-FhDCqHiDd84_lw2bFve8I_jqPLx-m_asz7YLX80ALs2E&s=10" },
     "pravintambe": { "title": "Kaun Pravin Tambe", "src": "https://short.icu/WTa2sOemZ", "year": "2022", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-jRvsYLBHQiOq0oiH4QHgOomTQfp213ym7jgzmxJxdF2OD7geyy89t0cO&s=10" },
     "pushinboots": { "title": "Puss in Boots", "src": "https://short.icu/yG8TgwG1n", "year": "2022", "img": "https://upload.wikimedia.org/wikipedia/en/7/78/Puss_in_Boots_The_Last_Wish_poster.jpg" },
-    "raid": { "title": "Raid", "src": "https://short.icu/dtUao9wHS", "year": "2018", "img": "https://m.media-amazon.com/images/M/MV5BZDcwMWZiYjgtYWE5Zi00NDk0LTkyMDctYzgzMzA4YTZlZjBlXkEyXkFqcGc@._V1_.jpg" },
-    "raid2": { "title": "Raid 2", "src": "https://short.icu/9zakt-gQI", "year": "2025", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSt3lM5lf1ze5Yx8nw1IOGK72HxXEWzSNfEJqdugPMHyD94hEVvHR5Hfxm&s=10" },
+    "raid": { "title": "Raid", "src": "https://short.icu/MNvF1Tcah", "year": "2018", "img": "https://m.media-amazon.com/images/M/MV5BZDcwMWZiYjgtYWE5Zi00NDk0LTkyMDctYzgzMzA4YTZlZjBlXkEyXkFqcGc@._V1_.jpg" },
+    "raid2": { "title": "Raid 2", "src": "https://short.icu/gVlaDsDwIx", "year": "2025", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSt3lM5lf1ze5Yx8nw1IOGK72HxXEWzSNfEJqdugPMHyD94hEVvHR5Hfxm&s=10" },
     "ratatouille": { "title": "Ratatouille", "src": "https://short.icu/48Mz4uJEH0", "year": "2007", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwnPmqAEdTgVyXk6jr93TfwiUzkAEyQSueyxLN7Z8eYaNmKlXBrWv2wW8&s=10" },
     "saiyara": { "title": "Saiyara", "src": "https://short.icu/ihBT4CEEG", "year": "2025", "img": "https://prigames.netlify.app/movies/images/17.jpg" },
     "salimohabbat": { "title": "Saali Mohabbat", "src": "https://short.icu/i6Yfs_xAI", "year": "2025", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbhf_bUrTITA4rlncGcv7Yn8iJWJ_QZ65mDmaFnOwTr0OQiIpG0fDg0Trj&s=10" },
@@ -276,5 +276,6 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
