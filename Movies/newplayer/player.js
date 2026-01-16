@@ -89,7 +89,7 @@ const movieDatabase = {
     "chhava": { "title": "Chhava", "src": "https://short.icu/k1zmEDRH0", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/9F4lPRLjfBjsu0zjWNOZQMa8a4V.jpg" },
     "chhichhore": { "title": "Chhichhore", "src": "https://short.icu/pt5bNHwf_", "year": "2019", "img": "https://m.media-amazon.com/images/M/MV5BMjFkYThiNDMtMmFhYS00ZjQ5LWJjZjMtZmQ3ODAxYmIwM2RlXkEyXkFqcGc@._V1_.jpg" },
     "chidiya": { "title": "Chidiya", "src": "https://short.icu/ltcMJUUkW", "year": "2024", "img": "https://catimages.org/images/2025/11/12/Chidiya-2016-HDHub4u.Ms.jpg" },
-    "cuttputlli": { "title": "Cuttputlli", "src": "https://short.icu/R_MoQOK0C", "year": "2022", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4zMxl8JPG8OH_SCEaoNeKPzmFDqXjNG1G86Chgauf-d_ODm5SvmvK8YNt&s=10" },
+    "cuttputlli": { "title": "Cuttputlli", "src": "https://short.icu/A_8QDqEIOv", "year": "2022", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4zMxl8JPG8OH_SCEaoNeKPzmFDqXjNG1G86Chgauf-d_ODm5SvmvK8YNt&s=10" },
     "despicable4": { "title": "Despicable Me 4", "src": "https://short.icu/MlXMrR0vd", "year": "2024", "img": "https://m.media-amazon.com/images/M/MV5BNzY0ZTlhYzgtOTgzZC00ZTg2LTk4NTEtZDllM2E2NGE5Njg2XkEyXkFqcGc@._V1_.jpg" },
     "dhol": { "title": "Dhol", "src": "https://short.icu/yjR4wpIjj", "year": "2007", "img": "https://upload.wikimedia.org/wikipedia/en/thumb/2/20/Dhol1.jpg/250px-Dhol1.jpg" },
     "ekdiwanekidiwaniyat": { "title": "Ek Deewane Ki Deewaniyat", "src": "https://short.icu/mT7S0woOR", "year": "2025", "img": "https://prigames.netlify.app/movies/images/16.jpg" },
@@ -276,6 +276,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
