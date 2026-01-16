@@ -9,6 +9,7 @@ const movieDatabase = {
         "tmdb": "95440",
         "episodes": ["https://short.icu/OzcIkav01","https://short.icu/hvs4iLHuM","https://short.icu/A3S4gqYx4","https://short.icu/u42XsM7xb","https://short.icu/d1uqiv21f","https://short.icu/UDEuAwdmI","https://short.icu/LhM_9VDym"]
     },
+    "pushpa-the-rise": { "title": "Pushpa: The Rise", "src": "https://short.icu/BFqd9jO7g", "year": "2021", "img": "https://image.tmdb.org/t/p/w500/h6Pd89ngvl9quPVsx3KoJlQsvk9.jpg" },
     "got1": { 
         "title": "Game Of Thrones Season 1", 
         "img": "https://i.pinimg.com/736x/cb/13/3d/cb133d3ccd5dd67463513d892173753c.jpg",
@@ -275,3 +276,4 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
