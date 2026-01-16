@@ -38,7 +38,7 @@ const movieDatabase = {
         "title": "Panchayat Season 1", 
         "img": "https://image.tmdb.org/t/p/w500/hmjIgLSh2bVcHDQqQ0f0xeen24x.jpg",
         "tmdb": "100147",
-        "episodes": ["https://short.icu/k0yxHyLcD","https://short.icu/X4iK9DLrO","https://short.icu/IOhU7xfQx","https://short.icu/kD9Omk0qB","https://short.icu/DoLn2KrAp","https://short.icu/G0Ef-WA0r","https://short.icu/ZXDyvQaOP","https://short.icu/XrPdo8Lfh"]
+        "episodes": ["https://short.icu/z6b4cTVgE","https://short.icu/gDapNZNqr","https://short.icu/vuyMH3wTG","https://short.icu/Wwpef2jia","https://short.icu/oOhV_nW0r","https://short.icu/4UHcKWLHR","https://short.icu/vev_LatRV","https://short.icu/dLGOLEt8W"]
     },
     "panchayats2": { 
         "title": "Panchayat Season 2", 
@@ -276,6 +276,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
