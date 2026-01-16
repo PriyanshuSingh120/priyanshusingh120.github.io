@@ -30,7 +30,7 @@
     <div class="container">
         <div class="search-area">
             <h2>1. Find Movie</h2>
-            <input type="text" id="apiSearch" placeholder="Type movie name (e.g. Inception)..." oninput="searchTMDB()">
+            <input type="text" oninput="handleInput(event)" placeholder="Search for a movie...">
             <div id="results" class="search-results">
                 <p style="color: #666;">Results will appear here...</p>
             </div>
@@ -75,41 +75,69 @@
 const API_KEY = 'dc691868b09daaabe9acc238ed898cf7';
 const IMG_PATH = 'https://image.tmdb.org/t/p/w500';
 
-// --- TELEGRAM CONFIG (STAYS AT TOP) ---
+// --- TELEGRAM CONFIG ---
 const TELEGRAM_TOKEN = '7287243554:AAHa43wD_V2roGLep1aQgKHn0vqXHYlFp-M';
 const TELEGRAM_CHAT_ID = '-1003605866054';
 
-async function searchTMDB() {
-    const query = document.getElementById('apiSearch').value;
-    const resultsDiv = document.getElementById('results');
-    if (query.length < 2) return;
+// 1. Added a timer variable for debouncing
+let debounceTimer;
 
-    try {
-        const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
-        const data = await res.json();
-        
+async function searchTMDB() {
+    const query = document.getElementById('apiSearch').value.trim();
+    const resultsDiv = document.getElementById('results');
+
+    // Clear the timer every time the user types a new character
+    clearTimeout(debounceTimer);
+
+    if (query.length < 2) {
         resultsDiv.innerHTML = '';
-        data.results.slice(0, 10).forEach(movie => {
-            const poster = movie.poster_path ? IMG_PATH + movie.poster_path : 'https://via.placeholder.com/200x300';
-            const year = movie.release_date ? movie.release_date.split('-')[0] : 'N/A';
+        return;
+    }
+
+    // 2. Wrap the fetch in a setTimeout (Debounce of 500ms)
+    debounceTimer = setTimeout(async () => {
+        try {
+            const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
             
-            const div = document.createElement('div');
-            div.className = 'tmdb-card';
-            div.innerHTML = `<img src="${poster}"><p>${movie.title} (${year})</p>`;
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
             
-            div.onclick = () => {
-                selectMovie(movie, poster, year);
-                // We pass 'movie' here so the function can get genres/story
-                sendToTelegram(movie, poster, year); 
-            };
-            resultsDiv.appendChild(div);
-        });
-    } catch (e) { console.error("Search failed"); }
+            const data = await res.json();
+            
+            resultsDiv.innerHTML = '';
+            if (!data.results || data.results.length === 0) {
+                resultsDiv.innerHTML = '<p style="color:white; padding:10px;">No movies found.</p>';
+                return;
+            }
+
+            data.results.slice(0, 10).forEach(movie => {
+                const poster = movie.poster_path ? IMG_PATH + movie.poster_path : 'https://via.placeholder.com/200x300';
+                const year = movie.release_date ? movie.release_date.split('-')[0] : 'N/A';
+                
+                const div = document.createElement('div');
+                div.className = 'tmdb-card';
+                div.innerHTML = `<img src="${poster}"><p>${movie.title} (${year})</p>`;
+                
+                div.onclick = () => {
+                    selectMovie(movie, poster, year);
+                    sendToTelegram(movie, poster, year); 
+                };
+                resultsDiv.appendChild(div);
+            });
+        } catch (e) { 
+            console.error("Search failed:", e);
+            // Help identify if an adblocker is the cause
+            if (e.message.includes("Failed to fetch")) {
+                resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Network Blocked (Try disabling AdBlock)</p>';
+            }
+        }
+    }, 500); // 500ms delay
 }
 
 function selectMovie(movie, poster, year) {
     document.getElementById('mName').value = movie.title;
-    document.getElementById('mId').value = movie.title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+    // Improved ID generation to be cleaner
+    const cleanId = movie.title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    document.getElementById('mId').value = cleanId;
     document.getElementById('mTmdb').value = movie.id;
     document.getElementById('mImg').value = poster;
     document.getElementById('mYear').value = `${year} | Bollywood | HD`;
@@ -124,10 +152,8 @@ function updateOutputs() {
     const tmdb = document.getElementById('mTmdb').value;
     const year = document.getElementById('mYear').value;
 
-    // JS Output
     document.getElementById('outJS').value = `"${id}": { "title": "${name}", "src": "${src}", "year": "${year.split(' ')[0]}", "img": "${img}" },`;
 
-    // HTML Output
     document.getElementById('outHTML').value = `<a href="newplayer/player.html?id=${id}&tmdb=${tmdb}" class="movie-link" data-id="${tmdb}">
     <div class="movie-card">
         <div class="movie-poster-container"><img src="${img}" class="movie-poster" loading="lazy"></div>
@@ -138,9 +164,8 @@ function updateOutputs() {
 
 async function sendToTelegram(movie, poster, year) {
     const rating = movie.vote_average ? movie.vote_average.toFixed(1) : "N/A";
-    const movieId = movie.title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+    const movieId = document.getElementById('mId').value; // Use the cleaned ID from the input
     
-    // Hashtags
     const genreMap = { 28: "#Action", 12: "#Adventure", 16: "#Animation", 35: "#Comedy", 80: "#Crime", 18: "#Drama", 14: "#Fantasy", 27: "#Horror", 878: "#SciFi", 53: "#Thriller" };
     let hashtags = movie.genre_ids ? movie.genre_ids.map(id => genreMap[id]).filter(h => h).join(" ") : "";
     if (movie.original_language === 'hi') hashtags += " #Bollywood";
@@ -154,7 +179,7 @@ async function sendToTelegram(movie, poster, year) {
                     `${hashtags} #Prigames`;
 
     try {
-        const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendPhoto`, {
+        await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendPhoto`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -164,21 +189,15 @@ async function sendToTelegram(movie, poster, year) {
                 parse_mode: 'Markdown'
             })
         });
-
-        const result = await response.json();
-        if (result.ok) {
-            console.log("Success!");
-        } else {
-            console.error("Telegram API Error:", result.description);
-        }
     } catch (e) {
-        console.error("Network Error:", e);
+        console.error("Telegram Send Failed:", e);
     }
 }
 </script>
 </body>
 
 </html>
+
 
 
 
