@@ -130,7 +130,7 @@ const movieDatabase = {
     "saiyara": { "title": "Saiyara", "src": "https://short.icu/ihBT4CEEG", "year": "2025", "img": "https://prigames.netlify.app/movies/images/17.jpg" },
     "salimohabbat": { "title": "Saali Mohabbat", "src": "https://short.icu/i6Yfs_xAI", "year": "2025", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbhf_bUrTITA4rlncGcv7Yn8iJWJ_QZ65mDmaFnOwTr0OQiIpG0fDg0Trj&s=10" },
     "stand-by-me-doremon-2": { "title": "Stand By Me Doraemon 2", "src": "https://short.icu/DM1-dxLAK", "year": "2020", "img": "https://prigames.netlify.app/movies/images/12.jpg" },
-    "stephen": { "title": "Stephen", "src": "https://short.icu/TnoJzrjMp", "year": "2024", "img": "https://m.media-amazon.com/images/M/MV5BMTdiOTNhNjItMzk3ZC00YTBlLWE2YjQtZDQ4ZjYyOWNjZjA4XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" },
+    "stephen": { "title": "Stephen", "src": "https://short.icu/2LvjZPK7M", "year": "2024", "img": "https://m.media-amazon.com/images/M/MV5BMTdiOTNhNjItMzk3ZC00YTBlLWE2YjQtZDQ4ZjYyOWNjZjA4XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" },
     "strikingrescue": { "title": "Striking Rescue", "src": "https://short.icu/BHuq5Rp0C", "year": "2024", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4eS6As9vD1v9dj49GMGk25nRQ6j0UqaTsRDYRr4h4dc63jSsF7iFf4cU&s=10" },
     "teesmaarkhan": { "title": "Tees Maar Khan", "src": "https://short.icu/6NpMbWcZx", "year": "2010", "img": "https://m.media-amazon.com/images/M/MV5BYjJiZmZkZGYtYjA1OC00MjRkLWFlYTgtYjM4ODBlYWI1MjQwXkEyXkFqcGc@._V1_.jpg" },
     "texas-chainsaw": { "title": "Texas Chainsaw", "src": "https://short.icu/nstC2-MBm", "year": "2013", "img": "https://prigames.netlify.app/movies/images/13.jpg" },
@@ -276,6 +276,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
