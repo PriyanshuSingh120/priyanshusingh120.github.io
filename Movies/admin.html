@@ -30,7 +30,7 @@
     <div class="container">
         <div class="search-area">
             <h2>1. Find Movie</h2>
-            <input type="text" oninput="handleInput(event)" placeholder="Search for a movie...">
+            <input type="text" id="apiSearch" oninput="searchTMDB()" placeholder="Search movies...">
             <div id="results" class="search-results">
                 <p style="color: #666;">Results will appear here...</p>
             </div>
@@ -197,6 +197,7 @@ async function sendToTelegram(movie, poster, year) {
 </body>
 
 </html>
+
 
 
 
