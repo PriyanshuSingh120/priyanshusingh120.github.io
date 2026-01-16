@@ -164,7 +164,7 @@ async function sendToTelegram(movie) {
                     `⭐ *IMDb:* ${rating}/10\n` +
                     `📅 *Year:* ${year}\n\n` +
                     `📝 *Story:* ${movie.overview ? movie.overview.substring(0, 120) : "Enjoy the stream!"}...\n\n` +
-                    `🔗 [Watch Now](https://prigames.netlify.app/movies/newplayer/index?id=${movieId})\n\n` +
+                    `🔗 [Watch Now](https://prigames.netlify.app/movies/newplayer/player?id=${movieId})\n\n` +
                     `${hashtags} #Prigames`;
 
     try {
@@ -187,3 +187,4 @@ async function sendToTelegram(movie) {
 
 </body>
 </html>
+
