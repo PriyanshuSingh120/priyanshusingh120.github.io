@@ -79,6 +79,9 @@ const movieDatabase = {
         "tmdb": "66732",
         "episodes": ["https://short.icu/RrBB6-79l","https://short.icu/YcwrZOAyz","https://short.icu/U8oxvfuW2","https://short.icu/pBvuStnhl"]
     },
+    "the-rip": { "title": "The Rip", "src": "https://short.icu/I92myT5vG", "year": "2026", "img": "https://image.tmdb.org/t/p/w500/p4bW2sJKAwcHuLpfoZK7Zo63osA.jpg" },
+    "the-smashing-machine": { "title": "The Smashing Machine", "src": "https://short.icu/2oM9IXe8B", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/mPuBDGrVIBGOymBxR6rO3iIvBSe.jpg" },
+    "godzilla-minus-one": { "title": "Godzilla Minus One", "src": "https://short.icu/bGHG9Au7ZO", "year": "2023", "img": "https://image.tmdb.org/t/p/w500/2E2WTX0TJEflAged6kzErwqX1kt.jpg" },
     "3idiots": { "title": "3Idiots", "src": "https://short.icu/V550M_IBX", "year": "2009", "img": "https://m.media-amazon.com/images/I/81TeJPHjP-L._AC_UF1000,1000_QL80_.jpg" },
     "ajey": { "title": "Ajey: The Untold Story of a Yogi", "src": "https://short.icu/7IHRfjVYh", "year": "2024", "img": "https://upload.wikimedia.org/wikipedia/en/b/b7/Ajey-Poster.jpg" },
     "akhanda2": { "title": "Akhanda 2", "src": "https://short.icu/nmVnnZszs", "year": "2025", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0SooyoLyOkvEgwlLQt8gDEgnVfZLul3k9NoTpTrk8sYWieHdkE2GR8tI&s=10" },
@@ -252,3 +255,4 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
