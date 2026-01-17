@@ -144,6 +144,7 @@ const movieDatabase = {
     "strikingrescue": { "title": "Striking Rescue", "src": "https://short.icu/BHuq5Rp0C", "year": "2024", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4eS6As9vD1v9dj49GMGk25nRQ6j0UqaTsRDYRr4h4dc63jSsF7iFf4cU&s=10" },
     "teesmaarkhan": { "title": "Tees Maar Khan", "src": "https://short.icu/6NpMbWcZx", "year": "2010", "img": "https://m.media-amazon.com/images/M/MV5BYjJiZmZkZGYtYjA1OC00MjRkLWFlYTgtYjM4ODBlYWI1MjQwXkEyXkFqcGc@._V1_.jpg" },
     "texas-chainsaw": { "title": "Texas Chainsaw", "src": "https://short.icu/nstC2-MBm", "year": "2013", "img": "https://prigames.netlify.app/movies/images/13.jpg" },
+    "rahu-ketu": { "title": "Rahu Ketu", "src": "https://short.icu/BR_0zqx3Q", "year": "2026", "img": "https://image.tmdb.org/t/p/w500/zjgWWOIsEqYNSa1fGRr82mBo3gv.jpg" },
     "thamma": { "title": "Thamma", "src": "https://short.icu/KzjK4XScn", "year": "2025", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrNTel1Jb41WgqCGnOBv-8n6f_z0UfhMsL_dlyXqnE9Z-6Q6Phx5PzjmU&s=10" },
     "theboy": { "title": "The Boy", "src": "https://short.icu/Vt5HcoHaO", "year": "2016", "img": "https://imgshare.info/images/2025/07/20/The-Boy-2016.jpg" },
     "tholu": { "title": "Tholu Bommalata", "src": "https://short.icu/tZkPvr3YG", "year": "2019", "img": "https://m.media-amazon.com/images/M/MV5BZTQ1MmE3MjgtN2E4ZC00MTNlLThlZWQtYjIzZjIxZjI1YTkxXkEyXkFqcGc@._V1_.jpg" },
@@ -259,6 +260,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
