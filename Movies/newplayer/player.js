@@ -79,6 +79,8 @@ const movieDatabase = {
         "tmdb": "66732",
         "episodes": ["https://short.icu/RrBB6-79l","https://short.icu/YcwrZOAyz","https://short.icu/U8oxvfuW2","https://short.icu/pBvuStnhl"]
     },
+    "vritta": { "title": "Vritta", "src": "https://short.icu/N2lYEchkf", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/oNPao9volH0jAA1jULlQ6hCOmAe.jpg" },
+    "five-nights-at-freddy-s-2": { "title": "Five Nights at Freddy's 2", "src": "https://short.icu/mefNkkclf", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/udAxQEORq2I5wxI97N2TEqdhzBE.jpg" },
     "the-rip": { "title": "The Rip", "src": "https://short.icu/I92myT5vG", "year": "2026", "img": "https://image.tmdb.org/t/p/w500/p4bW2sJKAwcHuLpfoZK7Zo63osA.jpg" },
     "the-smashing-machine": { "title": "The Smashing Machine", "src": "https://short.icu/2oM9IXe8B", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/mPuBDGrVIBGOymBxR6rO3iIvBSe.jpg" },
     "godzilla-minus-one": { "title": "Godzilla Minus One", "src": "https://short.icu/bGHG9Au7ZO", "year": "2023", "img": "https://image.tmdb.org/t/p/w500/2E2WTX0TJEflAged6kzErwqX1kt.jpg" },
@@ -255,4 +257,5 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
