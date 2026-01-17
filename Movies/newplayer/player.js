@@ -35,6 +35,7 @@ const movieDatabase = {
         "tmdb": "254558",
         "episodes": ["https://short.icu/xVfDacuLX7","https://short.icu/uj4eBNozm","https://short.icu/0xsHh_sy0","https://short.icu/9sfprsaaj","https://short.icu/qfwY2Q1Is","https://short.icu/1zNYJWhqv","https://short.icu/RCLhytk2_"]
     },
+    "super-30": { "title": "Super 30", "src": "https://short.icu/Ir1itWICQ", "year": "2019", "img": "https://image.tmdb.org/t/p/w500/n0LdZvEqZjnSQSHzzwryFBYjXk1.jpg" },
     "panchayats1": { 
         "title": "Panchayat Season 1", 
         "img": "https://image.tmdb.org/t/p/w500/hmjIgLSh2bVcHDQqQ0f0xeen24x.jpg",
@@ -277,6 +278,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
