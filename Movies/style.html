@@ -123,7 +123,7 @@ function updateOutputs() {
     document.getElementById('outJS').value = `"${id}": { "title": "${name}", "src": "${src}", "year": "${yearOnly}", "img": "${img}" },`;
 
     // HTML Output - Updated to newplayer/index
-    document.getElementById('outHTML').value = `<a href="newplayer/index.html?id=${id}&tmdb=${tmdb}" class="movie-link" data-id="${tmdb}">
+    document.getElementById('outHTML').value = `<a href="newplayer/player?id=${id}&tmdb=${tmdb}" class="movie-link" data-id="${tmdb}">
     <div class="movie-card">
         <div class="movie-poster-container"><img src="${img}" class="movie-poster" loading="lazy"></div>
         <div class="movie-info"><h3>${name}</h3><p>${yearVal}</p></div>
@@ -187,4 +187,5 @@ async function sendToTelegram(movie) {
 
 </body>
 </html>
+
 
