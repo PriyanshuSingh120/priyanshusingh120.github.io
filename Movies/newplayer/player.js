@@ -1,27 +1,28 @@
 const TMDB_API_KEY = 'dc691868b09daaabe9acc238ed898cf7';
 
-// --- YOUR DATABASE ---
 const movieDatabase = {
     // --- SERIES DATABASE ADDITION ---
-    "familyman3": { 
-        "title": "The Family Man Season 3", 
-        "img": "https://catimages.org/images/2025/11/21/The-Family-Man-S03-Hindi-HDRip-ALL-Episodes.jpg",
-        "tmdb": "95440",
-        "episodes": ["https://short.icu/OzcIkav01","https://short.icu/hvs4iLHuM","https://short.icu/A3S4gqYx4","https://short.icu/u42XsM7xb","https://short.icu/d1uqiv21f","https://short.icu/UDEuAwdmI","https://short.icu/LhM_9VDym"]
-    },
     "pushpa-the-rise": { "title": "Pushpa: The Rise", "src": "https://short.icu/BFqd9jO7g", "year": "2021", "img": "https://image.tmdb.org/t/p/w500/h6Pd89ngvl9quPVsx3KoJlQsvk9.jpg" },
-    "got1": { 
-        "title": "Game Of Thrones Season 1", 
-        "img": "https://i.pinimg.com/736x/cb/13/3d/cb133d3ccd5dd67463513d892173753c.jpg",
-        "tmdb": "1399",
-        "episodes": ["https://short.icu/h2B8qM3lG","https://short.icu/no_u3ua8-","https://short.icu/wIdcX5hFw","https://short.icu/taNL76E-D","https://short.icu/VROKYQ2Qi","https://short.icu/Z65Ic8gUl","https://short.icu/C2t7B60T6","https://short.icu/L7K7Bm4Ei","https://short.icu/sxCOYY6-z","https://short.icu/0izCNMFmG"]
-    },
-    puzzle": { "title": "Puzzle", "src": "https://short.icu/e3kt7JPeH5", "year": "2018", "img": "https://image.tmdb.org/t/p/w500/7CfijsjOsPKzz2Dd1zoMF5VPmZo.jpg" },
     "got2": { 
         "title": "Game Of Thrones Season 2", 
         "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXcc4myHHLydYJrshVYmbcZMq-KgKTzHiBO9C1gETAu93BTTxxiA57dkk&s=10",
         "tmdb": "1399",
         "episodes": ["https://short.icu/iCoJ7LxST","https://short.icu/HDBdhe2r2","https://short.icu/KFfmh0oAX","https://short.icu/FPNbWnfQI","https://short.icu/nki1MkRAB6","https://short.icu/rsTXTuU1Qt","https://short.icu/jQ-ai9T6K","https://short.icu/yL89Eg2QV","https://short.icu/-RaIXDOaz","https://short.icu/KtwsCC_iV"]
+    },
+    "familyman3": { 
+        "title": "The Family Man Season 3", 
+        "img": "https://catimages.org/images/2025/11/21/The-Family-Man-S03-Hindi-HDRip-ALL-Episodes.jpg",
+        "tmdb": "95440",
+        "isSeries": true,
+        "episodes": ["https://short.icu/OzcIkav01","https://short.icu/hvs4iLHuM","https://short.icu/A3S4gqYx4","https://short.icu/u42XsM7xb","https://short.icu/d1uqiv21f","https://short.icu/UDEuAwdmI","https://short.icu/LhM_9VDym"]
+    },
+    "puzzle": { "title": "Puzzle", "src": "https://short.icu/e3kt7JPeH5", "year": "2018", "img": "https://image.tmdb.org/t/p/w500/7CfijsjOsPKzz2Dd1zoMF5VPmZo.jpg" },
+    "got1": { 
+        "title": "Game Of Thrones Season 1", 
+        "img": "https://i.pinimg.com/736x/cb/13/3d/cb133d3ccd5dd67463513d892173753c.jpg",
+        "tmdb": "1399",
+        "isSeries": true,
+        "episodes": ["https://short.icu/h2B8qM3lG","https://short.icu/no_u3ua8-","https://short.icu/wIdcX5hFw","https://short.icu/taNL76E-D","https://short.icu/VROKYQ2Qi","https://short.icu/Z65Ic8gUl","https://short.icu/C2t7B60T6","https://short.icu/L7K7Bm4Ei","https://short.icu/sxCOYY6-z","https://short.icu/0izCNMFmG"]
     },
     "got3": { 
         "title": "Game Of Thrones Season 3", 
@@ -167,87 +168,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
         titleEl.innerText = movie.title;
 
-        // CHECK IF IT IS A SERIES
         if (movie.episodes && movie.episodes.length > 0) {
-            selectorArea.style.display = 'block'; // Show dropdown
-            dropdown.innerHTML = ""; // Clear
-            
+            selectorArea.style.display = 'block';
+            dropdown.innerHTML = ""; 
             movie.episodes.forEach((url, index) => {
                 let opt = document.createElement('option');
                 opt.value = url;
                 opt.innerText = `Episode ${index + 1}`;
                 dropdown.appendChild(opt);
             });
-            
-            player.src = movie.episodes[0]; // Load Ep 1 by default
+            player.src = movie.episodes[0]; 
         } else {
-            player.src = movie.src; // Just a regular movie
+            player.src = movie.src;
             selectorArea.style.display = 'none';
         }
 
-        fetchMetaData(movie.title, urlParams.get('tmdb'));
+        // Pass isSeries flag to API fetcher
+        fetchMetaData(movie.title, movie.tmdb, movie.isSeries);
         generateRecommendations(movieId);
+    } else {
+        document.getElementById('displayTitle').innerText = "Movie Not Found";
     }
 });
 
-// Helper for Dropdown
 function loadSpecificEpisode(url) {
     document.getElementById('mainVideoPlayer').src = url;
 }
 
-async function fetchMetaData(displayTitle, manualId) {
+async function fetchMetaData(displayTitle, manualId, isSeries = false) {
     const ratingEl = document.getElementById('imdbRatingDisplay');
     const yearEl = document.getElementById('displayYear');
     const descEl = document.getElementById('movieDescription');
-    const titleEl = document.getElementById('displayTitle');
 
-    const originalTitle = displayTitle;
-    let url;
-    
-    // Priority check for ID passed via URL
-    if (manualId) {
-        url = `https://api.themoviedb.org/3/movie/${manualId}?api_key=${TMDB_API_KEY}`;
-    } else {
-        const searchQuery = originalTitle.replace(/\[.*?\]/g, '').trim();
-        url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(searchQuery)}`;
-    }
+    // Use /tv/ endpoint if it's a series, otherwise /movie/
+    const type = isSeries ? 'tv' : 'movie';
+    let url = manualId 
+        ? `https://api.themoviedb.org/3/${type}/${manualId}?api_key=${TMDB_API_KEY}`
+        : `https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(displayTitle)}`;
 
     try {
         const response = await fetch(url);
         const data = await response.json();
-        
-        if (manualId || (data.results && data.results.length > 0)) {
-            // If search, filter results for best match
-            let bestMatch = manualId ? data : data.results.sort((a, b) => {
-                const aIsIndian = a.original_language === 'hi' || a.original_language === 'te';
-                const bIsIndian = b.original_language === 'hi' || b.original_language === 'te';
-                if (aIsIndian && !bIsIndian) return -1;
-                if (!aIsIndian && bIsIndian) return 1;
-                return b.popularity - a.popularity;
-            })[0];
+        const bestMatch = (data.results && data.results.length > 0) ? data.results[0] : data;
 
-            // TITLE LOGIC: Use API name if original is short/filename-like
-            if (originalTitle.length < 5 || originalTitle.toLowerCase().includes('.html')) {
-                titleEl.innerText = bestMatch.title;
-            } else {
-                titleEl.innerText = originalTitle;
-            }
-
-            // Apply Metadata
+        if (bestMatch) {
             const rating = bestMatch.vote_average ? bestMatch.vote_average.toFixed(1) : "N/A";
-            const year = (bestMatch.release_date || "2025").split('-')[0];
+            const date = bestMatch.release_date || bestMatch.first_air_date || "2025";
+            const year = date.split('-')[0];
 
             ratingEl.innerHTML = `<i class="fab fa-imdb" style="color: #f5c518;"></i> IMDb: ${rating}`;
             yearEl.innerText = `📅 ${year}`;
             descEl.innerText = bestMatch.overview || "Overview not available.";
-            
-        } else {
-            titleEl.innerText = originalTitle;
-            descEl.innerText = "Enjoy the stream on CineView!";
         }
     } catch (e) {
-        console.error("API Error", e);
-        titleEl.innerText = originalTitle;
+        console.error("Metadata Load Error", e);
     }
 }
 
@@ -258,7 +232,7 @@ function generateRecommendations(currentId) {
     const keys = Object.keys(movieDatabase).filter(key => key !== currentId);
     const randomMovies = keys.sort(() => 0.5 - Math.random()).slice(0, 8);
 
-    grid.innerHTML = ""; // Clear grid before injecting
+    grid.innerHTML = ""; 
 
     randomMovies.forEach(key => {
         const item = movieDatabase[key];
@@ -278,11 +252,3 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
-
-
-
-
-
-
-
-
