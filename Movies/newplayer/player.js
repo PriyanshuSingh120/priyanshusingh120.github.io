@@ -112,6 +112,7 @@ const movieDatabase = {
     "interstallar": { "title": "Interstellar", "src": "https://short.icu/QLElpjnf8", "year": "2014", "img": "https://upload.wikimedia.org/wikipedia/en/b/bc/Interstellar_film_poster.jpg" },
     "it": { "title": "IT", "src": "https://short.icu/b_2_gAfH8", "year": "2017", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS50mRvA5Tb9MHlM4iesO23IQmsM3_EY3YaRhcuTUo4BXkW0DSeXTAbGkk&s=10" },
     "jester": { "title": "The Jester 2", "src": "https://short.icu/ZhLOxfemC", "year": "2023", "img": "https://prigames.netlify.app/movies/images/6.jpg" },
+    "a-beautiful-mind": { "title": "A Beautiful Mind", "src": "https://short.icu/i8mdW6PtK", "year": "2001", "img": "https://image.tmdb.org/t/p/w500/rEIg5yJdNOt9fmX4P8gU9LeNoTQ.jpg" },
     "johnyenglish": { "title": "Johnny English", "src": "https://short.icu/o5_SzBsUr", "year": "2018", "img": "https://image.tmdb.org/t/p/w400/tCBxnZwLiY1BOKw3tH6AxHZdqPh.jpg" },
     "jollyllb3": { "title": "Jolly LLB 3", "src": "https://short.icu/6UJAPeNXp", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/bwRoU9p5GvjxgPfmIgsfcJ4ydng.jpg" },
     "kaalidhar-laapata": { "title": "Kaalidhar Laapata", "src": "https://short.icu/CixZbuDjj", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/a7ctu6C6f7tN87ve4HFDoELp7cH.jpg" },
@@ -257,5 +258,6 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
