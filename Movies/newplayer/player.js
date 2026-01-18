@@ -81,6 +81,8 @@ const movieDatabase = {
         "tmdb": "66732",
         "episodes": ["https://short.icu/RrBB6-79l","https://short.icu/YcwrZOAyz","https://short.icu/U8oxvfuW2","https://short.icu/pBvuStnhl"]
     },
+    "lucky-baskhar": { "title": "Lucky Baskhar", "src": "https://short.icu/1UCbVlsM0h", "year": "2024", "img": "https://image.tmdb.org/t/p/w500/a47JQFl9L7VDa79tEvnTOJe0rPa.jpg" },
+    "stree-2": { "title": "Stree 2", "src": "https://short.icu/L8MlxJ68xb", "year": "2024", "img": "https://image.tmdb.org/t/p/w500/nfnhwfUEFuSOxxf4jDdBlY6Lccw.jpg" },
     "vritta": { "title": "Vritta", "src": "https://short.icu/N2lYEchkf", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/oNPao9volH0jAA1jULlQ6hCOmAe.jpg" },
     "five-nights-at-freddy-s-2": { "title": "Five Nights at Freddy's 2", "src": "https://short.icu/mefNkkclf", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/udAxQEORq2I5wxI97N2TEqdhzBE.jpg" },
     "the-rip": { "title": "The Rip", "src": "https://short.icu/I92myT5vG", "year": "2026", "img": "https://image.tmdb.org/t/p/w500/p4bW2sJKAwcHuLpfoZK7Zo63osA.jpg" },
@@ -262,6 +264,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
