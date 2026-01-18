@@ -128,6 +128,7 @@ const movieDatabase = {
     "kishkindhapuri": { "title": "Kishkindhapuri", "src": "https://short.icu/G1-bPfZ9iN", "year": "2025", "img": "https://prigames.netlify.app/movies/images/9.jpg" },
     "kiskiskopyarkaru2": { "title": "Kis Kisko Pyaar Karoon 2", "src": "https://short.icu/2CimpUZoW", "year": "2025", "img": "https://m.media-amazon.com/images/M/MV5BOTJkZDAxNTUtNGZhYy00Mjg5LTlhZTctZDQ3MjRhODRmYzI4XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" },
     "kungfupanda": { "title": "Kung Fu Panda", "src": "https://short.icu/MEjDHh08z", "year": "2008", "img": "https://catimages.org/images/2025/06/23/Kung.Fu.Panda.2008.jpg" },
+    "luck": { "title": "Luck", "src": "https://short.icu/-6NC7zkIH", "year": "2022", "img": "https://image.tmdb.org/t/p/w500/1HOYvwGFioUFL58UVvDRG6beEDm.jpg" },
     "kuruchetra": { "title": "Kuruchetra", "src": "https://short.icu/wnyLDUZ_U", "year": "2025", "img": "https://prigames.netlify.app/movies/images/10.jpg" },
     "leo": { "title": "Leo", "src": "https://short.icu/MdZ6aKsBP", "year": "2023", "img": "https://upload.wikimedia.org/wikipedia/en/7/75/Leo_%282023_Indian_film%29.jpg" },
     "madagascar": { "title": "Madagascar", "src": "https://short.icu/TxG57omyNYn", "year": "2005", "img": "https://upload.wikimedia.org/wikipedia/en/3/36/Madagascar_Theatrical_Poster.jpg" },
@@ -265,6 +266,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
