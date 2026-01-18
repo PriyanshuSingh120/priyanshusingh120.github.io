@@ -81,6 +81,7 @@ const movieDatabase = {
         "tmdb": "66732",
         "episodes": ["https://short.icu/RrBB6-79l","https://short.icu/YcwrZOAyz","https://short.icu/U8oxvfuW2","https://short.icu/pBvuStnhl"]
     },
+    "sankranthiki-vasthunam": { "title": "Sankranthiki Vasthunam", "src": "https://short.icu/t_4EX2NuZ", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/gFa07KuR3tWFI6YFTeGz930zeMo.jpg" },
     "luck": { "title": "Luck", "src": "https://short.icu/-6NC7zkIH", "year": "2022", "img": "https://image.tmdb.org/t/p/w500/1HOYvwGFioUFL58UVvDRG6beEDm.jpg" },
     "lucky-baskhar": { "title": "Lucky Baskhar", "src": "https://short.icu/1UCbVlsM0h", "year": "2024", "img": "https://image.tmdb.org/t/p/w500/a47JQFl9L7VDa79tEvnTOJe0rPa.jpg" },
     "stree-2": { "title": "Stree 2", "src": "https://short.icu/L8MlxJ68xb", "year": "2024", "img": "https://image.tmdb.org/t/p/w500/nfnhwfUEFuSOxxf4jDdBlY6Lccw.jpg" },
@@ -266,6 +267,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
