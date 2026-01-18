@@ -43,6 +43,8 @@ const movieDatabase = {
         "tmdb": "100147",
         "episodes": ["https://short.icu/z6b4cTVgE","https://short.icu/gDapNZNqr","https://short.icu/vuyMH3wTG","https://short.icu/Wwpef2jia","https://short.icu/oOhV_nW0r","https://short.icu/4UHcKWLHR","https://short.icu/vev_LatRV","https://short.icu/dLGOLEt8W"]
     },
+    "despicable-me-3": { "title": "Despicable Me 3", "src": "https://short.icu/lYHluUjFr", "year": "2017", "img": "https://image.tmdb.org/t/p/w500/6t3YWl7hrr88lCEFlGVqW5yV99R.jpg" },
+    "bigil": { "title": "Bigil", "src": "https://short.icu/yVgZQ1nYMp", "year": "2019", "img": "https://image.tmdb.org/t/p/w500/s4Yi1RbMyyN3hH2hElwvluP2rOG.jpg" },
     "panchayats2": { 
         "title": "Panchayat Season 2", 
         "img": "https://image.tmdb.org/t/p/w500/gRKDEpUPd2pp2msmwdgEW34V0SL.jpg",
@@ -260,6 +262,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
