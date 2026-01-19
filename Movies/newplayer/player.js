@@ -16,6 +16,13 @@ const movieDatabase = {
   "isSeries": true, 
   "episodes": ["https://short.icu/735vwjsEy","https://short.icu/cJsTLVM5b","https://short.icu/Wg-JTtx7f","https://short.icu/ciqrOxriFL","https://short.icu/XyGIBdhCx","https://short.icu/t8BSpJSCE","https://short.icu/FHOAYrnpC"] 
 },
+    "special-ops": { 
+  "title": "Special Ops", 
+  "img": "https://image.tmdb.org/t/p/w500/rTOGcNzVMYGezpx9AxX7ilzLNEp.jpg", 
+  "tmdb": "100612", 
+  "isSeries": true, 
+  "episodes": ["https://short.icu/LCiMGHDTq","https://short.icu/t2JlAS7LF","https://short.icu/i1zTMp9UT","https://short.icu/DBBRoMdmB","https://short.icu/zdB2MnbdS","https://short.icu/um_KmmQzE","https://short.icu/pOC0XtQdf","https://short.icu/Nhzq7boa2"] 
+},
     "familyman3": { 
         "title": "The Family Man Season 3", 
         "img": "https://catimages.org/images/2025/11/21/The-Family-Man-S03-Hindi-HDRip-ALL-Episodes.jpg",
@@ -277,6 +284,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
