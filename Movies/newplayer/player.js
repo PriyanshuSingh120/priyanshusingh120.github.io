@@ -88,6 +88,7 @@ const movieDatabase = {
         "tmdb": "66732",
         "episodes": ["https://short.icu/RrBB6-79l","https://short.icu/YcwrZOAyz","https://short.icu/U8oxvfuW2","https://short.icu/pBvuStnhl"]
     },
+    "ranarangam": { "title": "Ranarangam", "src": "https://short.icu/SpPK72jmQ", "year": "2019", "img": "https://image.tmdb.org/t/p/w500/ofeya3VH7q9EtzdQMhTWY3GFhaT.jpg" },
     "lost-ladies": { "title": "Lost Ladies", "src": "https://short.icu/KPvnEv-Ml", "year": "2024", "img": "https://image.tmdb.org/t/p/w500/cGG5hCwPnMvuKzvUBnxo5y3DcVM.jpg" },
     "sankranthiki-vasthunam": { "title": "Sankranthiki Vasthunam", "src": "https://short.icu/t_4EX2NuZ", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/gFa07KuR3tWFI6YFTeGz930zeMo.jpg" },
     "luck": { "title": "Luck", "src": "https://short.icu/-6NC7zkIH", "year": "2022", "img": "https://image.tmdb.org/t/p/w500/1HOYvwGFioUFL58UVvDRG6beEDm.jpg" },
@@ -275,6 +276,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
