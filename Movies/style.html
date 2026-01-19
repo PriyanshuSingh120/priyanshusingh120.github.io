@@ -3,72 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineView Pro Admin</title>
+    <title>CineView Admin Pro</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; color: white; padding: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #121212; color: white; padding: 20px; }
         .container { max-width: 900px; margin: auto; display: flex; flex-direction: column; gap: 20px; }
-        .admin-section { background: #1e1e1e; padding: 20px; border-radius: 12px; border: 1px solid #333; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        h2 { margin-top: 0; color: #0088cc; }
-        
-        .flex-row { display: flex; gap: 15px; align-items: flex-end; }
-        .flex-item { flex: 1; }
+        .admin-section { background: #1e1e1e; padding: 20px; border-radius: 12px; border: 1px solid #333; }
         
         input, textarea, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 6px; border: 1px solid #444; background: #2a2a2a; color: white; box-sizing: border-box; }
-        input:focus { border-color: #0088cc; outline: none; }
-        
-        .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 15px; }
-        .tmdb-card { background: #262626; padding: 8px; cursor: pointer; text-align: center; border-radius: 8px; transition: 0.2s; border: 1px solid transparent; }
-        .tmdb-card:hover { border-color: #0088cc; transform: translateY(-5px); }
-        .tmdb-card img { width: 100%; border-radius: 5px; height: 180px; object-fit: cover; }
-        .tmdb-card p { font-size: 12px; margin: 8px 0 0; height: 32px; overflow: hidden; }
+        .flex-row { display: flex; gap: 15px; }
+        .flex-item { flex: 1; }
 
-        .btn-send { background: #0088cc; color: white; border: none; padding: 15px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 16px; }
-        .btn-send:hover { background: #00aaff; }
-        label { font-weight: bold; font-size: 13px; color: #888; text-transform: uppercase; }
-        .badge { background: #444; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-left: 5px; }
+        .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-top: 15px; }
+        .tmdb-card { background: #262626; padding: 8px; cursor: pointer; text-align: center; border-radius: 8px; transition: 0.2s; border: 1px solid transparent; }
+        .tmdb-card:hover { border-color: #0088cc; }
+        .tmdb-card img { width: 100%; border-radius: 5px; height: 170px; object-fit: cover; }
+        .tmdb-card p { font-size: 11px; margin: 5px 0; height: 30px; overflow: hidden; }
+
+        .btn-send { background: #0088cc; color: white; border: none; padding: 15px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        label { font-weight: bold; font-size: 12px; color: #888; text-transform: uppercase; }
+        .hidden { display: none; }
+        h2 { color: #0088cc; margin-top: 0; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>CineView Admin Control</h2>
+    <h2>CineView Admin Panel</h2>
 
     <div class="admin-section">
         <div class="flex-row">
-            <div style="flex: 1;">
-                <label>Content Type</label>
-                <select id="searchType" onchange="searchTMDB()">
+            <div style="width: 150px;">
+                <label>Type</label>
+                <select id="contentType" onchange="toggleType()">
                     <option value="movie">Movie</option>
-                    <option value="tv">TV Series</option>
+                    <option value="series">Series (Episodes)</option>
                 </select>
             </div>
-            <div style="flex: 3;">
+            <div class="flex-item">
                 <label>Search TMDB (Name or ID)</label>
-                <input type="text" id="apiSearch" oninput="searchTMDB()" placeholder="Search movie/show or paste TMDB ID...">
+                <input type="text" id="apiSearch" oninput="searchTMDB()" placeholder="Search title or enter TMDB ID...">
             </div>
         </div>
         <div id="results" class="results-grid"></div>
     </div>
 
     <div class="admin-section">
-        <div class="flex-row">
-            <div class="flex-item">
-                <label>Title</label>
-                <input type="text" id="mName" oninput="updateOutputs()">
-            </div>
-            <div class="flex-item" id="seriesExtras" style="display:none;">
-                <div style="display:flex; gap:10px;">
-                    <div><label>S</label><input type="number" id="mS" value="1" oninput="updateOutputs()"></div>
-                    <div><label>E</label><input type="number" id="mE" value="1" oninput="updateOutputs()"></div>
-                </div>
-            </div>
-        </div>
+        <label>Title</label>
+        <input type="text" id="mName" oninput="updateOutputs()">
 
-        <label>Custom ID (URL Slug)</label>
+        <label>Custom ID (Slug)</label>
         <input type="text" id="mId" oninput="updateOutputs()">
 
-        <label>Video Source Link (Embed URL)</label>
-        <input type="text" id="mSrc" placeholder="https://..." oninput="updateOutputs()">
+        <div id="movieLinkBox">
+            <label>Video Source Link (Single Movie)</label>
+            <input type="text" id="mSrc" placeholder="https://..." oninput="updateOutputs()">
+        </div>
+
+        <div id="seriesLinkBox" class="hidden">
+            <label>Episode Links (One URL per line)</label>
+            <textarea id="mEpisodes" rows="5" placeholder="https://link1.com&#10;https://link2.com" oninput="updateOutputs()"></textarea>
+        </div>
 
         <div class="flex-row">
             <div class="flex-item">
@@ -76,21 +70,21 @@
                 <input type="text" id="mImg" oninput="updateOutputs()">
             </div>
             <div class="flex-item">
-                <label>Metadata (Year | Quality)</label>
+                <label>Year / Metadata</label>
                 <input type="text" id="mYear" oninput="updateOutputs()">
             </div>
         </div>
-
+        
         <input type="hidden" id="mTmdb">
-        <button class="btn-send" onclick="triggerTelegram()">🚀 Send to Telegram Channel</button>
+        <button class="btn-send" onclick="triggerTelegram()">🚀 Post to Telegram</button>
     </div>
 
     <div class="admin-section">
-        <label>JS Config Entry</label>
-        <textarea id="outJS" rows="2" readonly onclick="this.select()"></textarea>
+        <label>JS Config Object</label>
+        <textarea id="outJS" rows="5" readonly onclick="this.select()"></textarea>
         
         <label>HTML List Item</label>
-        <textarea id="outHTML" rows="3" readonly onclick="this.select()"></textarea>
+        <textarea id="outHTML" rows="4" readonly onclick="this.select()"></textarea>
     </div>
 </div>
 
@@ -102,27 +96,30 @@ const TELEGRAM_CHAT_ID = '-1003605866054';
 
 let selectedMovieData = null;
 
+function toggleType() {
+    const type = document.getElementById('contentType').value;
+    document.getElementById('movieLinkBox').className = (type === 'movie') ? '' : 'hidden';
+    document.getElementById('seriesLinkBox').className = (type === 'series') ? '' : 'hidden';
+    updateOutputs();
+}
+
 async function searchTMDB() {
     const query = document.getElementById('apiSearch').value;
-    const type = document.getElementById('searchType').value;
+    const type = document.getElementById('contentType').value;
+    const tmdbType = (type === 'series') ? 'tv' : 'movie';
     const resultsDiv = document.getElementById('results');
-    
+
     if (query.length < 1) { resultsDiv.innerHTML = ''; return; }
 
-    let url;
-    // Check if query is a number (TMDB ID)
-    if (!isNaN(query) && query.trim() !== "") {
-        url = `https://api.themoviedb.org/3/${type}/${query}?api_key=${API_KEY}`;
-    } else {
-        url = `https://api.themoviedb.org/3/search/${type}?api_key=${API_KEY}&query=${encodeURIComponent(query)}`;
-    }
+    let url = isNaN(query) 
+        ? `https://api.themoviedb.org/3/search/${tmdbType}?api_key=${API_KEY}&query=${encodeURIComponent(query)}`
+        : `https://api.themoviedb.org/3/${tmdbType}/${query}?api_key=${API_KEY}`;
 
     try {
         const res = await fetch(url);
         const data = await res.json();
+        const results = data.results ? data.results : [data];
         resultsDiv.innerHTML = '';
-
-        const results = data.results ? data.results : [data]; // Handle single ID result vs search list
 
         results.slice(0, 8).forEach(item => {
             if(!item.id) return;
@@ -132,115 +129,79 @@ async function searchTMDB() {
             
             const div = document.createElement('div');
             div.className = 'tmdb-card';
-            div.innerHTML = `<img src="${poster}"><p>${title} <span class="badge">${year}</span></p>`;
-            div.onclick = () => selectMovie(item, poster, year, type);
+            div.innerHTML = `<img src="${poster}"><p>${title} (${year})</p>`;
+            div.onclick = () => selectMovie(item, poster, year);
             resultsDiv.appendChild(div);
         });
-    } catch (e) { console.error("Search failed", e); }
+    } catch (e) { console.error("Search Error"); }
 }
 
-function selectMovie(movie, poster, year, type) {
-    selectedMovieData = { ...movie, contentType: type };
-    const title = movie.title || movie.name;
-    
+function selectMovie(item, poster, year) {
+    selectedMovieData = item;
+    const title = item.title || item.name;
     document.getElementById('mName').value = title;
-    document.getElementById('mTmdb').value = movie.id;
+    document.getElementById('mTmdb').value = item.id;
     document.getElementById('mImg').value = poster;
-    document.getElementById('mYear').value = `${year} | ${type === 'tv' ? 'Series' : 'Movie'} | HD`;
-    
-    // Toggle Season/Episode inputs
-    document.getElementById('seriesExtras').style.display = (type === 'tv') ? 'block' : 'none';
-
-    // Auto-ID Logic
-    let generatedId = title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-    document.getElementById('mId').value = generatedId;
-    
+    document.getElementById('mYear').value = year;
+    document.getElementById('mId').value = title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
     updateOutputs();
-    document.getElementById('mName').scrollIntoView({ behavior: 'smooth' });
 }
 
 function updateOutputs() {
+    const type = document.getElementById('contentType').value;
     const name = document.getElementById('mName').value;
-    let id = document.getElementById('mId').value;
-    const src = document.getElementById('mSrc').value || 'LINK_HERE';
+    const id = document.getElementById('mId').value;
     const img = document.getElementById('mImg').value;
+    const year = document.getElementById('mYear').value;
     const tmdb = document.getElementById('mTmdb').value;
-    const yearVal = document.getElementById('mYear').value;
-    const type = document.getElementById('searchType').value;
 
-    // Adjust ID for Episodes
-    if(type === 'tv') {
-        const s = document.getElementById('mS').value;
-        const e = document.getElementById('mE').value;
-        id = `${id}-s${s}e${e}`;
+    let jsCode = "";
+    if (type === 'series') {
+        const episodesRaw = document.getElementById('mEpisodes').value.split('\n').filter(l => l.trim() !== "");
+        const episodesJSON = JSON.stringify(episodesRaw);
+        jsCode = `"${id}": { \n  "title": "${name}", \n  "img": "${img}", \n  "tmdb": "${tmdb}", \n  "isSeries": true, \n  "episodes": ${episodesJSON} \n},`;
+    } else {
+        const src = document.getElementById('mSrc').value || 'LINK_HERE';
+        jsCode = `"${id}": { "title": "${name}", "src": "${src}", "year": "${year}", "img": "${img}" },`;
     }
 
-    // JS Output
-    document.getElementById('outJS').value = `"${id}": { "title": "${name}", "src": "${src}", "year": "${yearVal.split(' ')[0]}", "img": "${img}" },`;
-
-    // HTML Output
+    document.getElementById('outJS').value = jsCode;
     document.getElementById('outHTML').value = `<a href="newplayer/player?id=${id}&tmdb=${tmdb}" class="movie-link" data-id="${tmdb}">
     <div class="movie-card">
-        <div class="movie-poster-container"><img src="${img}" class="movie-poster" loading="lazy"></div>
-        <div class="movie-info"><h3>${name}${type === 'tv' ? ' (S'+document.getElementById('mS').value+' E'+document.getElementById('mE').value+')' : ''}</h3><p>${yearVal}</p></div>
+        <div class="movie-poster-container"><img src="${img}" class="movie-poster"></div>
+        <div class="movie-info"><h3>${name}</h3><p>${year} | ${type === 'series' ? 'Series' : 'Movie'}</p></div>
     </div>
 </a>`;
 }
 
 async function triggerTelegram() {
-    if (!selectedMovieData) { alert("Select content first!"); return; }
-    
+    if (!selectedMovieData) return alert("Select content first!");
     const btn = document.querySelector('.btn-send');
-    btn.innerText = "Sending...";
-    btn.disabled = true;
-
-    const type = selectedMovieData.contentType;
+    btn.innerText = "Processing...";
+    
     const name = document.getElementById('mName').value;
-    const rating = selectedMovieData.vote_average ? selectedMovieData.vote_average.toFixed(1) : "N/A";
     const poster = document.getElementById('mImg').value;
     const id = document.getElementById('mId').value;
-    const year = document.getElementById('mYear').value.split(' ')[0];
+    const type = document.getElementById('contentType').value;
     
-    let epInfo = "";
-    let finalUrl = `https://prigames.netlify.app/movies/newplayer/player?id=${id}`;
-    
-    if(type === 'tv') {
-        const s = document.getElementById('mS').value;
-        const e = document.getElementById('mE').value;
-        epInfo = `\n📦 *Season:* ${s} | *Episode:* ${e}`;
-        finalUrl += `-s${s}e${e}`;
-    }
-
-    const genreMap = { 28: "#Action", 12: "#Adventure", 16: "#Animation", 35: "#Comedy", 80: "#Crime", 18: "#Drama", 14: "#Fantasy", 27: "#Horror", 878: "#SciFi", 53: "#Thriller" };
-    let hashtags = selectedMovieData.genre_ids ? selectedMovieData.genre_ids.map(id => genreMap[id]).filter(h => h).join(" ") : "";
-
-    const message = `🎬 *New ${type === 'tv' ? 'Episode' : 'Movie'} on CineView!* \n\n` +
-                    `🍿 *Title:* ${name}${epInfo}\n` +
-                    `⭐ *IMDb:* ${rating}/10\n` +
-                    `📅 *Year:* ${year}\n\n` +
-                    `📝 *Story:* ${selectedMovieData.overview ? selectedMovieData.overview.substring(0, 100) : "New content added!"}...\n\n` +
-                    `🔗 [Watch Now](${finalUrl})\n\n` +
-                    `${hashtags} #CineView #Prigames`;
+    const message = `🎬 *New Upload on CineView!* \n\n` +
+                    `🍿 *Title:* ${name}\n` +
+                    `🏷️ *Type:* ${type === 'series' ? 'Web Series' : 'Movie'}\n` +
+                    `📝 *Story:* ${selectedMovieData.overview ? selectedMovieData.overview.substring(0, 120) : "Watch now on CineView!"}...\n\n` +
+                    `🔗 [Watch Online](https://prigames.netlify.app/movies/newplayer/player?id=${id})\n\n` +
+                    `#CineView #Update`;
 
     try {
         await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendPhoto`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                chat_id: TELEGRAM_CHAT_ID,
-                photo: poster,
-                caption: message,
-                parse_mode: 'Markdown'
-            })
+            body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, photo: poster, caption: message, parse_mode: 'Markdown' })
         });
-        alert("Sent Successfully!");
-    } catch (e) {
-        alert("Telegram Error. Check console.");
-    } finally {
-        btn.innerText = "🚀 Send to Telegram Channel";
-        btn.disabled = false;
-    }
+        alert("Sent to Telegram!");
+    } catch (e) { alert("Error sending!"); }
+    btn.innerText = "🚀 Post to Telegram";
 }
 </script>
+
 </body>
 </html>
