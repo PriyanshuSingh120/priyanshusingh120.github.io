@@ -9,13 +9,13 @@ const movieDatabase = {
         "tmdb": "1399",
         "episodes": ["https://short.icu/iCoJ7LxST","https://short.icu/HDBdhe2r2","https://short.icu/KFfmh0oAX","https://short.icu/FPNbWnfQI","https://short.icu/nki1MkRAB6","https://short.icu/rsTXTuU1Qt","https://short.icu/jQ-ai9T6K","https://short.icu/yL89Eg2QV","https://short.icu/-RaIXDOaz","https://short.icu/KtwsCC_iV"]
     },
-    "taskaree": { 
-        "title": "Taskaree: The Smuggler's Web", 
-        "episodes": ["https://short.icu/735vwjsEy" , "https://short.icu/cJsTLVM5b" , "https://short.icu/Wg-JTtx7f" , "https://short.icu/ciqrOxriFL" , "https://short.icu/XyGIBdhCx" , "https://short.icu/t8BSpJSCE" , "https://short.icu/FHOAYrnpC"], 
-        "year": "2026",
-        "tmdb": "308482"
-        "img": "https://resizing.flixster.com/2LdyNCv_Mh-XxJUwbI8C-C5VQ7c=/206x305/v2/https://resizing.flixster.com/_2U-8U1dyFDIKzff_V31po5dyUs=/ems.cHJkLWVtcy1hc3NldHMvdHZzZWFzb24vNzA0YzYyZDUtYTkyYi00OWYxLWIxMmEtZGNlZjViMDBiOGU1LmpwZw==" 
-   },
+    "taskaree-the-smuggler-s-web": { 
+  "title": "Taskaree: The Smuggler's Web", 
+  "img": "https://image.tmdb.org/t/p/w500/25fKRXvQLBq4nXu9vjOVJcvCiiD.jpg", 
+  "tmdb": "308482", 
+  "isSeries": true, 
+  "episodes": ["https://short.icu/735vwjsEy","https://short.icu/cJsTLVM5b","https://short.icu/Wg-JTtx7f","https://short.icu/ciqrOxriFL","https://short.icu/XyGIBdhCx","https://short.icu/t8BSpJSCE","https://short.icu/FHOAYrnpC"] 
+},
     "familyman3": { 
         "title": "The Family Man Season 3", 
         "img": "https://catimages.org/images/2025/11/21/The-Family-Man-S03-Hindi-HDRip-ALL-Episodes.jpg",
@@ -274,6 +274,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
