@@ -3,20 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineView Admin Panel</title>
+    <title>CineView Pro Admin</title>
     <style>
-        body { font-family: sans-serif; background: #1a1a1a; color: white; padding: 20px; }
-        .container { max-width: 800px; margin: auto; display: flex; flex-direction: column; gap: 20px; }
-        input, textarea { width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; border: none; }
-        .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; margin-top: 10px; }
-        .tmdb-card { background: #333; padding: 5px; cursor: pointer; text-align: center; border-radius: 5px; transition: 0.3s; }
-        .tmdb-card:hover { background: #444; transform: scale(1.05); }
-        .tmdb-card img { width: 100%; border-radius: 5px; }
-        .tmdb-card p { font-size: 12px; margin: 5px 0; height: 30px; overflow: hidden; }
-        .admin-section { background: #222; padding: 20px; border-radius: 10px; border: 1px solid #444; }
-        .btn-send { background: #0088cc; color: white; border: none; padding: 15px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; color: white; padding: 20px; }
+        .container { max-width: 900px; margin: auto; display: flex; flex-direction: column; gap: 20px; }
+        .admin-section { background: #1e1e1e; padding: 20px; border-radius: 12px; border: 1px solid #333; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        h2 { margin-top: 0; color: #0088cc; }
+        
+        .flex-row { display: flex; gap: 15px; align-items: flex-end; }
+        .flex-item { flex: 1; }
+        
+        input, textarea, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 6px; border: 1px solid #444; background: #2a2a2a; color: white; box-sizing: border-box; }
+        input:focus { border-color: #0088cc; outline: none; }
+        
+        .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 15px; }
+        .tmdb-card { background: #262626; padding: 8px; cursor: pointer; text-align: center; border-radius: 8px; transition: 0.2s; border: 1px solid transparent; }
+        .tmdb-card:hover { border-color: #0088cc; transform: translateY(-5px); }
+        .tmdb-card img { width: 100%; border-radius: 5px; height: 180px; object-fit: cover; }
+        .tmdb-card p { font-size: 12px; margin: 8px 0 0; height: 32px; overflow: hidden; }
+
+        .btn-send { background: #0088cc; color: white; border: none; padding: 15px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 16px; }
         .btn-send:hover { background: #00aaff; }
-        label { font-weight: bold; font-size: 14px; color: #aaa; }
+        label { font-weight: bold; font-size: 13px; color: #888; text-transform: uppercase; }
+        .badge { background: #444; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-left: 5px; }
     </style>
 </head>
 <body>
@@ -25,32 +34,59 @@
     <h2>CineView Admin Control</h2>
 
     <div class="admin-section">
-        <label>Search TMDB Movie</label>
-        <input type="text" id="apiSearch" oninput="searchTMDB()" placeholder="Type movie name...">
+        <div class="flex-row">
+            <div style="flex: 1;">
+                <label>Content Type</label>
+                <select id="searchType" onchange="searchTMDB()">
+                    <option value="movie">Movie</option>
+                    <option value="tv">TV Series</option>
+                </select>
+            </div>
+            <div style="flex: 3;">
+                <label>Search TMDB (Name or ID)</label>
+                <input type="text" id="apiSearch" oninput="searchTMDB()" placeholder="Search movie/show or paste TMDB ID...">
+            </div>
+        </div>
         <div id="results" class="results-grid"></div>
     </div>
 
     <div class="admin-section">
-        <label>Movie Title</label>
-        <input type="text" id="mName" oninput="updateOutputs()">
-        
-        <label>Custom ID (Editable - This will be in the URL)</label>
+        <div class="flex-row">
+            <div class="flex-item">
+                <label>Title</label>
+                <input type="text" id="mName" oninput="updateOutputs()">
+            </div>
+            <div class="flex-item" id="seriesExtras" style="display:none;">
+                <div style="display:flex; gap:10px;">
+                    <div><label>S</label><input type="number" id="mS" value="1" oninput="updateOutputs()"></div>
+                    <div><label>E</label><input type="number" id="mE" value="1" oninput="updateOutputs()"></div>
+                </div>
+            </div>
+        </div>
+
+        <label>Custom ID (URL Slug)</label>
         <input type="text" id="mId" oninput="updateOutputs()">
-        
-        <label>Video Source Link</label>
-        <input type="text" id="mSrc" placeholder="Paste video URL here" oninput="updateOutputs()">
-        
-        <label>Poster Image URL</label>
-        <input type="text" id="mImg" oninput="updateOutputs()">
+
+        <label>Video Source Link (Embed URL)</label>
+        <input type="text" id="mSrc" placeholder="https://..." oninput="updateOutputs()">
+
+        <div class="flex-row">
+            <div class="flex-item">
+                <label>Poster URL</label>
+                <input type="text" id="mImg" oninput="updateOutputs()">
+            </div>
+            <div class="flex-item">
+                <label>Metadata (Year | Quality)</label>
+                <input type="text" id="mYear" oninput="updateOutputs()">
+            </div>
+        </div>
 
         <input type="hidden" id="mTmdb">
-        <input type="hidden" id="mYear">
-
         <button class="btn-send" onclick="triggerTelegram()">🚀 Send to Telegram Channel</button>
     </div>
 
     <div class="admin-section">
-        <label>JS Config Object</label>
+        <label>JS Config Entry</label>
         <textarea id="outJS" rows="2" readonly onclick="this.select()"></textarea>
         
         <label>HTML List Item</label>
@@ -61,111 +97,130 @@
 <script>
 const API_KEY = 'dc691868b09daaabe9acc238ed898cf7';
 const IMG_PATH = 'https://image.tmdb.org/t/p/w500';
-
-// --- TELEGRAM CONFIG ---
 const TELEGRAM_TOKEN = '7287243554:AAHa43wD_V2roGLep1aQgKHn0vqXHYlFp-M';
 const TELEGRAM_CHAT_ID = '-1003605866054';
 
-// Store the selected movie data globally for the telegram function
 let selectedMovieData = null;
 
 async function searchTMDB() {
     const query = document.getElementById('apiSearch').value;
+    const type = document.getElementById('searchType').value;
     const resultsDiv = document.getElementById('results');
-    if (query.length < 2) { resultsDiv.innerHTML = ''; return; }
+    
+    if (query.length < 1) { resultsDiv.innerHTML = ''; return; }
+
+    let url;
+    // Check if query is a number (TMDB ID)
+    if (!isNaN(query) && query.trim() !== "") {
+        url = `https://api.themoviedb.org/3/${type}/${query}?api_key=${API_KEY}`;
+    } else {
+        url = `https://api.themoviedb.org/3/search/${type}?api_key=${API_KEY}&query=${encodeURIComponent(query)}`;
+    }
 
     try {
-        const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
+        const res = await fetch(url);
         const data = await res.json();
-        
         resultsDiv.innerHTML = '';
-        data.results.slice(0, 8).forEach(movie => {
-            const poster = movie.poster_path ? IMG_PATH + movie.poster_path : 'https://via.placeholder.com/200x300';
-            const year = movie.release_date ? movie.release_date.split('-')[0] : 'N/A';
+
+        const results = data.results ? data.results : [data]; // Handle single ID result vs search list
+
+        results.slice(0, 8).forEach(item => {
+            if(!item.id) return;
+            const title = item.title || item.name;
+            const poster = item.poster_path ? IMG_PATH + item.poster_path : 'https://via.placeholder.com/200x300';
+            const year = (item.release_date || item.first_air_date || 'N/A').split('-')[0];
             
             const div = document.createElement('div');
             div.className = 'tmdb-card';
-            div.innerHTML = `<img src="${poster}"><p>${movie.title}</p>`;
-            
-            div.onclick = () => selectMovie(movie, poster, year);
+            div.innerHTML = `<img src="${poster}"><p>${title} <span class="badge">${year}</span></p>`;
+            div.onclick = () => selectMovie(item, poster, year, type);
             resultsDiv.appendChild(div);
         });
-    } catch (e) { console.error("Search failed"); }
+    } catch (e) { console.error("Search failed", e); }
 }
 
-function selectMovie(movie, poster, year) {
-    selectedMovieData = movie; // Save reference
-    document.getElementById('mName').value = movie.title;
+function selectMovie(movie, poster, year, type) {
+    selectedMovieData = { ...movie, contentType: type };
+    const title = movie.title || movie.name;
     
-    // Auto-generate ID but keep it editable
-    const generatedId = movie.title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-    document.getElementById('mId').value = generatedId;
-    
+    document.getElementById('mName').value = title;
     document.getElementById('mTmdb').value = movie.id;
     document.getElementById('mImg').value = poster;
-    document.getElementById('mYear').value = `${year} | Bollywood | HD`;
+    document.getElementById('mYear').value = `${year} | ${type === 'tv' ? 'Series' : 'Movie'} | HD`;
+    
+    // Toggle Season/Episode inputs
+    document.getElementById('seriesExtras').style.display = (type === 'tv') ? 'block' : 'none';
+
+    // Auto-ID Logic
+    let generatedId = title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    document.getElementById('mId').value = generatedId;
     
     updateOutputs();
-    // Scroll to the edit section
     document.getElementById('mName').scrollIntoView({ behavior: 'smooth' });
 }
 
 function updateOutputs() {
     const name = document.getElementById('mName').value;
-    const id = document.getElementById('mId').value;
+    let id = document.getElementById('mId').value;
     const src = document.getElementById('mSrc').value || 'LINK_HERE';
     const img = document.getElementById('mImg').value;
     const tmdb = document.getElementById('mTmdb').value;
     const yearVal = document.getElementById('mYear').value;
-    const yearOnly = yearVal.split(' ')[0];
+    const type = document.getElementById('searchType').value;
+
+    // Adjust ID for Episodes
+    if(type === 'tv') {
+        const s = document.getElementById('mS').value;
+        const e = document.getElementById('mE').value;
+        id = `${id}-s${s}e${e}`;
+    }
 
     // JS Output
-    document.getElementById('outJS').value = `"${id}": { "title": "${name}", "src": "${src}", "year": "${yearOnly}", "img": "${img}" },`;
+    document.getElementById('outJS').value = `"${id}": { "title": "${name}", "src": "${src}", "year": "${yearVal.split(' ')[0]}", "img": "${img}" },`;
 
-    // HTML Output - Updated to newplayer/index
+    // HTML Output
     document.getElementById('outHTML').value = `<a href="newplayer/player?id=${id}&tmdb=${tmdb}" class="movie-link" data-id="${tmdb}">
     <div class="movie-card">
         <div class="movie-poster-container"><img src="${img}" class="movie-poster" loading="lazy"></div>
-        <div class="movie-info"><h3>${name}</h3><p>${yearVal}</p></div>
+        <div class="movie-info"><h3>${name}${type === 'tv' ? ' (S'+document.getElementById('mS').value+' E'+document.getElementById('mE').value+')' : ''}</h3><p>${yearVal}</p></div>
     </div>
 </a>`;
 }
 
 async function triggerTelegram() {
-    if (!selectedMovieData) {
-        alert("Please select a movie first!");
-        return;
-    }
+    if (!selectedMovieData) { alert("Select content first!"); return; }
     
     const btn = document.querySelector('.btn-send');
     btn.innerText = "Sending...";
     btn.disabled = true;
 
-    await sendToTelegram(selectedMovieData);
-    
-    btn.innerText = "🚀 Send to Telegram Channel";
-    btn.disabled = false;
-    alert("Sent Successfully!");
-}
-
-async function sendToTelegram(movie) {
-    const rating = movie.vote_average ? movie.vote_average.toFixed(1) : "N/A";
-    const poster = document.getElementById('mImg').value;
-    const movieId = document.getElementById('mId').value; // Get the EDITABLE ID
-    const year = document.getElementById('mYear').value.split(' ')[0];
+    const type = selectedMovieData.contentType;
     const name = document.getElementById('mName').value;
+    const rating = selectedMovieData.vote_average ? selectedMovieData.vote_average.toFixed(1) : "N/A";
+    const poster = document.getElementById('mImg').value;
+    const id = document.getElementById('mId').value;
+    const year = document.getElementById('mYear').value.split(' ')[0];
+    
+    let epInfo = "";
+    let finalUrl = `https://prigames.netlify.app/movies/newplayer/player?id=${id}`;
+    
+    if(type === 'tv') {
+        const s = document.getElementById('mS').value;
+        const e = document.getElementById('mE').value;
+        epInfo = `\n📦 *Season:* ${s} | *Episode:* ${e}`;
+        finalUrl += `-s${s}e${e}`;
+    }
 
     const genreMap = { 28: "#Action", 12: "#Adventure", 16: "#Animation", 35: "#Comedy", 80: "#Crime", 18: "#Drama", 14: "#Fantasy", 27: "#Horror", 878: "#SciFi", 53: "#Thriller" };
-    let hashtags = movie.genre_ids ? movie.genre_ids.map(id => genreMap[id]).filter(h => h).join(" ") : "";
-    if (movie.original_language === 'hi') hashtags += " #Bollywood";
+    let hashtags = selectedMovieData.genre_ids ? selectedMovieData.genre_ids.map(id => genreMap[id]).filter(h => h).join(" ") : "";
 
-    const message = `🎬 *New Upload on CineView!* \n\n` +
-                    `🍿 *Title:* ${name}\n` +
+    const message = `🎬 *New ${type === 'tv' ? 'Episode' : 'Movie'} on CineView!* \n\n` +
+                    `🍿 *Title:* ${name}${epInfo}\n` +
                     `⭐ *IMDb:* ${rating}/10\n` +
                     `📅 *Year:* ${year}\n\n` +
-                    `📝 *Story:* ${movie.overview ? movie.overview.substring(0, 120) : "Enjoy the stream!"}...\n\n` +
-                    `🔗 [Watch Now](https://prigames.netlify.app/movies/newplayer/player?id=${movieId})\n\n` +
-                    `${hashtags} #Prigames`;
+                    `📝 *Story:* ${selectedMovieData.overview ? selectedMovieData.overview.substring(0, 100) : "New content added!"}...\n\n` +
+                    `🔗 [Watch Now](${finalUrl})\n\n` +
+                    `${hashtags} #CineView #Prigames`;
 
     try {
         await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendPhoto`, {
@@ -178,14 +233,14 @@ async function sendToTelegram(movie) {
                 parse_mode: 'Markdown'
             })
         });
+        alert("Sent Successfully!");
     } catch (e) {
-        console.error("Telegram Error:", e);
-        alert("Failed to send to Telegram. Check console.");
+        alert("Telegram Error. Check console.");
+    } finally {
+        btn.innerText = "🚀 Send to Telegram Channel";
+        btn.disabled = false;
     }
 }
 </script>
-
 </body>
 </html>
-
-
