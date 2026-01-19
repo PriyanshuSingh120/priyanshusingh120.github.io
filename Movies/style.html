@@ -104,25 +104,41 @@ function toggleType() {
 }
 
 async function searchTMDB() {
-    const query = document.getElementById('apiSearch').value;
+    const query = document.getElementById('apiSearch').value.trim();
     const type = document.getElementById('contentType').value;
     const tmdbType = (type === 'series') ? 'tv' : 'movie';
     const resultsDiv = document.getElementById('results');
 
     if (query.length < 1) { resultsDiv.innerHTML = ''; return; }
 
-    let url = isNaN(query) 
-        ? `https://api.themoviedb.org/3/search/${tmdbType}?api_key=${API_KEY}&query=${encodeURIComponent(query)}`
-        : `https://api.themoviedb.org/3/${tmdbType}/${query}?api_key=${API_KEY}`;
+    let url;
+    
+    // 1. Check if it's an IMDb ID (starts with tt)
+    if (query.startsWith('tt')) {
+        url = `https://api.themoviedb.org/3/find/${query}?api_key=${API_KEY}&external_source=imdb_id`;
+    } 
+    // 2. Check if it's a TMDB ID (purely numeric)
+    else if (!isNaN(query)) {
+        url = `https://api.themoviedb.org/3/${tmdbType}/${query}?api_key=${API_KEY}`;
+    } 
+    // 3. Otherwise, search by Name
+    else {
+        url = `https://api.themoviedb.org/3/search/${tmdbType}?api_key=${API_KEY}&query=${encodeURIComponent(query)}`;
+    }
 
     try {
         const res = await fetch(url);
         const data = await res.json();
-        const results = data.results ? data.results : [data];
-        resultsDiv.innerHTML = '';
+        
+        // Handle the different ways TMDB returns data based on the URL used
+        let results = [];
+        if (data.movie_results) results = data.movie_results; // From IMDb "find"
+        else if (data.tv_results) results = data.tv_results;   // From IMDb "find"
+        else if (data.results) results = data.results;         // From Search
+        else if (data.id) results = [data];                    // From ID lookup
 
+        resultsDiv.innerHTML = '';
         results.slice(0, 8).forEach(item => {
-            if(!item.id) return;
             const title = item.title || item.name;
             const poster = item.poster_path ? IMG_PATH + item.poster_path : 'https://via.placeholder.com/200x300';
             const year = (item.release_date || item.first_air_date || 'N/A').split('-')[0];
@@ -133,9 +149,8 @@ async function searchTMDB() {
             div.onclick = () => selectMovie(item, poster, year);
             resultsDiv.appendChild(div);
         });
-    } catch (e) { console.error("Search Error"); }
+    } catch (e) { console.error("Search failed", e); }
 }
-
 function selectMovie(item, poster, year) {
     selectedMovieData = item;
     const title = item.title || item.name;
@@ -205,3 +220,4 @@ async function triggerTelegram() {
 
 </body>
 </html>
+
