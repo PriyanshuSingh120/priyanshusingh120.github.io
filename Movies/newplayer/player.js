@@ -63,8 +63,8 @@ const movieDatabase = {
         "title": "Panchayat Season 2", 
         "img": "https://image.tmdb.org/t/p/w500/gRKDEpUPd2pp2msmwdgEW34V0SL.jpg",
         "tmdb": "100147",
-        "episodes": ["https://short.icu/DFMFBYw4O","https://short.icu/276sG4v3U","https://short.icu/aIWwkKsde","https://short.icu/UGi8ht-Jo","https://short.icu/jLoccqc_L","https://short.icu/7Gmq0saQg","https://short.icu/AY-YfajxG","https://short.icu/75cf0cYUH"]
-    },
+        "episodes": ["https://short.icu/DFMFBYw4O","https://short.icu/276sG4v3U","https://short.icu/aIWwkKsde","https://short.icu/UGi8ht-Jo","https://short.icu/jLoccqc_L","https://short.icu/7Gmq0saQg","https://short.icu/AY-YfajxG","https://short.icu/75cf0cYUH"] 
+},
     "panchayats3": { 
         "title": "Panchayat Season 3", 
         "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYnHIyZn59WEBrdmnjj6XQIchRvDPV2HWvdRWpbgDWOwalJzrKAcF-DkEh&s=10",
@@ -284,6 +284,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
