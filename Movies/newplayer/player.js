@@ -44,6 +44,13 @@ const movieDatabase = {
         "tmdb": "1399",
         "episodes": ["https://short.icu/HWzUOfgpw","https://short.icu/X6F_qpnJn","https://short.icu/w33oywFGy","https://short.icu/MCy5_F8oA","https://short.icu/5mMZa1Jp8J","https://short.icu/EdcmsxTUS6","https://short.icu/BXK8RyCIX","https://short.icu/SzVEQFNmS","https://short.icu/vSRBxADZxe","https://short.icu/d-xFc6TKc"]
     },
+    "mrs-deshpande": { 
+  "title": "Mrs. Deshpande", 
+  "img": "https://image.tmdb.org/t/p/w500/7uZ9ZQHVfOACW7Got0wMg8ykGkz.jpg", 
+  "tmdb": "260846", 
+  "isSeries": true, 
+  "episodes": ["https://short.icu/qGINu3Tpy","https://short.icu/MjKklN3ET","https://short.icu/KRLLBjLlT","https://short.icu/xxeuKEe0T","https://short.icu/Yym3EALTq","https://short.icu/1VTTcnegq"] 
+},
     "kapils3": { 
         "title": "The Kapil Sharma Show Season 3", 
         "img": "https://catimages.org/images/2025/06/21/The-Great-Indian-Kapil-Show-2025-S03-HDHub4u.Ms.jpg",
@@ -284,6 +291,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
