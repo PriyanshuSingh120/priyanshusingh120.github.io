@@ -102,6 +102,7 @@ const movieDatabase = {
         "tmdb": "66732",
         "episodes": ["https://short.icu/RrBB6-79l","https://short.icu/YcwrZOAyz","https://short.icu/U8oxvfuW2","https://short.icu/pBvuStnhl"]
     },
+    "kabir-singh": { "title": "Kabir Singh", "src": "https://short.icu/rucro0oz5", "year": "2019", "img": "https://upload.wikimedia.org/wikipedia/en/d/dc/Kabir_Singh.jpg" },
     "bumblebee": { "title": "Bumblebee", "src": "https://short.icu/U56hErh4E", "year": "2018", "img": "https://image.tmdb.org/t/p/w500/fw02ONlDhrYjTSZV8XO6hhU3ds3.jpg" },
     "ranarangam": { "title": "Ranarangam", "src": "https://short.icu/SpPK72jmQ", "year": "2019", "img": "https://image.tmdb.org/t/p/w500/ofeya3VH7q9EtzdQMhTWY3GFhaT.jpg" },
     "lost-ladies": { "title": "Lost Ladies", "src": "https://short.icu/KPvnEv-Ml", "year": "2024", "img": "https://image.tmdb.org/t/p/w500/cGG5hCwPnMvuKzvUBnxo5y3DcVM.jpg" },
@@ -291,6 +292,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
