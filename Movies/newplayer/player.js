@@ -45,6 +45,7 @@ const movieDatabase = {
         "isSeries": true,
         "episodes": ["https://short.icu/h2B8qM3lG","https://short.icu/no_u3ua8-","https://short.icu/wIdcX5hFw","https://short.icu/taNL76E-D","https://short.icu/VROKYQ2Qi","https://short.icu/Z65Ic8gUl","https://short.icu/C2t7B60T6","https://short.icu/L7K7Bm4Ei","https://short.icu/sxCOYY6-z","https://short.icu/0izCNMFmG"]
     },
+    "liger": { "title": "Liger", "src": "https://short.icu/dAl9WbpLX", "year": "2022", "img": "https://image.tmdb.org/t/p/w500/bBZJAdfmcwhyvkwK1XajnHECdoY.jpg" },
     "got3": { 
         "title": "Game Of Thrones Season 3", 
         "img": "https://upload.wikimedia.org/wikipedia/en/1/1d/Game_of_Thrones_Season_3.jpg",
@@ -300,6 +301,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
