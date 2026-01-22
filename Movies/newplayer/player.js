@@ -16,6 +16,13 @@ const movieDatabase = {
   "isSeries": true, 
   "episodes": ["https://short.icu/e8a-E1--B","https://short.icu/H5epjTQ_4","https://short.icu/aV192cp_m","https://short.icu/-xiyaOk8x","https://short.icu/9iODPJ5pf"] 
 },
+    "the-great-indian-kapil-show": { 
+  "title": "The Great Indian Kapil Show (season 4)", 
+  "img": "https://image.tmdb.org/t/p/w500/3KMCmGDlYLlJ8zGOhCs6f3FZcnj.jpg", 
+  "tmdb": "247769", 
+  "isSeries": true, 
+  "episodes": ["https://short.icu/2yJowFkgD","https://short.icu/vC2yIcr2k","https://short.icu/paJyrkzNd","https://short.icu/mlVO9QwG-"] 
+},
     "taskaree-the-smuggler-s-web": { 
   "title": "Taskaree: The Smuggler's Web", 
   "img": "https://image.tmdb.org/t/p/w500/25fKRXvQLBq4nXu9vjOVJcvCiiD.jpg", 
@@ -304,6 +311,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
