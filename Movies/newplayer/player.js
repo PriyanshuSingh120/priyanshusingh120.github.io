@@ -9,6 +9,13 @@ const movieDatabase = {
         "tmdb": "1399",
         "episodes": ["https://short.icu/iCoJ7LxST","https://short.icu/HDBdhe2r2","https://short.icu/KFfmh0oAX","https://short.icu/FPNbWnfQI","https://short.icu/nki1MkRAB6","https://short.icu/rsTXTuU1Qt","https://short.icu/jQ-ai9T6K","https://short.icu/yL89Eg2QV","https://short.icu/-RaIXDOaz","https://short.icu/KtwsCC_iV"]
     },
+    "chernobyl": { 
+  "title": "Chernobyl", 
+  "img": "https://image.tmdb.org/t/p/w500/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg", 
+  "tmdb": "87108", 
+  "isSeries": true, 
+  "episodes": ["https://short.icu/e8a-E1--B","https://short.icu/H5epjTQ_4","https://short.icu/aV192cp_m","https://short.icu/-xiyaOk8x","https://short.icu/9iODPJ5pf"] 
+},
     "taskaree-the-smuggler-s-web": { 
   "title": "Taskaree: The Smuggler's Web", 
   "img": "https://image.tmdb.org/t/p/w500/25fKRXvQLBq4nXu9vjOVJcvCiiD.jpg", 
@@ -293,6 +300,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
