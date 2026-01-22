@@ -110,6 +110,7 @@ const movieDatabase = {
         "tmdb": "66732",
         "episodes": ["https://short.icu/RrBB6-79l","https://short.icu/YcwrZOAyz","https://short.icu/U8oxvfuW2","https://short.icu/pBvuStnhl"]
     },
+    "sitaare-zameen-par": { "title": "Sitaare Zameen Par", "src": "https://short.icu/6OmR4C0xX", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/adYjCJGSNiL7CIaDW3g0Bcg7r2Z.jpg" },
     "kung-fu-panda-4": { "title": "Kung Fu Panda 4", "src": "https://short.icu/X2HFGXffg", "year": "2024", "img": "https://image.tmdb.org/t/p/w500/kDp1vUBnMpe8ak4rjgl3cLELqjU.jpg" },
     "kabir-singh": { "title": "Kabir Singh", "src": "https://short.icu/rucro0oz5", "year": "2019", "img": "https://upload.wikimedia.org/wikipedia/en/d/dc/Kabir_Singh.jpg" },
     "bumblebee": { "title": "Bumblebee", "src": "https://short.icu/U56hErh4E", "year": "2018", "img": "https://image.tmdb.org/t/p/w500/fw02ONlDhrYjTSZV8XO6hhU3ds3.jpg" },
@@ -301,6 +302,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
