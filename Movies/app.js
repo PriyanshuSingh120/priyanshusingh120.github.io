@@ -12,9 +12,10 @@ let movieData = [];
 function refreshMovieData() {
     const movieCards = document.querySelectorAll('.movie-link');
     movieData = Array.from(movieCards).map(card => {
-        // Also ensure TMDB ID is appended to links if missing
         const tmdbId = card.getAttribute('data-id');
         const currentHref = card.getAttribute('href');
+        
+        // Ensure TMDB ID is appended to links if missing for tracking
         if (tmdbId && currentHref && !currentHref.includes('&tmdb=')) {
             card.setAttribute('href', `${currentHref}&tmdb=${tmdbId}`);
         }
@@ -26,6 +27,30 @@ function refreshMovieData() {
             searchTitle: card.querySelector('h3').innerText.replace(/\[.*?\]/g, '').trim()
         };
     });
+}
+
+/**
+ * FUNCTION: getPrioritizedMovie
+ * Selects a movie from the list, favoring the first ones (trending/latest) 
+ * while still allowing older movies to appear occasionally.
+ */
+function getPrioritizedMovie() {
+    if (movieData.length === 0) return null;
+
+    // Define "Trending/Latest" as the first 20 movies on the page
+    const topLimit = Math.min(movieData.length, 20);
+    const trendingMovies = movieData.slice(0, topLimit);
+    const olderMovies = movieData.slice(topLimit);
+
+    // 70% chance to pick from Trending/Latest
+    // 30% chance to pick from the rest (or if there are no older movies)
+    const pickFromTrending = Math.random() < 0.7 || olderMovies.length === 0;
+
+    if (pickFromTrending) {
+        return trendingMovies[Math.floor(Math.random() * trendingMovies.length)];
+    } else {
+        return olderMovies[Math.floor(Math.random() * olderMovies.length)];
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -60,13 +85,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /**
  * FUNCTION: updateSlider
- * Fetches data from TMDB and updates the UI with a random movie.
+ * Fetches data from TMDB and updates the UI with a prioritized random movie.
  */
 async function updateSlider() {
-    // Refresh the list every time the slider changes to pick up new movies
+    // Refresh the list to pick up new movies
     refreshMovieData();
 
-    if (movieData.length === 0) return;
+    const movie = getPrioritizedMovie();
+    if (!movie) return;
 
     const sliderImg = document.getElementById('sliderImg');
     const sliderBg = document.getElementById('sliderBg');
@@ -76,8 +102,6 @@ async function updateSlider() {
 
     // Start Fade Out
     if (sliderImg) sliderImg.style.opacity = "0";
-
-    const movie = movieData[Math.floor(Math.random() * movieData.length)];
 
     let url = movie.imdbId 
         ? `https://api.themoviedb.org/3/find/${movie.imdbId}?api_key=${TMDB_API_KEY}&external_source=imdb_id`
@@ -92,17 +116,20 @@ async function updateSlider() {
             const backdropLink = result.backdrop_path ? BACKDROP_BASE + result.backdrop_path : "";
             const posterLink = result.poster_path ? POSTER_BASE + result.poster_path : "";
 
-            // Wait for fade out to complete (matching CSS transition)
+            // Wait for fade out to complete (0.4s)
             setTimeout(() => {
                 if (backdropLink && sliderBg) {
                     sliderBg.style.backgroundImage = `url('${backdropLink}')`;
                 }
                 
                 if (sliderTitle) sliderTitle.innerText = movie.title;
-                if (movieRating) movieRating.innerHTML = `⭐ Rating: ${result.vote_average.toFixed(1)}`;
+                if (movieRating) {
+                    const rating = result.vote_average ? result.vote_average.toFixed(1) : "N/A";
+                    movieRating.innerHTML = `⭐ Rating: ${rating}`;
+                }
                 if (playBtn) playBtn.href = movie.link;
 
-                // Preload image before fading in for a smoother look
+                // Preload image before fading in
                 if (posterLink && sliderImg) {
                     const imgPreloader = new Image();
                     imgPreloader.src = posterLink;
@@ -110,6 +137,9 @@ async function updateSlider() {
                         sliderImg.src = posterLink;
                         sliderImg.style.opacity = "1";
                     };
+                } else if (sliderImg) {
+                    // Fallback if no poster found
+                    sliderImg.style.opacity = "1";
                 }
             }, 400); 
         }
