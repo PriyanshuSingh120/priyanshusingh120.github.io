@@ -1,10 +1,37 @@
-// 1. Move these to the TOP (Global Scope)
+// 1. Global Scope Variables
 const TMDB_API_KEY = 'dc691868b09daaabe9acc238ed898cf7'; 
 const BACKDROP_BASE = "https://image.tmdb.org/t/p/w1280"; 
 const POSTER_BASE = "https://image.tmdb.org/t/p/w500"; 
-let movieData = []; // This MUST be outside
+let movieData = []; 
+
+/**
+ * FUNCTION: refreshMovieData
+ * Scans the DOM for all current movie cards and updates the movieData array.
+ * This ensures new movies added via "Load More" or dynamic scripts are included.
+ */
+function refreshMovieData() {
+    const movieCards = document.querySelectorAll('.movie-link');
+    movieData = Array.from(movieCards).map(card => {
+        // Also ensure TMDB ID is appended to links if missing
+        const tmdbId = card.getAttribute('data-id');
+        const currentHref = card.getAttribute('href');
+        if (tmdbId && currentHref && !currentHref.includes('&tmdb=')) {
+            card.setAttribute('href', `${currentHref}&tmdb=${tmdbId}`);
+        }
+
+        return {
+            link: card.getAttribute('href'),
+            title: card.querySelector('h3').innerText.trim(),
+            imdbId: tmdbId, 
+            searchTitle: card.querySelector('h3').innerText.replace(/\[.*?\]/g, '').trim()
+        };
+    });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Initial setup ---
+    refreshMovieData();
+
     // --- Mobile Menu Toggle ---
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
@@ -12,26 +39,14 @@ document.addEventListener('DOMContentLoaded', () => {
         menuToggle.addEventListener('click', () => navLinks.classList.toggle('active'));
     }
 
-    // --- Collect and Randomize Movies ---
-    const movieCards = document.querySelectorAll('.movie-link');
-    movieData = Array.from(movieCards).map(card => {
-        return {
-            link: card.getAttribute('href'),
-            title: card.querySelector('h3').innerText.trim(),
-            imdbId: card.getAttribute('data-id'), 
-            searchTitle: card.querySelector('h3').innerText.replace(/\[.*?\]/g, '').trim()
-        };
-    });
-
-    // START THE SLIDER
+    // --- START THE SLIDER ---
     if (movieData.length > 0) {
-        updateSlider(); // Start first one immediately
-        setInterval(updateSlider, 6000); // Change every 6 seconds
+        updateSlider(); // Initial run
+        setInterval(updateSlider, 6000); // Cycle every 6 seconds
     }
 
     // --- Search Logic ---
     const searchInput = document.querySelector('.search-input');
-    const searchButton = document.querySelector('.search-button');
     if (searchInput) {
         searchInput.addEventListener('input', () => {
             const term = searchInput.value.toLowerCase();
@@ -43,15 +58,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-
+/**
+ * FUNCTION: updateSlider
+ * Fetches data from TMDB and updates the UI with a random movie.
+ */
 async function updateSlider() {
+    // Refresh the list every time the slider changes to pick up new movies
+    refreshMovieData();
+
     if (movieData.length === 0) return;
 
     const sliderImg = document.getElementById('sliderImg');
     const sliderBg = document.getElementById('sliderBg');
+    const sliderTitle = document.getElementById('sliderTitle');
+    const movieRating = document.getElementById('movieRating');
+    const playBtn = document.getElementById('playBtn');
 
-    sliderImg.style.opacity = "0";
-
+    // Start Fade Out
+    if (sliderImg) sliderImg.style.opacity = "0";
 
     const movie = movieData[Math.floor(Math.random() * movieData.length)];
 
@@ -68,38 +92,29 @@ async function updateSlider() {
             const backdropLink = result.backdrop_path ? BACKDROP_BASE + result.backdrop_path : "";
             const posterLink = result.poster_path ? POSTER_BASE + result.poster_path : "";
 
+            // Wait for fade out to complete (matching CSS transition)
             setTimeout(() => {
-                if (backdropLink) sliderBg.style.backgroundImage = `url('${backdropLink}')`;
-                if (posterLink) sliderImg.src = posterLink;
+                if (backdropLink && sliderBg) {
+                    sliderBg.style.backgroundImage = `url('${backdropLink}')`;
+                }
                 
-                document.getElementById('sliderTitle').innerText = movie.title;
-                document.getElementById('movieRating').innerHTML = `⭐ Rating: ${result.vote_average.toFixed(1)}`;
-                document.getElementById('playBtn').href = movie.link;
-                const imgPreloader = new Image();
-                imgPreloader.src = posterLink;
-                imgPreloader.onload = () => {
-                    sliderImg.src = posterLink;
-                    sliderImg.style.opacity = "1";
-                };
+                if (sliderTitle) sliderTitle.innerText = movie.title;
+                if (movieRating) movieRating.innerHTML = `⭐ Rating: ${result.vote_average.toFixed(1)}`;
+                if (playBtn) playBtn.href = movie.link;
 
-                // 3. FADE BACK IN
-                sliderImg.style.opacity = "1";
-                // sliderBg.style.opacity = "1";
-            }, 400); // This matches the 0.4s in your CSS
+                // Preload image before fading in for a smoother look
+                if (posterLink && sliderImg) {
+                    const imgPreloader = new Image();
+                    imgPreloader.src = posterLink;
+                    imgPreloader.onload = () => {
+                        sliderImg.src = posterLink;
+                        sliderImg.style.opacity = "1";
+                    };
+                }
+            }, 400); 
         }
     } catch (err) {
-        console.error("Animation Error:", err);
-        sliderImg.style.opacity = "1"; // Ensure it doesn't stay invisible
+        console.error("Slider Update Error:", err);
+        if (sliderImg) sliderImg.style.opacity = "1"; 
     }
 }
-
-
-document.querySelectorAll('.movie-link').forEach(link => {
-    const tmdbId = link.getAttribute('data-id');
-    const currentHref = link.getAttribute('href');
-    
-
-    if (tmdbId && !currentHref.includes('&tmdb=')) {
-        link.setAttribute('href', `${currentHref}&tmdb=${tmdbId}`);
-    }
-});
