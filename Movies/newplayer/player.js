@@ -131,6 +131,7 @@ const movieDatabase = {
         "tmdb": "66732",
         "episodes": ["https://short.icu/RrBB6-79l","https://short.icu/YcwrZOAyz","https://short.icu/U8oxvfuW2","https://short.icu/pBvuStnhl"]
     },
+    "tere-ishk-mein": { "title": "Tere Ishk Mein", "src": "https://short.icu/TYhQXfBmF", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/7FsHlW9z7gDhDE4EXAE2WcXUVQj.jpg" },
     "parasite": { "title": "Parasite", "src": "https://short.icu/Zv2IYvYvU", "year": "2019", "img": "https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg" },
     "homebound": { "title": "Homebound", "src": "https://short.icu/F50oSqRTM3", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/vyezjSvSdLO0bvr6jSNuFi6yuiw.jpg" },
     "silence-can-you-hear-it": { "title": "Silence... Can You Hear It?", "src": "https://short.icu/w1uCXZiCr", "year": "2021", "img": "https://image.tmdb.org/t/p/w500/9lxPuirAgtqHYG3JtIdfg7TucKn.jpg" },
@@ -328,6 +329,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
