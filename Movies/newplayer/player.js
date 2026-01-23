@@ -30,6 +30,13 @@ const movieDatabase = {
   "isSeries": true, 
   "episodes": ["https://short.icu/735vwjsEy","https://short.icu/cJsTLVM5b","https://short.icu/Wg-JTtx7f","https://short.icu/ciqrOxriFL","https://short.icu/XyGIBdhCx","https://short.icu/t8BSpJSCE","https://short.icu/FHOAYrnpC"] 
 },
+    "steal": { 
+  "title": "Steal", 
+  "img": "https://image.tmdb.org/t/p/w500/6KmlaPhsohh3Ki9XJUq0jiUYbf3.jpg", 
+  "tmdb": "254071", 
+  "isSeries": true, 
+  "episodes": ["https://short.icu/cRSBTqizP","https://short.icu/HtzjfsB9M","https://short.icu/r0wRBWrtz","https://short.icu/OLleBYyDr","https://short.icu/OClUen7k5","https://short.icu/u2fOUSZY8T"] 
+},
     "special-ops": { 
   "title": "Special Ops", 
   "img": "https://image.tmdb.org/t/p/w500/rTOGcNzVMYGezpx9AxX7ilzLNEp.jpg", 
@@ -321,6 +328,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
