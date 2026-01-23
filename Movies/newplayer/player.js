@@ -9,6 +9,13 @@ const movieDatabase = {
         "tmdb": "1399",
         "episodes": ["https://short.icu/iCoJ7LxST","https://short.icu/HDBdhe2r2","https://short.icu/KFfmh0oAX","https://short.icu/FPNbWnfQI","https://short.icu/nki1MkRAB6","https://short.icu/rsTXTuU1Qt","https://short.icu/jQ-ai9T6K","https://short.icu/yL89Eg2QV","https://short.icu/-RaIXDOaz","https://short.icu/KtwsCC_iV"]
     },
+    "the-traitors": { 
+  "title": "The Traitors", 
+  "img": "https://image.tmdb.org/t/p/w500/82gKEb78UPkYAMjXLSswwVzpCbI.jpg", 
+  "tmdb": "271489", 
+  "isSeries": true, 
+  "episodes": ["https://short.icu/OECS7_O1Hh","https://short.icu/cy9s-nJSj","https://short.icu/2yMkFxb9V","https://short.icu/mUHwqpGa3","https://short.icu/Xw1za7G8e","https://short.icu/5cQX07cVU","https://short.icu/XDMYlF0qI","https://short.icu/ZiEXDePH10","https://short.icu/y6R6dRk4N","https://short.icu/GcXTWdzM3"] 
+},
     "chernobyl": { 
   "title": "Chernobyl", 
   "img": "https://image.tmdb.org/t/p/w500/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg", 
@@ -330,6 +337,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
