@@ -131,6 +131,7 @@ const movieDatabase = {
         "tmdb": "66732",
         "episodes": ["https://short.icu/RrBB6-79l","https://short.icu/YcwrZOAyz","https://short.icu/U8oxvfuW2","https://short.icu/pBvuStnhl"]
     },
+    "border-2": { "title": "Border 2", "src": "https://short.icu/s2mCKLYkm", "year": "2026", "img": "https://image.tmdb.org/t/p/w500/q7ow2BdAeQIc6zVteJ0x1Uxmixt.jpg" },
     "tere-ishk-mein": { "title": "Tere Ishk Mein", "src": "https://short.icu/TYhQXfBmF", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/7FsHlW9z7gDhDE4EXAE2WcXUVQj.jpg" },
     "parasite": { "title": "Parasite", "src": "https://short.icu/Zv2IYvYvU", "year": "2019", "img": "https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg" },
     "homebound": { "title": "Homebound", "src": "https://short.icu/F50oSqRTM3", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/vyezjSvSdLO0bvr6jSNuFi6yuiw.jpg" },
@@ -329,6 +330,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
