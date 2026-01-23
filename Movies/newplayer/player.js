@@ -44,6 +44,13 @@ const movieDatabase = {
         "isSeries": true,
         "episodes": ["https://short.icu/OzcIkav01","https://short.icu/hvs4iLHuM","https://short.icu/A3S4gqYx4","https://short.icu/u42XsM7xb","https://short.icu/d1uqiv21f","https://short.icu/UDEuAwdmI","https://short.icu/LhM_9VDym"]
     },
+    "mitti-ek-nayi-pehchaan": { 
+  "title": "Mitti – Ek Nayi Pehchaan", 
+  "img": "https://image.tmdb.org/t/p/w500/443pEkTNjSY4Y8PjIzJfxSslRYw.jpg", 
+  "tmdb": "295719", 
+  "isSeries": true, 
+  "episodes": ["https://short.icu/xKenXm3Pe","https://short.icu/n68PkY7vV","https://short.icu/icJCKtgML","https://short.icu/l_L_DHV5b","https://short.icu/lo-180cDvb","https://short.icu/UAoRyDsym","https://short.icu/e0wLki7zS","https://short.icu/tmrLY95taf"] 
+},
     "puzzle": { "title": "Puzzle", "src": "https://short.icu/e3kt7JPeH5", "year": "2018", "img": "https://image.tmdb.org/t/p/w500/7CfijsjOsPKzz2Dd1zoMF5VPmZo.jpg" },
     "got1": { 
         "title": "Game Of Thrones Season 1", 
@@ -314,6 +321,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
