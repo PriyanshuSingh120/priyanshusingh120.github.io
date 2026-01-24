@@ -145,6 +145,7 @@ const movieDatabase = {
         "tmdb": "66732",
         "episodes": ["https://short.icu/RrBB6-79l","https://short.icu/YcwrZOAyz","https://short.icu/U8oxvfuW2","https://short.icu/pBvuStnhl"]
     },
+    "12th-fail": { "title": "12th Fail", "src": "https://short.icu/-tGxzoOLL", "year": "2023", "img": "https://image.tmdb.org/t/p/w500/eebUPRI4Z5e1Z7Hev4JZAwMIFkX.jpg" },
     "welcome-back": { "title": "Welcome Back", "src": "https://short.icu/72MTfaND8", "year": "2015", "img": "https://image.tmdb.org/t/p/w500/xnRIT3ggVcJxGWylKw85n6pteLp.jpg" },
     "cheekatilo": { "title": "Cheekatilo", "src": "https://short.icu/wwLdO_MZa3", "year": "2026", "img": "https://image.tmdb.org/t/p/w500/pO86EjZb7QyGYk5RW4Xm4UWe5Uv.jpg" },
     "dhurandhar": { "title": "Dhurandhar", "src": "https://short.icu/9l2LoJVx0h", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/8FHOtUpNIk5ZPEay2N2EY5lrxkv.jpg" },
@@ -348,6 +349,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
