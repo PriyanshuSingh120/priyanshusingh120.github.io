@@ -44,6 +44,13 @@ const movieDatabase = {
   "isSeries": true, 
   "episodes": ["https://short.icu/cRSBTqizP","https://short.icu/HtzjfsB9M","https://short.icu/r0wRBWrtz","https://short.icu/OLleBYyDr","https://short.icu/OClUen7k5","https://short.icu/u2fOUSZY8T"] 
 },
+    "space-gen-chandrayaan": { 
+  "title": "Space Gen: Chandrayaan", 
+  "img": "https://image.tmdb.org/t/p/w500/d6WIr1vycFCCdYewgRf8dpWxQQE.jpg", 
+  "tmdb": "311632", 
+  "isSeries": true, 
+  "episodes": ["https://short.icu/QPjOsHaCQ","https://short.icu/QZD2usv2u","https://short.icu/AUC-QHlzi","https://short.icu/NYv37dBXEV","https://short.icu/sSwU2sfk4"] 
+},
     "special-ops": { 
   "title": "Special Ops", 
   "img": "https://image.tmdb.org/t/p/w500/rTOGcNzVMYGezpx9AxX7ilzLNEp.jpg", 
@@ -339,6 +346,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
