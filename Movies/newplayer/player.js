@@ -23,6 +23,13 @@ const movieDatabase = {
   "isSeries": true, 
   "episodes": ["https://short.icu/e8a-E1--B","https://short.icu/H5epjTQ_4","https://short.icu/aV192cp_m","https://short.icu/-xiyaOk8x","https://short.icu/9iODPJ5pf"] 
 },
+    "making-true-detective": { 
+  "title": "Making True Detective", 
+  "img": "https://image.tmdb.org/t/p/w500/2DOB6Ta84XcOsZ7p2wQ42eZA6La.jpg", 
+  "tmdb": "1615709", 
+  "isSeries": true, 
+  "episodes": ["https://short.icu/UpxR2X4RG","https://short.icu/5bionCFxN","https://short.icu/1TB0Yv19p","https://short.icu/SggRrnc22","https://short.icu/tdxbbJTov","https://short.icu/MfDQW-3eT","https://short.icu/m91PJ77jX","https://short.icu/GDRivrunF"] 
+},
     "the-great-indian-kapil-show": { 
   "title": "The Great Indian Kapil Show (season 4)", 
   "img": "https://image.tmdb.org/t/p/w500/3KMCmGDlYLlJ8zGOhCs6f3FZcnj.jpg", 
@@ -350,6 +357,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
