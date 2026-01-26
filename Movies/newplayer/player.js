@@ -23,6 +23,13 @@ const movieDatabase = {
   "isSeries": true, 
   "episodes": ["https://short.icu/e8a-E1--B","https://short.icu/H5epjTQ_4","https://short.icu/aV192cp_m","https://short.icu/-xiyaOk8x","https://short.icu/9iODPJ5pf"] 
 },
+    "special-ops": { 
+  "title": "Special Ops 2", 
+  "img": "https://image.tmdb.org/t/p/w500/rTOGcNzVMYGezpx9AxX7ilzLNEp.jpg", 
+  "tmdb": "100612", 
+  "isSeries": true, 
+  "episodes": ["https://short.icu/y9uRorwCc","https://short.icu/qMK0HMlZ5","https://short.icu/eWyyF4n_e","https://short.icu/oTwsxPQ9s","https://short.icu/DNTsfroMqS","https://short.icu/OS-fMBklp","https://short.icu/TjOYm-0G0"] 
+},
     "squid-game": { 
   "title": "Squid Game", 
   "img": "https://image.tmdb.org/t/p/w500/1QdXdRYfktUSONkl1oD5gc6Be0s.jpg", 
@@ -364,6 +371,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
