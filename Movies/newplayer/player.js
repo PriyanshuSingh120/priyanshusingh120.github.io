@@ -23,6 +23,13 @@ const movieDatabase = {
   "isSeries": true, 
   "episodes": ["https://short.icu/e8a-E1--B","https://short.icu/H5epjTQ_4","https://short.icu/aV192cp_m","https://short.icu/-xiyaOk8x","https://short.icu/9iODPJ5pf"] 
 },
+    "squid-game": { 
+  "title": "Squid Game", 
+  "img": "https://image.tmdb.org/t/p/w500/1QdXdRYfktUSONkl1oD5gc6Be0s.jpg", 
+  "tmdb": "93405", 
+  "isSeries": true, 
+  "episodes": ["https://short.icu/axDNRsVVT","https://short.icu/3yBJP9S4n","https://short.icu/Ai-OVpCJ3","https://short.icu/670eHUmkX","https://short.icu/QR20MthY6","https://short.icu/jQIFGDJd1"] 
+},
     "making-true-detective": { 
   "title": "Making True Detective", 
   "img": "https://image.tmdb.org/t/p/w500/2DOB6Ta84XcOsZ7p2wQ42eZA6La.jpg", 
@@ -35,7 +42,7 @@ const movieDatabase = {
   "img": "https://image.tmdb.org/t/p/w500/3KMCmGDlYLlJ8zGOhCs6f3FZcnj.jpg", 
   "tmdb": "247769", 
   "isSeries": true, 
-  "episodes": ["https://short.icu/2yJowFkgD","https://short.icu/vC2yIcr2k","https://short.icu/paJyrkzNd","https://short.icu/mlVO9QwG-","https://short.icu/22RfZR3Gc"] 
+  "episodes": ["https://short.icu/2yJowFkgD","https://short.icu/vC2yIcr2k","https://short.icu/paJyrkzNd","https://short.icu/mlVO9QwG-","https://short.icu/22RfZR3Gc","https://short.icu/lArfC8XaZ"] 
 },
     "taskaree-the-smuggler-s-web": { 
   "title": "Taskaree: The Smuggler's Web", 
@@ -357,6 +364,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
