@@ -23,7 +23,7 @@ const movieDatabase = {
   "isSeries": true, 
   "episodes": ["https://short.icu/e8a-E1--B","https://short.icu/H5epjTQ_4","https://short.icu/aV192cp_m","https://short.icu/-xiyaOk8x","https://short.icu/9iODPJ5pf"] 
 },
-    "special-ops": { 
+    "special-ops2": { 
   "title": "Special Ops 2", 
   "img": "https://image.tmdb.org/t/p/w500/rTOGcNzVMYGezpx9AxX7ilzLNEp.jpg", 
   "tmdb": "100612", 
@@ -371,6 +371,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
