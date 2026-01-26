@@ -23,6 +23,13 @@ const movieDatabase = {
   "isSeries": true, 
   "episodes": ["https://short.icu/e8a-E1--B","https://short.icu/H5epjTQ_4","https://short.icu/aV192cp_m","https://short.icu/-xiyaOk8x","https://short.icu/9iODPJ5pf"] 
 },
+    "special-ops-1-5-the-himmat-story": { 
+  "title": "Special Ops 1.5 The Himmat Story", 
+  "img": "https://image.tmdb.org/t/p/w500/nH5LDmNofN4p5mldUxxhVzfn4sk.jpg", 
+  "tmdb": "138396", 
+  "isSeries": true, 
+  "episodes": ["https://short.icu/LmV_mN_cb","https://short.icu/UcVbbq_MD","https://short.icu/_iWWqQOVv","https://short.icu/oJHe9TNgr"] 
+},
     "special-ops2": { 
   "title": "Special Ops 2", 
   "img": "https://image.tmdb.org/t/p/w500/rTOGcNzVMYGezpx9AxX7ilzLNEp.jpg", 
@@ -371,6 +378,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
