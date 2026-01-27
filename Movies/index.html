@@ -40,7 +40,9 @@
 
         <section class="movie-section">
             <h2 class="section-title">✨ All Movies & Series</h2>
-            <div class="movie-grid">
+            
+            <!-- Added id="movieGrid" here so JS can find it -->
+            <div class="movie-grid" id="movieGrid">
 
                 <a href="newplayer/player.html?id=avatarfaa" class="movie-link">
                     <div class="movie-card"><div class="movie-poster-container"><img src="https://m.media-amazon.com/images/M/MV5BZDYxY2I1OGMtN2Y4MS00ZmU1LTgyNDAtODA0MzAyYjI0N2Y2XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" class="movie-poster"></div>
@@ -516,18 +518,18 @@
                 <a href="newplayer/player.html?id=zootopia2" class="movie-link"><div class="movie-card"><div class="movie-poster-container"><img src="https://images.justwatch.com/poster/336822920/s718/zootopia-2.jpg" class="movie-poster"></div><div class="movie-info"><h3>Zootopia 2</h3><p>Animated</p></div></div></a>
 
             </div>
+         <!-- Moved requestBox inside the section for better layout -->
+            <div id="requestBox" class="hidden" style="text-align: center; padding: 40px 20px; background: #1a1a1a; border-radius: 12px; margin-top: 20px; border: 1px dashed #444;">
+                <h3 style="color: #0088cc;">🎬 Movie Not Found</h3>
+                <p style="color: #888;">We don't have this one yet. Want us to upload it?</p>
+                <button onclick="sendRequest()" id="reqBtn" style="background: #0088cc; color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px;">
+                    🚀 Request this Movie
+                </button>
+            </div>
         </section>
     </main>
-    <div id="requestBox" class="hidden" style="text-align: center; padding: 40px 20px; background: #1a1a1a; border-radius: 12px; margin-top: 20px; border: 1px dashed #444;">
-    <h3 style="color: #0088cc;">🎬 Movie Not Found</h3>
-    <p style="color: #888;">We don't have this one yet. Want us to upload it?</p>
-    <button onclick="sendRequest()" id="reqBtn" style="background: #0088cc; color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px;">
-        🚀 Request this Movie
-    </button>
-    </div>
     
-        <footer>
-        
+    <footer>
         <a href="https://github.com/PriyanshuSingh120/priyanshusingh120.github.io" target="_blank"><img src="https://prigames.netlify.app/social/github.png" alt="github" ></a>
         <a href="https://www.instagram.com/prigames.official/?hl=en" target="_blank"><img src="https://prigames.netlify.app/social/instagram.png" alt="instagram"></a>
         <a href="https://t.me/prigames" target="_blank"><img src="https://prigames.netlify.app/social/telegram.png" alt="telegram"></a>
@@ -535,60 +537,4 @@
     
     <script src="app.js"></script>    
 </body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+</html> 
