@@ -20,13 +20,14 @@
         <nav class="nav-links">
             <a href="#">Home</a>
             <a href="#movieGrid">Library</a>
-            <a href="#myListSection" id="myListLink">My List <span id="watchlistCount"></span></a>
+            <!-- Added Watchlist Count link -->
+            <a href="#myListSection" id="myListLink">My List <span id="watchlistCount" style="color: #e50914; font-weight: bold;"></span></a>
         </nav>
         <button class="menu-toggle"><i class="fas fa-bars"></i></button>
     </header>
 
     <main>
-        <!-- Hero Slider -->
+        <!-- Hero Slider Section -->
         <section class="hero-slider-section">
             <div class="slider-content">
                 <div id="sliderBg" class="slider-bg-blur"></div>
@@ -40,7 +41,7 @@
             </div>
         </section>
 
-        <!-- Genre Filters -->
+        <!-- Genre Filters (Fixed Functionality) -->
         <div class="filter-bar">
             <button class="filter-chip active" data-filter="all" onclick="filterByCategory('all')">All</button>
             <button class="filter-chip" data-filter="movie" onclick="filterByCategory('movie')">Movies</button>
@@ -50,24 +51,28 @@
             <button class="filter-chip" data-filter="action" onclick="filterByCategory('action')">Action</button>
         </div>
 
-        <!-- Top 10 Section -->
+        <!-- Top 10 Section (Numbered List) -->
         <section class="top10-section">
             <h2 class="section-title">🏆 Top 10 in India Today</h2>
             <div class="top10-wrapper" id="top10Grid">
-                <!-- Numbers 1-10 will be generated here by JS -->
+                <!-- Numbers 1-10 will be generated here by app.js -->
             </div>
         </section>
 
-        <!-- My List Section (Hidden if empty) -->
+        <!-- My List Section (Watchlist) -->
         <section id="myListSection" class="movie-section hidden">
             <h2 class="section-title">💖 My Watchlist</h2>
-            <div class="movie-grid" id="myListGrid"></div>
+            <div class="movie-grid" id="myListGrid">
+                <!-- Hearted movies will appear here -->
+            </div>
         </section>
 
-        <!-- Main Grid -->
+        <!-- Main Library Grid -->
         <section class="movie-section">
             <h2 class="section-title">✨ Explore Library</h2>
+            <!-- IMPORTANT: id="movieGrid" added here -->
             <div class="movie-grid" id="movieGrid">
+
 
                 <a href="newplayer/player.html?id=avatarfaa" class="movie-link">
                     <div class="movie-card"><div class="movie-poster-container"><img src="https://m.media-amazon.com/images/M/MV5BZDYxY2I1OGMtN2Y4MS00ZmU1LTgyNDAtODA0MzAyYjI0N2Y2XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" class="movie-poster"></div>
@@ -563,5 +568,6 @@
     <script src="app.js"></script>    
 </body>
 </html> 
+
 
 
