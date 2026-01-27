@@ -13,18 +13,20 @@
         <div class="logo-group">
             <div class="logo">CineView</div>
             <div class="search-box header-search">
-                <input type="text" placeholder="Search 100+ movies..." class="search-input">
+                <input type="text" placeholder="Search movies..." class="search-input">
                 <button class="search-button"><i class="fas fa-search"></i></button>
             </div>
         </div>
         <nav class="nav-links">
-            <a href="https://prigames.netlify.app/">Home</a>
-            <a href="https://prigames.netlify.app/movies/">Movies</a>
+            <a href="#">Home</a>
+            <a href="#movieGrid">Library</a>
+            <a href="#myListSection" id="myListLink">My List <span id="watchlistCount"></span></a>
         </nav>
         <button class="menu-toggle"><i class="fas fa-bars"></i></button>
     </header>
 
     <main>
+        <!-- Hero Slider -->
         <section class="hero-slider-section">
             <div class="slider-content">
                 <div id="sliderBg" class="slider-bg-blur"></div>
@@ -38,18 +40,33 @@
             </div>
         </section>
 
-        <section class="movie-section">
-            <h2 class="section-title">✨ All Movies & Series</h2>
-            <div class="filter-bar">
-    <button class="filter-chip active" data-filter="all" onclick="filterByCategory('all')">All</button>
-    <button class="filter-chip" data-filter="movie" onclick="filterByCategory('movie')">Movies</button>
-    <button class="filter-chip" data-filter="series" onclick="filterByCategory('series')">Series</button>
-    <button class="filter-chip" data-filter="action" onclick="filterByCategory('action')">Action</button>
-    <button class="filter-chip" data-filter="animated" onclick="filterByCategory('animated')">Animated</button>
-    <button class="filter-chip" data-filter="horror" onclick="filterByCategory('horror')">Horror</button>
+        <!-- Genre Filters -->
+        <div class="filter-bar">
+            <button class="filter-chip active" data-filter="all" onclick="filterByCategory('all')">All</button>
+            <button class="filter-chip" data-filter="movie" onclick="filterByCategory('movie')">Movies</button>
+            <button class="filter-chip" data-filter="series" onclick="filterByCategory('series')">Series</button>
+            <button class="filter-chip" data-filter="2025" onclick="filterByCategory('2025')">2025 Hits</button>
+            <button class="filter-chip" data-filter="animated" onclick="filterByCategory('animated')">Animated</button>
+            <button class="filter-chip" data-filter="action" onclick="filterByCategory('action')">Action</button>
+        </div>
+
+        <!-- Top 10 Section -->
+        <section class="top10-section">
+            <h2 class="section-title">🏆 Top 10 in India Today</h2>
+            <div class="top10-wrapper" id="top10Grid">
+                <!-- Numbers 1-10 will be generated here by JS -->
             </div>
-            
-            <!-- Added id="movieGrid" here so JS can find it -->
+        </section>
+
+        <!-- My List Section (Hidden if empty) -->
+        <section id="myListSection" class="movie-section hidden">
+            <h2 class="section-title">💖 My Watchlist</h2>
+            <div class="movie-grid" id="myListGrid"></div>
+        </section>
+
+        <!-- Main Grid -->
+        <section class="movie-section">
+            <h2 class="section-title">✨ Explore Library</h2>
             <div class="movie-grid" id="movieGrid">
 
                 <a href="newplayer/player.html?id=avatarfaa" class="movie-link">
@@ -546,4 +563,5 @@
     <script src="app.js"></script>    
 </body>
 </html> 
+
 
