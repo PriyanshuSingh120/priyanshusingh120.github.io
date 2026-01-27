@@ -441,74 +441,34 @@ footer img:hover{
     border-color: #0088cc;
 }
 
-.top10-section {
-    padding: 20px 0;
-    overflow: hidden;
+.top10-wrapper { display: flex; gap: 40px; overflow-x: auto; padding: 20px 60px; scrollbar-width: none; }
+.top10-wrapper::-webkit-scrollbar { display: none; }
+.top10-card { position: relative; flex: 0 0 140px; height: 210px; }
+.rank-num { 
+    position: absolute; left: -45px; bottom: -15px; 
+    font-size: 110px; font-weight: 900; z-index: -1; 
+    font-family: 'Arial Black', sans-serif; color: #121212;
+    -webkit-text-stroke: 2px rgba(255, 255, 255, 0.6);
 }
 
-.top10-wrapper {
-    display: flex;
-    gap: 40px; /* Space between cards */
-    overflow-x: auto;
-    padding: 20px 20px 40px 60px; /* Left padding for first number */
-    scrollbar-width: none;
-    scroll-behavior: smooth;
+/* WATCHLIST BUTTON (HEARTS) */
+.movie-poster-container { position: relative; }
+.watchlist-btn {
+    position: absolute; top: 10px; right: 10px;
+    background: rgba(0,0,0,0.6); border: none; color: #e50914;
+    width: 35px; height: 35px; border-radius: 50%;
+    cursor: pointer; z-index: 10; transition: 0.3s;
 }
+.watchlist-btn:hover { background: #e50914; color: white; transform: scale(1.1); }
 
-.top10-wrapper::-webkit-scrollbar {
-    display: none;
+/* FILTER CHIPS */
+.filter-bar { display: flex; gap: 10px; overflow-x: auto; padding: 15px 5px; margin-bottom: 20px; }
+.filter-chip { 
+    white-space: nowrap; background: #222; color: #888; border: 1px solid #333;
+    padding: 8px 18px; border-radius: 20px; cursor: pointer; transition: 0.3s;
 }
+.filter-chip.active { background: #0088cc; color: white; border-color: #0088cc; }
 
-.top10-card {
-    position: relative;
-    flex: 0 0 140px; /* Fixed width to prevent size explosion */
-    height: 210px;   /* Fixed height */
-    text-decoration: none;
-}
+.hidden { display: none; }
 
-.top10-card .movie-card {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    transition: transform 0.3s ease;
-}
-
-.top10-card .movie-info {
-    display: none; /* Keep it clean like Netflix */
-}
-
-.top10-card:hover .movie-card {
-    transform: scale(1.05);
-    z-index: 20;
-}
-
-/* --- THE RANK NUMBERS --- */
-.rank-num {
-    position: absolute;
-    left: -45px;
-    bottom: -15px;
-    font-size: 110px;
-    font-weight: 900;
-    line-height: 1;
-    z-index: -1; /* Place behind poster */
-    font-family: 'Arial Black', sans-serif;
-    color: #121212; /* Match background */
-    -webkit-text-stroke: 2px rgba(255, 255, 255, 0.6); /* White outline */
-    pointer-events: none;
-}
-
-/* Ensure posters have high z-index to sit over numbers */
-.top10-card .movie-poster-container {
-    z-index: 5;
-    position: relative;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-}
-
-/* Fix main movie cards if they are too big */
-.movie-card {
-    border-radius: 8px;
-    overflow: hidden;
-}
 
