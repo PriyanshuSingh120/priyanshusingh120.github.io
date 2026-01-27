@@ -8,21 +8,19 @@
         body { font-family: 'Segoe UI', sans-serif; background: #121212; color: white; padding: 20px; }
         .container { max-width: 900px; margin: auto; display: flex; flex-direction: column; gap: 20px; }
         .admin-section { background: #1e1e1e; padding: 20px; border-radius: 12px; border: 1px solid #333; }
-        
         input, textarea, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 6px; border: 1px solid #444; background: #2a2a2a; color: white; box-sizing: border-box; }
         .flex-row { display: flex; gap: 15px; }
         .flex-item { flex: 1; }
-
         .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-top: 15px; }
         .tmdb-card { background: #262626; padding: 8px; cursor: pointer; text-align: center; border-radius: 8px; transition: 0.2s; border: 1px solid transparent; }
         .tmdb-card:hover { border-color: #0088cc; }
         .tmdb-card img { width: 100%; border-radius: 5px; height: 170px; object-fit: cover; }
         .tmdb-card p { font-size: 11px; margin: 5px 0; height: 30px; overflow: hidden; }
-
         .btn-send { background: #0088cc; color: white; border: none; padding: 15px; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
         label { font-weight: bold; font-size: 12px; color: #888; text-transform: uppercase; }
         .hidden { display: none; }
         h2 { color: #0088cc; margin-top: 0; }
+        #seasonSelectorWrapper { background: #0088cc22; padding: 15px; border-radius: 8px; margin-top: 10px; border: 1px dashed #0088cc; }
     </style>
 </head>
 <body>
@@ -44,6 +42,12 @@
                 <input type="text" id="apiSearch" oninput="searchTMDB()" placeholder="Search title or enter TMDB ID...">
             </div>
         </div>
+        
+        <div id="seasonSelectorWrapper" class="hidden">
+            <label id="seasonLabel" style="color: #fff;">Select Season:</label>
+            <select id="seasonPicker" onchange="applySeasonData(this.value)"></select>
+        </div>
+
         <div id="results" class="results-grid"></div>
     </div>
 
@@ -95,11 +99,13 @@ const TELEGRAM_TOKEN = '7287243554:AAHa43wD_V2roGLep1aQgKHn0vqXHYlFp-M';
 const TELEGRAM_CHAT_ID = '-1003605866054';
 
 let selectedMovieData = null;
+let currentSeasons = [];
 
 function toggleType() {
     const type = document.getElementById('contentType').value;
     document.getElementById('movieLinkBox').className = (type === 'movie') ? '' : 'hidden';
     document.getElementById('seriesLinkBox').className = (type === 'series') ? '' : 'hidden';
+    document.getElementById('seasonSelectorWrapper').className = 'hidden';
     updateOutputs();
 }
 
@@ -110,32 +116,22 @@ async function searchTMDB() {
     const resultsDiv = document.getElementById('results');
 
     if (query.length < 1) { resultsDiv.innerHTML = ''; return; }
+    
+    document.getElementById('seasonSelectorWrapper').className = 'hidden';
 
     let url;
-    
-    // 1. Check if it's an IMDb ID (starts with tt)
     if (query.startsWith('tt')) {
         url = `https://api.themoviedb.org/3/find/${query}?api_key=${API_KEY}&external_source=imdb_id`;
-    } 
-    // 2. Check if it's a TMDB ID (purely numeric)
-    else if (!isNaN(query)) {
+    } else if (!isNaN(query)) {
         url = `https://api.themoviedb.org/3/${tmdbType}/${query}?api_key=${API_KEY}`;
-    } 
-    // 3. Otherwise, search by Name
-    else {
+    } else {
         url = `https://api.themoviedb.org/3/search/${tmdbType}?api_key=${API_KEY}&query=${encodeURIComponent(query)}`;
     }
 
     try {
         const res = await fetch(url);
         const data = await res.json();
-        
-        // Handle the different ways TMDB returns data based on the URL used
-        let results = [];
-        if (data.movie_results) results = data.movie_results; // From IMDb "find"
-        else if (data.tv_results) results = data.tv_results;   // From IMDb "find"
-        else if (data.results) results = data.results;         // From Search
-        else if (data.id) results = [data];                    // From ID lookup
+        let results = data.movie_results || data.tv_results || data.results || (data.id ? [data] : []);
 
         resultsDiv.innerHTML = '';
         results.slice(0, 8).forEach(item => {
@@ -151,14 +147,48 @@ async function searchTMDB() {
         });
     } catch (e) { console.error("Search failed", e); }
 }
-function selectMovie(item, poster, year) {
+
+async function selectMovie(item, poster, year) {
     selectedMovieData = item;
+    const type = document.getElementById('contentType').value;
     const title = item.title || item.name;
+    
     document.getElementById('mName').value = title;
     document.getElementById('mTmdb').value = item.id;
     document.getElementById('mImg').value = poster;
     document.getElementById('mYear').value = year;
     document.getElementById('mId').value = title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+
+    if (type === 'series') {
+        const res = await fetch(`https://api.themoviedb.org/3/tv/${item.id}?api_key=${API_KEY}`);
+        const details = await res.json();
+        if (details.seasons) {
+            currentSeasons = details.seasons;
+            const picker = document.getElementById('seasonPicker');
+            picker.innerHTML = '<option value="">-- Select Season --</option>';
+            currentSeasons.forEach(s => {
+                if(s.season_number === 0) return; 
+                const opt = document.createElement('option');
+                opt.value = s.season_number;
+                opt.innerText = `${s.name} (${s.episode_count} Episodes)`;
+                picker.appendChild(opt);
+            });
+            document.getElementById('seasonSelectorWrapper').className = '';
+        }
+    }
+    updateOutputs();
+}
+
+function applySeasonData(seasonNum) {
+    if(!seasonNum) return;
+    const season = currentSeasons.find(s => s.season_number == seasonNum);
+    const baseName = selectedMovieData.name;
+    const baseId = baseName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+
+    document.getElementById('mName').value = `${baseName} (Season ${seasonNum})`;
+    document.getElementById('mId').value = `${baseId}-s${seasonNum}`;
+    if (season.poster_path) document.getElementById('mImg').value = IMG_PATH + season.poster_path;
+    
     updateOutputs();
 }
 
@@ -173,52 +203,38 @@ function updateOutputs() {
     let jsCode = "";
     if (type === 'series') {
         const episodesRaw = document.getElementById('mEpisodes').value.split('\n').filter(l => l.trim() !== "");
-        const episodesJSON = JSON.stringify(episodesRaw);
-        jsCode = `"${id}": { \n  "title": "${name}", \n  "img": "${img}", \n  "tmdb": "${tmdb}", \n  "isSeries": true, \n  "episodes": ${episodesJSON} \n},`;
+        jsCode = `"${id}": { \n  "title": "${name}", \n  "img": "${img}", \n  "tmdb": "${tmdb}", \n  "isSeries": true, \n  "episodes": ${JSON.stringify(episodesRaw, null, 2)} \n},`;
     } else {
         const src = document.getElementById('mSrc').value || 'LINK_HERE';
         jsCode = `"${id}": { "title": "${name}", "src": "${src}", "year": "${year}", "img": "${img}" },`;
     }
-
     document.getElementById('outJS').value = jsCode;
-    document.getElementById('outHTML').value = `<a href="newplayer/player?id=${id}&tmdb=${tmdb}" class="movie-link" data-id="${tmdb}">
-    <div class="movie-card">
-        <div class="movie-poster-container"><img src="${img}" class="movie-poster"></div>
-        <div class="movie-info"><h3>${name}</h3><p>${year} | ${type === 'series' ? 'Series' : 'Movie'}</p></div>
-    </div>
-</a>`;
+    document.getElementById('outHTML').value = `<a href="newplayer/player?id=${id}&tmdb=${tmdb}" class="movie-link" data-id="${tmdb}">\n    <div class="movie-card">\n        <div class="movie-poster-container"><img src="${img}" class="movie-poster"></div>\n        <div class="movie-info"><h3>${name}</h3><p>${year} | ${type === 'series' ? 'Series' : 'Movie'}</p></div>\n    </div>\n</a>`;
 }
 
 async function triggerTelegram() {
     if (!selectedMovieData) return alert("Select content first!");
     const btn = document.querySelector('.btn-send');
     btn.innerText = "Processing...";
-    
     const name = document.getElementById('mName').value;
     const poster = document.getElementById('mImg').value;
     const id = document.getElementById('mId').value;
     const type = document.getElementById('contentType').value;
     
-    const message = `🎬 *New Upload on CineView!* \n\n` +
-                    `🍿 *Title:* ${name}\n` +
-                    `🏷️ *Type:* ${type === 'series' ? 'Web Series' : 'Movie'}\n` +
-                    `📝 *Story:* ${selectedMovieData.overview ? selectedMovieData.overview.substring(0, 120) : "Watch now on CineView!"}...\n\n` +
-                    `🔗 [Click Here To watch The Movie](https://prigames.netlify.app/movies/newplayer/player?id=${id})\n\n` +
-                    `#CineView #Update`;
+    const message = `🎬 *New Upload on CineView!* \n\n🍿 *Title:* ${name}\n🏷️ *Type:* ${type === 'series' ? 'Web Series' : 'Movie'}\n📝 *Story:* ${selectedMovieData.overview ? selectedMovieData.overview.substring(0, 120) : "Watch now on CineView!"}...\n\n🔗 [Click Here To watch](https://prigames.netlify.app/movies/newplayer/player?id=${id})\n\n#CineView #Update`;
 
     try {
-        await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendPhoto`, {
+        const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendPhoto`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, photo: poster, caption: message, parse_mode: 'Markdown' })
         });
-        alert("Sent to Telegram!");
+        const result = await res.json();
+        if(result.ok) alert("Sent to Telegram!");
+        else alert("Telegram Error: " + result.description);
     } catch (e) { alert("Error sending!"); }
     btn.innerText = "🚀 Post to Telegram";
 }
 </script>
-
 </body>
 </html>
-
-
