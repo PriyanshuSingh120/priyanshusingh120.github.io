@@ -38,36 +38,60 @@ function getPrioritizedMovie() {
 }
 
 async function sendRequest() {
-    const movieName = document.querySelector('.search-input').value;
+    // 1. Better selector: find the visible search input value
+    const searchInputs = document.querySelectorAll('.search-input');
+    let movieName = "";
+    searchInputs.forEach(input => {
+        if(input.value.trim() !== "") movieName = input.value.trim();
+    });
+
+    if (!movieName) {
+        alert("Please enter a movie name first!");
+        return;
+    }
+
     const btn = document.getElementById('reqBtn');
+    const requestBox = document.getElementById('requestBox');
     
     btn.innerText = "Sending Request...";
     btn.disabled = true;
 
-    const message = `📥 *NEW MOVIE REQUEST*\n\n👤 A user is searching for:\n🎬 *${movieName}*\n\nHey @priyanshuzx_07, a new request just came in from the website!`;
+    // Telegram Details
+    const token = '7287243554:AAHa43wD_V2roGLep1aQgKHn0vqXHYlFp-M';
+    const chatId = '-1003555701279'; 
+    const message = `📥 *NEW MOVIE REQUEST*\n\n🎬 *Movie:* ${movieName}\n👤 *Status:* Requested via Website\n\nHey @priyanshuzx_07, someone is looking for this!`;
 
     try {
-        await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+        const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                chat_id: DISCUSSION_GROUP_ID,
+                chat_id: chatId,
                 text: message,
                 parse_mode: 'Markdown'
             })
         });
-        
-        document.getElementById('requestBox').innerHTML = `
-            <h3 style="color: #00ff00;">✅ Request Sent!</h3>
-            <p>Your request for <b>${movieName}</b> is now in our queue.</p>
-            <p><a href="https://t.me/prigames_chat" target="_blank" style="color: #0088cc; text-decoration: none; font-weight: bold;">Join Discussion Group to track updates →</a></p>
-        `;
+
+        const data = await response.json();
+
+        if (data.ok) {
+            requestBox.innerHTML = `
+                <h3 style="color: #00ff00;">✅ Request Sent!</h3>
+                <p>We've sent your request for <b>${movieName}</b> to our team.</p>
+                <p><a href="https://t.me/prigames_chat" target="_blank" style="color: #0088cc; text-decoration: none; font-weight: bold;">Join Discussion Group to track updates →</a></p>
+            `;
+        } else {
+            // This will tell us EXACTLY why Telegram rejected it
+            console.error("Telegram API Error:", data.description);
+            throw new Error(data.description);
+        }
     } catch (e) {
+        console.error("Request failed:", e);
+        alert("Bot error: " + e.message + "\nMake sure the bot is an Admin in the chat group.");
         btn.innerText = "🚀 Request this Movie";
         btn.disabled = false;
     }
 }
-
 function handleSearch() {
     const searchInput = document.querySelector('.search-input');
     const requestBox = document.getElementById('requestBox');
@@ -175,3 +199,4 @@ document.addEventListener('DOMContentLoaded', () => {
         searchInput.addEventListener('input', handleSearch);
     }
 });
+
