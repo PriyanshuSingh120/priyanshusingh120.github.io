@@ -38,62 +38,64 @@ function getPrioritizedMovie() {
 }
 
 async function sendRequest() {
-    // 1. Better selector: find the visible search input value
+    // Finds the search input that actually has text
     const searchInputs = document.querySelectorAll('.search-input');
     let movieName = "";
     searchInputs.forEach(input => {
         if(input.value.trim() !== "") movieName = input.value.trim();
     });
 
-    if (!movieName) {
-        alert("Please enter a movie name first!");
-        return;
-    }
+    if (!movieName) return;
 
     const btn = document.getElementById('reqBtn');
     const requestBox = document.getElementById('requestBox');
     
-    btn.innerText = "Sending Request...";
+    btn.innerText = "Sending...";
     btn.disabled = true;
 
-    // Telegram Details
-    const token = '7287243554:AAHa43wD_V2roGLep1aQgKHn0vqXHYlFp-M';
-    const chatId = '-1003555701279'; 
-    const message = `📥 *NEW MOVIE REQUEST*\n\n🎬 *Movie:* ${movieName}\n👤 *Status:* Requested via Website\n\nHey @priyanshuzx_07, someone is looking for this!`;
+    // We use HTML parse_mode instead of Markdown to avoid character errors with "_"
+    const message = `<b>📥 NEW MOVIE REQUEST</b>\n\n` +
+                    `<b>🎬 Movie:</b> ${movieName}\n` +
+                    `<b>👤 Status:</b> User Requested\n\n` +
+                    `Hey admin, someone is looking for this on CineView!`;
 
     try {
-        const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                chat_id: chatId,
+                chat_id: DISCUSSION_GROUP_ID,
                 text: message,
-                parse_mode: 'Markdown'
+                parse_mode: 'HTML' // Changed from Markdown to HTML for stability
             })
         });
 
         const data = await response.json();
 
         if (data.ok) {
+            // Play a success sound (optional - using a built-in browser beep if you want)
             requestBox.innerHTML = `
                 <h3 style="color: #00ff00;">✅ Request Sent!</h3>
                 <p>We've sent your request for <b>${movieName}</b> to our team.</p>
                 <p><a href="https://t.me/prigames_chat" target="_blank" style="color: #0088cc; text-decoration: none; font-weight: bold;">Join Discussion Group to track updates →</a></p>
             `;
         } else {
-            // This will tell us EXACTLY why Telegram rejected it
-            console.error("Telegram API Error:", data.description);
             throw new Error(data.description);
         }
     } catch (e) {
         console.error("Request failed:", e);
-        alert("Bot error: " + e.message + "\nMake sure the bot is an Admin in the chat group.");
-        btn.innerText = "🚀 Request this Movie";
+        btn.innerText = "Retry Request";
         btn.disabled = false;
+        // Use a simple message box instead of alert
+        const errorMsg = document.createElement('p');
+        errorMsg.style.color = "red";
+        errorMsg.innerText = "Failed to send. Please try again.";
+        requestBox.appendChild(errorMsg);
     }
 }
+
 function handleSearch() {
-    const searchInput = document.querySelector('.search-input');
+    const searchInput = event.target;
     const requestBox = document.getElementById('requestBox');
     const term = searchInput.value.toLowerCase();
     let foundCount = 0;
@@ -105,9 +107,9 @@ function handleSearch() {
     });
 
     if (foundCount === 0 && term.length > 0) {
-        if (requestBox) requestBox.classList.remove('hidden');
+        requestBox.classList.remove('hidden');
     } else {
-        if (requestBox) requestBox.classList.add('hidden');
+        requestBox.classList.add('hidden');
     }
 }
 
@@ -131,10 +133,7 @@ async function updateSlider() {
     try {
         const response = await fetch(url);
         const data = await response.json();
-        
-        let result = movie.imdbId 
-            ? (data.movie_results?.[0] || data.tv_results?.[0] || data.person_results?.[0]) 
-            : data.results?.[0];
+        let result = movie.imdbId ? (data.movie_results?.[0] || data.tv_results?.[0]) : data.results?.[0];
 
         if (result) {
             const backdropLink = result.backdrop_path ? BACKDROP_BASE + result.backdrop_path : "";
@@ -194,9 +193,8 @@ document.addEventListener('DOMContentLoaded', () => {
         setInterval(updateSlider, 6000);
     }
 
-    const searchInput = document.querySelector('.search-input');
-    if (searchInput) {
-        searchInput.addEventListener('input', handleSearch);
-    }
+    const searchInputs = document.querySelectorAll('.search-input');
+    searchInputs.forEach(input => {
+        input.addEventListener('input', handleSearch);
+    });
 });
-
