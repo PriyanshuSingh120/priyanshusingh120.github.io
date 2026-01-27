@@ -40,6 +40,14 @@
 
         <section class="movie-section">
             <h2 class="section-title">✨ All Movies & Series</h2>
+            <div class="filter-bar">
+    <button class="filter-chip active" data-filter="all" onclick="filterByCategory('all')">All</button>
+    <button class="filter-chip" data-filter="movie" onclick="filterByCategory('movie')">Movies</button>
+    <button class="filter-chip" data-filter="series" onclick="filterByCategory('series')">Series</button>
+    <button class="filter-chip" data-filter="action" onclick="filterByCategory('action')">Action</button>
+    <button class="filter-chip" data-filter="animated" onclick="filterByCategory('animated')">Animated</button>
+    <button class="filter-chip" data-filter="horror" onclick="filterByCategory('horror')">Horror</button>
+            </div>
             
             <!-- Added id="movieGrid" here so JS can find it -->
             <div class="movie-grid" id="movieGrid">
@@ -538,3 +546,4 @@
     <script src="app.js"></script>    
 </body>
 </html> 
+
