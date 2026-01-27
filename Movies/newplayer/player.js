@@ -173,6 +173,8 @@ const movieDatabase = {
         "tmdb": "66732",
         "episodes": ["https://short.icu/RrBB6-79l","https://short.icu/YcwrZOAyz","https://short.icu/U8oxvfuW2","https://short.icu/pBvuStnhl"]
     },
+    "amaran": { "title": "Amaran", "src": "https://short.icu/TDsIjVYSj", "year": "2024", "img": "https://image.tmdb.org/t/p/w500/yj9DbvPWjytH2EvDpGuJwos69rn.jpg" },
+    "ghost-rider-spirit-of-vengeance": { "title": "Ghost Rider: Spirit of Vengeance", "src": "https://short.icu/1A8YHwZza", "year": "2011", "img": "https://image.tmdb.org/t/p/w500/fUJOWsjjE8u1r4YOLYe1RLYy7bm.jpg" },
     "batti-gul-meter-chalu": { "title": "Batti Gul Meter Chalu", "src": "https://short.icu/L_RcePy5DI", "year": "2018", "img": "https://image.tmdb.org/t/p/w500/1vu8ytRpXHYjmVQ2g7Ro5j5k61F.jpg" },
     "12th-fail": { "title": "12th Fail", "src": "https://short.icu/-tGxzoOLL", "year": "2023", "img": "https://image.tmdb.org/t/p/w500/eebUPRI4Z5e1Z7Hev4JZAwMIFkX.jpg" },
     "welcome-back": { "title": "Welcome Back", "src": "https://short.icu/72MTfaND8", "year": "2015", "img": "https://image.tmdb.org/t/p/w500/xnRIT3ggVcJxGWylKw85n6pteLp.jpg" },
@@ -378,6 +380,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
