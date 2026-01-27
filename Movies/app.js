@@ -102,12 +102,15 @@ async function updateSlider() {
 
     let url = movie.imdbId 
         ? `https://api.themoviedb.org/3/find/${movie.imdbId}?api_key=${TMDB_API_KEY}&external_source=imdb_id`
-        : `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(movie.searchTitle)}`;
+        : `https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(movie.searchTitle)}`;
 
     try {
         const response = await fetch(url);
         const data = await response.json();
-        let result = movie.imdbId ? (data.movie_results[0] || data.tv_results[0]) : data.results[0];
+        
+        let result = movie.imdbId 
+            ? (data.movie_results?.[0] || data.tv_results?.[0] || data.person_results?.[0]) 
+            : data.results?.[0];
 
         if (result) {
             const backdropLink = result.backdrop_path ? BACKDROP_BASE + result.backdrop_path : "";
