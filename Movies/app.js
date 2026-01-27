@@ -1,21 +1,17 @@
-// 1. Global Scope Variables
 const TMDB_API_KEY = 'dc691868b09daaabe9acc238ed898cf7'; 
 const BACKDROP_BASE = "https://image.tmdb.org/t/p/w1280"; 
 const POSTER_BASE = "https://image.tmdb.org/t/p/w500"; 
+const DISCUSSION_GROUP_ID = '-1003555701279';
+const TELEGRAM_TOKEN = '7287243554:AAHa43wD_V2roGLep1aQgKHn0vqXHYlFp-M';
+
 let movieData = []; 
 
-/**
- * FUNCTION: refreshMovieData
- * Scans the DOM for all current movie cards and updates the movieData array.
- * This ensures new movies added via "Load More" or dynamic scripts are included.
- */
 function refreshMovieData() {
     const movieCards = document.querySelectorAll('.movie-link');
     movieData = Array.from(movieCards).map(card => {
         const tmdbId = card.getAttribute('data-id');
         const currentHref = card.getAttribute('href');
         
-        // Ensure TMDB ID is appended to links if missing for tracking
         if (tmdbId && currentHref && !currentHref.includes('&tmdb=')) {
             card.setAttribute('href', `${currentHref}&tmdb=${tmdbId}`);
         }
@@ -29,68 +25,70 @@ function refreshMovieData() {
     });
 }
 
-/**
- * FUNCTION: getPrioritizedMovie
- * Selects a movie from the list, favoring the first ones (trending/latest) 
- * while still allowing older movies to appear occasionally.
- */
 function getPrioritizedMovie() {
     if (movieData.length === 0) return null;
-
-    // Define "Trending/Latest" as the first 20 movies on the page
     const topLimit = Math.min(movieData.length, 20);
     const trendingMovies = movieData.slice(0, topLimit);
     const olderMovies = movieData.slice(topLimit);
-
-    // 70% chance to pick from Trending/Latest
-    // 30% chance to pick from the rest (or if there are no older movies)
     const pickFromTrending = Math.random() < 0.7 || olderMovies.length === 0;
 
-    if (pickFromTrending) {
-        return trendingMovies[Math.floor(Math.random() * trendingMovies.length)];
-    } else {
-        return olderMovies[Math.floor(Math.random() * olderMovies.length)];
+    return pickFromTrending 
+        ? trendingMovies[Math.floor(Math.random() * trendingMovies.length)]
+        : olderMovies[Math.floor(Math.random() * olderMovies.length)];
+}
+
+async function sendRequest() {
+    const movieName = document.querySelector('.search-input').value;
+    const btn = document.getElementById('reqBtn');
+    
+    btn.innerText = "Sending Request...";
+    btn.disabled = true;
+
+    const message = `📥 *NEW MOVIE REQUEST*\n\n👤 A user is searching for:\n🎬 *${movieName}*\n\nHey @priyanshuzx_07, a new request just came in from the website!`;
+
+    try {
+        await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: DISCUSSION_GROUP_ID,
+                text: message,
+                parse_mode: 'Markdown'
+            })
+        });
+        
+        document.getElementById('requestBox').innerHTML = `
+            <h3 style="color: #00ff00;">✅ Request Sent!</h3>
+            <p>Your request for <b>${movieName}</b> is now in our queue.</p>
+            <p><a href="https://t.me/prigames_chat" target="_blank" style="color: #0088cc; text-decoration: none; font-weight: bold;">Join Discussion Group to track updates →</a></p>
+        `;
+    } catch (e) {
+        btn.innerText = "🚀 Request this Movie";
+        btn.disabled = false;
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    // --- Initial setup ---
-    refreshMovieData();
-
-    // --- Mobile Menu Toggle ---
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navLinks = document.querySelector('.nav-links');
-    if (menuToggle && navLinks) {
-        menuToggle.addEventListener('click', () => navLinks.classList.toggle('active'));
-    }
-
-    // --- START THE SLIDER ---
-    if (movieData.length > 0) {
-        updateSlider(); // Initial run
-        setInterval(updateSlider, 6000); // Cycle every 6 seconds
-    }
-
-    // --- Search Logic ---
+function handleSearch() {
     const searchInput = document.querySelector('.search-input');
-    if (searchInput) {
-        searchInput.addEventListener('input', () => {
-            const term = searchInput.value.toLowerCase();
-            document.querySelectorAll('.movie-link').forEach(link => {
-                const isMatch = link.textContent.toLowerCase().includes(term);
-                link.style.display = isMatch ? '' : 'none';
-            });
-        });
+    const requestBox = document.getElementById('requestBox');
+    const term = searchInput.value.toLowerCase();
+    let foundCount = 0;
+
+    document.querySelectorAll('.movie-link').forEach(link => {
+        const isMatch = link.textContent.toLowerCase().includes(term);
+        link.style.display = isMatch ? '' : 'none';
+        if (isMatch) foundCount++;
+    });
+
+    if (foundCount === 0 && term.length > 0) {
+        if (requestBox) requestBox.classList.remove('hidden');
+    } else {
+        if (requestBox) requestBox.classList.add('hidden');
     }
-});
+}
 
-/**
- * FUNCTION: updateSlider
- * Fetches data from TMDB and updates the UI with a prioritized random movie.
- */
 async function updateSlider() {
-    // Refresh the list to pick up new movies
     refreshMovieData();
-
     const movie = getPrioritizedMovie();
     if (!movie) return;
 
@@ -100,7 +98,6 @@ async function updateSlider() {
     const movieRating = document.getElementById('movieRating');
     const playBtn = document.getElementById('playBtn');
 
-    // Start Fade Out
     if (sliderImg) sliderImg.style.opacity = "0";
 
     let url = movie.imdbId 
@@ -110,18 +107,14 @@ async function updateSlider() {
     try {
         const response = await fetch(url);
         const data = await response.json();
-        let result = movie.imdbId ? data.movie_results[0] : data.results[0];
+        let result = movie.imdbId ? (data.movie_results[0] || data.tv_results[0]) : data.results[0];
 
         if (result) {
             const backdropLink = result.backdrop_path ? BACKDROP_BASE + result.backdrop_path : "";
             const posterLink = result.poster_path ? POSTER_BASE + result.poster_path : "";
 
-            // Wait for fade out to complete (0.4s)
             setTimeout(() => {
-                if (backdropLink && sliderBg) {
-                    sliderBg.style.backgroundImage = `url('${backdropLink}')`;
-                }
-                
+                if (backdropLink && sliderBg) sliderBg.style.backgroundImage = `url('${backdropLink}')`;
                 if (sliderTitle) sliderTitle.innerText = movie.title;
                 if (movieRating) {
                     const rating = result.vote_average ? result.vote_average.toFixed(1) : "N/A";
@@ -129,7 +122,6 @@ async function updateSlider() {
                 }
                 if (playBtn) playBtn.href = movie.link;
 
-                // Preload image before fading in
                 if (posterLink && sliderImg) {
                     const imgPreloader = new Image();
                     imgPreloader.src = posterLink;
@@ -138,13 +130,45 @@ async function updateSlider() {
                         sliderImg.style.opacity = "1";
                     };
                 } else if (sliderImg) {
-                    // Fallback if no poster found
                     sliderImg.style.opacity = "1";
                 }
             }, 400); 
         }
     } catch (err) {
-        console.error("Slider Update Error:", err);
         if (sliderImg) sliderImg.style.opacity = "1"; 
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    refreshMovieData();
+
+    const movieGrid = document.getElementById('movieGrid');
+    if (movieGrid) {
+        const movieElements = Array.from(movieGrid.getElementsByClassName('movie-link'));
+        movieElements.sort((a, b) => {
+            const isNewA = /2025|2026|New/i.test(a.innerText);
+            const isNewB = /2025|2026|New/i.test(b.innerText);
+            if (isNewB && !isNewA) return 1;
+            if (isNewA && !isNewB) return -1;
+            return 0.5 - Math.random();
+        });
+        movieGrid.innerHTML = "";
+        movieElements.forEach(el => movieGrid.appendChild(el));
+    }
+
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    if (menuToggle && navLinks) {
+        menuToggle.addEventListener('click', () => navLinks.classList.toggle('active'));
+    }
+
+    if (movieData.length > 0) {
+        updateSlider();
+        setInterval(updateSlider, 6000);
+    }
+
+    const searchInput = document.querySelector('.search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', handleSearch);
+    }
+});
