@@ -179,19 +179,39 @@ async function selectMovie(item, poster, year) {
     updateOutputs();
 }
 
-function applySeasonData(seasonNum) {
+async function applySeasonData(seasonNum) {
     if(!seasonNum) return;
+
+    // 1. Find the selected season from our stored list
     const season = currentSeasons.find(s => s.season_number == seasonNum);
     const baseName = selectedMovieData.name;
     const baseId = baseName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
 
+    // 2. Update Basic Fields
     document.getElementById('mName').value = `${baseName} (Season ${seasonNum})`;
     document.getElementById('mId').value = `${baseId}-s${seasonNum}`;
-    if (season.poster_path) document.getElementById('mImg').value = IMG_PATH + season.poster_path;
+
+    // 3. Update Image (Season-specific poster)
+    if (season.poster_path) {
+        document.getElementById('mImg').value = IMG_PATH + season.poster_path;
+    } else {
+        // Fallback to main show poster if season poster is missing
+        document.getElementById('mImg').value = IMG_PATH + selectedMovieData.poster_path;
+    }
+
+    // 4. Update Year (Season-specific release year)
+    if (season.air_date) {
+        const seasonYear = season.air_date.split('-')[0];
+        document.getElementById('mYear').value = seasonYear;
+    } else {
+        // Fallback to main show year
+        const showYear = (selectedMovieData.first_air_date || 'N/A').split('-')[0];
+        document.getElementById('mYear').value = showYear;
+    }
     
     updateOutputs();
 }
-
+    
 function updateOutputs() {
     const type = document.getElementById('contentType').value;
     const name = document.getElementById('mName').value;
@@ -238,3 +258,4 @@ async function triggerTelegram() {
 </script>
 </body>
 </html>
+
