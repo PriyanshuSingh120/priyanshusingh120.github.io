@@ -173,6 +173,8 @@ const movieDatabase = {
         "tmdb": "66732",
         "episodes": ["https://short.icu/RrBB6-79l","https://short.icu/YcwrZOAyz","https://short.icu/U8oxvfuW2","https://short.icu/pBvuStnhl"]
     },
+    "kedarnath": { "title": "Kedarnath", "src": "https://short.icu/viIfjVThz", "year": "2018", "img": "https://image.tmdb.org/t/p/w500/viq6ltqew6ZU6dur1FUVKpf9tiZ.jpg" },
+    "ted": { "title": "Ted", "src": "https://short.icu/CaS-mz9wA", "year": "2012", "img": "https://image.tmdb.org/t/p/w500/tZPTcdGTpxq4yJx1YxqBl0gthNz.jpg" },
     "amaran": { "title": "Amaran", "src": "https://short.icu/TDsIjVYSj", "year": "2024", "img": "https://image.tmdb.org/t/p/w500/yj9DbvPWjytH2EvDpGuJwos69rn.jpg" },
     "ghost-rider-spirit-of-vengeance": { "title": "Ghost Rider: Spirit of Vengeance", "src": "https://short.icu/1A8YHwZza", "year": "2011", "img": "https://image.tmdb.org/t/p/w500/fUJOWsjjE8u1r4YOLYe1RLYy7bm.jpg" },
     "batti-gul-meter-chalu": { "title": "Batti Gul Meter Chalu", "src": "https://short.icu/L_RcePy5DI", "year": "2018", "img": "https://image.tmdb.org/t/p/w500/1vu8ytRpXHYjmVQ2g7Ro5j5k61F.jpg" },
@@ -380,6 +382,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
