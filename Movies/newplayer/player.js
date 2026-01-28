@@ -173,6 +173,7 @@ const movieDatabase = {
         "tmdb": "66732",
         "episodes": ["https://short.icu/RrBB6-79l","https://short.icu/YcwrZOAyz","https://short.icu/U8oxvfuW2","https://short.icu/pBvuStnhl"]
     },
+    "sultan": { "title": "Sultan", "src": "https://short.icu/t-H9cuHzO", "year": "2016", "img": "https://image.tmdb.org/t/p/w500/vPTYtKuV8X5uUd3SqnzO14W6Dti.jpg" },
     "lubber-pandhu": { "title": "Lubber Pandhu", "src": "https://short.icu/zX7mBJdLR", "year": "2024", "img": "https://image.tmdb.org/t/p/w500/jNyLZjIgaYVkBli2JihHwABlAPY.jpg" },
     "ujda-chaman": { "title": "Ujda Chaman", "src": "https://short.icu/sl5Rizeo4", "year": "2019", "img": "https://image.tmdb.org/t/p/w500/hybSFEHZcehPN8oRdb5YjaxRk2u.jpg" },
     "kedarnath": { "title": "Kedarnath", "src": "https://short.icu/viIfjVThz", "year": "2018", "img": "https://image.tmdb.org/t/p/w500/viq6ltqew6ZU6dur1FUVKpf9tiZ.jpg" },
@@ -384,6 +385,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
