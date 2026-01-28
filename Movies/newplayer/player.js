@@ -173,6 +173,7 @@ const movieDatabase = {
         "tmdb": "66732",
         "episodes": ["https://short.icu/RrBB6-79l","https://short.icu/YcwrZOAyz","https://short.icu/U8oxvfuW2","https://short.icu/pBvuStnhl"]
     },
+    "ujda-chaman": { "title": "Ujda Chaman", "src": "https://short.icu/sl5Rizeo4", "year": "2019", "img": "https://image.tmdb.org/t/p/w500/hybSFEHZcehPN8oRdb5YjaxRk2u.jpg" },
     "kedarnath": { "title": "Kedarnath", "src": "https://short.icu/viIfjVThz", "year": "2018", "img": "https://image.tmdb.org/t/p/w500/viq6ltqew6ZU6dur1FUVKpf9tiZ.jpg" },
     "ted": { "title": "Ted", "src": "https://short.icu/CaS-mz9wA", "year": "2012", "img": "https://image.tmdb.org/t/p/w500/tZPTcdGTpxq4yJx1YxqBl0gthNz.jpg" },
     "amaran": { "title": "Amaran", "src": "https://short.icu/TDsIjVYSj", "year": "2024", "img": "https://image.tmdb.org/t/p/w500/yj9DbvPWjytH2EvDpGuJwos69rn.jpg" },
@@ -382,6 +383,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
