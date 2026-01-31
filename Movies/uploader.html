@@ -32,81 +32,59 @@
     </div>
 
     <script>
-        // Your Hardcoded API Key from your screenshot
         const MY_API_KEY = "391ea7f7e967589e017d3b3924b1c33f";
 
         async function startDirectUpload() {
-    const links = document.getElementById('linksInput').value.trim().split('\n');
-    const log = document.getElementById('statusLog');
-    const btn = document.getElementById('mainBtn');
+            const links = document.getElementById('linksInput').value.trim().split('\n');
+            const log = document.getElementById('statusLog');
+            const btn = document.getElementById('mainBtn');
 
-    log.innerHTML = "";
-    btn.disabled = true;
+            log.innerHTML = "";
+            btn.disabled = true;
+            btn.innerText = "UPLOADING...";
 
-    for (let link of links) {
-        let url = link.trim();
-        if (!url) continue;
+            for (let link of links) {
+                let url = link.trim();
+                if (!url) continue;
 
-        const driveMatch = url.match(/\/d\/(.+?)\//) || url.match(/id=(.+?)(&|$)/);
-        const fileId = driveMatch ? driveMatch[1] : null;
+                // Regex to get File ID
+                const driveMatch = url.match(/\/d\/(.+?)\//) || url.match(/id=(.+?)(&|$)/);
+                const fileId = driveMatch ? driveMatch[1] : null;
 
-        if (!fileId) {
-            appendLog("Invalid Link", "red");
-            continue;
-        }
-
-        try {
-            // We put the key in the URL AND the Header for maximum compatibility
-            const apiUrl = `https://api.abyss.to/v1/remote/${fileId}?key=${MY_API_KEY}`;
-
-            const response = await puter.net.fetch(apiUrl, {
-                method: 'POST',
-                headers: { 
-                    'x-api-key': MY_API_KEY, // Extra security header
-                    'Accept': 'application/json'
+                if (!fileId) {
+                    appendLog(`Invalid Link: ${url.substring(0, 30)}...`, "red");
+                    continue;
                 }
-            });
 
-            const text = await response.text();
-            
-            // If the server sends back a blank screen or HTML, this will tell us
-            if (!text || text.startsWith("<!DOCTYPE")) {
-                throw new Error("ISP Blocked: Server sent back a webpage instead of data.");
-            }
+                try {
+                    appendLog(`Processing ID: ${fileId}`, "blue");
+                    
+                    const apiUrl = `https://api.abyss.to/v1/remote/${fileId}?key=${MY_API_KEY}`;
 
-            const data = JSON.parse(text);
+                    const response = await puter.net.fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 
+                            'Accept': 'application/json'
+                        }
+                    });
 
-            if (data.id) {
-                const embed = `<iframe src="https://abyss.to/embed/${data.id}" width="100%" height="400" frameborder="0" allowfullscreen></iframe>`;
-                appendLog(`Success: ${data.name}`, "green");
-                // ... append textarea logic
-            } else {
-                appendLog(`Abyss Error: ${data.message}`, "red");
-            }
-        } catch (err) {
-            appendLog(`System Error: ${err.message}`, "red");
-        }
-    }
-    btn.disabled = false;
-}
-
-                    // Handle potential non-JSON errors (like the Chinese block page)
                     const text = await response.text();
                     let data;
+                    
                     try {
                         data = JSON.parse(text);
                     } catch (e) {
-                        throw new Error("Server blocked request or returned invalid data.");
+                        throw new Error("Invalid server response (Check if GDrive file is public)");
                     }
 
                     if (data.id) {
                         const embed = `<iframe src="https://abyss.to/embed/${data.id}" width="100%" height="400" frameborder="0" allowfullscreen></iframe>`;
-                        appendLog(`SUCCESS: ${data.name || 'File Syncing'}<br><textarea class="w-full bg-slate-900 mt-1 p-1 text-blue-400 border border-slate-800" readonly>${embed}</textarea>`, "green");
+                        appendLog(`SUCCESS: ${data.name || 'File Syncing'}<br><textarea class="w-full bg-slate-950 mt-1 p-2 text-blue-400 border border-slate-800 rounded text-[10px]" readonly onclick="this.select()">${embed}</textarea>`, "green");
                     } else {
-                        appendLog(`FAILED: ${data.message || "Unknown Abyss Error"}`, "red");
+                        appendLog(`ABYSS ERROR: ${data.message || "Unknown Error"}`, "red");
                     }
                 } catch (err) {
-                    appendLog(`ERROR: ${err.message}`, "red");
+                    appendLog(`SYSTEM ERROR: ${err.message}`, "red");
                 }
             }
 
@@ -118,11 +96,11 @@
             const log = document.getElementById('statusLog');
             const div = document.createElement('div');
             const colors = {
-                green: "text-green-400 border-green-900/30",
-                red: "text-red-400 border-red-900/30",
-                blue: "text-blue-400 border-blue-900/30"
+                green: "text-green-400",
+                red: "text-red-400",
+                blue: "text-blue-400"
             };
-            div.className = `p-2 border-b ${colors[color]} bg-slate-900/20`;
+            div.className = `p-2 border-b border-slate-800 ${colors[color]} bg-slate-900/10`;
             div.innerHTML = msg;
             log.appendChild(div);
             log.scrollTop = log.scrollHeight;
