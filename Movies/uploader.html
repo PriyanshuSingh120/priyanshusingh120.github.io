@@ -2,101 +2,331 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineView | Fixed Uploader</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CineView Cloud Admin</title>
+    <!-- Puter.js for CORS-free API calls -->
     <script src="https://js.puter.com/v2/"></script>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; -webkit-tap-highlight-color: transparent; }
+        .custom-scroll::-webkit-scrollbar { height: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+        .tab-active { background: #2563eb; color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
+        .debug-entry { border-left: 2px solid #334155; padding-left: 8px; margin-bottom: 4px; font-family: monospace; font-size: 10px; }
+    </style>
 </head>
-<body class="bg-[#0b0f1a] text-slate-200 p-8">
+<body class="pb-40">
 
-    <div class="max-w-4xl mx-auto bg-[#161b2b] rounded-3xl border border-slate-800 shadow-2xl overflow-hidden">
-        <div class="bg-blue-600 p-6">
-            <h1 class="text-2xl font-black italic italic">CINEVIEW | STABLE UPLOADER</h1>
-            <p class="text-blue-100 text-[10px] uppercase">Bypassing JSON Errors & ISP Blocks</p>
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800 p-4">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-black italic tracking-tighter text-blue-500">CINEVIEW <span class="text-white">PRO</span></h1>
+                <p class="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Cloud Admin Node</p>
+            </div>
+            <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-800">
+                <button onclick="switchTab('add')" id="tab-add" class="px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest tab-active">Add</button>
+                <button onclick="switchTab('manage')" id="tab-manage" class="px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest text-slate-500">Manage</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto p-4 space-y-6">
+
+        <!-- Tab: Add Content -->
+        <div id="section-add" class="space-y-6">
+            
+            <!-- TMDB Search -->
+            <section class="bg-slate-900/40 p-5 rounded-3xl border border-slate-800 space-y-4">
+                <div class="flex gap-2">
+                    <select id="contentType" class="bg-slate-950 border border-slate-800 rounded-xl px-3 text-xs font-bold outline-none text-blue-400">
+                        <option value="movie">Movies</option>
+                        <option value="series">Series</option>
+                    </select>
+                    <input type="text" id="tmdbInput" oninput="searchTMDB(this.value)" placeholder="Search Movie Name..." class="flex-grow bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm outline-none focus:border-blue-500">
+                </div>
+                <div id="tmdbResults" class="flex gap-4 overflow-x-auto pb-2 custom-scroll min-h-[40px]">
+                    <p class="text-[10px] text-slate-700 italic w-full text-center py-4">Search results will appear here...</p>
+                </div>
+            </section>
+
+            <!-- Abyss Picker -->
+            <section class="bg-slate-900/40 p-5 rounded-3xl border border-slate-800 space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Abyss Library</h3>
+                    <button onclick="fetchAbyss()" id="btn-abyss" class="text-[10px] bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-full font-black text-blue-500 uppercase">Refresh List</button>
+                </div>
+                <div id="abyssResults" class="flex gap-3 overflow-x-auto pb-2 custom-scroll">
+                    <p class="text-[10px] text-slate-700 italic w-full text-center py-4">Click Refresh to browse uploads...</p>
+                </div>
+            </section>
+
+            <!-- Manual Form -->
+            <section class="bg-slate-900 p-6 rounded-[2rem] border border-slate-800 shadow-2xl space-y-4">
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="space-y-1">
+                        <label class="text-[9px] font-black text-slate-600 uppercase ml-2">Title</label>
+                        <input type="text" id="f-title" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm outline-none">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[9px] font-black text-slate-600 uppercase ml-2">Slug ID</label>
+                        <input type="text" id="f-slug" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm outline-none">
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[9px] font-black text-slate-600 uppercase ml-2">Source Link (short.icu)</label>
+                    <input type="text" id="f-src" placeholder="https://short.icu/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm outline-none text-blue-400">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="space-y-1">
+                        <label class="text-[9px] font-black text-slate-600 uppercase ml-2">Poster URL</label>
+                        <input type="text" id="f-img" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-[10px]">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[9px] font-black text-slate-600 uppercase ml-2">Year</label>
+                        <input type="text" id="f-year" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-[10px]">
+                    </div>
+                </div>
+
+                <input type="hidden" id="f-tmdb">
+
+                <button onclick="publishContent()" id="btn-publish" class="w-full bg-blue-600 hover:bg-blue-500 py-5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-xl shadow-blue-500/20 active:scale-95">
+                    🚀 Publish & Notify Telegram
+                </button>
+            </section>
+
         </div>
 
-        <div class="p-8 space-y-6">
-            <textarea id="linksInput" rows="8" class="w-full bg-[#0b0f1a] border border-slate-700 rounded-xl p-4 text-sm font-mono outline-none focus:border-blue-500" placeholder="Paste standard GDrive links here..."></textarea>
-            
-            <button onclick="startUpload()" id="mainBtn" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-xl font-bold uppercase transition-all">
-                Upload to Abyss
-            </button>
-
-            <div id="statusLog" class="bg-black border border-slate-800 rounded-xl p-4 h-64 overflow-y-auto font-mono text-[10px] space-y-2">
-                <span class="text-slate-600">// Ready. Paste a standard Drive link to begin.</span>
+        <!-- Tab: Manage Database -->
+        <div id="section-manage" class="hidden space-y-4">
+            <div id="dbList" class="space-y-3">
+                <!-- Database entries go here -->
             </div>
+        </div>
+
+    </main>
+
+    <!-- Debug Console -->
+    <div class="fixed bottom-4 left-4 right-4 bg-black/95 border border-slate-800 rounded-2xl p-4 h-36 shadow-2xl overflow-hidden z-[100]">
+        <div class="flex justify-between items-center mb-2">
+            <span class="text-[8px] font-black text-slate-600 uppercase tracking-widest">System Debug Console</span>
+            <button onclick="document.getElementById('debugLog').innerHTML = ''" class="text-[8px] text-slate-700 uppercase">Clear</button>
+        </div>
+        <div id="debugLog" class="overflow-y-auto h-24 custom-scroll">
+            <div class="debug-entry text-blue-500">System Initialized.</div>
         </div>
     </div>
 
-    <script>
-        const MY_API_KEY = "391ea7f7e967589e017d3b3924b1c33f";
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, doc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-        async function startUpload() {
-            const links = document.getElementById('linksInput').value.trim().split('\n');
-            const log = document.getElementById('statusLog');
-            const btn = document.getElementById('mainBtn');
+        // --- KEYS ---
+        const TMDB_KEY = 'dc691868b09daaabe9acc238ed898cf7';
+        const ABYSS_KEY = '391ea7f7e967589e017d3b3924b1c33f';
+        const TG_TOKEN = '7287243554:AAHa43wD_V2roGLep1aQgKHn0vqXHYlFp-M';
+        const TG_CHAT = '-1003605866054';
 
-            log.innerHTML = "";
-            btn.disabled = true;
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'cineview-cloud';
 
-            for (let link of links) {
-                let url = link.trim();
-                if (!url) continue;
+        let currentUser = null;
 
-                // 1. EXTRACT FILE ID (The only stable way for Drive)
-                const driveMatch = url.match(/\/d\/(.+?)\//) || url.match(/id=(.+?)(&|$)/);
-                
-                if (!driveMatch) {
-                    appendLog("Invalid Link: Use a standard GDrive share link.", "red");
-                    continue;
-                }
+        // --- Logging ---
+        window.addLog = (msg, type = 'info') => {
+            const log = document.getElementById('debugLog');
+            const entry = document.createElement('div');
+            entry.className = `debug-entry ${type === 'error' ? 'text-red-500' : (type === 'success' ? 'text-green-500' : 'text-blue-400')}`;
+            entry.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            log.prepend(entry);
+        };
 
-                const fileId = driveMatch[1];
-                const apiUrl = `https://api.abyss.to/v1/remote/${fileId}?key=${MY_API_KEY}`;
-
-                try {
-                    appendLog(`Syncing File ID: ${fileId}`, "blue");
-                    
-                    const response = await puter.net.fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Accept': 'application/json' }
-                    });
-
-                    // 2. THE JSON PROTECTOR
-                    const text = await response.text();
-                    if (!text) throw new Error("Server returned an empty response. Quota might be full.");
-
-                    let data;
-                    try {
-                        data = JSON.parse(text);
-                    } catch (e) {
-                        // If it's not JSON, it's likely a Google/Abyss error page (HTML)
-                        throw new Error("Server returned HTML. This usually means the link is private or invalid.");
-                    }
-
-                    if (data.id) {
-                        const embed = `<iframe src="https://abyss.to/embed/${data.id}" width="100%" height="400" frameborder="0" allowfullscreen></iframe>`;
-                        appendLog(`SUCCESS: ${data.name}<br><textarea class="w-full bg-slate-900 mt-1 p-2 text-blue-400 border border-slate-800" readonly>${embed}</textarea>`, "green");
-                    } else {
-                        appendLog(`ABYSS ERROR: ${data.message || "Unknown error"}`, "red");
-                    }
-
-                } catch (err) {
-                    appendLog(`CRITICAL ERROR: ${err.message}`, "red");
-                }
+        // --- Auth ---
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                addLog("Firebase Cloud Connection: Active", "success");
+                initDatabaseListener();
+            } else {
+                signInAnonymously(auth).catch(e => addLog("Auth Error: " + e.message, "error"));
             }
-            btn.disabled = false;
+        });
+
+        // --- Firestore Listener ---
+        function initDatabaseListener() {
+            const movieRef = collection(db, 'artifacts', appId, 'public', 'data', 'movies');
+            onSnapshot(query(movieRef), (snap) => {
+                const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                renderDatabase(docs);
+                addLog(`Database Synced: ${docs.length} records`, "success");
+            }, (err) => addLog("Database Sync Error: " + err.message, "error"));
         }
 
-        function appendLog(msg, color) {
-            const log = document.getElementById('statusLog');
-            const div = document.createElement('div');
-            const colors = { green: "text-green-400", red: "text-red-400", blue: "text-blue-400" };
-            div.className = `p-2 border-b border-slate-800 ${colors[color]}`;
-            div.innerHTML = msg;
-            log.appendChild(div);
-            log.scrollTop = log.scrollHeight;
+        function renderDatabase(movies) {
+            const container = document.getElementById('dbList');
+            if (movies.length === 0) {
+                container.innerHTML = `<div class="text-center py-10 text-slate-700 italic text-sm">Database is empty.</div>`;
+                return;
+            }
+            container.innerHTML = movies.map(movie => `
+                <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 flex items-center justify-between group">
+                    <div class="flex items-center gap-3">
+                        <img src="${movie.img}" class="w-10 h-14 rounded-lg object-cover shadow-xl">
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-200">${movie.title}</h3>
+                            <p class="text-[9px] font-mono text-slate-500 uppercase">${movie.year} • ${movie.slug}</p>
+                        </div>
+                    </div>
+                    <button onclick="deleteMovie('${movie.id}')" class="text-red-500 p-2 opacity-50 hover:opacity-100 transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // --- Actions ---
+        window.deleteMovie = async (id) => {
+            if (!confirm("Delete this content?")) return;
+            try {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'movies', id));
+                addLog("Record Deleted", "info");
+            } catch (e) { addLog("Delete Failed", "error"); }
+        };
+
+        window.publishContent = async () => {
+            const title = document.getElementById('f-title').value;
+            const src = document.getElementById('f-src').value;
+            const btn = document.getElementById('btn-publish');
+
+            if (!title || !src) return alert("Title and Source are required.");
+
+            btn.disabled = true;
+            btn.innerText = "UPLOADING...";
+            addLog("Uploading metadata to Cloud...");
+
+            try {
+                const movieData = {
+                    title,
+                    slug: document.getElementById('f-slug').value,
+                    src,
+                    img: document.getElementById('f-img').value,
+                    year: document.getElementById('f-year').value,
+                    tmdb: document.getElementById('f-tmdb').value,
+                    type: document.getElementById('contentType').value,
+                    createdAt: serverTimestamp()
+                };
+
+                // 1. Save to Firestore
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'movies'), movieData);
+                addLog("Cloud Upload Successful", "success");
+
+                // 2. Notify Telegram via Puter Bridge
+                addLog("Sending Telegram Notification...");
+                const tgMsg = `🎬 *NEW ON CINEVIEW* \n\n🍿 *Title:* ${movieData.title}\n📅 *Year:* ${movieData.year}\n\n🔗 [Watch Now](https://prigames.netlify.app/movies/newplayer/player?id=${movieData.slug})`;
+                
+                const tgRes = await puter.net.fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendPhoto`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: TG_CHAT,
+                        photo: movieData.img,
+                        caption: tgMsg,
+                        parse_mode: 'Markdown'
+                    })
+                });
+                
+                const tgData = await tgRes.json();
+                if (tgData.ok) addLog("Telegram Alert Sent", "success");
+                else addLog("Telegram Failed: " + tgData.description, "error");
+
+                alert("🚀 Success! Published to Cloud & Telegram.");
+                resetForm();
+
+            } catch (e) {
+                addLog("Publish Failed: " + e.message, "error");
+                alert("Error: " + e.message);
+            }
+            btn.disabled = false;
+            btn.innerText = "🚀 Publish & Notify Telegram";
+        };
+
+        function resetForm() {
+            document.getElementById('f-title').value = '';
+            document.getElementById('f-slug').value = '';
+            document.getElementById('f-src').value = '';
+            document.getElementById('f-img').value = '';
+            document.getElementById('f-year').value = '';
+            document.getElementById('tmdbInput').value = '';
+            document.getElementById('tmdbResults').innerHTML = '';
+        }
+    </script>
+
+    <script>
+        // --- Standard UI Helpers ---
+        function switchTab(tab) {
+            document.getElementById('section-add').classList.toggle('hidden', tab !== 'add');
+            document.getElementById('section-manage').classList.toggle('hidden', tab !== 'manage');
+            document.getElementById('tab-add').className = `px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest ${tab === 'add' ? 'tab-active' : 'text-slate-500'}`;
+            document.getElementById('tab-manage').className = `px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest ${tab === 'manage' ? 'tab-active' : 'text-slate-500'}`;
+        }
+
+        async function searchTMDB(val) {
+            if (val.length < 2) return;
+            const type = document.getElementById('contentType').value === 'series' ? 'tv' : 'movie';
+            const res = await fetch(`https://api.themoviedb.org/3/search/${type}?api_key=dc691868b09daaabe9acc238ed898cf7&query=${encodeURIComponent(val)}`);
+            const data = await res.json();
+            const container = document.getElementById('tmdbResults');
+            container.innerHTML = data.results.slice(0, 8).map(item => `
+                <div onclick="selectTMDB('${item.id}', '${(item.title || item.name).replace(/'/g, "\\'")}', '${item.poster_path}', '${(item.release_date || item.first_air_date || '').split('-')[0]}')" class="flex-shrink-0 w-24 text-center space-y-2 cursor-pointer active:scale-95 transition-transform">
+                    <img src="https://image.tmdb.org/t/p/w200${item.poster_path}" class="h-32 w-full object-cover rounded-xl border border-slate-800">
+                    <p class="text-[8px] font-bold truncate uppercase text-slate-500">${item.title || item.name}</p>
+                </div>
+            `).join('');
+        }
+
+        function selectTMDB(id, name, img, year) {
+            document.getElementById('f-title').value = name;
+            document.getElementById('f-img').value = `https://image.tmdb.org/t/p/w500${img}`;
+            document.getElementById('f-year').value = year;
+            document.getElementById('f-tmdb').value = id;
+            document.getElementById('f-slug').value = name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+            document.getElementById('tmdbResults').innerHTML = `<p class="text-[10px] text-blue-500 font-bold w-full text-center py-4 uppercase">Selected: ${name}</p>`;
+        }
+
+        async function fetchAbyss() {
+            const btn = document.getElementById('btn-abyss');
+            const container = document.getElementById('abyssResults');
+            btn.disabled = true;
+            btn.innerText = "SYNCING...";
+            addLog("Accessing Abyss Library via Cloud Bridge...");
+
+            try {
+                const res = await puter.net.fetch(`https://api.abyss.to/v1/resources?key=391ea7f7e967589e017d3b3924b1c33f&type=files&maxResults=30`);
+                const data = await res.json();
+                container.innerHTML = data.items.map(file => `
+                    <div onclick="document.getElementById('f-src').value = 'https://short.icu/${file.id}'" class="flex-shrink-0 p-3 bg-slate-950 border border-slate-800 rounded-2xl w-40 cursor-pointer active:bg-blue-600/10">
+                        <div class="text-[9px] font-bold truncate text-slate-200">${file.name}</div>
+                        <div class="text-[7px] text-blue-500 uppercase font-black mt-2">Tap to Select</div>
+                    </div>
+                `).join('');
+                addLog(`Abyss Synced: ${data.items.length} files found`, "success");
+            } catch (e) {
+                addLog("Abyss Sync Failed", "error");
+                container.innerHTML = `<p class="text-red-500 text-[10px] py-4 w-full text-center">Connection Failed.</p>`;
+            }
+            btn.disabled = false;
+            btn.innerText = "Refresh List";
         }
     </script>
 </body>
 </html>
+
