@@ -36,41 +36,59 @@
         const MY_API_KEY = "391ea7f7e967589e017d3b3924b1c33f";
 
         async function startDirectUpload() {
-            const links = document.getElementById('linksInput').value.trim().split('\n');
-            const log = document.getElementById('statusLog');
-            const btn = document.getElementById('mainBtn');
+    const links = document.getElementById('linksInput').value.trim().split('\n');
+    const log = document.getElementById('statusLog');
+    const btn = document.getElementById('mainBtn');
 
-            if (!links[0]) return alert("Please paste at least one Google Drive link.");
+    log.innerHTML = "";
+    btn.disabled = true;
 
-            log.innerHTML = "";
-            btn.disabled = true;
-            btn.innerText = "UPLOADING...";
+    for (let link of links) {
+        let url = link.trim();
+        if (!url) continue;
 
-            for (let link of links) {
-                let url = link.trim();
-                if (!url) continue;
+        const driveMatch = url.match(/\/d\/(.+?)\//) || url.match(/id=(.+?)(&|$)/);
+        const fileId = driveMatch ? driveMatch[1] : null;
 
-                // Extract GDrive File ID
-                const driveMatch = url.match(/\/d\/(.+?)\//) || url.match(/id=(.+?)(&|$)/);
-                
-                if (!driveMatch) {
-                    appendLog(`Skipped: Invalid URL format`, "red");
-                    continue;
+        if (!fileId) {
+            appendLog("Invalid Link", "red");
+            continue;
+        }
+
+        try {
+            // We put the key in the URL AND the Header for maximum compatibility
+            const apiUrl = `https://api.abyss.to/v1/remote/${fileId}?key=${MY_API_KEY}`;
+
+            const response = await puter.net.fetch(apiUrl, {
+                method: 'POST',
+                headers: { 
+                    'x-api-key': MY_API_KEY, // Extra security header
+                    'Accept': 'application/json'
                 }
+            });
 
-                const fileId = driveMatch[1];
-                appendLog(`Syncing FileID: ${fileId}...`, "blue");
+            const text = await response.text();
+            
+            // If the server sends back a blank screen or HTML, this will tell us
+            if (!text || text.startsWith("<!DOCTYPE")) {
+                throw new Error("ISP Blocked: Server sent back a webpage instead of data.");
+            }
 
-                try {
-                    // Documentation says we can use apiKey as a Query Parameter 'key'
-                    const apiUrl = `https://api.abyss.to/v1/remote/${fileId}?key=${MY_API_KEY}`;
+            const data = JSON.parse(text);
 
-                    const response = await puter.net.fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 
-                            'Content-Type': 'application/json'
-                        }
-                    });
+            if (data.id) {
+                const embed = `<iframe src="https://abyss.to/embed/${data.id}" width="100%" height="400" frameborder="0" allowfullscreen></iframe>`;
+                appendLog(`Success: ${data.name}`, "green");
+                // ... append textarea logic
+            } else {
+                appendLog(`Abyss Error: ${data.message}`, "red");
+            }
+        } catch (err) {
+            appendLog(`System Error: ${err.message}`, "red");
+        }
+    }
+    btn.disabled = false;
+}
 
                     // Handle potential non-JSON errors (like the Chinese block page)
                     const text = await response.text();
