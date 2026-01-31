@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineView | Abyss Bulk Uploader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6 text-blue-500">Abyss Bulk Remote Uploader</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-4">
+                <div>
+                    <label class="block mb-2 font-semibold">Abyss API Key:</label>
+                    <input type="password" id="apiKey" placeholder="Enter your API Key" 
+                        class="w-full p-2 rounded bg-gray-800 border border-gray-700 focus:border-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block mb-2 font-semibold">Movie Download Links (One per line):</label>
+                    <textarea id="linksInput" rows="10" placeholder="https://site.com/movie1.mp4&#10;https://site.com/movie2.mkv"
+                        class="w-full p-2 rounded bg-gray-800 border border-gray-700 focus:border-blue-500 outline-none"></textarea>
+                </div>
+                <button onclick="startBulkUpload()" id="uploadBtn"
+                    class="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded font-bold transition">
+                    Start Bulk Upload
+                </button>
+            </div>
+
+            <div>
+                <label class="block mb-2 font-semibold">Results (Embed URLs):</label>
+                <div id="results" class="w-full h-[400px] p-2 rounded bg-black border border-gray-700 overflow-y-auto text-sm font-mono">
+                    <span class="text-gray-500">Waiting for links...</span>
+                </div>
+                <button onclick="copyResults()" class="mt-4 w-full bg-gray-700 hover:bg-gray-600 py-2 rounded text-sm">
+                    Copy All Embed Links
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function startBulkUpload() {
+            const apiKey = document.getElementById('apiKey').value;
+            const links = document.getElementById('linksInput').value.trim().split('\n');
+            const resultsDiv = document.getElementById('results');
+            const btn = document.getElementById('uploadBtn');
+
+            if (!apiKey || links[0] === "") {
+                alert("Please provide both API Key and Links.");
+                return;
+            }
+
+            resultsDiv.innerHTML = '<p class="text-yellow-500 animate-pulse">Starting uploads...</p>';
+            btn.disabled = true;
+            btn.innerText = "Processing...";
+
+            for (let link of links) {
+                const trimmedLink = link.trim();
+                if (!trimmedLink) continue;
+
+                try {
+                    // Note: Abyss API typically uses a POST request for remote uploads
+                    const response = await fetch('https://abyss.to/api/upload/remote', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: new URLSearchParams({
+                            'api_key': apiKey,
+                            'url': trimmedLink
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.status === "success" || data.result) {
+                        // Abyss usually returns a slug or file ID
+                        const fileId = data.result.file_id || data.result; 
+                        const embedUrl = `https://abyss.to/embed/${fileId}`;
+                        
+                        const p = document.createElement('p');
+                        p.className = "text-green-400 mb-1";
+                        p.innerText = embedUrl;
+                        resultsDiv.appendChild(p);
+                    } else {
+                        throw new Error(data.message || "Failed to upload");
+                    }
+                } catch (error) {
+                    const p = document.createElement('p');
+                    p.className = "text-red-500 mb-1";
+                    p.innerText = `Error: ${trimmedLink} - ${error.message}`;
+                    resultsDiv.appendChild(p);
+                }
+            }
+
+            btn.disabled = false;
+            btn.innerText = "Start Bulk Upload";
+        }
+
+        function copyResults() {
+            const results = Array.from(document.querySelectorAll('#results p.text-green-400'))
+                                 .map(p => p.innerText).join('\n');
+            navigator.clipboard.writeText(results);
+            alert("Embed links copied!");
+        }
+    </script>
+</body>
+</html>
