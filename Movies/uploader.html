@@ -3,30 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineView | Google Auth Bypass</title>
+    <title>CineView | Fixed Uploader</title>
     <script src="https://js.puter.com/v2/"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-[#0b0f1a] text-slate-200 p-8 font-sans">
+<body class="bg-[#0b0f1a] text-slate-200 p-8">
 
     <div class="max-w-4xl mx-auto bg-[#161b2b] rounded-3xl border border-slate-800 shadow-2xl overflow-hidden">
-        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-6">
-            <h1 class="text-2xl font-black italic tracking-tighter">CINEVIEW GOOGLE-AUTH BYPASS</h1>
-            <p class="text-blue-100 text-[10px] uppercase tracking-[0.2em]">Using API Key: 391ea7f7...24b1c33f</p>
+        <div class="bg-blue-600 p-6">
+            <h1 class="text-2xl font-black italic italic">CINEVIEW | STABLE UPLOADER</h1>
+            <p class="text-blue-100 text-[10px] uppercase">Bypassing JSON Errors & ISP Blocks</p>
         </div>
 
         <div class="p-8 space-y-6">
-            <div>
-                <label class="block text-[10px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Paste Google Drive Links</label>
-                <textarea id="linksInput" rows="10" class="w-full bg-[#0b0f1a] border border-slate-700 rounded-xl p-4 text-sm font-mono resize-none outline-none focus:border-blue-500 transition-all" placeholder="https://drive.google.com/file/d/..."></textarea>
-            </div>
-
-            <button onclick="startDirectUpload()" id="mainBtn" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-xl font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-900/20">
-                Start Remote Upload
+            <textarea id="linksInput" rows="8" class="w-full bg-[#0b0f1a] border border-slate-700 rounded-xl p-4 text-sm font-mono outline-none focus:border-blue-500" placeholder="Paste standard GDrive links here..."></textarea>
+            
+            <button onclick="startUpload()" id="mainBtn" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-xl font-bold uppercase transition-all">
+                Upload to Abyss
             </button>
 
             <div id="statusLog" class="bg-black border border-slate-800 rounded-xl p-4 h-64 overflow-y-auto font-mono text-[10px] space-y-2">
-                <span class="text-slate-600">// Ready. No login required for API Key users.</span>
+                <span class="text-slate-600">// Ready. Paste a standard Drive link to begin.</span>
             </div>
         </div>
     </div>
@@ -34,69 +31,68 @@
     <script>
         const MY_API_KEY = "391ea7f7e967589e017d3b3924b1c33f";
 
-        async function startDirectUpload() {
-    const links = document.getElementById('linksInput').value.trim().split('\n');
-    const log = document.getElementById('statusLog');
-    const btn = document.getElementById('mainBtn');
+        async function startUpload() {
+            const links = document.getElementById('linksInput').value.trim().split('\n');
+            const log = document.getElementById('statusLog');
+            const btn = document.getElementById('mainBtn');
 
-    log.innerHTML = "";
-    btn.disabled = true;
+            log.innerHTML = "";
+            btn.disabled = true;
 
-    for (let link of links) {
-        let url = link.trim();
-        if (!url) continue;
+            for (let link of links) {
+                let url = link.trim();
+                if (!url) continue;
 
-        let apiUrl = "";
-        
-        // Check if it's a Google Drive link
-        const driveMatch = url.match(/\/d\/(.+?)\//) || url.match(/id=(.+?)(&|$)/);
-        
-        if (driveMatch) {
-            // Use the specialized v1 Remote endpoint for GDrive
-            const fileId = driveMatch[1];
-            apiUrl = `https://api.abyss.to/v1/remote/${fileId}?key=${MY_API_KEY}`;
-        } else {
-            // Fallback for regular direct MP4 links from other websites
-            // Use the standard v1 Remote upload with URL parameter
-            apiUrl = `https://api.abyss.to/v1/remote?key=${MY_API_KEY}&url=${encodeURIComponent(url)}`;
-        }
+                // 1. EXTRACT FILE ID (The only stable way for Drive)
+                const driveMatch = url.match(/\/d\/(.+?)\//) || url.match(/id=(.+?)(&|$)/);
+                
+                if (!driveMatch) {
+                    appendLog("Invalid Link: Use a standard GDrive share link.", "red");
+                    continue;
+                }
 
-        try {
-            appendLog(`Targeting: ${url.substring(0, 40)}...`, "blue");
-            
-            const response = await puter.net.fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Accept': 'application/json' }
-            });
+                const fileId = driveMatch[1];
+                const apiUrl = `https://api.abyss.to/v1/remote/${fileId}?key=${MY_API_KEY}`;
 
-            const text = await response.text();
-            const data = JSON.parse(text);
+                try {
+                    appendLog(`Syncing File ID: ${fileId}`, "blue");
+                    
+                    const response = await puter.net.fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Accept': 'application/json' }
+                    });
 
-            if (data.id || data.slug) {
-                const id = data.id || data.slug;
-                const embed = `<iframe src="https://abyss.to/embed/${id}" width="100%" height="400" frameborder="0" allowfullscreen></iframe>`;
-                appendLog(`SUCCESS: ${data.name || 'Video Syncing'}<br><textarea class="w-full bg-slate-950 mt-1 p-2 text-blue-400 border border-slate-800 rounded text-[10px]" readonly onclick="this.select()">${embed}</textarea>`, "green");
-            } else {
-                appendLog(`ABYSS ERROR: ${data.message || "Unknown Error"}`, "red");
+                    // 2. THE JSON PROTECTOR
+                    const text = await response.text();
+                    if (!text) throw new Error("Server returned an empty response. Quota might be full.");
+
+                    let data;
+                    try {
+                        data = JSON.parse(text);
+                    } catch (e) {
+                        // If it's not JSON, it's likely a Google/Abyss error page (HTML)
+                        throw new Error("Server returned HTML. This usually means the link is private or invalid.");
+                    }
+
+                    if (data.id) {
+                        const embed = `<iframe src="https://abyss.to/embed/${data.id}" width="100%" height="400" frameborder="0" allowfullscreen></iframe>`;
+                        appendLog(`SUCCESS: ${data.name}<br><textarea class="w-full bg-slate-900 mt-1 p-2 text-blue-400 border border-slate-800" readonly>${embed}</textarea>`, "green");
+                    } else {
+                        appendLog(`ABYSS ERROR: ${data.message || "Unknown error"}`, "red");
+                    }
+
+                } catch (err) {
+                    appendLog(`CRITICAL ERROR: ${err.message}`, "red");
+                }
             }
-        } catch (err) {
-            appendLog(`SYSTEM ERROR: ${err.message}`, "red");
+            btn.disabled = false;
         }
-    }
-
-    btn.disabled = false;
-    btn.innerText = "Start Remote Upload";
-}
 
         function appendLog(msg, color) {
             const log = document.getElementById('statusLog');
             const div = document.createElement('div');
-            const colors = {
-                green: "text-green-400",
-                red: "text-red-400",
-                blue: "text-blue-400"
-            };
-            div.className = `p-2 border-b border-slate-800 ${colors[color]} bg-slate-900/10`;
+            const colors = { green: "text-green-400", red: "text-red-400", blue: "text-blue-400" };
+            div.className = `p-2 border-b border-slate-800 ${colors[color]}`;
             div.innerHTML = msg;
             log.appendChild(div);
             log.scrollTop = log.scrollHeight;
