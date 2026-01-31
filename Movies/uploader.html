@@ -3,135 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineView Admin | Abyss Bulk</title>
+    <title>CineView Admin | Abyss v1 API</title>
     <script src="https://js.puter.com/v2/"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen p-4 md:p-8">
+<body class="bg-slate-950 text-slate-100 p-4 md:p-8 font-sans">
 
-    <div class="max-w-5xl mx-auto">
-        <header class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <div>
-                <h1 class="text-3xl font-black text-blue-500 tracking-tighter italic">CINEVIEW</h1>
-                <p class="text-slate-500 text-sm">Abyss.to Cloud Remote Uploader</p>
-            </div>
-            <div id="statusBadge" class="bg-slate-800 px-4 py-2 rounded-full border border-slate-700 text-xs flex items-center gap-2">
-                <span id="dot" class="w-2 h-2 rounded-full bg-slate-500"></span>
-                <span id="statusText">System Ready</span>
-            </div>
-        </header>
+    <div class="max-w-5xl mx-auto bg-slate-900 rounded-3xl border border-slate-800 shadow-2xl overflow-hidden">
+        <div class="bg-blue-600 p-6">
+            <h1 class="text-2xl font-black italic tracking-tighter">CINEVIEW MANAGER</h1>
+            <p class="text-blue-100 text-xs uppercase tracking-widest">Official v1 API Integration</p>
+        </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="space-y-6 bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl">
+        <div class="p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Abyss API Key</label>
-                    <input type="password" id="apiKey" placeholder="Paste your API key here..." 
-                        class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm font-mono">
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-2">Your API Key</label>
+                    <input type="text" id="apiKey" value="391ea7f7e967589e017d3b3924b1c33f" 
+                        class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm font-mono text-blue-400">
                 </div>
-
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Movie URLs (Google Drive or Direct)</label>
-                    <textarea id="linksInput" rows="10" placeholder="https://drive.google.com/file/d/...&#10;https://server.com/movie.mp4"
-                        class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm font-mono resize-none"></textarea>
-                    <p class="text-[10px] text-slate-500 mt-2 italic">Note: Google Drive links are automatically converted to Direct links.</p>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-2">Google Drive Movie Links</label>
+                    <textarea id="linksInput" rows="10" placeholder="Paste GDrive links here..."
+                        class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm font-mono resize-none focus:border-blue-500 outline-none"></textarea>
                 </div>
-
-                <button onclick="startBulkProcess()" id="processBtn"
-                    class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-xl shadow-[0_0_20px_rgba(37,99,235,0.3)] transition-all uppercase tracking-widest">
-                    Start Bulk Upload
+                <button onclick="runV1Upload()" id="btn" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-xl font-bold uppercase tracking-widest transition-all">
+                    Sync to Abyss
                 </button>
             </div>
 
-            <div class="flex flex-col h-full bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl">
-                <div class="flex justify-between items-center mb-4">
-                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest">Results</label>
-                    <button onclick="copyAllEmbeds()" class="text-[10px] text-blue-400 hover:text-blue-300 font-bold uppercase">Copy All IFrames</button>
-                </div>
-                
-                <div id="log" class="flex-grow bg-slate-950 rounded-xl p-4 overflow-y-auto min-h-[420px] max-h-[500px] border border-slate-800 font-mono text-[11px] space-y-3">
-                    <span class="text-slate-600">// Standing by for input...</span>
+            <div class="flex flex-col">
+                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-2">IFrame Embed Codes</label>
+                <div id="results" class="bg-black border border-slate-800 rounded-xl p-4 flex-grow overflow-y-auto text-[10px] font-mono space-y-2 h-[400px]">
+                    <span class="text-slate-700">// Waiting for links...</span>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        async function startBulkProcess() {
-            const apiKey = document.getElementById('apiKey').value;
-            const rawLinks = document.getElementById('linksInput').value.trim().split('\n');
-            const log = document.getElementById('log');
-            const btn = document.getElementById('processBtn');
-            const dot = document.getElementById('dot');
-            const statusText = document.getElementById('statusText');
+        async function runV1Upload() {
+            const key = document.getElementById('apiKey').value;
+            const links = document.getElementById('linksInput').value.trim().split('\n');
+            const results = document.getElementById('results');
+            const btn = document.getElementById('btn');
 
-            if (!apiKey || !rawLinks[0]) return alert("Missing API Key or Links!");
+            if(!key || !links[0]) return alert("Enter Key and Links");
 
-            // UI Setup
-            log.innerHTML = "";
+            results.innerHTML = "";
             btn.disabled = true;
-            btn.classList.add('opacity-50', 'cursor-not-allowed');
-            dot.className = "w-2 h-2 rounded-full bg-yellow-400 animate-ping";
-            statusText.innerText = "Processing...";
+            btn.innerText = "UPLOADING TO V1...";
 
-            for (let originalLink of rawLinks) {
-                let finalUrl = originalLink.trim();
-                if (!finalUrl) continue;
+            for (let link of links) {
+                const url = link.trim();
+                if (!url) continue;
 
-                // 1. Google Drive Auto-Fixer
-                if (finalUrl.includes("drive.google.com")) {
-                    const idMatch = finalUrl.match(/\/d\/(.+?)\//) || finalUrl.match(/id=(.+?)(&|$)/);
-                    if (idMatch && idMatch[1]) {
-                        finalUrl = `https://drive.google.com/uc?export=download&id=${idMatch[1]}`;
-                    }
+                // Extract File ID from Google Drive URL
+                const driveMatch = url.match(/\/d\/(.+?)\//) || url.match(/id=(.+?)(&|$)/);
+                
+                if (!driveMatch) {
+                    appendLog(`Invalid GDrive Link: ${url}`, "red");
+                    continue;
                 }
 
-                const item = document.createElement('div');
-                item.className = "p-3 bg-slate-900 rounded-lg border border-slate-800 animate-pulse";
-                item.innerHTML = `<span class="text-blue-400">QUEUED:</span> ${finalUrl.substring(0, 50)}...`;
-                log.appendChild(item);
+                const fileId = driveMatch[1];
+                const apiUrl = `https://api.abyss.to/v1/remote/${fileId}`;
 
                 try {
-                    // 2. Puter.js Network Call (Bypasses CORS)
-                    const response = await puter.net.fetch("https://abyss.to/api/upload/remote", {
+                    // Using Puter.js to bypass CORS as usual
+                    const response = await puter.net.fetch(apiUrl, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: new URLSearchParams({ 'api_key': apiKey, 'url': finalUrl }).toString()
+                        headers: { 
+                            'Authorization': `Bearer ${key}`, // Documentation says Authorization: Bearer {token}
+                            'Content-Type': 'application/json'
+                        }
                     });
 
                     const data = await response.json();
 
-                    if (data.status === "success" || data.result) {
-                        const fileId = data.result.file_id || data.result;
-                        const embedCode = `<iframe src="https://abyss.to/embed/${fileId}" width="100%" height="400" frameborder="0" allowfullscreen></iframe>`;
-                        
-                        item.classList.remove('animate-pulse');
-                        item.className = "p-3 bg-green-900/10 border border-green-900/50 rounded-lg";
-                        item.innerHTML = `
-                            <div class="text-green-400 font-bold mb-1">✓ UPLOADED</div>
-                            <textarea class="w-full bg-black border border-slate-800 p-2 text-[10px] text-slate-300 rounded" readonly onclick="this.select()">${embedCode}</textarea>
-                        `;
+                    if (data.id) {
+                        const embed = `<iframe src="https://abyss.to/embed/${data.id}" width="100%" height="400" frameborder="0" allowfullscreen></iframe>`;
+                        appendLog(embed, "green");
                     } else {
-                        throw new Error(data.message || "Link rejected");
+                        throw new Error(data.message || "Failed to initiate remote");
                     }
                 } catch (err) {
-                    item.classList.remove('animate-pulse');
-                    item.className = "p-3 bg-red-900/10 border border-red-900/50 rounded-lg";
-                    item.innerHTML = `<div class="text-red-500 font-bold">✕ ERROR</div><div class="text-slate-500">${err.message}</div>`;
+                    appendLog(`Error [${fileId}]: ${err.message}`, "red");
                 }
-                log.scrollTop = log.scrollHeight;
             }
 
             btn.disabled = false;
-            btn.classList.remove('opacity-50', 'cursor-not-allowed');
-            dot.className = "w-2 h-2 rounded-full bg-green-500";
-            statusText.innerText = "Task Complete";
+            btn.innerText = "Sync to Abyss";
         }
 
-        function copyAllEmbeds() {
-            const allBoxes = Array.from(document.querySelectorAll('#log textarea')).map(t => t.value).join('\n');
-            if (!allBoxes) return;
-            navigator.clipboard.writeText(allBoxes);
-            alert("All IFrame codes copied!");
+        function appendLog(text, color) {
+            const div = document.createElement('div');
+            const results = document.getElementById('results');
+            if (color === "green") {
+                div.className = "p-2 bg-green-900/20 border border-green-800 text-green-400 rounded";
+                div.innerHTML = `SUCCESS:<br><textarea class='w-full bg-black mt-1 p-1' readonly>${text}</textarea>`;
+            } else {
+                div.className = "p-2 bg-red-900/20 border border-red-800 text-red-400 rounded";
+                div.innerText = text;
+            }
+            results.appendChild(div);
+            results.scrollTop = results.scrollHeight;
         }
     </script>
 </body>
