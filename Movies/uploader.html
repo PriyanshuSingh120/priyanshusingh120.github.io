@@ -1,330 +1,386 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CineView Cloud Admin</title>
-    <!-- Puter.js for CORS-free API calls -->
-    <script src="https://js.puter.com/v2/"></script>
-    <!-- Tailwind CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineView Pro - Unrestricted Streaming</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; -webkit-tap-highlight-color: transparent; }
-        .custom-scroll::-webkit-scrollbar { height: 4px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
-        .tab-active { background: #2563eb; color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
-        .debug-entry { border-left: 2px solid #334155; padding-left: 8px; margin-bottom: 4px; font-family: monospace; font-size: 10px; }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .glass-nav {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .player-aspect {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            background: #000;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .player-aspect iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: none;
+        }
+
+        .server-btn {
+            transition: all 0.2s ease;
+        }
+
+        .server-btn.active {
+            background-color: #ef4444;
+            color: white;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+        }
+
+        .movie-card:hover img {
+            transform: scale(1.08);
+            filter: brightness(0.6);
+        }
+
+        .loader {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #ef4444;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
-<body class="pb-40">
+<body class="min-h-screen">
 
-    <!-- Header -->
-    <header class="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800 p-4">
-        <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <div>
-                <h1 class="text-xl font-black italic tracking-tighter text-blue-500">CINEVIEW <span class="text-white">PRO</span></h1>
-                <p class="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Cloud Admin Node</p>
+    <!-- Navbar -->
+    <nav class="glass-nav fixed top-0 w-full z-50 px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-2 cursor-pointer" onclick="location.reload()">
+            <div class="bg-red-600 p-2 rounded-lg">
+                <i class="fa-solid fa-clapperboard text-white"></i>
             </div>
-            <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-800">
-                <button onclick="switchTab('add')" id="tab-add" class="px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest tab-active">Add</button>
-                <button onclick="switchTab('manage')" id="tab-manage" class="px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest text-slate-500">Manage</button>
-            </div>
+            <h1 class="text-2xl font-black tracking-tighter italic">CINE<span class="text-red-600 font-bold">VIEW</span></h1>
         </div>
-    </header>
 
-    <main class="max-w-4xl mx-auto p-4 space-y-6">
+        <div class="relative w-full max-w-2xl">
+            <input 
+                type="text" id="searchInput" 
+                placeholder="Movie ya TV Show search karein..." 
+                class="w-full bg-neutral-900 border border-neutral-800 rounded-xl py-3 px-12 focus:outline-none focus:ring-2 focus:ring-red-600 transition-all text-sm"
+            >
+            <i class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-neutral-500"></i>
+        </div>
 
-        <!-- Tab: Add Content -->
-        <div id="section-add" class="space-y-6">
+        <div class="flex gap-4 text-xs font-bold uppercase tracking-widest">
+            <button onclick="fetchMovies('movie')" class="hover:text-red-500 transition-colors">Movies</button>
+            <button onclick="fetchMovies('tv')" class="hover:text-red-500 transition-colors">TV Shows</button>
+        </div>
+    </nav>
+
+    <!-- Player Section -->
+    <section id="playerSection" class="hidden pt-32 pb-10 container mx-auto px-4">
+        <div class="grid lg:grid-cols-3 gap-6">
             
-            <!-- TMDB Search -->
-            <section class="bg-slate-900/40 p-5 rounded-3xl border border-slate-800 space-y-4">
-                <div class="flex gap-2">
-                    <select id="contentType" class="bg-slate-950 border border-slate-800 rounded-xl px-3 text-xs font-bold outline-none text-blue-400">
-                        <option value="movie">Movies</option>
-                        <option value="series">Series</option>
-                    </select>
-                    <input type="text" id="tmdbInput" oninput="searchTMDB(this.value)" placeholder="Search Movie Name..." class="flex-grow bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm outline-none focus:border-blue-500">
-                </div>
-                <div id="tmdbResults" class="flex gap-4 overflow-x-auto pb-2 custom-scroll min-h-[40px]">
-                    <p class="text-[10px] text-slate-700 italic w-full text-center py-4">Search results will appear here...</p>
-                </div>
-            </section>
-
-            <!-- Abyss Picker -->
-            <section class="bg-slate-900/40 p-5 rounded-3xl border border-slate-800 space-y-4">
-                <div class="flex justify-between items-center">
-                    <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Abyss Library</h3>
-                    <button onclick="fetchAbyss()" id="btn-abyss" class="text-[10px] bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-full font-black text-blue-500 uppercase">Refresh List</button>
-                </div>
-                <div id="abyssResults" class="flex gap-3 overflow-x-auto pb-2 custom-scroll">
-                    <p class="text-[10px] text-slate-700 italic w-full text-center py-4">Click Refresh to browse uploads...</p>
-                </div>
-            </section>
-
-            <!-- Manual Form -->
-            <section class="bg-slate-900 p-6 rounded-[2rem] border border-slate-800 shadow-2xl space-y-4">
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="space-y-1">
-                        <label class="text-[9px] font-black text-slate-600 uppercase ml-2">Title</label>
-                        <input type="text" id="f-title" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm outline-none">
+            <div class="lg:col-span-2 space-y-4">
+                <div class="player-aspect bg-neutral-900">
+                    <div id="playerLoading" class="absolute inset-0 flex items-center justify-center bg-black z-10 hidden">
+                        <div class="loader"></div>
                     </div>
-                    <div class="space-y-1">
-                        <label class="text-[9px] font-black text-slate-600 uppercase ml-2">Slug ID</label>
-                        <input type="text" id="f-slug" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm outline-none">
-                    </div>
+                    <div id="iframeContainer" class="w-full h-full"></div>
                 </div>
 
-                <div class="space-y-1">
-                    <label class="text-[9px] font-black text-slate-600 uppercase ml-2">Source Link (short.icu)</label>
-                    <input type="text" id="f-src" placeholder="https://short.icu/..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm outline-none text-blue-400">
+                <!-- Servers -->
+                <div class="bg-neutral-900/80 p-5 rounded-2xl border border-white/5">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xs font-black text-neutral-400 uppercase tracking-tighter">Backup Servers</h3>
+                        <span class="text-[10px] bg-red-600/20 text-red-500 px-2 py-1 rounded font-bold">Auto-Sync Enabled</span>
+                    </div>
+                    <div id="serverList" class="flex flex-wrap gap-2"></div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="space-y-1">
-                        <label class="text-[9px] font-black text-slate-600 uppercase ml-2">Poster URL</label>
-                        <input type="text" id="f-img" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-[10px]">
+                <!-- TV Controls -->
+                <div id="tvControls" class="hidden bg-neutral-900/80 p-6 rounded-2xl border border-white/5">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="fa-solid fa-layer-group text-red-500"></i>
+                        <h3 class="font-bold text-sm uppercase">Episodes Selector</h3>
                     </div>
-                    <div class="space-y-1">
-                        <label class="text-[9px] font-black text-slate-600 uppercase ml-2">Year</label>
-                        <input type="text" id="f-year" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-[10px]">
-                    </div>
-                </div>
-
-                <input type="hidden" id="f-tmdb">
-
-                <button onclick="publishContent()" id="btn-publish" class="w-full bg-blue-600 hover:bg-blue-500 py-5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-xl shadow-blue-500/20 active:scale-95">
-                    🚀 Publish & Notify Telegram
-                </button>
-            </section>
-
-        </div>
-
-        <!-- Tab: Manage Database -->
-        <div id="section-manage" class="hidden space-y-4">
-            <div id="dbList" class="space-y-3">
-                <!-- Database entries go here -->
-            </div>
-        </div>
-
-    </main>
-
-    <!-- Debug Console -->
-    <div class="fixed bottom-4 left-4 right-4 bg-black/95 border border-slate-800 rounded-2xl p-4 h-36 shadow-2xl overflow-hidden z-[100]">
-        <div class="flex justify-between items-center mb-2">
-            <span class="text-[8px] font-black text-slate-600 uppercase tracking-widest">System Debug Console</span>
-            <button onclick="document.getElementById('debugLog').innerHTML = ''" class="text-[8px] text-slate-700 uppercase">Clear</button>
-        </div>
-        <div id="debugLog" class="overflow-y-auto h-24 custom-scroll">
-            <div class="debug-entry text-blue-500">System Initialized.</div>
-        </div>
-    </div>
-
-    <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, doc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-
-        // --- KEYS ---
-        const TMDB_KEY = 'dc691868b09daaabe9acc238ed898cf7';
-        const ABYSS_KEY = '391ea7f7e967589e017d3b3924b1c33f';
-        const TG_TOKEN = '7287243554:AAHa43wD_V2roGLep1aQgKHn0vqXHYlFp-M';
-        const TG_CHAT = '-1003605866054';
-
-        const firebaseConfig = JSON.parse(__firebase_config);
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'cineview-cloud';
-
-        let currentUser = null;
-
-        // --- Logging ---
-        window.addLog = (msg, type = 'info') => {
-            const log = document.getElementById('debugLog');
-            const entry = document.createElement('div');
-            entry.className = `debug-entry ${type === 'error' ? 'text-red-500' : (type === 'success' ? 'text-green-500' : 'text-blue-400')}`;
-            entry.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
-            log.prepend(entry);
-        };
-
-        // --- Auth ---
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUser = user;
-                addLog("Firebase Cloud Connection: Active", "success");
-                initDatabaseListener();
-            } else {
-                signInAnonymously(auth).catch(e => addLog("Auth Error: " + e.message, "error"));
-            }
-        });
-
-        // --- Firestore Listener ---
-        function initDatabaseListener() {
-            const movieRef = collection(db, 'artifacts', appId, 'public', 'data', 'movies');
-            onSnapshot(query(movieRef), (snap) => {
-                const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                renderDatabase(docs);
-                addLog(`Database Synced: ${docs.length} records`, "success");
-            }, (err) => addLog("Database Sync Error: " + err.message, "error"));
-        }
-
-        function renderDatabase(movies) {
-            const container = document.getElementById('dbList');
-            if (movies.length === 0) {
-                container.innerHTML = `<div class="text-center py-10 text-slate-700 italic text-sm">Database is empty.</div>`;
-                return;
-            }
-            container.innerHTML = movies.map(movie => `
-                <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 flex items-center justify-between group">
-                    <div class="flex items-center gap-3">
-                        <img src="${movie.img}" class="w-10 h-14 rounded-lg object-cover shadow-xl">
+                    <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <h3 class="text-sm font-bold text-slate-200">${movie.title}</h3>
-                            <p class="text-[9px] font-mono text-slate-500 uppercase">${movie.year} • ${movie.slug}</p>
+                            <p class="text-[10px] uppercase text-neutral-500 font-black mb-1">Season</p>
+                            <select id="seasonSelect" onchange="updateEpisodes()" class="w-full bg-neutral-800 border border-neutral-700 rounded-xl p-3 text-sm focus:ring-2 focus:ring-red-500 outline-none"></select>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase text-neutral-500 font-black mb-1">Episode</p>
+                            <select id="episodeSelect" onchange="changeEpisode()" class="w-full bg-neutral-800 border border-neutral-700 rounded-xl p-3 text-sm focus:ring-2 focus:ring-red-500 outline-none"></select>
                         </div>
                     </div>
-                    <button onclick="deleteMovie('${movie.id}')" class="text-red-500 p-2 opacity-50 hover:opacity-100 transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                </div>
+            </div>
+
+            <!-- Details Sidebar -->
+            <div class="lg:col-span-1">
+                <div class="bg-neutral-900/80 p-8 rounded-3xl border border-white/5 h-full sticky top-32">
+                    <h2 id="mediaTitle" class="text-4xl font-black text-white leading-none tracking-tighter mb-4"></h2>
+                    <div class="flex items-center gap-4 mb-6">
+                        <span id="mediaRating" class="flex items-center gap-1 text-yellow-500 font-bold"><i class="fa-solid fa-star"></i> <span></span></span>
+                        <span id="mediaYear" class="text-neutral-500 font-bold"></span>
+                        <span id="mediaTypeLabel" class="bg-white/10 text-white px-2 py-1 rounded text-[10px] font-black uppercase"></span>
+                    </div>
+                    <p id="mediaDesc" class="text-neutral-400 text-sm leading-relaxed line-clamp-6 mb-8"></p>
+                    <button onclick="closePlayer()" class="w-full bg-red-600 hover:bg-red-700 py-4 rounded-2xl font-black transition-all text-sm uppercase tracking-widest shadow-xl shadow-red-600/20">
+                        <i class="fa-solid fa-power-off mr-2"></i> Stop Player
                     </button>
                 </div>
-            `).join('');
-        }
+            </div>
+        </div>
+    </section>
 
-        // --- Actions ---
-        window.deleteMovie = async (id) => {
-            if (!confirm("Delete this content?")) return;
-            try {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'movies', id));
-                addLog("Record Deleted", "info");
-            } catch (e) { addLog("Delete Failed", "error"); }
-        };
-
-        window.publishContent = async () => {
-            const title = document.getElementById('f-title').value;
-            const src = document.getElementById('f-src').value;
-            const btn = document.getElementById('btn-publish');
-
-            if (!title || !src) return alert("Title and Source are required.");
-
-            btn.disabled = true;
-            btn.innerText = "UPLOADING...";
-            addLog("Uploading metadata to Cloud...");
-
-            try {
-                const movieData = {
-                    title,
-                    slug: document.getElementById('f-slug').value,
-                    src,
-                    img: document.getElementById('f-img').value,
-                    year: document.getElementById('f-year').value,
-                    tmdb: document.getElementById('f-tmdb').value,
-                    type: document.getElementById('contentType').value,
-                    createdAt: serverTimestamp()
-                };
-
-                // 1. Save to Firestore
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'movies'), movieData);
-                addLog("Cloud Upload Successful", "success");
-
-                // 2. Notify Telegram via Puter Bridge
-                addLog("Sending Telegram Notification...");
-                const tgMsg = `🎬 *NEW ON CINEVIEW* \n\n🍿 *Title:* ${movieData.title}\n📅 *Year:* ${movieData.year}\n\n🔗 [Watch Now](https://prigames.netlify.app/movies/newplayer/player?id=${movieData.slug})`;
-                
-                const tgRes = await puter.net.fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendPhoto`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: TG_CHAT,
-                        photo: movieData.img,
-                        caption: tgMsg,
-                        parse_mode: 'Markdown'
-                    })
-                });
-                
-                const tgData = await tgRes.json();
-                if (tgData.ok) addLog("Telegram Alert Sent", "success");
-                else addLog("Telegram Failed: " + tgData.description, "error");
-
-                alert("🚀 Success! Published to Cloud & Telegram.");
-                resetForm();
-
-            } catch (e) {
-                addLog("Publish Failed: " + e.message, "error");
-                alert("Error: " + e.message);
-            }
-            btn.disabled = false;
-            btn.innerText = "🚀 Publish & Notify Telegram";
-        };
-
-        function resetForm() {
-            document.getElementById('f-title').value = '';
-            document.getElementById('f-slug').value = '';
-            document.getElementById('f-src').value = '';
-            document.getElementById('f-img').value = '';
-            document.getElementById('f-year').value = '';
-            document.getElementById('tmdbInput').value = '';
-            document.getElementById('tmdbResults').innerHTML = '';
-        }
-    </script>
+    <!-- Content Grid -->
+    <main class="pt-32 container mx-auto px-4" id="mainGrid">
+        <div class="flex items-center justify-between mb-10 px-2">
+            <h2 id="gridTitle" class="text-3xl font-black tracking-tighter">Trending Movies</h2>
+            <div class="h-1 flex-1 bg-neutral-900 mx-6 rounded-full overflow-hidden">
+                <div class="h-full bg-red-600 w-24 animate-pulse"></div>
+            </div>
+        </div>
+        
+        <div id="resultsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-8 pb-32"></div>
+        
+        <div id="gridLoader" class="flex justify-center py-20 hidden">
+            <div class="loader"></div>
+        </div>
+    </main>
 
     <script>
-        // --- Standard UI Helpers ---
-        function switchTab(tab) {
-            document.getElementById('section-add').classList.toggle('hidden', tab !== 'add');
-            document.getElementById('section-manage').classList.toggle('hidden', tab !== 'manage');
-            document.getElementById('tab-add').className = `px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest ${tab === 'add' ? 'tab-active' : 'text-slate-500'}`;
-            document.getElementById('tab-manage').className = `px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest ${tab === 'manage' ? 'tab-active' : 'text-slate-500'}`;
+        const TMDB_KEY = 'dc691868b09daaabe9acc238ed898cf7';
+        const IMG_PATH = 'https://image.tmdb.org/t/p/w500';
+
+        let state = {
+            id: null,
+            type: 'movie',
+            season: 1,
+            episode: 1,
+            server: 'vidsrc.to',
+            data: null
+        };
+
+        const servers = [
+            { name: 'Server 1', host: 'vidsrc.to' },
+            { name: 'Server 2', host: 'vidsrc.me' },
+            { name: 'Server 3', host: '2embed.cc' },
+            { name: 'Server 4', host: 'autoembed.to' },
+            { name: 'Server 5', host: 'moviesapi.club' },
+            { name: 'Server 6', host: 'vidsrc.cc' }
+        ];
+
+        window.onload = () => {
+            fetchMovies('movie');
+            setupSearch();
+            renderServerButtons();
+        };
+
+        function setupSearch() {
+            const search = document.getElementById('searchInput');
+            search.addEventListener('keypress', (e) => {
+                if(e.key === 'Enter' && search.value) {
+                    searchContent(search.value);
+                    if(state.id) closePlayer();
+                }
+            });
         }
 
-        async function searchTMDB(val) {
-            if (val.length < 2) return;
-            const type = document.getElementById('contentType').value === 'series' ? 'tv' : 'movie';
-            const res = await fetch(`https://api.themoviedb.org/3/search/${type}?api_key=dc691868b09daaabe9acc238ed898cf7&query=${encodeURIComponent(val)}`);
+        async function fetchMovies(type) {
+            const grid = document.getElementById('resultsGrid');
+            const loader = document.getElementById('gridLoader');
+            const title = document.getElementById('gridTitle');
+            
+            title.innerText = type === 'movie' ? 'Popular Movies' : 'Hot TV Shows';
+            grid.innerHTML = '';
+            loader.classList.remove('hidden');
+
+            const endpoint = type === 'movie' ? '/movie/popular' : '/tv/popular';
+            const res = await fetch(`https://api.themoviedb.org/3${endpoint}?api_key=${TMDB_KEY}`);
             const data = await res.json();
-            const container = document.getElementById('tmdbResults');
-            container.innerHTML = data.results.slice(0, 8).map(item => `
-                <div onclick="selectTMDB('${item.id}', '${(item.title || item.name).replace(/'/g, "\\'")}', '${item.poster_path}', '${(item.release_date || item.first_air_date || '').split('-')[0]}')" class="flex-shrink-0 w-24 text-center space-y-2 cursor-pointer active:scale-95 transition-transform">
-                    <img src="https://image.tmdb.org/t/p/w200${item.poster_path}" class="h-32 w-full object-cover rounded-xl border border-slate-800">
-                    <p class="text-[8px] font-bold truncate uppercase text-slate-500">${item.title || item.name}</p>
-                </div>
-            `).join('');
+            
+            renderCards(data.results, type);
+            loader.classList.add('hidden');
         }
 
-        function selectTMDB(id, name, img, year) {
-            document.getElementById('f-title').value = name;
-            document.getElementById('f-img').value = `https://image.tmdb.org/t/p/w500${img}`;
-            document.getElementById('f-year').value = year;
-            document.getElementById('f-tmdb').value = id;
-            document.getElementById('f-slug').value = name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
-            document.getElementById('tmdbResults').innerHTML = `<p class="text-[10px] text-blue-500 font-bold w-full text-center py-4 uppercase">Selected: ${name}</p>`;
+        async function searchContent(query) {
+            const grid = document.getElementById('resultsGrid');
+            grid.innerHTML = '';
+            document.getElementById('gridTitle').innerText = `Results for: ${query}`;
+            
+            const res = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${TMDB_KEY}&query=${encodeURIComponent(query)}`);
+            const data = await res.json();
+            renderCards(data.results);
         }
 
-        async function fetchAbyss() {
-            const btn = document.getElementById('btn-abyss');
-            const container = document.getElementById('abyssResults');
-            btn.disabled = true;
-            btn.innerText = "SYNCING...";
-            addLog("Accessing Abyss Library via Cloud Bridge...");
+        function renderCards(items, forceType = null) {
+            const grid = document.getElementById('resultsGrid');
+            items.forEach(item => {
+                if(!item.poster_path) return;
+                
+                const type = forceType || item.media_type || (item.title ? 'movie' : 'tv');
+                const title = item.title || item.name;
+                const year = (item.release_date || item.first_air_date || '????').split('-')[0];
 
-            try {
-                const res = await puter.net.fetch(`https://api.abyss.to/v1/resources?key=391ea7f7e967589e017d3b3924b1c33f&type=files&maxResults=30`);
-                const data = await res.json();
-                container.innerHTML = data.items.map(file => `
-                    <div onclick="document.getElementById('f-src').value = 'https://short.icu/${file.id}'" class="flex-shrink-0 p-3 bg-slate-950 border border-slate-800 rounded-2xl w-40 cursor-pointer active:bg-blue-600/10">
-                        <div class="text-[9px] font-bold truncate text-slate-200">${file.name}</div>
-                        <div class="text-[7px] text-blue-500 uppercase font-black mt-2">Tap to Select</div>
+                const card = document.createElement('div');
+                card.className = 'movie-card group cursor-pointer';
+                card.innerHTML = `
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl mb-4 bg-neutral-800">
+                        <img src="${IMG_PATH + item.poster_path}" class="w-full aspect-[2/3] object-cover transition-all duration-700">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-4 text-center">
+                            <div class="w-14 h-14 bg-red-600 rounded-full flex items-center justify-center mb-4 transform scale-50 group-hover:scale-100 transition-transform">
+                                <i class="fa-solid fa-play text-white text-xl ml-1"></i>
+                            </div>
+                            <p class="text-[10px] font-black uppercase tracking-widest text-white/70">Click to stream</p>
+                        </div>
                     </div>
-                `).join('');
-                addLog(`Abyss Synced: ${data.items.length} files found`, "success");
-            } catch (e) {
-                addLog("Abyss Sync Failed", "error");
-                container.innerHTML = `<p class="text-red-500 text-[10px] py-4 w-full text-center">Connection Failed.</p>`;
+                    <div>
+                        <h4 class="text-sm font-black truncate text-white/90 group-hover:text-red-500 transition-colors">${title}</h4>
+                        <div class="flex items-center justify-between mt-1">
+                            <span class="text-[9px] text-neutral-500 font-bold uppercase">${year}</span>
+                            <span class="text-[9px] bg-white/5 px-2 py-0.5 rounded text-neutral-400 font-black">${type}</span>
+                        </div>
+                    </div>
+                `;
+                card.onclick = () => initMedia(item, type);
+                grid.appendChild(card);
+            });
+        }
+
+        async function initMedia(item, type) {
+            state.id = item.id;
+            state.type = type;
+            state.season = 1;
+            state.episode = 1;
+
+            document.getElementById('playerSection').classList.remove('hidden');
+            document.getElementById('mainGrid').classList.add('opacity-20', 'pointer-events-none');
+            document.getElementById('mediaTitle').innerText = item.title || item.name;
+            document.getElementById('mediaDesc').innerText = item.overview || "No plot information available.";
+            document.getElementById('mediaRating').querySelector('span').innerText = item.vote_average.toFixed(1);
+            document.getElementById('mediaYear').innerText = (item.release_date || item.first_air_date || '2024').split('-')[0];
+            document.getElementById('mediaTypeLabel').innerText = type;
+
+            if(type === 'tv') {
+                document.getElementById('tvControls').classList.remove('hidden');
+                setupTVSelector(item.id);
+            } else {
+                document.getElementById('tvControls').classList.add('hidden');
             }
-            btn.disabled = false;
-            btn.innerText = "Refresh List";
+
+            renderPlayer();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function setupTVSelector(id) {
+            const res = await fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=${TMDB_KEY}`);
+            const data = await res.json();
+            const seasonSelect = document.getElementById('seasonSelect');
+            seasonSelect.innerHTML = '';
+            
+            data.seasons.forEach(s => {
+                if(s.season_number === 0) return;
+                const opt = document.createElement('option');
+                opt.value = s.season_number;
+                opt.innerText = `Season ${s.season_number}`;
+                seasonSelect.appendChild(opt);
+            });
+            updateEpisodes();
+        }
+
+        async function updateEpisodes() {
+            state.season = document.getElementById('seasonSelect').value;
+            const res = await fetch(`https://api.themoviedb.org/3/tv/${state.id}/season/${state.season}?api_key=${TMDB_KEY}`);
+            const data = await res.json();
+            const epSelect = document.getElementById('episodeSelect');
+            epSelect.innerHTML = '';
+            data.episodes.forEach(e => {
+                const opt = document.createElement('option');
+                opt.value = e.episode_number;
+                opt.innerText = `Ep ${e.episode_number}: ${e.name}`;
+                epSelect.appendChild(opt);
+            });
+            state.episode = 1;
+            renderPlayer();
+        }
+
+        function changeEpisode() {
+            state.episode = document.getElementById('episodeSelect').value;
+            renderPlayer();
+        }
+
+        function renderPlayer() {
+            const container = document.getElementById('iframeContainer');
+            const loading = document.getElementById('playerLoading');
+            loading.classList.remove('hidden');
+            
+            let embedUrl = "";
+            const host = state.server;
+            
+            if(state.type === 'movie') {
+                if(host === '2embed.cc') embedUrl = `https://www.2embed.cc/embed/${state.id}`;
+                else if(host === 'moviesapi.club') embedUrl = `https://moviesapi.club/movie/${state.id}`;
+                else embedUrl = `https://${host}/embed/movie/${state.id}`;
+            } else {
+                if(host === '2embed.cc') embedUrl = `https://www.2embed.cc/embedtv/${state.id}&s=${state.season}&e=${state.episode}`;
+                else if(host === 'moviesapi.club') embedUrl = `https://moviesapi.club/tv/${state.id}-${state.season}-${state.episode}`;
+                else embedUrl = `https://${host}/embed/tv/${state.id}/${state.season}/${state.episode}`;
+            }
+
+            // No Sandbox - Removed for maximum compatibility
+            container.innerHTML = `<iframe src="${embedUrl}" allowfullscreen allow="autoplay; fullscreen; picture-in-picture" scrolling="no"></iframe>`;
+            
+            setTimeout(() => loading.classList.add('hidden'), 1000);
+            updateServerButtons();
+        }
+
+        function renderServerButtons() {
+            const list = document.getElementById('serverList');
+            servers.forEach(s => {
+                const btn = document.createElement('button');
+                btn.className = `server-btn bg-white/5 text-neutral-500 px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white/10`;
+                btn.innerText = s.name;
+                btn.id = `btn-${s.host}`;
+                btn.onclick = () => {
+                    state.server = s.host;
+                    renderPlayer();
+                };
+                list.appendChild(btn);
+            });
+        }
+
+        function updateServerButtons() {
+            document.querySelectorAll('.server-btn').forEach(b => b.classList.remove('active'));
+            const activeBtn = document.getElementById(`btn-${state.server}`);
+            if(activeBtn) activeBtn.classList.add('active');
+        }
+
+        function closePlayer() {
+            document.getElementById('playerSection').classList.add('hidden');
+            document.getElementById('mainGrid').classList.remove('opacity-20', 'pointer-events-none');
+            document.getElementById('iframeContainer').innerHTML = '';
+            state.id = null;
         }
     </script>
 </body>
