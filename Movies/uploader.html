@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineView Pro - Unrestricted Streaming</title>
+    <title>CineView - Hindi Dubbed Movies</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -17,19 +17,18 @@
         }
 
         .glass-nav {
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 2px solid #ef4444;
         }
 
         .player-aspect {
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
-            border-radius: 12px;
+            border-radius: 15px;
             background: #000;
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
         }
 
         .player-aspect iframe {
@@ -39,66 +38,53 @@
             border: none;
         }
 
-        .server-btn {
-            transition: all 0.2s ease;
-        }
-
         .server-btn.active {
             background-color: #ef4444;
             color: white;
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
-        }
-
-        .movie-card:hover img {
-            transform: scale(1.08);
-            filter: brightness(0.6);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
         }
 
         .loader {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #ef4444;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #222;
+            border-top: 5px solid #ef4444;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="min-h-screen">
 
-    <!-- Navbar -->
+    <!-- Navigation -->
     <nav class="glass-nav fixed top-0 w-full z-50 px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
         <div class="flex items-center gap-2 cursor-pointer" onclick="location.reload()">
             <div class="bg-red-600 p-2 rounded-lg">
-                <i class="fa-solid fa-clapperboard text-white"></i>
+                <i class="fa-solid fa-film text-white"></i>
             </div>
-            <h1 class="text-2xl font-black tracking-tighter italic">CINE<span class="text-red-600 font-bold">VIEW</span></h1>
+            <h1 class="text-2xl font-black tracking-tighter italic">CINE<span class="text-red-600">HINDI</span></h1>
         </div>
 
-        <div class="relative w-full max-w-2xl">
+        <div class="relative w-full max-w-xl">
             <input 
                 type="text" id="searchInput" 
-                placeholder="Movie ya TV Show search karein..." 
-                class="w-full bg-neutral-900 border border-neutral-800 rounded-xl py-3 px-12 focus:outline-none focus:ring-2 focus:ring-red-600 transition-all text-sm"
+                placeholder="Movie ka naam likhein (e.g. Iron Man Hindi)..." 
+                class="w-full bg-neutral-900 border border-neutral-800 rounded-full py-3 px-12 focus:outline-none focus:ring-2 focus:ring-red-600 transition-all text-sm"
             >
             <i class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-neutral-500"></i>
         </div>
 
-        <div class="flex gap-4 text-xs font-bold uppercase tracking-widest">
-            <button onclick="fetchMovies('movie')" class="hover:text-red-500 transition-colors">Movies</button>
-            <button onclick="fetchMovies('tv')" class="hover:text-red-500 transition-colors">TV Shows</button>
+        <div class="flex gap-4 text-xs font-bold uppercase">
+            <button onclick="fetchMovies('hi')" class="text-red-500 hover:text-white transition-colors">Bollywood</button>
+            <button onclick="fetchMovies('en', true)" class="hover:text-red-500 transition-colors">Hollywood Hindi</button>
         </div>
     </nav>
 
-    <!-- Player Section -->
-    <section id="playerSection" class="hidden pt-32 pb-10 container mx-auto px-4">
-        <div class="grid lg:grid-cols-3 gap-6">
-            
+    <!-- Player Container -->
+    <section id="playerSection" class="hidden pt-36 pb-10 container mx-auto px-4">
+        <div class="grid lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2 space-y-4">
                 <div class="player-aspect bg-neutral-900">
                     <div id="playerLoading" class="absolute inset-0 flex items-center justify-center bg-black z-10 hidden">
@@ -107,46 +93,38 @@
                     <div id="iframeContainer" class="w-full h-full"></div>
                 </div>
 
-                <!-- Servers -->
+                <!-- Servers with Hindi Note -->
                 <div class="bg-neutral-900/80 p-5 rounded-2xl border border-white/5">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-xs font-black text-neutral-400 uppercase tracking-tighter">Backup Servers</h3>
-                        <span class="text-[10px] bg-red-600/20 text-red-500 px-2 py-1 rounded font-bold">Auto-Sync Enabled</span>
+                        <h3 class="text-xs font-black text-neutral-400 uppercase tracking-widest">Servers (Check Audio in Settings)</h3>
+                        <span class="text-[10px] bg-green-600/20 text-green-500 px-2 py-1 rounded font-bold">Hindi Tracks Available</span>
                     </div>
                     <div id="serverList" class="flex flex-wrap gap-2"></div>
+                    <p class="text-[10px] text-neutral-500 mt-3 italic">*Agar audio English ho, toh player ke andar 'Settings' ya 'Audio' icon par click karke Hindi select karein.</p>
                 </div>
 
                 <!-- TV Controls -->
                 <div id="tvControls" class="hidden bg-neutral-900/80 p-6 rounded-2xl border border-white/5">
-                    <div class="flex items-center gap-2 mb-4">
-                        <i class="fa-solid fa-layer-group text-red-500"></i>
-                        <h3 class="font-bold text-sm uppercase">Episodes Selector</h3>
-                    </div>
+                    <h3 class="font-bold text-sm uppercase mb-4 text-red-500 italic">Season & Episode Chunyein</h3>
                     <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <p class="text-[10px] uppercase text-neutral-500 font-black mb-1">Season</p>
-                            <select id="seasonSelect" onchange="updateEpisodes()" class="w-full bg-neutral-800 border border-neutral-700 rounded-xl p-3 text-sm focus:ring-2 focus:ring-red-500 outline-none"></select>
-                        </div>
-                        <div>
-                            <p class="text-[10px] uppercase text-neutral-500 font-black mb-1">Episode</p>
-                            <select id="episodeSelect" onchange="changeEpisode()" class="w-full bg-neutral-800 border border-neutral-700 rounded-xl p-3 text-sm focus:ring-2 focus:ring-red-500 outline-none"></select>
-                        </div>
+                        <select id="seasonSelect" onchange="updateEpisodes()" class="bg-neutral-800 border border-neutral-700 rounded-xl p-3 text-sm focus:ring-2 focus:ring-red-500 outline-none"></select>
+                        <select id="episodeSelect" onchange="changeEpisode()" class="bg-neutral-800 border border-neutral-700 rounded-xl p-3 text-sm focus:ring-2 focus:ring-red-500 outline-none"></select>
                     </div>
                 </div>
             </div>
 
             <!-- Details Sidebar -->
             <div class="lg:col-span-1">
-                <div class="bg-neutral-900/80 p-8 rounded-3xl border border-white/5 h-full sticky top-32">
-                    <h2 id="mediaTitle" class="text-4xl font-black text-white leading-none tracking-tighter mb-4"></h2>
+                <div class="bg-neutral-900/80 p-8 rounded-3xl border border-white/5 h-full">
+                    <h2 id="mediaTitle" class="text-3xl font-black text-white leading-tight mb-4"></h2>
                     <div class="flex items-center gap-4 mb-6">
-                        <span id="mediaRating" class="flex items-center gap-1 text-yellow-500 font-bold"><i class="fa-solid fa-star"></i> <span></span></span>
+                        <span id="mediaRating" class="text-yellow-500 font-bold italic"><i class="fa-solid fa-star"></i> <span></span></span>
                         <span id="mediaYear" class="text-neutral-500 font-bold"></span>
-                        <span id="mediaTypeLabel" class="bg-white/10 text-white px-2 py-1 rounded text-[10px] font-black uppercase"></span>
+                        <span id="mediaTypeLabel" class="bg-red-600 text-white px-2 py-1 rounded text-[10px] font-black uppercase tracking-widest"></span>
                     </div>
-                    <p id="mediaDesc" class="text-neutral-400 text-sm leading-relaxed line-clamp-6 mb-8"></p>
-                    <button onclick="closePlayer()" class="w-full bg-red-600 hover:bg-red-700 py-4 rounded-2xl font-black transition-all text-sm uppercase tracking-widest shadow-xl shadow-red-600/20">
-                        <i class="fa-solid fa-power-off mr-2"></i> Stop Player
+                    <p id="mediaDesc" class="text-neutral-400 text-sm leading-relaxed mb-8"></p>
+                    <button onclick="closePlayer()" class="w-full bg-neutral-800 hover:bg-red-600 py-4 rounded-2xl font-black transition-all text-sm uppercase tracking-widest">
+                        Player Band Karein
                     </button>
                 </div>
             </div>
@@ -154,13 +132,8 @@
     </section>
 
     <!-- Content Grid -->
-    <main class="pt-32 container mx-auto px-4" id="mainGrid">
-        <div class="flex items-center justify-between mb-10 px-2">
-            <h2 id="gridTitle" class="text-3xl font-black tracking-tighter">Trending Movies</h2>
-            <div class="h-1 flex-1 bg-neutral-900 mx-6 rounded-full overflow-hidden">
-                <div class="h-full bg-red-600 w-24 animate-pulse"></div>
-            </div>
-        </div>
+    <main class="pt-36 container mx-auto px-4" id="mainGrid">
+        <h2 id="gridTitle" class="text-3xl font-black tracking-tighter mb-10 border-l-4 border-red-600 pl-4">Trending Hindi Content</h2>
         
         <div id="resultsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-8 pb-32"></div>
         
@@ -183,16 +156,14 @@
         };
 
         const servers = [
-            { name: 'Server 1', host: 'vidsrc.to' },
-            { name: 'Server 2', host: 'vidsrc.me' },
-            { name: 'Server 3', host: '2embed.cc' },
-            { name: 'Server 4', host: 'autoembed.to' },
-            { name: 'Server 5', host: 'moviesapi.club' },
-            { name: 'Server 6', host: 'vidsrc.cc' }
+            { name: 'Server 1 (Multi)', host: 'vidsrc.to' },
+            { name: 'Server 2 (Hindi)', host: 'vidsrc.me' },
+            { name: 'Server 3 (Extra)', host: '2embed.cc' },
+            { name: 'Server 4 (Backup)', host: 'autoembed.to' }
         ];
 
         window.onload = () => {
-            fetchMovies('movie');
+            fetchMovies('hi'); // Default: Hindi movies
             setupSearch();
             renderServerButtons();
         };
@@ -202,64 +173,68 @@
             search.addEventListener('keypress', (e) => {
                 if(e.key === 'Enter' && search.value) {
                     searchContent(search.value);
-                    if(state.id) closePlayer();
                 }
             });
         }
 
-        async function fetchMovies(type) {
+        async function fetchMovies(langCode, dubbedMode = false) {
             const grid = document.getElementById('resultsGrid');
             const loader = document.getElementById('gridLoader');
             const title = document.getElementById('gridTitle');
             
-            title.innerText = type === 'movie' ? 'Popular Movies' : 'Hot TV Shows';
+            title.innerText = dubbedMode ? 'Hollywood Hindi Dubbed' : 'Popular Hindi Movies';
             grid.innerHTML = '';
             loader.classList.remove('hidden');
 
-            const endpoint = type === 'movie' ? '/movie/popular' : '/tv/popular';
-            const res = await fetch(`https://api.themoviedb.org/3${endpoint}?api_key=${TMDB_KEY}`);
+            // Dubbed mode: Search for movies released in English but fetch with Hindi metadata
+            let url = dubbedMode 
+                ? `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_KEY}&language=hi-IN&sort_by=popularity.desc&with_original_language=en`
+                : `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_KEY}&language=hi-IN&sort_by=popularity.desc&with_original_language=hi`;
+
+            const res = await fetch(url);
             const data = await res.json();
-            
-            renderCards(data.results, type);
+            renderCards(data.results);
             loader.classList.add('hidden');
         }
 
         async function searchContent(query) {
             const grid = document.getElementById('resultsGrid');
             grid.innerHTML = '';
-            document.getElementById('gridTitle').innerText = `Results for: ${query}`;
+            document.getElementById('gridTitle').innerText = `Results: ${query}`;
             
-            const res = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${TMDB_KEY}&query=${encodeURIComponent(query)}`);
+            // Appending "Hindi" internally to help TMDB find dubbed content
+            const searchQuery = query.toLowerCase().includes('hindi') ? query : query + " Hindi";
+            const res = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${TMDB_KEY}&language=hi-IN&query=${encodeURIComponent(searchQuery)}`);
             const data = await res.json();
             renderCards(data.results);
         }
 
-        function renderCards(items, forceType = null) {
+        function renderCards(items) {
             const grid = document.getElementById('resultsGrid');
             items.forEach(item => {
                 if(!item.poster_path) return;
                 
-                const type = forceType || item.media_type || (item.title ? 'movie' : 'tv');
+                const type = item.media_type || (item.title ? 'movie' : 'tv');
                 const title = item.title || item.name;
                 const year = (item.release_date || item.first_air_date || '????').split('-')[0];
 
                 const card = document.createElement('div');
-                card.className = 'movie-card group cursor-pointer';
+                card.className = 'group cursor-pointer';
                 card.innerHTML = `
                     <div class="relative rounded-2xl overflow-hidden shadow-2xl mb-4 bg-neutral-800">
-                        <img src="${IMG_PATH + item.poster_path}" class="w-full aspect-[2/3] object-cover transition-all duration-700">
-                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-4 text-center">
-                            <div class="w-14 h-14 bg-red-600 rounded-full flex items-center justify-center mb-4 transform scale-50 group-hover:scale-100 transition-transform">
-                                <i class="fa-solid fa-play text-white text-xl ml-1"></i>
+                        <img src="${IMG_PATH + item.poster_path}" class="w-full aspect-[2/3] object-cover transition-all duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-4">
+                            <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center mb-2">
+                                <i class="fa-solid fa-play text-white ml-1"></i>
                             </div>
-                            <p class="text-[10px] font-black uppercase tracking-widest text-white/70">Click to stream</p>
+                            <p class="text-[10px] font-black uppercase tracking-widest text-white/70">Play Hindi</p>
                         </div>
                     </div>
                     <div>
-                        <h4 class="text-sm font-black truncate text-white/90 group-hover:text-red-500 transition-colors">${title}</h4>
-                        <div class="flex items-center justify-between mt-1">
-                            <span class="text-[9px] text-neutral-500 font-bold uppercase">${year}</span>
-                            <span class="text-[9px] bg-white/5 px-2 py-0.5 rounded text-neutral-400 font-black">${type}</span>
+                        <h4 class="text-sm font-black truncate text-white/90 group-hover:text-red-500">${title}</h4>
+                        <div class="flex items-center justify-between mt-1 text-[9px] font-bold text-neutral-500 uppercase">
+                            <span>${year}</span>
+                            <span class="bg-white/5 px-2 py-0.5 rounded">${type}</span>
                         </div>
                     </div>
                 `;
@@ -275,9 +250,9 @@
             state.episode = 1;
 
             document.getElementById('playerSection').classList.remove('hidden');
-            document.getElementById('mainGrid').classList.add('opacity-20', 'pointer-events-none');
+            document.getElementById('mainGrid').classList.add('opacity-10', 'pointer-events-none');
             document.getElementById('mediaTitle').innerText = item.title || item.name;
-            document.getElementById('mediaDesc').innerText = item.overview || "No plot information available.";
+            document.getElementById('mediaDesc').innerText = item.overview || "Is movie ki jankari Hindi mein uplabd nahi hai.";
             document.getElementById('mediaRating').querySelector('span').innerText = item.vote_average.toFixed(1);
             document.getElementById('mediaYear').innerText = (item.release_date || item.first_air_date || '2024').split('-')[0];
             document.getElementById('mediaTypeLabel').innerText = type;
@@ -294,11 +269,10 @@
         }
 
         async function setupTVSelector(id) {
-            const res = await fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=${TMDB_KEY}`);
+            const res = await fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=${TMDB_KEY}&language=hi-IN`);
             const data = await res.json();
             const seasonSelect = document.getElementById('seasonSelect');
             seasonSelect.innerHTML = '';
-            
             data.seasons.forEach(s => {
                 if(s.season_number === 0) return;
                 const opt = document.createElement('option');
@@ -311,7 +285,7 @@
 
         async function updateEpisodes() {
             state.season = document.getElementById('seasonSelect').value;
-            const res = await fetch(`https://api.themoviedb.org/3/tv/${state.id}/season/${state.season}?api_key=${TMDB_KEY}`);
+            const res = await fetch(`https://api.themoviedb.org/3/tv/${state.id}/season/${state.season}?api_key=${TMDB_KEY}&language=hi-IN`);
             const data = await res.json();
             const epSelect = document.getElementById('episodeSelect');
             epSelect.innerHTML = '';
@@ -340,18 +314,14 @@
             
             if(state.type === 'movie') {
                 if(host === '2embed.cc') embedUrl = `https://www.2embed.cc/embed/${state.id}`;
-                else if(host === 'moviesapi.club') embedUrl = `https://moviesapi.club/movie/${state.id}`;
                 else embedUrl = `https://${host}/embed/movie/${state.id}`;
             } else {
                 if(host === '2embed.cc') embedUrl = `https://www.2embed.cc/embedtv/${state.id}&s=${state.season}&e=${state.episode}`;
-                else if(host === 'moviesapi.club') embedUrl = `https://moviesapi.club/tv/${state.id}-${state.season}-${state.episode}`;
                 else embedUrl = `https://${host}/embed/tv/${state.id}/${state.season}/${state.episode}`;
             }
 
-            // No Sandbox - Removed for maximum compatibility
-            container.innerHTML = `<iframe src="${embedUrl}" allowfullscreen allow="autoplay; fullscreen; picture-in-picture" scrolling="no"></iframe>`;
-            
-            setTimeout(() => loading.classList.add('hidden'), 1000);
+            container.innerHTML = `<iframe src="${embedUrl}" allowfullscreen allow="autoplay; fullscreen" scrolling="no"></iframe>`;
+            setTimeout(() => loading.classList.add('hidden'), 1500);
             updateServerButtons();
         }
 
@@ -359,13 +329,10 @@
             const list = document.getElementById('serverList');
             servers.forEach(s => {
                 const btn = document.createElement('button');
-                btn.className = `server-btn bg-white/5 text-neutral-500 px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white/10`;
+                btn.className = `server-btn bg-white/5 text-neutral-400 px-4 py-2 rounded-xl text-[10px] font-black uppercase hover:bg-white/10`;
                 btn.innerText = s.name;
                 btn.id = `btn-${s.host}`;
-                btn.onclick = () => {
-                    state.server = s.host;
-                    renderPlayer();
-                };
+                btn.onclick = () => { state.server = s.host; renderPlayer(); };
                 list.appendChild(btn);
             });
         }
@@ -378,9 +345,8 @@
 
         function closePlayer() {
             document.getElementById('playerSection').classList.add('hidden');
-            document.getElementById('mainGrid').classList.remove('opacity-20', 'pointer-events-none');
+            document.getElementById('mainGrid').classList.remove('opacity-10', 'pointer-events-none');
             document.getElementById('iframeContainer').innerHTML = '';
-            state.id = null;
         }
     </script>
 </body>
