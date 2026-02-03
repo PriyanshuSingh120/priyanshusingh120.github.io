@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CineView Admin Pro | Abyss Folder Explorer</title>
+    <title>CineView Admin Pro | Abyss & GitHub Sync</title>
     <script src="https://js.puter.com/v2/"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -12,9 +12,7 @@
         .custom-scroll::-webkit-scrollbar { height: 4px; width: 4px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
         input, select, textarea { background: #0f172a !important; border: 1px solid #1e293b !important; color: white !important; }
-        .folder-card { border-left: 4px solid #facc15; background: rgba(250, 204, 21, 0.1) !important; }
-        .file-card { border-left: 4px solid #3b82f6; background: rgba(59, 130, 246, 0.1) !important; }
-        .card-active:active { transform: scale(0.95); opacity: 0.8; }
+        input:focus { border-color: #3b82f6 !important; ring: 1px #3b82f6; }
     </style>
 </head>
 <body class="p-4 md:p-10 font-sans">
@@ -24,27 +22,41 @@
     <div class="flex flex-col md:flex-row justify-between items-center gap-4">
         <div>
             <h1 class="text-4xl font-black italic text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-500 tracking-tighter">CINEVIEW PRO</h1>
-            <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Abyss Folder-to-Episode Automator</p>
+            <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Master Admin • Abyss & GitHub Auto-Sync</p>
         </div>
         <div id="syncStatus" class="hidden flex items-center gap-2 bg-blue-500/10 text-blue-400 border border-blue-500/20 px-4 py-2 rounded-full text-[10px] font-bold uppercase animate-pulse">
             <span class="w-2 h-2 bg-blue-500 rounded-full"></span> GitHub Uploading...
         </div>
     </div>
 
+    <!-- GitHub Config -->
+    <div class="glass-card rounded-3xl p-6">
+        <button onclick="document.getElementById('ghConfig').classList.toggle('hidden')" class="w-full text-left text-xs font-bold text-slate-400 uppercase flex justify-between items-center">
+            <span>GitHub Configuration</span>
+            <span class="bg-slate-800 p-1 px-2 rounded">SETTINGS ▼</span>
+        </button>
+        <div id="ghConfig" class="hidden mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="password" id="ghToken" placeholder="GitHub PAT (Fine-grained Token)" class="w-full p-3 rounded-xl text-xs outline-none">
+            <input type="text" id="ghUser" placeholder="GitHub Username" class="w-full p-3 rounded-xl text-xs outline-none">
+            <input type="text" id="ghRepo" placeholder="Repository Name" class="w-full p-3 rounded-xl text-xs outline-none">
+            <input type="text" id="ghPath" placeholder="Data Path (e.g. data/movies.js)" class="w-full p-3 rounded-xl text-xs outline-none">
+            <button onclick="saveConfig()" class="md:col-span-2 bg-slate-800 hover:bg-slate-700 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition">Save Locally</button>
+        </div>
+    </div>
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Left Column -->
+        <!-- Left: Search & Content Selection -->
         <div class="space-y-6">
-            <!-- Search & Type -->
             <div class="glass-card rounded-3xl p-6 space-y-4">
                 <div class="flex gap-2">
-                    <select id="contentType" onchange="toggleType()" class="w-32 p-3 rounded-xl text-xs font-bold outline-none cursor-pointer">
+                    <select id="contentType" onchange="toggleType()" class="w-32 p-3 rounded-xl text-xs font-bold outline-none">
                         <option value="movie">Movie</option>
                         <option value="series">Series</option>
                     </select>
-                    <input type="text" id="apiSearch" oninput="searchTMDB()" placeholder="Search TMDB..." class="flex-grow p-3 rounded-xl text-sm outline-none">
+                    <input type="text" id="apiSearch" oninput="searchTMDB()" placeholder="Search Movie or TV Series..." class="flex-grow p-3 rounded-xl text-sm outline-none">
                 </div>
                 <div id="tmdbResults" class="flex gap-3 overflow-x-auto pb-4 custom-scroll min-h-[160px]">
-                    <p class="text-slate-600 text-xs italic py-10 w-full text-center">Search for content on TMDB...</p>
+                    <p class="text-slate-600 text-xs italic py-10 w-full text-center">Type above to search TMDB...</p>
                 </div>
                 <div id="seasonWrapper" class="hidden bg-indigo-500/10 p-4 rounded-2xl border border-indigo-500/20">
                     <label class="text-[10px] font-bold text-indigo-400 uppercase mb-2 block">Select Season</label>
@@ -52,31 +64,19 @@
                 </div>
             </div>
 
-            <!-- Abyss Explorer -->
+            <!-- Abyss Library -->
             <div class="glass-card rounded-3xl p-6">
                 <div class="flex justify-between items-center mb-4">
-                    <div class="flex items-center gap-3">
-                        <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest">Abyss Library</h3>
-                        <button id="abyssBack" onclick="fetchAbyss()" class="hidden bg-yellow-600 hover:bg-yellow-500 text-white text-[9px] font-black px-3 py-1 rounded-full transition-all">
-                            ← BACK TO ROOT
-                        </button>
-                    </div>
-                    <button onclick="fetchAbyss(currentFolderId)" class="text-[10px] text-blue-500 font-bold uppercase hover:underline">Refresh</button>
+                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest">Abyss Library</h3>
+                    <button onclick="fetchAbyss()" class="text-[10px] text-blue-500 font-bold uppercase hover:underline">Refresh</button>
                 </div>
-                <div id="abyssList" class="flex gap-3 overflow-x-auto pb-4 custom-scroll min-h-[120px]">
-                    <!-- Items Load Here -->
-                </div>
-                <div class="flex justify-between items-center mt-2">
-                    <p id="abyssPathDisplay" class="text-[9px] text-slate-500 italic">Location: Root</p>
-                    <div class="flex gap-2">
-                        <span class="flex items-center gap-1 text-[8px] uppercase font-bold text-yellow-500">● Folder</span>
-                        <span class="flex items-center gap-1 text-[8px] uppercase font-bold text-blue-500">● File</span>
-                    </div>
+                <div id="abyssList" class="flex gap-3 overflow-x-auto pb-4 custom-scroll min-h-[100px]">
+                    <p class="text-slate-700 text-[10px] italic">No videos loaded.</p>
                 </div>
             </div>
         </div>
 
-        <!-- Right Column -->
+        <!-- Right: Form & Metadata -->
         <div class="glass-card rounded-3xl p-6 space-y-4">
             <div class="grid grid-cols-2 gap-4">
                 <div>
@@ -91,15 +91,12 @@
 
             <div id="movieBox">
                 <label class="text-[10px] font-bold text-slate-500 uppercase">Embed Source (short.icu)</label>
-                <input type="text" id="mSrc" placeholder="https://short.icu/..." oninput="updateOutputs()" class="w-full p-3 rounded-xl text-sm outline-none">
+                <input type="text" id="mSrc" placeholder="https://short.icu/embed/..." oninput="updateOutputs()" class="w-full p-3 rounded-xl text-sm outline-none">
             </div>
 
             <div id="seriesBox" class="hidden">
-                <div class="flex justify-between items-center mb-1">
-                    <label class="text-[10px] font-bold text-slate-500 uppercase">Episode List</label>
-                    <button onclick="document.getElementById('mEpisodes').value = ''; updateOutputs();" class="text-[9px] text-red-500 font-bold hover:underline">CLEAR ALL</button>
-                </div>
-                <textarea id="mEpisodes" rows="6" oninput="updateOutputs()" placeholder="Files clicked in Abyss will appear here..." class="w-full p-3 rounded-xl text-xs outline-none font-mono leading-relaxed"></textarea>
+                <label class="text-[10px] font-bold text-slate-500 uppercase">Episode Links (One per line)</label>
+                <textarea id="mEpisodes" rows="4" oninput="updateOutputs()" placeholder="Paste Abyss links here..." class="w-full p-3 rounded-xl text-xs outline-none font-mono"></textarea>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
@@ -119,19 +116,19 @@
                 🚀 Auto-Sync to GitHub
             </button>
             <button onclick="triggerTelegram()" class="w-full border border-slate-800 text-slate-500 py-3 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition">
-                Notify Telegram
+                Send Notification to Telegram
             </button>
         </div>
     </div>
 
-    <!-- Codes -->
+    <!-- Final Codes -->
     <div class="glass-card rounded-3xl p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-            <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block tracking-widest">JavaScript Data</label>
+            <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block tracking-widest">JavaScript Data Code</label>
             <textarea id="outJS" rows="6" readonly class="w-full p-4 rounded-2xl text-[10px] font-mono text-blue-400 outline-none" onclick="this.select()"></textarea>
         </div>
         <div>
-            <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block tracking-widest">HTML Item</label>
+            <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block tracking-widest">HTML Player List Code</label>
             <textarea id="outHTML" rows="6" readonly class="w-full p-4 rounded-2xl text-[10px] font-mono text-indigo-400 outline-none" onclick="this.select()"></textarea>
         </div>
     </div>
@@ -146,9 +143,21 @@ const IMG_BASE = 'https://image.tmdb.org/t/p/w500';
 
 let currentSeasons = [];
 let selectedMovie = null;
-let currentFolderId = null;
 
-window.onload = () => fetchAbyss();
+window.onload = () => {
+    document.getElementById('ghToken').value = localStorage.getItem('ghToken') || '';
+    document.getElementById('ghUser').value = localStorage.getItem('ghUser') || '';
+    document.getElementById('ghRepo').value = localStorage.getItem('ghRepo') || '';
+    document.getElementById('ghPath').value = localStorage.getItem('ghPath') || '';
+};
+
+function saveConfig() {
+    localStorage.setItem('ghToken', document.getElementById('ghToken').value);
+    localStorage.setItem('ghUser', document.getElementById('ghUser').value);
+    localStorage.setItem('ghRepo', document.getElementById('ghRepo').value);
+    localStorage.setItem('ghPath', document.getElementById('ghPath').value);
+    alert("Settings Saved!");
+}
 
 function toggleType() {
     const isSeries = document.getElementById('contentType').value === 'series';
@@ -158,74 +167,33 @@ function toggleType() {
     updateOutputs();
 }
 
-// --- Robust Abyss Explorer ---
-async function fetchAbyss(folderId = null) {
-    currentFolderId = folderId;
+// --- Abyss Section ---
+async function fetchAbyss() {
     const list = document.getElementById('abyssList');
-    const backBtn = document.getElementById('abyssBack');
-    const pathLabel = document.getElementById('abyssPathDisplay');
-    
-    list.innerHTML = '<div class="w-full py-10 text-center text-blue-500 text-[10px] font-bold animate-pulse">SYNCHRONIZING...</div>';
-    folderId ? backBtn.classList.remove('hidden') : backBtn.classList.add('hidden');
-    pathLabel.innerText = folderId ? `Location: Subfolder (${folderId})` : "Location: Root";
-
+    list.innerHTML = '<p class="text-blue-500 animate-pulse text-[10px] uppercase font-bold">Accessing Cloud...</p>';
     try {
-        let url = `https://api.abyss.to/v1/resources?key=${ABYSS_API}&maxResults=100`;
-        if (folderId) url += `&folderId=${folderId}`;
-        
-        const res = await puter.net.fetch(url);
+        const res = await puter.net.fetch(`https://api.abyss.to/v1/resources?key=${ABYSS_API}&type=files&maxResults=20`);
         const data = await res.json();
         list.innerHTML = '';
-
-        if (!data.items || data.items.length === 0) {
-            list.innerHTML = '<div class="w-full py-10 text-center text-slate-600 text-[10px]">Folder is empty.</div>';
-            return;
-        }
-
-        data.items.forEach(item => {
-            // Check type explicitly. Some APIs use 'folder'/'file', others use 'folders'/'files'
-            const isFolder = item.type === 'folder' || item.type === 'folders' || item.is_folder === true;
-            
+        data.items.forEach(file => {
             const div = document.createElement('div');
-            div.className = `flex-shrink-0 w-36 glass-card p-3 rounded-2xl cursor-pointer hover:border-white transition-all card-active ${isFolder ? 'folder-card' : 'file-card'}`;
-            
-            div.onclick = (e) => {
-                e.preventDefault();
-                if (isFolder) {
-                    // It is a folder: Navigate into it
-                    console.log("Navigating into folder:", item.id);
-                    fetchAbyss(item.id);
-                } else {
-                    // It is a file: Add link to the input fields
-                    const link = `https://short.icu/${item.id}`;
-                    const isSeries = document.getElementById('contentType').value === 'series';
-                    
-                    if (isSeries) {
-                        const epArea = document.getElementById('mEpisodes');
-                        const currentVal = epArea.value.trim();
-                        epArea.value = currentVal ? (currentVal + '\n' + link) : link;
-                    } else {
-                        document.getElementById('mSrc').value = link;
-                    }
-                    updateOutputs();
-                }
+            div.className = 'flex-shrink-0 w-36 glass-card p-3 rounded-2xl cursor-pointer hover:border-blue-500 transition-all';
+            div.onclick = () => {
+                // ABYSS EMBED DOMAIN: short.icu
+                document.getElementById('mSrc').value = `https://short.icu/${file.id}`;
+                updateOutputs();
             };
-
             div.innerHTML = `
-                <div class="text-[16px] mb-1">${isFolder ? '📁' : '📄'}</div>
-                <div class="text-[10px] font-bold truncate">${item.name}</div>
-                <div class="text-[8px] text-slate-500 mt-1 uppercase font-black">
-                    ${isFolder ? '<span class="text-yellow-500">OPEN FOLDER</span>' : '<span class="text-blue-500">ADD EPISODE</span>'}
-                </div>
+                <div class="text-[8px] text-blue-500 font-black mb-1">FILE</div>
+                <div class="text-[10px] font-bold truncate">${file.name}</div>
+                <div class="text-[8px] text-slate-500 mt-1 uppercase">Click to Embed</div>
             `;
             list.appendChild(div);
         });
-    } catch (e) { 
-        list.innerHTML = '<div class="w-full py-10 text-center text-red-500 text-[10px]">Connection Error.</div>'; 
-    }
+    } catch (e) { list.innerHTML = '<p class="text-red-500 text-[10px]">Error loading Abyss.</p>'; }
 }
 
-// --- TMDB Integration ---
+// --- TMDB Section ---
 async function searchTMDB() {
     const query = document.getElementById('apiSearch').value.trim();
     const type = document.getElementById('contentType').value === 'series' ? 'tv' : 'movie';
@@ -243,7 +211,7 @@ async function searchTMDB() {
             const year = (item.release_date || item.first_air_date || 'N/A').split('-')[0];
             card.onclick = () => selectMovie(item, poster, year);
             card.innerHTML = `
-                <img src="${poster}" class="w-full h-36 object-cover rounded-xl border border-slate-800 group-hover:border-blue-500 transition-all shadow-lg">
+                <img src="${poster}" class="w-full h-36 object-cover rounded-xl border border-slate-800 group-hover:border-blue-500 transition-all">
                 <p class="text-[9px] font-bold truncate uppercase tracking-tighter">${item.title || item.name}</p>
             `;
             resDiv.appendChild(card);
@@ -299,8 +267,11 @@ function updateOutputs() {
         movieObj.src = document.getElementById('mSrc').value;
     }
 
+    // JS CONFIG OUTPUT
     document.getElementById('outJS').value = `"${id}": ${JSON.stringify(movieObj, null, 2)},`;
-    document.getElementById('outHTML').value = `<a href="newplayer/player?id=${id}&tmdb=${tmdb}" class="movie-link" data-id="${tmdb}">
+
+    // HTML PLAYER LIST OUTPUT
+    const htmlSnippet = `<a href="newplayer/player?id=${id}&tmdb=${tmdb}" class="movie-link" data-id="${tmdb}">
     <div class="movie-card">
         <div class="movie-poster-container"><img src="${img}" class="movie-poster"></div>
         <div class="movie-info">
@@ -309,20 +280,23 @@ function updateOutputs() {
         </div>
     </div>
 </a>`;
+    document.getElementById('outHTML').value = htmlSnippet;
 }
 
-// --- GitHub Sync ---
+// --- GitHub Auto-Sync ---
 async function triggerGHSync() {
-    const token = localStorage.getItem('ghToken');
-    const user = localStorage.getItem('ghUser');
-    const repo = localStorage.getItem('ghRepo');
-    const path = localStorage.getItem('ghPath');
-
-    if (!token || !selectedMovie) return alert("Config missing in LocalStorage!");
-
     const btn = document.getElementById('syncBtn');
+    const status = document.getElementById('syncStatus');
+    const token = document.getElementById('ghToken').value;
+    const user = document.getElementById('ghUser').value;
+    const repo = document.getElementById('ghRepo').value;
+    const path = document.getElementById('ghPath').value;
+
+    if (!token || !selectedMovie) return alert("Select Movie & Setup GitHub!");
+
     btn.disabled = true;
-    btn.innerText = "PUSHING...";
+    btn.innerText = "Syncing...";
+    status.classList.remove('hidden');
 
     try {
         const url = `https://api.github.com/repos/${user}/${repo}/contents/${path}`;
@@ -331,6 +305,8 @@ async function triggerGHSync() {
         
         let content = atob(data.content);
         const newEntry = document.getElementById('outJS').value;
+        
+        // Injecting into the object structure
         const lastBrace = content.lastIndexOf('}');
         const updatedContent = content.slice(0, lastBrace) + `  ${newEntry}\n` + content.slice(lastBrace);
 
@@ -338,25 +314,27 @@ async function triggerGHSync() {
             method: 'PUT',
             headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                message: `Update: ${document.getElementById('mName').value}`,
+                message: `Auto-Update: ${document.getElementById('mName').value}`,
                 content: btoa(unescape(encodeURIComponent(updatedContent))),
                 sha: data.sha
             })
         });
 
-        if (push.ok) alert("🎉 Website Updated!");
-        else alert("Push Failed.");
-    } catch (e) { alert("Error: " + e.message); }
+        if (push.ok) alert("🚀 GitHub Website Updated Successfully!");
+        else alert("GitHub Error: Access Token might be expired.");
+    } catch (e) { alert("Sync Error: " + e.message); }
     
     btn.disabled = false;
     btn.innerText = "🚀 Auto-Sync to GitHub";
+    status.classList.add('hidden');
 }
 
 async function triggerTelegram() {
     const name = document.getElementById('mName').value;
     const img = document.getElementById('mImg').value;
     const id = document.getElementById('mId').value;
-    const msg = `🎬 *NEW ON CINEVIEW* \n\n🍿 *${name}*\n\n🔗 [WATCH NOW](https://prigames.netlify.app/movies/newplayer/player?id=${id})`;
+    const story = selectedMovie.overview ? selectedMovie.overview.substring(0, 120) : "Enjoy high quality streaming!";
+    const msg = `🎬 *NEW ON CINEVIEW* \n\n🍿 *Title:* ${name}\n✨ *Story:* ${story}...\n\n🔗 [WATCH NOW](https://prigames.netlify.app/movies/newplayer/player?id=${id})\n\n#Update #CineView`;
 
     try {
         await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendPhoto`, {
@@ -364,10 +342,9 @@ async function triggerTelegram() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ chat_id: TG_CHAT, photo: img, caption: msg, parse_mode: 'Markdown' })
         });
-        alert("Telegram Notification Sent!");
-    } catch (e) { alert("Telegram Failed."); }
+        alert("Sent to Telegram Channel!");
+    } catch (e) { alert("Telegram Error"); }
 }
 </script>
 </body>
 </html>
-
