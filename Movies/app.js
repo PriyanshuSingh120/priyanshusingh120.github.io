@@ -1,6 +1,6 @@
 const TMDB_API_KEY = 'dc691868b09daaabe9acc238ed898cf7'; 
-const BACKDROP_BASE = "https://image.tmdb.org/t/p/w780"; // Optimized for mobile speed
-const POSTER_BASE = "https://image.tmdb.org/t/p/w342";   // Faster poster loading
+const BACKDROP_BASE = "https://image.tmdb.org/t/p/w780"; 
+const POSTER_BASE = "https://image.tmdb.org/t/p/w342"; 
 const DISCUSSION_GROUP_ID = '-1003555701279';
 const TELEGRAM_TOKEN = '7287243554:AAHa43wD_V2roGLep1aQgKHn0vqXHYlFp-M';
 
@@ -9,39 +9,41 @@ let nextSlideCache = null;
 let watchlist = JSON.parse(localStorage.getItem('cineview_watchlist')) || [];
 
 /**
- * 1. INITIALIZE: Speed-focused setup
+ * 1. INITIALIZE: The core setup
  */
 function initializeLibrary() {
     const movieGrid = document.getElementById('movieGrid');
     if (!movieGrid) return;
 
+    // Capture the cards once
     const movieElements = Array.from(movieGrid.getElementsByClassName('movie-link'));
     
-    // Quick Sort: 2025/2026 First
+    // Sort: 2025/2026 First
     movieElements.sort((a, b) => {
-        const isNewA = /2025|2026/i.test(a.innerText);
-        const isNewB = /2025|2026/i.test(b.innerText);
+        const isNewA = /2025|2026|New/i.test(a.innerText);
+        const isNewB = /2025|2026|New/i.test(b.innerText);
         return isNewB - isNewA;
     });
 
+    // Re-render main grid safely
     movieGrid.innerHTML = "";
     movieElements.forEach(el => {
         const img = el.querySelector('img');
         if (img) img.setAttribute('loading', 'lazy');
-        movieGrid.appendChild(el);
+        movieGrid.appendChild(el); // Put original back in grid
         addWatchlistButton(el); 
     });
 
     refreshMovieData();
-    loadTop10(movieElements); // Improved matching logic
+    loadTop10(movieElements); 
     renderWatchlist();
     
-    // Bootstrap Slider caching
+    // Start slider caching
     prepareNextSlide().then(() => updateSlider());
 }
 
 /**
- * 2. TOP 10: Robust matching to prevent "Worst List" issues
+ * 2. TOP 10: Fixed to prevent "stealing" cards from main grid
  */
 async function loadTop10(localElements) {
     const top10Grid = document.getElementById('top10Grid');
@@ -55,83 +57,77 @@ async function loadTop10(localElements) {
         let matched = [];
         trending.forEach(t => {
             const tName = (t.title || t.name || "").toLowerCase();
-            // Match by ID attribute or flexible title check
             const match = localElements.find(el => {
                 const localTitle = el.querySelector('h3').innerText.toLowerCase();
-                return el.dataset.id == t.id || localTitle.includes(tName) || tName.includes(localTitle);
+                return el.dataset.id == t.id || localTitle.includes(tName);
             });
             if (match && !matched.includes(match)) matched.push(match);
         });
 
-        // Fallback: If TMDB match is low, use newest local movies to keep list full
+        // Fallback: Use newest if trending matching fails
         if (matched.length < 5) {
-            localElements.slice(0, 10).forEach(el => {
-                if (!matched.includes(el)) matched.push(el);
-            });
+            matched = [...matched, ...localElements.slice(0, 10)].slice(0, 10);
         }
 
         top10Grid.innerHTML = "";
         matched.slice(0, 10).forEach((el, index) => {
-            const clone = el.cloneNode(true);
+            const clone = el.cloneNode(true); // CRITICAL: Use clone so original stays in main grid
             clone.className = 'top10-card';
-            // Add a rank number indicator
-            const rank = document.createElement('span');
-            rank.className = 'rank-badge';
-            rank.innerText = index + 1;
-            clone.appendChild(rank);
+            
+            const rankNum = document.createElement('div');
+            rankNum.className = 'rank-num';
+            rankNum.innerText = index + 1;
+            clone.appendChild(rankNum);
+            
             top10Grid.appendChild(clone);
         });
-    } catch (e) { console.error("Top 10 Loading Failed"); }
+    } catch (e) { console.error("Top 10 load error"); }
 }
 
 /**
- * 3. SLIDER ENGINE: Pre-cache strategy
+ * 3. SLIDER: Turbo pre-cache
  */
 async function updateSlider() {
     if (movieData.length === 0) return;
 
     const elements = {
-        img: document.getElementById('sliderImg'),
+        bg: document.getElementById('sliderBg'),
         title: document.getElementById('sliderTitle'),
         rating: document.getElementById('movieRating'),
-        bg: document.getElementById('sliderBg'),
+        img: document.getElementById('sliderImg'),
         btn: document.getElementById('playBtn')
     };
 
-    let currentSlide = nextSlideCache || await fetchSlideData();
+    let current = nextSlideCache || await fetchSlideData();
 
-    if (currentSlide) {
-        if (elements.bg) elements.bg.style.backgroundImage = `linear-gradient(to bottom, transparent, #121212), url('${currentSlide.backdrop}')`;
-        if (elements.title) elements.title.innerText = currentSlide.title;
-        if (elements.rating) elements.rating.innerHTML = `⭐ ${currentSlide.rating}`;
-        if (elements.img) elements.img.src = currentSlide.poster;
-        if (elements.btn) elements.btn.href = currentSlide.link;
+    if (current && elements.bg) {
+        elements.bg.style.backgroundImage = `linear-gradient(to bottom, transparent, #121212), url('${current.backdrop}')`;
+        elements.title.innerText = current.title;
+        elements.rating.innerHTML = `⭐ ${current.rating}`;
+        elements.img.src = current.poster;
+        elements.btn.href = current.link;
         
-        // Visual Cleanup
-        elements.title?.classList.remove('skeleton');
-        elements.rating?.classList.remove('skeleton');
+        elements.title.classList.remove('skeleton');
+        elements.rating.classList.remove('skeleton');
     }
-    prepareNextSlide(); // Start downloading next image immediately
+    prepareNextSlide();
 }
 
 async function fetchSlideData() {
+    if (movieData.length === 0) return null;
     const movie = movieData[Math.floor(Math.random() * Math.min(movieData.length, 25))];
-    if (!movie) return null;
-
-    const url = movie.id 
-        ? `https://api.themoviedb.org/3/find/${movie.id}?api_key=${TMDB_API_KEY}&external_source=imdb_id`
-        : `https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(movie.searchTitle)}`;
 
     try {
-        const res = await fetch(url);
+        const res = await fetch(movie.id ? 
+            `https://api.themoviedb.org/3/find/${movie.id}?api_key=${TMDB_API_KEY}&external_source=imdb_id` : 
+            `https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(movie.searchTitle)}`);
+        
         const data = await res.json();
         const result = movie.id ? (data.movie_results?.[0] || data.tv_results?.[0]) : data.results?.[0];
 
         if (result) {
-            // Force browser to pre-download the backdrop
             const preImg = new Image();
             preImg.src = BACKDROP_BASE + result.backdrop_path;
-            
             return new Promise((resolve) => {
                 preImg.onload = () => resolve({
                     title: movie.title,
@@ -140,30 +136,16 @@ async function fetchSlideData() {
                     poster: POSTER_BASE + result.poster_path,
                     link: movie.link
                 });
-                preImg.onerror = () => resolve(null);
             });
         }
     } catch (e) { return null; }
 }
 
-async function prepareNextSlide() {
-    nextSlideCache = await fetchSlideData();
-}
+async function prepareNextSlide() { nextSlideCache = await fetchSlideData(); }
 
 /**
- * 4. ANDROID NAVIGATION FIX
+ * 4. UTILS & ANDROID
  */
-function setupAndroidFix() {
-    // Fix mobile viewport jumps
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-    
-    // Fix click response
-    document.querySelectorAll('.nav-link, button').forEach(el => {
-        el.style.touchAction = 'manipulation';
-    });
-}
-
 function refreshMovieData() {
     movieData = Array.from(document.querySelectorAll('#movieGrid .movie-link')).map(card => ({
         link: card.getAttribute('href'),
@@ -173,11 +155,60 @@ function refreshMovieData() {
     }));
 }
 
-// Search & Watchlist logic remains same as your previous working version
-// ... (handleSearch, addWatchlistButton, renderWatchlist) ...
+function handleSearch(e) {
+    const term = e.target.value.toLowerCase();
+    document.querySelectorAll('#movieGrid .movie-link').forEach(link => {
+        link.style.display = link.textContent.toLowerCase().includes(term) ? '' : 'none';
+    });
+}
+
+function setupAndroidFix() {
+    document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+    document.querySelectorAll('.nav-link, button').forEach(el => el.style.touchAction = 'manipulation');
+}
+
+// Watchlist Button
+function addWatchlistButton(card) {
+    const container = card.querySelector('.movie-poster-container');
+    if (!container || container.querySelector('.watchlist-btn')) return;
+    
+    const btn = document.createElement('button');
+    btn.className = 'watchlist-btn';
+    const id = card.getAttribute('href');
+    btn.innerHTML = watchlist.includes(id) ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
+    
+    btn.onclick = (e) => {
+        e.preventDefault();
+        if (watchlist.includes(id)) {
+            watchlist = watchlist.filter(item => item !== id);
+            btn.innerHTML = '<i class="far fa-heart"></i>';
+        } else {
+            watchlist.push(id);
+            btn.innerHTML = '<i class="fas fa-heart"></i>';
+        }
+        localStorage.setItem('cineview_watchlist', JSON.stringify(watchlist));
+        renderWatchlist();
+    };
+    container.appendChild(btn);
+}
+
+function renderWatchlist() {
+    const grid = document.getElementById('myListGrid');
+    const section = document.getElementById('myListSection');
+    if (!grid || !section) return;
+    if (watchlist.length === 0) { section.classList.add('hidden'); return; }
+    section.classList.remove('hidden');
+    grid.innerHTML = "";
+    watchlist.forEach(id => {
+        const original = document.querySelector(`.movie-link[href="${id}"]`);
+        if (original) grid.appendChild(original.cloneNode(true));
+    });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     initializeLibrary();
     setupAndroidFix();
-    setInterval(updateSlider, 10000); 
+    const input = document.querySelector('.search-input');
+    if (input) input.addEventListener('input', handleSearch);
+    setInterval(updateSlider, 9000);
 });
