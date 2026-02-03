@@ -8,7 +8,7 @@ let movieData = [];
 let watchlist = JSON.parse(localStorage.getItem('cineview_watchlist')) || [];
 
 /**
- * INITIALIZE: Optimized for Mobile & Speed
+ * INITIALIZE: High-speed loading
  */
 function initializeLibrary() {
     const movieGrid = document.getElementById('movieGrid');
@@ -16,15 +16,14 @@ function initializeLibrary() {
 
     const movieElements = Array.from(movieGrid.getElementsByClassName('movie-link'));
     
-    // Sort Newest (2025/2026) First
+    // 1. Sort logic
     movieElements.sort((a, b) => {
         const isNewA = /2025|2026|New/i.test(a.innerText);
         const isNewB = /2025|2026|New/i.test(b.innerText);
-        if (isNewB && !isNewA) return 1;
-        if (isNewA && !isNewB) return -1;
-        return 0;
+        return isNewB - isNewA; 
     });
 
+    // 2. Clear and Re-append with Lazy Loading
     movieGrid.innerHTML = "";
     movieElements.forEach(el => {
         const img = el.querySelector('img');
@@ -33,27 +32,31 @@ function initializeLibrary() {
         addWatchlistButton(el); 
     });
 
-    refreshMovieData(); // Populate movieData array once
+    // 3. Set Data & Load UI Components
+    refreshMovieData();
     loadTop10(movieElements);
     renderWatchlist();
-    updateSlider(); // Initial run
+    
+    // Initial slider load
+    setTimeout(updateSlider, 500); 
 }
 
 /**
- * SLIDER: Fast-loading with Image Pre-caching
+ * SLIDER: Faster loading with Background Pre-caching
  */
 async function updateSlider() {
+    if (movieData.length === 0) refreshMovieData();
     if (movieData.length === 0) return;
 
     const sliderImg = document.getElementById('sliderImg');
     const sliderTitle = document.getElementById('sliderTitle');
     const movieRating = document.getElementById('movieRating');
     const sliderBg = document.getElementById('sliderBg');
+    const playBtn = document.getElementById('playBtn');
 
-    // Pick a random movie from the top 20
-    const movie = movieData[Math.floor(Math.random() * Math.min(movieData.length, 20))];
-    
-    let url = movie.id 
+    const movie = movieData[Math.floor(Math.random() * Math.min(movieData.length, 25))];
+
+    let url = (movie.id && movie.id !== "undefined")
         ? `https://api.themoviedb.org/3/find/${movie.id}?api_key=${TMDB_API_KEY}&external_source=imdb_id`
         : `https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(movie.searchTitle)}`;
 
@@ -63,75 +66,119 @@ async function updateSlider() {
         const result = movie.id ? (data.movie_results?.[0] || data.tv_results?.[0]) : data.results?.[0];
 
         if (result && result.backdrop_path) {
-            // Pre-load images in background before showing
-            const tempImg = new Image();
             const backdropUrl = BACKDROP_BASE + result.backdrop_path;
-            tempImg.src = backdropUrl;
+            const posterUrl = POSTER_BASE + result.poster_path;
 
-            tempImg.onload = () => {
-                // Only update DOM once image is ready to prevent flickering
-                sliderBg.style.backgroundImage = `linear-gradient(to bottom, transparent, #121212), url('${backdropUrl}')`;
-                sliderImg.src = POSTER_BASE + result.poster_path;
-                sliderTitle.innerText = movie.title;
-                movieRating.innerHTML = `⭐ ${result.vote_average.toFixed(1)}`;
-                document.getElementById('playBtn').href = movie.link;
-                
-                // CSS transitions will handle the smoothness
-                sliderTitle.classList.remove('skeleton');
-                movieRating.classList.remove('skeleton');
-                sliderImg.style.opacity = "1";
+            // Pre-cache the image before showing it
+            const imgCache = new Image();
+            imgCache.src = backdropUrl;
+            imgCache.onload = () => {
+                if(sliderBg) sliderBg.style.backgroundImage = `linear-gradient(to bottom, transparent, #121212), url('${backdropUrl}')`;
+                if(sliderImg) {
+                    sliderImg.src = posterUrl;
+                    sliderImg.style.opacity = "1";
+                }
+                if(sliderTitle) {
+                    sliderTitle.innerText = movie.title;
+                    sliderTitle.classList.remove('skeleton');
+                }
+                if(movieRating) {
+                    movieRating.innerHTML = `⭐ ${result.vote_average.toFixed(1)}`;
+                    movieRating.classList.remove('skeleton');
+                }
+                if(playBtn) playBtn.href = movie.link;
             };
         }
     } catch (e) {
-        console.error("Slider Update Error");
+        console.warn("Slider skip: API error");
     }
 }
 
 /**
- * ANDROID NAV & TOUCH FIXES
+ * ANDROID NAVIGATION FIX
  */
-function setupMobileNav() {
-    // Force immediate response on mobile clicks
-    const navLinks = document.querySelectorAll('.nav-link, .filter-chip, .watchlist-btn');
-    navLinks.forEach(link => {
-        link.style.touchAction = 'manipulation';
+function fixMobileNav() {
+    // Android Chrome click delay fix
+    const interactiveElements = document.querySelectorAll('.nav-link, button, .filter-chip');
+    interactiveElements.forEach(el => {
+        el.style.cursor = 'pointer';
+        el.style.touchAction = 'manipulation';
     });
 
-    // Fix for Android viewport height issues (URL bar hiding/showing)
-    const setVh = () => {
-        let vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    // Fix for the 100vh issue on Android browsers
+    const setHeight = () => {
+        document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
     };
-    window.addEventListener('resize', setVh);
-    setVh();
+    window.addEventListener('resize', setHeight);
+    setHeight();
 }
 
 /**
- * UTILS: (Modified refresh to be cleaner)
+ * DATA MANAGEMENT
  */
 function refreshMovieData() {
     const cards = document.querySelectorAll('#movieGrid .movie-link');
     movieData = Array.from(cards).map(card => ({
         link: card.getAttribute('href'),
-        title: card.querySelector('h3').innerText,
+        title: card.querySelector('h3') ? card.querySelector('h3').innerText : 'Unknown',
         id: card.dataset.id,
-        searchTitle: card.querySelector('h3').innerText.replace(/\[.*?\]/g, '').trim()
-    }));
+        searchTitle: card.querySelector('h3') ? card.querySelector('h3').innerText.replace(/\[.*?\]/g, '').trim() : ''
+    })).filter(m => m.title !== 'Unknown');
 }
 
-// ... (Keep your loadTop10, addWatchlistButton, renderWatchlist, and filterByCategory functions as they were)
+/**
+ * SEARCH & TELEGRAM REQUEST
+ */
+function handleSearch(e) {
+    const term = e.target.value.toLowerCase();
+    const requestBox = document.getElementById('requestBox');
+    let found = 0;
+
+    document.querySelectorAll('#movieGrid .movie-link').forEach(link => {
+        const isMatch = link.textContent.toLowerCase().includes(term);
+        link.style.display = isMatch ? '' : 'none';
+        if (isMatch) found++;
+    });
+
+    if (requestBox) {
+        found === 0 && term.length > 0 ? requestBox.classList.remove('hidden') : requestBox.classList.add('hidden');
+    }
+}
+
+async function sendRequest() {
+    const input = document.querySelector('.search-input');
+    const name = input ? input.value : "";
+    const btn = document.getElementById('reqBtn');
+    if (!name) return;
+
+    btn.innerText = "Sending...";
+    const message = `<b>📥 NEW MOVIE REQUEST</b>\n\n<b>🎬 Movie:</b> ${name}`;
+    
+    try {
+        await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: DISCUSSION_GROUP_ID, text: message, parse_mode: 'HTML' })
+        });
+        document.getElementById('requestBox').innerHTML = `<h3 style="color:#00ff00;">✅ Request Sent!</h3>`;
+    } catch (e) {
+        btn.innerText = "Error. Try again.";
+    }
+}
+
+// Keep your existing Watchlist and Top10 functions as they were (they work fine)
+// ... (addWatchlistButton, renderWatchlist, loadTop10, filterByCategory) ...
 
 /**
- * DOM CONTENT LOADED
+ * START APP
  */
 document.addEventListener('DOMContentLoaded', () => {
     initializeLibrary();
-    setupMobileNav();
-    
+    fixMobileNav();
+
     document.querySelectorAll('.search-input').forEach(i => {
         i.addEventListener('input', handleSearch);
     });
 
-    // Change slide every 9 seconds
-    setInterval(updateSlider, 9000);
+    setInterval(updateSlider, 10000); 
 });
