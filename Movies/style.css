@@ -496,3 +496,8 @@ footer img:hover{
     0% { background-position: -600px 0; }
     100% { background-position: 600px 0; }
 }
+.navbar {
+    z-index: 9999 !important;
+    position: fixed;
+    top: 0;
+}
