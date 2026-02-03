@@ -2,409 +2,387 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineView Pro - English UI | Hindi Dubbed Content</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CineView Admin Pro | Abyss & Telegram</title>
+    <script src="https://js.puter.com/v2/"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        body { background: #0b0f1a; color: #e2e8f0; overflow-x: hidden; }
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .custom-scroll::-webkit-scrollbar { height: 4px; width: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
+        input, select, textarea { background: #0f172a !important; border: 1px solid #1e293b !important; color: white !important; }
+        input:focus { border-color: #3b82f6 !important; ring: 1px #3b82f6; }
         
-        body {
-            font-family: 'Outfit', sans-serif;
-            background-color: #050505;
-            color: #ffffff;
-            overflow-x: hidden;
-        }
-
-        .glass-nav {
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(239, 68, 68, 0.3);
-        }
-
-        .player-aspect {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            border-radius: 20px;
-            background: #000;
-            box-shadow: 0 0 30px rgba(239, 68, 68, 0.2);
-        }
-
-        .player-aspect iframe {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            border: none;
-        }
-
-        .movie-card img {
-            transition: all 0.5s ease;
-        }
-
-        .movie-card:hover img {
-            transform: scale(1.1);
-            filter: brightness(0.4);
-        }
-
-        .loader {
-            width: 45px;
-            height: 45px;
-            border: 4px solid #1a1a1a;
-            border-top: 4px solid #ef4444;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .active-server {
-            background-color: #ef4444 !important;
-            color: white !important;
-            border-color: #ef4444 !important;
-        }
+        .folder-card { border-left: 4px solid #fbbf24; background: rgba(251, 191, 36, 0.1) !important; }
+        .file-card { border-left: 4px solid #3b82f6; background: rgba(59, 130, 246, 0.1) !important; }
         
-        select option { background: #1a1a1a; color: white; }
+        #toast {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            padding: 12px 24px; border-radius: 12px; z-index: 9999;
+            font-weight: bold; font-size: 11px; text-transform: uppercase;
+            display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
     </style>
 </head>
-<body class="min-h-screen">
+<body class="p-4 md:p-10 font-sans">
 
-    <!-- Navbar -->
-    <nav class="glass-nav fixed top-0 w-full z-50 px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div class="flex items-center gap-2 cursor-pointer group" onclick="goHome()">
-            <div class="bg-red-600 p-2 rounded-xl shadow-lg shadow-red-600/30 group-hover:rotate-12 transition-transform">
-                <i class="fa-solid fa-play text-white text-sm"></i>
-            </div>
-            <h1 class="text-2xl font-black tracking-tighter uppercase">Cine<span class="text-red-600">View</span></h1>
+<div id="toast" class="bg-blue-600 text-white tracking-widest">Notification</div>
+
+<div class="max-w-5xl mx-auto space-y-6">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+        <div>
+            <h1 class="text-4xl font-black italic text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-500 tracking-tighter">CINEVIEW PRO</h1>
+            <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Master Admin • Abyss & Telegram Manager</p>
         </div>
+    </div>
 
-        <div class="relative w-full max-w-xl">
-            <input 
-                type="text" id="searchInput" 
-                placeholder="Search movies (e.g. Iron Man Hindi)..." 
-                class="w-full bg-neutral-900 border border-neutral-800 rounded-full py-3 px-12 focus:outline-none focus:ring-2 focus:ring-red-600 transition-all text-sm shadow-2xl"
-            >
-            <i class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-neutral-500"></i>
-        </div>
-
-        <div class="flex gap-6 text-[10px] font-black uppercase tracking-widest text-neutral-400">
-            <button onclick="goHome()" class="hover:text-white transition-colors">Home</button>
-            <button onclick="fetchDubbed('en')" class="hover:text-red-500 transition-colors">Hollywood Hindi</button>
-            <button onclick="fetchDubbed('hi')" class="hover:text-red-500 transition-colors">Bollywood</button>
-        </div>
-    </nav>
-
-    <!-- Player Section -->
-    <section id="playerSection" class="hidden pt-36 pb-10 container mx-auto px-4">
-        <div class="grid lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 space-y-6">
-                <div class="player-aspect bg-black">
-                    <div id="playerLoading" class="absolute inset-0 flex items-center justify-center bg-black z-10 hidden">
-                        <div class="loader"></div>
-                    </div>
-                    <div id="iframeContainer" class="w-full h-full"></div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Left Column -->
+        <div class="space-y-6">
+            <!-- Mode & TMDB Search -->
+            <div class="glass-card rounded-3xl p-6 space-y-4">
+                <div class="flex gap-2">
+                    <select id="contentType" onchange="toggleType()" class="w-32 p-3 rounded-xl text-xs font-bold outline-none cursor-pointer">
+                        <option value="movie">Movie</option>
+                        <option value="series">Series</option>
+                    </select>
+                    <input type="text" id="apiSearch" oninput="searchTMDB()" placeholder="Search TMDB..." class="flex-grow p-3 rounded-xl text-sm outline-none">
                 </div>
-
-                <!-- Server Info -->
-                <div class="bg-neutral-900/50 p-6 rounded-3xl border border-white/5">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-[10px] font-black uppercase text-neutral-500 tracking-widest">Streaming Servers</h3>
-                        <span class="text-[9px] bg-red-600/10 text-red-500 px-2 py-1 rounded font-bold">Refresh Safe</span>
-                    </div>
-                    <div id="serverList" class="flex flex-wrap gap-2"></div>
+                <div id="tmdbResults" class="flex gap-3 overflow-x-auto pb-4 custom-scroll min-h-[140px]">
+                    <p class="text-slate-600 text-xs italic py-8 w-full text-center">Find content on TMDB...</p>
                 </div>
-
-                <!-- TV Selector -->
-                <div id="tvControls" class="hidden bg-neutral-900/50 p-6 rounded-3xl border border-white/5">
-                    <h3 class="text-[10px] font-black uppercase text-neutral-500 mb-4 tracking-widest">Episode Picker</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <select id="seasonSelect" onchange="handleSeasonChange()" class="bg-neutral-800 border-none rounded-xl p-3 text-sm outline-none cursor-pointer"></select>
-                        <div class="flex bg-neutral-800 rounded-xl overflow-hidden border border-white/5">
-                            <input type="number" id="epInput" min="1" value="1" class="bg-transparent border-none p-3 text-sm flex-1 outline-none text-center">
-                            <button onclick="handleEpChange()" class="bg-red-600 hover:bg-red-700 px-6 text-xs font-black uppercase transition-colors">Play</button>
-                        </div>
-                    </div>
+                <div id="seasonWrapper" class="hidden bg-indigo-500/10 p-4 rounded-2xl border border-indigo-500/20">
+                    <label class="text-[10px] font-bold text-indigo-400 uppercase mb-2 block">Season Selector</label>
+                    <select id="seasonPicker" onchange="applySeason(this.value)" class="w-full p-3 rounded-xl text-xs outline-none"></select>
                 </div>
             </div>
 
-            <!-- Details Sidebar -->
-            <div class="lg:col-span-1">
-                <div class="bg-neutral-900/50 p-8 rounded-[2.5rem] border border-white/5 h-fit sticky top-36">
-                    <h2 id="mediaTitle" class="text-3xl font-black leading-tight mb-4"></h2>
-                    <div class="flex items-center gap-4 mb-6">
-                        <span id="mediaRating" class="flex items-center gap-1 text-yellow-500 font-bold"><i class="fa-solid fa-star"></i> <span></span></span>
-                        <span id="mediaYear" class="text-neutral-500 font-bold"></span>
-                        <span id="mediaTypeLabel" class="bg-white/10 text-white px-2 py-1 rounded text-[10px] font-black uppercase tracking-tighter"></span>
-                    </div>
-                    <p id="mediaDesc" class="text-neutral-400 text-sm leading-relaxed line-clamp-6 mb-8"></p>
-                    <button onclick="closePlayer()" class="w-full bg-neutral-800 hover:bg-red-600 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl">
-                        Close Player
+            <!-- Abyss Remote Upload -->
+            <div class="glass-card rounded-3xl p-6 bg-gradient-to-br from-slate-800/40 to-transparent">
+                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <span>☁️ Remote Upload to Abyss</span>
+                </h3>
+                <div class="flex flex-col gap-3">
+                    <input type="text" id="remoteUrl" placeholder="Paste Direct Download Link..." class="w-full p-3 rounded-xl text-xs outline-none">
+                    <button id="remoteBtn" onclick="triggerRemoteUpload()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl text-[10px] uppercase tracking-widest transition-all">
+                        Start Remote Transfer
                     </button>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Main Content -->
-    <main class="pt-36 container mx-auto px-4" id="mainContainer">
-        <div class="flex items-center justify-between mb-12">
-            <h2 id="gridTitle" class="text-4xl font-black tracking-tighter flex items-center gap-3">
-                Latest <i class="fa-solid fa-chevron-right text-red-600 text-2xl"></i>
-            </h2>
-            <div id="mainLoader" class="hidden"><div class="loader"></div></div>
-        </div>
-        <div id="resultsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-8 pb-20"></div>
-    </main>
-
-    <script>
-        const API_KEY = 'dc691868b09daaabe9acc238ed898cf7';
-        const BASE_URL = 'https://api.themoviedb.org/3';
-        const IMG_URL = 'https://image.tmdb.org/t/p/w500';
-
-        let state = {
-            id: null,
-            type: 'movie',
-            season: 1,
-            episode: 1,
-            server: 'vidsrc.to'
-        };
-
-        const servers = [
-            { name: 'Server 1', host: 'vidsrc.to' },
-            { name: 'Server 2', host: 'vidsrc.me' },
-            { name: 'Server 3', host: '2embed.cc' },
-            { name: 'Server 4', host: 'autoembed.to' }
-        ];
-
-        window.onload = () => {
-            renderServerButtons();
-            handleUrlHash();
-            
-            // Search Input Event
-            const searchInput = document.getElementById('searchInput');
-            searchInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && searchInput.value) {
-                    performSearch(searchInput.value);
-                }
-            });
-
-            window.addEventListener('hashchange', handleUrlHash);
-        };
-
-        async function fetchTrending() {
-            toggleLoader(true);
-            const grid = document.getElementById('resultsGrid');
-            grid.innerHTML = '';
-            
-            // Trending with Hindi metadata
-            const res = await fetch(`${BASE_URL}/trending/all/week?api_key=${API_KEY}&language=hi-IN`);
-            const data = await res.json();
-            renderCards(data.results);
-            toggleLoader(false);
-        }
-
-        async function fetchDubbed(lang) {
-            closePlayer();
-            toggleLoader(true);
-            const grid = document.getElementById('resultsGrid');
-            grid.innerHTML = '';
-            document.getElementById('gridTitle').innerText = lang === 'en' ? 'Hollywood Hindi' : 'Bollywood';
-
-            // Discover movies with original language and display in Hindi
-            const url = `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=hi-IN&sort_by=popularity.desc&with_original_language=${lang}`;
-            const res = await fetch(url);
-            const data = await res.json();
-            renderCards(data.results.map(i => ({...i, media_type: 'movie'})));
-            toggleLoader(false);
-        }
-
-        async function performSearch(query) {
-            closePlayer();
-            toggleLoader(true);
-            const grid = document.getElementById('resultsGrid');
-            grid.innerHTML = '';
-            document.getElementById('gridTitle').innerText = `Results for: ${query}`;
-            
-            // Background optimization: add "Hindi" to query if not present for dubbed results
-            const optimizedQuery = query.toLowerCase().includes('hindi') ? query : query + ' Hindi';
-            
-            const url = `${BASE_URL}/search/multi?api_key=${API_KEY}&language=hi-IN&query=${encodeURIComponent(optimizedQuery)}`;
-            const res = await fetch(url);
-            const data = await res.json();
-            
-            if (data.results && data.results.length > 0) {
-                renderCards(data.results);
-            } else {
-                grid.innerHTML = '<div class="col-span-full py-20 text-center text-neutral-600 font-bold">No results found. Try another movie name.</div>';
-            }
-            toggleLoader(false);
-        }
-
-        function renderCards(items) {
-            const grid = document.getElementById('resultsGrid');
-            items.forEach(item => {
-                if(!item.poster_path) return;
-                const type = item.media_type || (item.title ? 'movie' : 'tv');
-                const title = item.title || item.name;
-                const year = (item.release_date || item.first_air_date || '????').split('-')[0];
-
-                const card = document.createElement('div');
-                card.className = 'movie-card group cursor-pointer';
-                card.innerHTML = `
-                    <div class="relative aspect-[2/3] rounded-[2.5rem] overflow-hidden bg-neutral-900 shadow-2xl">
-                        <img src="${IMG_URL + item.poster_path}" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/60">
-                            <div class="bg-red-600 p-4 rounded-full shadow-2xl transform scale-50 group-hover:scale-100 transition-transform">
-                                <i class="fa-solid fa-play text-white"></i>
-                            </div>
-                        </div>
+            <!-- Abyss Explorer -->
+            <div class="glass-card rounded-3xl p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="flex items-center gap-2">
+                        <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest">Abyss Library</h3>
+                        <button id="abyssBack" onclick="fetchAbyss(null)" class="hidden text-[9px] bg-slate-800 px-2 py-1 rounded text-white border border-slate-700">← ROOT</button>
                     </div>
-                    <div class="mt-4 px-2">
-                        <h4 class="font-bold text-sm truncate group-hover:text-red-500 transition-colors">${title}</h4>
-                        <div class="flex items-center justify-between mt-1 text-[10px] font-black uppercase text-neutral-500">
-                            <span>${year}</span>
-                            <span><i class="fa-solid fa-star text-yellow-500 mr-1"></i>${item.vote_average.toFixed(1)}</span>
-                        </div>
-                    </div>
+                    <button onclick="fetchAbyss(currentFolderId)" class="text-[10px] text-blue-500 font-bold uppercase hover:underline">Refresh</button>
+                </div>
+                <div id="abyssList" class="flex gap-3 overflow-x-auto pb-4 custom-scroll min-h-[110px]">
+                    <p class="text-slate-700 text-[10px] italic">Accessing resources...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="glass-card rounded-3xl p-6 space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase">Title</label>
+                    <input type="text" id="mName" oninput="updateOutputs()" class="w-full p-3 rounded-xl text-sm outline-none">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase">Slug / ID</label>
+                    <input type="text" id="mId" oninput="updateOutputs()" class="w-full p-3 rounded-xl text-sm outline-none">
+                </div>
+            </div>
+
+            <div id="movieBox">
+                <label class="text-[10px] font-bold text-slate-500 uppercase">Embed Source (short.icu)</label>
+                <input type="text" id="mSrc" placeholder="Click a file below..." oninput="updateOutputs()" class="w-full p-3 rounded-xl text-sm outline-none">
+            </div>
+
+            <div id="seriesBox" class="hidden">
+                <div class="flex justify-between items-center mb-1">
+                    <label class="text-[10px] font-bold text-slate-500 uppercase">Episode List</label>
+                    <button onclick="document.getElementById('mEpisodes').value = ''; updateOutputs();" class="text-[9px] text-red-500 font-bold uppercase">Clear</button>
+                </div>
+                <textarea id="mEpisodes" rows="4" oninput="updateOutputs()" placeholder="Files selected in folders will appear here..." class="w-full p-3 rounded-xl text-xs outline-none font-mono"></textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase">Poster URL</label>
+                    <input type="text" id="mImg" oninput="updateOutputs()" class="w-full p-3 rounded-xl text-sm outline-none">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase">Year</label>
+                    <input type="text" id="mYear" oninput="updateOutputs()" class="w-full p-3 rounded-xl text-sm outline-none">
+                </div>
+            </div>
+            
+            <input type="hidden" id="mTmdb">
+
+            <!-- TELEGRAM ONLY BUTTON -->
+            <button id="telegramBtn" onclick="triggerTelegram()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-2xl shadow-xl shadow-blue-900/30 transition-all uppercase tracking-widest text-sm flex items-center justify-center gap-3">
+                📢 SEND TO TELEGRAM
+            </button>
+        </div>
+    </div>
+
+    <!-- Live Preview -->
+    <div class="glass-card rounded-3xl p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+            <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block tracking-widest">JavaScript Code (Copy Manually)</label>
+            <textarea id="outJS" rows="6" readonly class="w-full p-4 rounded-2xl text-[10px] font-mono text-blue-400 outline-none" onclick="this.select()"></textarea>
+        </div>
+        <div>
+            <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block tracking-widest">HTML Snippet</label>
+            <textarea id="outHTML" rows="6" readonly class="w-full p-4 rounded-2xl text-[10px] font-mono text-indigo-400 outline-none" onclick="this.select()"></textarea>
+        </div>
+    </div>
+</div>
+
+<script>
+const TMDB_API = 'dc691868b09daaabe9acc238ed898cf7';
+const ABYSS_API = '391ea7f7e967589e017d3b3924b1c33f';
+const TG_TOKEN = '7287243554:AAHa43wD_V2roGLep1aQgKHn0vqXHYlFp-M';
+const TG_CHAT = '-1003605866054';
+const IMG_BASE = 'https://image.tmdb.org/t/p/w500';
+
+let currentSeasons = [];
+let selectedMovie = null;
+let currentFolderId = null;
+
+window.onload = () => {
+    fetchAbyss();
+};
+
+function showToast(msg, color = "bg-blue-600") {
+    const toast = document.getElementById('toast');
+    toast.innerText = msg;
+    toast.className = `${color} text-white tracking-widest px-6 py-3 rounded-xl`;
+    toast.style.display = 'block';
+    setTimeout(() => { toast.style.display = 'none'; }, 3000);
+}
+
+function toggleType() {
+    const isSeries = document.getElementById('contentType').value === 'series';
+    document.getElementById('movieBox').classList.toggle('hidden', isSeries);
+    document.getElementById('seriesBox').classList.toggle('hidden', !isSeries);
+    document.getElementById('seasonWrapper').classList.add('hidden');
+    currentFolderId = null;
+    fetchAbyss();
+    updateOutputs();
+}
+
+// --- Abyss Explorer Logic ---
+async function fetchAbyss(folderId = null) {
+    currentFolderId = folderId;
+    const list = document.getElementById('abyssList');
+    const backBtn = document.getElementById('abyssBack');
+    const type = document.getElementById('contentType').value;
+    
+    list.innerHTML = '<p class="text-blue-500 animate-pulse text-[10px] uppercase font-bold py-10 w-full text-center">Loading Abyss...</p>';
+    
+    // Movie Mode Logic
+    if (type === 'movie') {
+        backBtn.classList.add('hidden');
+        try {
+            const res = await puter.net.fetch(`https://api.abyss.to/v1/resources?key=${ABYSS_API}&type=files&maxResults=20`);
+            const data = await res.json();
+            list.innerHTML = '';
+            data.items.forEach(file => {
+                const div = document.createElement('div');
+                div.className = 'flex-shrink-0 w-36 glass-card p-3 rounded-2xl cursor-pointer hover:border-blue-500 transition-all file-card';
+                div.onclick = () => {
+                    document.getElementById('mSrc').value = `https://short.icu/${file.id}`;
+                    updateOutputs();
+                };
+                div.innerHTML = `
+                    <div class="text-[8px] text-blue-500 font-black mb-1 tracking-widest uppercase">File</div>
+                    <div class="text-[10px] font-bold truncate">${file.name}</div>
                 `;
-                card.onclick = () => {
-                    state.id = item.id;
-                    state.type = type;
-                    updateUrlHash();
-                };
-                grid.appendChild(card);
+                list.appendChild(div);
             });
+        } catch (e) { list.innerHTML = '<p class="text-red-500 text-[10px] py-10 w-full text-center">Error loading Abyss.</p>'; }
+        return;
+    }
+
+    // Series Mode Logic
+    folderId ? backBtn.classList.remove('hidden') : backBtn.classList.add('hidden');
+    try {
+        let url = `https://api.abyss.to/v1/resources?key=${ABYSS_API}&maxResults=100`;
+        if (folderId) url += `&folderId=${folderId}`;
+        const res = await puter.net.fetch(url);
+        const data = await res.json();
+        list.innerHTML = '';
+        data.items.forEach(item => {
+            const isFolder = item.isDir === true;
+            if (!folderId && !isFolder) return;
+            if (folderId && isFolder) return;
+            const div = document.createElement('div');
+            div.className = `flex-shrink-0 w-36 glass-card p-3 rounded-2xl cursor-pointer hover:border-slate-500 transition-all ${isFolder ? 'folder-card' : 'file-card'}`;
+            div.onclick = () => {
+                if (isFolder) fetchAbyss(item.id);
+                else {
+                    const embedLink = `https://short.icu/${item.id}`;
+                    const epArea = document.getElementById('mEpisodes');
+                    epArea.value += (epArea.value ? '\n' : '') + embedLink;
+                    updateOutputs();
+                }
+            };
+            div.innerHTML = `
+                <div class="text-[18px] mb-1">${isFolder ? '📁' : '🎞️'}</div>
+                <div class="text-[10px] font-bold truncate">${item.name}</div>
+            `;
+            list.appendChild(div);
+        });
+    } catch (e) { list.innerHTML = '<p class="text-red-500 text-[10px] py-10 w-full text-center">Sync Failed.</p>'; }
+}
+
+// --- Abyss Remote URL Upload ---
+async function triggerRemoteUpload() {
+    const urlInput = document.getElementById('remoteUrl');
+    const btn = document.getElementById('remoteBtn');
+    const url = urlInput.value.trim();
+
+    if (!url) return showToast("Enter a direct link!", "bg-orange-600");
+
+    btn.disabled = true;
+    btn.innerText = "TRANSFERRING...";
+
+    try {
+        const res = await puter.net.fetch(`https://api.abyss.to/v1/remote/url?key=${ABYSS_API}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                url: url,
+                folderId: currentFolderId || "" 
+            })
+        });
+        const data = await res.json();
+        if (data.id || data.slug) {
+            showToast("🚀 Transfer Started!", "bg-green-600");
+            urlInput.value = "";
+        } else {
+            showToast("Transfer Rejected", "bg-red-600");
         }
+    } catch (e) { showToast("Connection Error", "bg-red-600"); }
+    btn.disabled = false;
+    btn.innerText = "Start Remote Transfer";
+}
 
-        async function initPlayer() {
-            const section = document.getElementById('playerSection');
-            const main = document.getElementById('mainContainer');
-            section.classList.remove('hidden');
-            main.classList.add('opacity-10', 'pointer-events-none');
+// --- TMDB Logic ---
+async function searchTMDB() {
+    const query = document.getElementById('apiSearch').value.trim();
+    const type = document.getElementById('contentType').value === 'series' ? 'tv' : 'movie';
+    const resDiv = document.getElementById('tmdbResults');
+    if (query.length < 2) return;
+    try {
+        const res = await fetch(`https://api.themoviedb.org/3/search/${type}?api_key=${TMDB_API}&query=${encodeURIComponent(query)}`);
+        const data = await res.json();
+        resDiv.innerHTML = '';
+        data.results.slice(0, 10).forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'flex-shrink-0 w-24 text-center space-y-2 cursor-pointer group';
+            const poster = item.poster_path ? IMG_BASE + item.poster_path : 'https://via.placeholder.com/200x300';
+            const year = (item.release_date || item.first_air_date || 'N/A').split('-')[0];
+            card.onclick = () => selectMovie(item, poster, year);
+            card.innerHTML = `
+                <img src="${poster}" class="w-full h-36 object-cover rounded-xl border border-slate-800 group-hover:border-blue-500 transition-all shadow-lg">
+                <p class="text-[9px] font-bold truncate uppercase tracking-tighter">${item.title || item.name}</p>
+            `;
+            resDiv.appendChild(card);
+        });
+    } catch (e) {}
+}
 
-            // Fetch metadata in Hindi
-            const res = await fetch(`${BASE_URL}/${state.type}/${state.id}?api_key=${API_KEY}&language=hi-IN`);
-            const data = await res.json();
+async function selectMovie(item, poster, year) {
+    selectedMovie = item;
+    const title = item.title || item.name;
+    document.getElementById('mName').value = title;
+    document.getElementById('mImg').value = poster;
+    document.getElementById('mYear').value = year;
+    document.getElementById('mTmdb').value = item.id;
+    document.getElementById('mId').value = title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+    if (document.getElementById('contentType').value === 'series') {
+        const res = await fetch(`https://api.themoviedb.org/3/tv/${item.id}?api_key=${TMDB_API}`);
+        const data = await res.json();
+        currentSeasons = data.seasons;
+        const picker = document.getElementById('seasonPicker');
+        picker.innerHTML = '<option value="">-- Choose Season --</option>';
+        currentSeasons.forEach(s => {
+            if (s.season_number === 0) return;
+            picker.innerHTML += `<option value="${s.season_number}">${s.name} (${s.episode_count} Eps)</option>`;
+        });
+        document.getElementById('seasonWrapper').classList.remove('hidden');
+    }
+    updateOutputs();
+}
 
-            // Set Title & Description in Hindi
-            document.getElementById('mediaTitle').innerText = data.title || data.name;
-            document.getElementById('mediaDesc').innerText = data.overview || "Sorry, Hindi description is not available for this title.";
-            document.getElementById('mediaRating').querySelector('span').innerText = data.vote_average.toFixed(1);
-            document.getElementById('mediaYear').innerText = (data.release_date || data.first_air_date || '2024').split('-')[0];
-            document.getElementById('mediaTypeLabel').innerText = state.type === 'movie' ? 'Movie' : 'TV Series';
+function applySeason(num) {
+    if(!num) return;
+    const s = currentSeasons.find(i => i.season_number == num);
+    document.getElementById('mName').value = `${selectedMovie.name} - Season ${num}`;
+    document.getElementById('mId').value = `${selectedMovie.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-s${num}`;
+    if(s.poster_path) document.getElementById('mImg').value = IMG_BASE + s.poster_path;
+    updateOutputs();
+}
 
-            if(state.type === 'tv') {
-                document.getElementById('tvControls').classList.remove('hidden');
-                setupTvMeta(data);
-            } else {
-                document.getElementById('tvControls').classList.add('hidden');
-            }
+function updateOutputs() {
+    const type = document.getElementById('contentType').value;
+    const name = document.getElementById('mName').value;
+    const id = document.getElementById('mId').value;
+    const img = document.getElementById('mImg').value;
+    const year = document.getElementById('mYear').value;
+    const tmdb = document.getElementById('mTmdb').value;
+    let movieObj = { title: name, img: img, year: year, tmdb: tmdb, type: type };
+    if (type === 'series') movieObj.episodes = document.getElementById('mEpisodes').value.split('\n').filter(l => l.trim() !== "");
+    else movieObj.src = document.getElementById('mSrc').value;
+    document.getElementById('outJS').value = `"${id}": ${JSON.stringify(movieObj, null, 2)},`;
+    document.getElementById('outHTML').value = `<a href="newplayer/player?id=${id}&tmdb=${tmdb}" class="movie-link" data-id="${tmdb}">
+    <div class="movie-card">
+        <div class="movie-poster-container"><img src="${img}" class="movie-poster"></div>
+        <div class="movie-info">
+            <h3>${name}</h3>
+            <p>${year} | ${type === 'movie' ? 'Movie' : 'Web Series'}</p>
+        </div>
+    </div>
+</a>`;
+}
 
-            renderIframe();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+// --- TELEGRAM ONLY LOGIC ---
+async function triggerTelegram() {
+    if (!selectedMovie) return showToast("Select content from TMDB first!", "bg-orange-600");
+    
+    const btn = document.getElementById('telegramBtn');
+    btn.disabled = true;
+    btn.innerText = "SENDING...";
 
-        async function setupTvMeta(data) {
-            const select = document.getElementById('seasonSelect');
-            select.innerHTML = '';
-            data.seasons.forEach(s => {
-                if(s.season_number === 0) return;
-                const opt = document.createElement('option');
-                opt.value = s.season_number;
-                opt.innerText = `Season ${s.season_number}`;
-                if(s.season_number == state.season) opt.selected = true;
-                select.appendChild(opt);
-            });
-            document.getElementById('epInput').value = state.episode;
-        }
+    const name = document.getElementById('mName').value;
+    const img = document.getElementById('mImg').value;
+    const id = document.getElementById('mId').value;
+    const msg = `🎬 *NEW ON CINEVIEW* \n\n🍿 *${name}*\n\n🔗 [WATCH NOW](https://prigames.netlify.app/movies/newplayer/player?id=${id})`;
 
-        function handleSeasonChange() {
-            state.season = document.getElementById('seasonSelect').value;
-            state.episode = 1;
-            updateUrlHash();
-        }
-
-        function handleEpChange() {
-            state.episode = document.getElementById('epInput').value;
-            updateUrlHash();
-        }
-
-        function renderIframe() {
-            const container = document.getElementById('iframeContainer');
-            const loading = document.getElementById('playerLoading');
-            loading.classList.remove('hidden');
-
-            let url = "";
-            const h = state.server;
-            if(state.type === 'movie') {
-                url = (h === '2embed.cc') ? `https://www.2embed.cc/embed/${state.id}` : `https://${h}/embed/movie/${state.id}`;
-            } else {
-                url = (h === '2embed.cc') ? `https://www.2embed.cc/embedtv/${state.id}&s=${state.season}&e=${state.episode}` : `https://${h}/embed/tv/${state.id}/${state.season}/${state.episode}`;
-            }
-
-            // High compatibility iframe
-            container.innerHTML = `<iframe src="${url}" allowfullscreen allow="autoplay; fullscreen" scrolling="no"></iframe>`;
-            
-            // Server button active state
-            document.querySelectorAll('.server-btn').forEach(btn => {
-                btn.classList.toggle('active-server', btn.dataset.host === state.server);
-            });
-
-            setTimeout(() => loading.classList.add('hidden'), 800);
-        }
-
-        function renderServerButtons() {
-            const list = document.getElementById('serverList');
-            servers.forEach(s => {
-                const btn = document.createElement('button');
-                btn.className = 'server-btn bg-neutral-800 border border-white/5 text-neutral-400 px-4 py-2 rounded-xl text-[10px] font-black uppercase hover:bg-neutral-700 transition-all';
-                btn.innerText = s.name;
-                btn.dataset.host = s.host;
-                btn.onclick = () => {
-                    state.server = s.host;
-                    updateUrlHash();
-                };
-                list.appendChild(btn);
-            });
-        }
-
-        function updateUrlHash() {
-            window.location.hash = `${state.type}/${state.id}/${state.season}/${state.episode}/${state.server}`;
-        }
-
-        function handleUrlHash() {
-            const hash = window.location.hash.substring(1);
-            if(hash) {
-                const parts = hash.split('/');
-                state.type = parts[0] || 'movie';
-                state.id = parts[1];
-                state.season = parts[2] || 1;
-                state.episode = parts[3] || 1;
-                state.server = parts[4] || 'vidsrc.to';
-                initPlayer();
-            } else {
-                fetchTrending();
-            }
-        }
-
-        function toggleLoader(show) {
-            document.getElementById('mainLoader').classList.toggle('hidden', !show);
-        }
-
-        function closePlayer() {
-            window.location.hash = '';
-            document.getElementById('playerSection').classList.add('hidden');
-            document.getElementById('mainContainer').classList.remove('opacity-10', 'pointer-events-none');
-            document.getElementById('iframeContainer').innerHTML = '';
-        }
-
-        function goHome() {
-            closePlayer();
-            document.getElementById('gridTitle').innerText = 'Latest';
-            fetchTrending();
-        }
-    </script>
+    try {
+        const res = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendPhoto`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: TG_CHAT, photo: img, caption: msg, parse_mode: 'Markdown' })
+        });
+        
+        if (res.ok) showToast("Telegram Notification Sent!", "bg-green-600");
+        else showToast("Telegram API Error", "bg-red-600");
+    } catch (e) { showToast("Telegram Failed", "bg-red-600"); }
+    
+    btn.disabled = false;
+    btn.innerText = "📢 SEND TO TELEGRAM";
+}
+</script>
 </body>
 </html>
 
