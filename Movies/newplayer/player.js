@@ -173,6 +173,14 @@ const movieDatabase = {
         "tmdb": "66732",
         "episodes": ["https://short.icu/RrBB6-79l","https://short.icu/YcwrZOAyz","https://short.icu/U8oxvfuW2","https://short.icu/pBvuStnhl"]
     },
+    "the-spongebob-movie-search-for-squarepants": {
+  "title": "The SpongeBob Movie: Search for SquarePants",
+  "img": "https://image.tmdb.org/t/p/w500/pDWYW9v8fmJdA7N0I1MOdQA3ETq.jpg",
+  "year": "2025",
+  "tmdb": "991494",
+  "type": "movie",
+  "src": "https://short.icu/m0LAfcqp1"
+},
     "rabbit-trap": {
   "title": "Rabbit Trap",
   "img": "https://image.tmdb.org/t/p/w500/sKnwnnmBpjo9BEskHtja6ToXUV1.jpg",
@@ -409,6 +417,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
