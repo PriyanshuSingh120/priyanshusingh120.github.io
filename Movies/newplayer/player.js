@@ -213,6 +213,14 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/8fq5gE5D9"
 },
+    "45": {
+  "title": "45",
+  "img": "https://image.tmdb.org/t/p/w500/luDTygZ6uAwaknc2isXZcz8YMvE.jpg",
+  "year": "2025",
+  "tmdb": "1382160",
+  "type": "movie",
+  "src": "https://short.icu/ouEaOoSAp"
+},
     "sultan": { "title": "Sultan", "src": "https://short.icu/t-H9cuHzO", "year": "2016", "img": "https://image.tmdb.org/t/p/w500/vPTYtKuV8X5uUd3SqnzO14W6Dti.jpg" },
     "lubber-pandhu": { "title": "Lubber Pandhu", "src": "https://short.icu/zX7mBJdLR", "year": "2024", "img": "https://image.tmdb.org/t/p/w500/jNyLZjIgaYVkBli2JihHwABlAPY.jpg" },
     "ujda-chaman": { "title": "Ujda Chaman", "src": "https://short.icu/sl5Rizeo4", "year": "2019", "img": "https://image.tmdb.org/t/p/w500/hybSFEHZcehPN8oRdb5YjaxRk2u.jpg" },
@@ -425,6 +433,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
