@@ -221,6 +221,45 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/ouEaOoSAp"
 },
+    "spider-man": {
+  "title": "Spider-Man",
+  "img": "https://image.tmdb.org/t/p/w500/kjdJntyBeEvqm9w97QGBdxPptzj.jpg",
+  "year": "2002",
+  "tmdb": "557",
+  "type": "movie",
+  "src": "https://short.icu/1HYGgP4Sx"
+},
+    "the-fix": {
+  "title": "The Fix",
+  "img": "https://image.tmdb.org/t/p/w500/vY7bY2xZymoIOti4WM5K29OMzCS.jpg",
+  "year": "2024",
+  "tmdb": "931940",
+  "type": "movie",
+  "src": "https://short.icu/egXqIGq07"
+},"hotel-transylvania-transformania": {
+  "title": "Hotel Transylvania: Transformania",
+  "img": "https://image.tmdb.org/t/p/w500/teCy1egGQa0y8ULJvlrDHQKnxBL.jpg",
+  "year": "2022",
+  "tmdb": "585083",
+  "type": "movie",
+  "src": "https://short.icu/B63hhJN52"
+},
+    "jurassic-world": {
+  "title": "Jurassic World",
+  "img": "https://image.tmdb.org/t/p/w500/rhr4y79GpxQF9IsfJItRXVaoGs4.jpg",
+  "year": "2015",
+  "tmdb": "135397",
+  "type": "movie",
+  "src": "https://short.icu/FIB7JBiNu"
+},
+    "stolen": {
+  "title": "Stolen",
+  "img": "https://image.tmdb.org/t/p/w500/xR5Endhjm4soY6fPgXY0jrpDZvL.jpg",
+  "year": "2023",
+  "tmdb": "1156202",
+  "type": "movie",
+  "src": "https://short.icu/KGcZypOHr"
+},
     "sultan": { "title": "Sultan", "src": "https://short.icu/t-H9cuHzO", "year": "2016", "img": "https://image.tmdb.org/t/p/w500/vPTYtKuV8X5uUd3SqnzO14W6Dti.jpg" },
     "lubber-pandhu": { "title": "Lubber Pandhu", "src": "https://short.icu/zX7mBJdLR", "year": "2024", "img": "https://image.tmdb.org/t/p/w500/jNyLZjIgaYVkBli2JihHwABlAPY.jpg" },
     "ujda-chaman": { "title": "Ujda Chaman", "src": "https://short.icu/sl5Rizeo4", "year": "2019", "img": "https://image.tmdb.org/t/p/w500/hybSFEHZcehPN8oRdb5YjaxRk2u.jpg" },
@@ -433,6 +472,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
