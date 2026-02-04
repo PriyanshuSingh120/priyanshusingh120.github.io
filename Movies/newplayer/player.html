@@ -2,324 +2,65 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="pageTitle">Cineview Pro Player</title>
-    
-    <!-- Premium Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <style>
-        :root {
-            --bg: #050505;
-            --surface: #121212;
-            --surface-light: #1e1e1e;
-            --accent: #e50914;
-            --text: #ffffff;
-            --text-dim: #9ca3af;
-            --radius-md: 12px;
-            --shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
-        }
-
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            margin: 0;
-            padding-bottom: 40px;
-            overflow-x: hidden;
-        }
-
-        /* --- Navigation --- */
-        .navbar {
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .back-link {
-            text-decoration: none;
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        /* --- Player Container --- */
-        .player-wrapper {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .video-box {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            background: #000;
-            box-shadow: var(--shadow);
-        }
-
-        @media (min-width: 1024px) {
-            .video-box {
-                border-radius: var(--radius-md);
-                margin-top: 10px;
-                overflow: hidden;
-                border: 1px solid rgba(255,255,255,0.05);
-            }
-        }
-
-        .video-box iframe {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            border: none;
-        }
-
-        /* --- Movie Info --- */
-        .content-info {
-            padding: 24px 20px;
-        }
-
-        .movie-title {
-            font-size: clamp(1.4rem, 5vw, 2.2rem);
-            font-weight: 800;
-            margin: 0 0 12px 0;
-            letter-spacing: -0.5px;
-        }
-
-        .meta-tags {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 24px;
-        }
-
-        .tag {
-            background: var(--surface-light);
-            padding: 5px 12px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--text-dim);
-            border: 1px solid rgba(255,255,255,0.1);
-            text-transform: uppercase;
-        }
-
-        .tag.rating { color: #f5c518; background: rgba(245, 197, 24, 0.1); border-color: rgba(245, 197, 24, 0.2); }
-        .tag.premium { color: var(--accent); border-color: var(--accent); }
-
-        /* --- Episode Selector --- */
-        .selector-card {
-            background: var(--surface);
-            padding: 16px;
-            border-radius: var(--radius-md);
-            border: 1px solid rgba(255,255,255,0.05);
-            margin-bottom: 30px;
-        }
-
-        .selector-card label {
-            display: block;
-            color: var(--accent);
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            font-weight: 800;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-        }
-
-        .custom-select {
-            width: 100%;
-            background: #000;
-            color: #fff;
-            border: 1px solid #333;
-            padding: 14px;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 0.95rem;
-            outline: none;
-        }
-
-        /* --- Description --- */
-        .description-box h3 { font-size: 1rem; color: var(--text-dim); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-        .description-box p { 
-            line-height: 1.6; 
-            color: #d1d5db; 
-            font-size: 0.95rem; 
-            margin: 0 0 40px 0;
-        }
-
-        /* --- ANDROID STYLE MOVIE SHELF --- */
-        .shelf-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-        }
-
-        .shelf-header h2 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin: 0;
-        }
-
-        /* The Grid/Scroll Logic */
-        #recommendationGrid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 16px;
-        }
-
-        @media (max-width: 768px) {
-            #recommendationGrid {
-                display: flex;
-                overflow-x: auto;
-                scroll-snap-type: x mandatory;
-                margin: 0 -20px;
-                padding: 0 20px 20px 20px;
-                scrollbar-width: none;
-            }
-            #recommendationGrid::-webkit-scrollbar { display: none; }
-        }
-
-        /* Professional Movie Card */
-        .movie-card-link {
-            text-decoration: none;
-            color: inherit;
-            flex: 0 0 140px; /* Fixed width for mobile scroll */
-            scroll-snap-align: start;
-        }
-
-        .poster-wrapper {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 2 / 3; /* FORCED ASPECT RATIO */
-            border-radius: 10px;
-            overflow: hidden;
-            background: var(--surface-light);
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: transform 0.3s ease;
-        }
-
-        .poster-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Prevents stretching */
-        }
-
-        .poster-wrapper::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 50%);
-        }
-
-        .card-title {
-            margin: 10px 0 2px 0;
-            font-size: 0.85rem;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .card-meta {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            margin: 0;
-        }
-
-        @media (hover: hover) {
-            .movie-card-link:hover .poster-wrapper {
-                transform: scale(1.05);
-                border-color: var(--accent);
-            }
-        }
-
-        /* --- Footer --- */
-        .footer-cta {
-            background: var(--surface);
-            padding: 40px 20px;
-            text-align: center;
-            border-radius: 20px;
-            margin: 20px;
-        }
-
-        .btn-full {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: #fff;
-            color: #000;
-            text-decoration: none;
-            padding: 14px 28px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            margin-top: 15px;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Cineview Video Player</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <nav class="navbar">
-        <a href="https://prigames.netlify.app/movies/" class="back-link">
-            <i class="fas fa-chevron-left"></i> <span>Library</span>
-        </a>
-    </nav>
-
-    <main class="player-wrapper">
-        <section class="video-box">
-            <iframe id="mainVideoPlayer" src="" allowfullscreen></iframe>
-        </section>
-
-        <section class="content-info">
-            <h1 id="displayTitle" class="movie-title">Loading...</h1>
-
-            <div class="meta-tags">
-                <span id="imdbRatingDisplay" class="tag rating"><i class="fas fa-star"></i> --</span>
-                <span id="displayYear" class="tag">0000</span>
-                <span class="tag premium">4K Ultra HD</span>
-                <span class="tag">CC</span>
+    <main>
+        <div class="video-player-container">
+            <div class="video-frame-area">
+                <iframe id="mainVideoPlayer" src="" allowfullscreen ></iframe>
             </div>
 
-            <div id="episodeSelectorArea" class="selector-card" style="display: none;">
-                <label>Episodes</label>
-                <select id="episodeDropdown" class="custom-select" onchange="loadSpecificEpisode(this.value)"></select>
-            </div>
+            <div class="player-content-area">
+                <div id="displayTitle" class="player-title">Loading Movie...</div>
+                
+                <div class="player-metadata">
+                    <span id="imdbRatingDisplay"><i class="fab fa-imdb" style="color: #f5c518;"></i> Loading...</span>
+                    <span id="displayYear">📅 ----</span>
+                    <span><i class="fas fa-layer-group"></i> 1080p | 720p</span>
+                </div>
 
-            <div class="description-box">
-                <h3>Storyline</h3>
-                <p id="movieDescription">Fetching overview...</p>
-            </div>
-
-            <div class="shelf-header">
-                <h2>Similar Movies</h2>
-            </div>
+                <div id="episodeSelectorArea" style="display: none; margin-top: 15px;">
+                    <label style="color: #e50914; font-weight: bold; margin-right: 10px;">Select Episode:</label>
+                    <select id="episodeDropdown" onchange="loadSpecificEpisode(this.value)" style="background: #222; color: #fff; padding: 10px; border-radius: 5px; border: 1px solid #444; width: 200px;">
+                        </select>
+                </div>
             
-            <div id="recommendationGrid">
-                <!-- Injected via player.js -->
+                <div class="movie-description-wrapper">
+                    <h3 class="overview-heading">Storyline</h3>
+                    <p id="movieDescription" class="movie-description">
+                        Fetching the movie overview...
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="container">
+            <h3>⚡ More To Watch</h3>
+            <div id="recommendationGrid" class="movie-grid"></div>
+        </div>
+
+        <section class="explore-footer">
+            <div class="explore-glow"></div>
+            <div class="explore-container">
+                <h4>Haven't found what you're looking for?</h4>
+                <a href="https://prigames.netlify.app/movies/" class="btn-explore">
+                    <span>Explore Full Library</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
             </div>
         </section>
-
-        <footer class="footer-cta">
-            <p style="color: var(--text-dim); margin-bottom: 5px;">Explore more content</p>
-            <h4 style="margin:0; font-size: 1.1rem;">Ready for more?</h4>
-            <a href="https://prigames.netlify.app/movies/" class="btn-full">
-                Browse Full Catalog <i class="fas fa-arrow-right"></i>
-            </a>
-        </footer>
     </main>
 
     <script src="player.js"></script>
 </body>
 </html>
+
 
