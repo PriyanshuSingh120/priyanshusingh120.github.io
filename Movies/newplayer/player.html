@@ -2,79 +2,398 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">Cineview Video Player</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title id="pageTitle">Cineview Pro</title>
+    
+    <!-- Premium Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+
+    <style>
+        :root {
+            --bg-dark: #080808;
+            --surface: #121212;
+            --surface-hover: #1c1c1c;
+            --accent: #e50914;
+            --text-main: #ffffff;
+            --text-dim: #a0a0a0;
+            --safe-area: 16px;
+            --card-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* --- Mobile-Optimized Header --- */
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px var(--safe-area);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.7), transparent);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+        }
+
+        .back-btn {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* --- Cinema Player --- */
+        .player-section {
+            width: 100%;
+            background: #000;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            aspect-ratio: 16/9;
+            background: #000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        @media (min-width: 1024px) {
+            .video-container {
+                margin-top: 20px;
+                border-radius: 16px;
+                overflow: hidden;
+            }
+        }
+
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* --- Content Details --- */
+        .main-content {
+            padding: 24px var(--safe-area);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .title-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .movie-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .badge-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            background: var(--surface);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            border: 1px solid rgba(255,255,255,0.1);
+            text-transform: uppercase;
+        }
+
+        .badge.rating {
+            color: #f5c518;
+            background: rgba(245, 197, 24, 0.1);
+            border-color: rgba(245, 197, 24, 0.2);
+        }
+
+        .badge.quality {
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* --- Smart Episode Picker --- */
+        .episode-picker {
+            background: var(--surface);
+            border-radius: var(--card-radius);
+            padding: 16px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .picker-label {
+            font-size: 0.8rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        select {
+            width: 100%;
+            background: #000;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            font-family: inherit;
+            font-size: 1rem;
+            appearance: none;
+        }
+
+        /* --- Storyline --- */
+        .storyline-section h3 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+        }
+
+        .storyline-text {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #ccc;
+            margin-bottom: 40px;
+        }
+
+        /* --- ANDROID STYLE MOVIE CARDS --- */
+        .suggestions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .suggestions-header h2 {
+            font-size: 1.2rem;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        /* Grid for Desktop, Horizontal Scroll for Mobile */
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 16px;
+            padding-bottom: 40px;
+        }
+
+        /* Mobile specific scroll behavior */
+        @media (max-width: 600px) {
+            .movie-grid {
+                display: flex;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                padding-bottom: 20px;
+                margin: 0 calc(-1 * var(--safe-area));
+                padding-left: var(--safe-area);
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .movie-grid::-webkit-scrollbar { display: none; }
+        }
+
+        .movie-card {
+            flex: 0 0 140px; /* Fixed width for consistent mobile scrolling */
+            scroll-snap-align: start;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .poster-box {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 2/3; /* STRICT MOVIE RATIO */
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            background: #222;
+            transition: var(--transition);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .poster-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .poster-box::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 40%);
+        }
+
+        .movie-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: 0;
+        }
+
+        .movie-meta {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin: 0;
+        }
+
+        /* Hover states for desktop */
+        @media (hover: hover) {
+            .movie-card:hover .poster-box {
+                transform: scale(1.05);
+                border-color: var(--accent);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            }
+            .movie-card:hover .movie-name {
+                color: var(--accent);
+            }
+        }
+
+        /* --- Footer --- */
+        .explore-footer {
+            background: var(--surface);
+            padding: 40px var(--safe-area);
+            text-align: center;
+            border-radius: 24px 24px 0 0;
+            margin-top: 20px;
+        }
+
+        .btn-full {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--text-main);
+            color: #000;
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-top: 16px;
+            transition: var(--transition);
+        }
+
+        .btn-full:active {
+            transform: scale(0.95);
+        }
+    </style>
 </head>
 <body>
+
     <nav class="top-nav">
         <a href="https://prigames.netlify.app/movies/" class="back-btn">
-            <i class="fas fa-chevron-left"></i> Back to Library
+            <i class="fas fa-arrow-left"></i>
+            <span>Browse</span>
         </a>
     </nav>
 
     <main>
-        <div class="player-wrapper">
-            <div class="video-player-container">
-                <div class="video-frame-area">
-                    <iframe id="mainVideoPlayer" src="" allowfullscreen></iframe>
-                </div>
-
-                <div class="player-content-area">
-                    <div class="header-flex">
-                        <h1 id="displayTitle" class="player-title">Loading Movie...</h1>
-                        <div class="action-buttons">
-                            <button class="icon-btn"><i class="far fa-heart"></i></button>
-                            <button class="icon-btn"><i class="fas fa-share-alt"></i></button>
-                        </div>
-                    </div>
-                    
-                    <div class="player-metadata">
-                        <span id="imdbRatingDisplay" class="badge-rating"><i class="fab fa-imdb"></i> Loading...</span>
-                        <span id="displayYear" class="badge">📅 ----</span>
-                        <span class="badge"><i class="fas fa-closed-captioning"></i> Multi-Audio</span>
-                        <span class="badge-quality">4K Ultra HD</span>
-                    </div>
-
-                    <div id="episodeSelectorArea" class="episode-container" style="display: none;">
-                        <label for="episodeDropdown"><i class="fas fa-list-ul"></i> Select Episode:</label>
-                        <div class="custom-select">
-                            <select id="episodeDropdown" onchange="loadSpecificEpisode(this.value)"></select>
-                        </div>
-                    </div>
-                
-                    <div class="movie-description-wrapper">
-                        <h3 class="overview-heading">Storyline</h3>
-                        <p id="movieDescription" class="movie-description">
-                            Fetching the movie overview...
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="section-header">
-                <h3>⚡ More To Watch</h3>
-                <div class="scroll-indicators"></div>
-            </div>
-            <div id="recommendationGrid" class="movie-grid"></div>
-        </div>
-
-        <section class="explore-footer">
-            <div class="explore-glow"></div>
-            <div class="explore-container">
-                <h4>Haven't found what you're looking for?</h4>
-                <a href="https://prigames.netlify.app/movies/" class="btn-explore">
-                    <span>Explore Full Library</span>
-                    <i class="fas fa-arrow-right"></i>
-                </a>
+        <section class="player-section">
+            <div class="video-container">
+                <iframe id="mainVideoPlayer" src="" allowfullscreen></iframe>
             </div>
         </section>
+
+        <section class="main-content">
+            <div class="title-area">
+                <h1 id="displayTitle" class="movie-title">Loading Title...</h1>
+            </div>
+
+            <div class="badge-row">
+                <span id="imdbRatingDisplay" class="badge rating"><i class="fas fa-star"></i> --</span>
+                <span id="displayYear" class="badge">YEAR</span>
+                <span class="badge quality">4K UHD</span>
+                <span class="badge">CC</span>
+            </div>
+
+            <div id="episodeSelectorArea" class="episode-picker" style="display: none;">
+                <span class="picker-label">Up Next / Episodes</span>
+                <div class="select-wrapper">
+                    <select id="episodeDropdown" onchange="loadSpecificEpisode(this.value)"></select>
+                </div>
+            </div>
+
+            <div class="storyline-section">
+                <h3>Storyline</h3>
+                <p id="movieDescription" class="storyline-text">
+                    Fetching the latest cinematic details...
+                </p>
+            </div>
+
+            <div class="suggestions-header">
+                <h2>Similar To This</h2>
+            </div>
+            
+            <div id="recommendationGrid" class="movie-grid">
+                <!-- Sample Movie Card Structure for Reference -->
+                <!-- 
+                <a href="#" class="movie-card">
+                    <div class="poster-box">
+                        <img src="placeholder.jpg" alt="Poster">
+                    </div>
+                    <p class="movie-name">Movie Name</p>
+                    <p class="movie-meta">2024 • Action</p>
+                </a> 
+                -->
+            </div>
+        </section>
+
+        <footer class="explore-footer">
+            <p style="color: var(--text-dim); margin-bottom: 8px;">More to explore</p>
+            <h4 style="margin: 0; font-size: 1.1rem;">Full Cineview Library</h4>
+            <a href="https://prigames.netlify.app/movies/" class="btn-full">
+                <span>View All</span>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+        </footer>
     </main>
 
-    <script src="player.js"></script>
+    <script src="player.js">
+        
+    </script>
 </body>
 </html>
+
