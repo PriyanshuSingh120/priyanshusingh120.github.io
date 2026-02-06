@@ -85,7 +85,6 @@ const movieDatabase = {
     "https://short.icu/pPBYEAAKf",
     "https://short.icu/5psZWQVaX",
     "https://short.icu/wMIpo78-3",
-    "https://short.icu/SA2G552ke",
     "https://short.icu/GQjiQ5IBL",
     "https://short.icu/-LdnnkHEdm",
     "https://short.icu/JEprqLwvPG",
@@ -527,6 +526,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
