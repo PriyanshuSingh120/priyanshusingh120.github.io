@@ -23,6 +23,38 @@ const movieDatabase = {
   "isSeries": true, 
   "episodes": ["https://short.icu/e8a-E1--B","https://short.icu/H5epjTQ_4","https://short.icu/aV192cp_m","https://short.icu/-xiyaOk8x","https://short.icu/9iODPJ5pf"] 
 },
+    "jujutsu-kaisen-s2": {
+  "title": "JUJUTSU KAISEN - Season 2",
+  "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNLedtKonJc-_VedlguVLuQyGDbzAt6XNGDlc8iCsJ8vskP6h93Zmc4Ns&s=10",
+  "year": "2023",
+  "tmdb": "95479",
+  "type": "series",
+  "episodes": [
+    "https://short.icu/FAU_YdyDW",
+    "https://short.icu/amL6eldUO",
+    "https://short.icu/OOqonZc4L",
+    "https://short.icu/a7wJvVE31",
+    "https://short.icu/IpIYrinV0",
+    "https://short.icu/LqR5XhfgP",
+    "https://short.icu/92YKmSzFi",
+    "https://short.icu/IXAkc3FrF",
+    "https://short.icu/_YcehkvsQ",
+    "https://short.icu/qhpJ77an_",
+    "https://short.icu/9KRimtl6X",
+    "https://short.icu/8rz5dGuw_",
+    "https://short.icu/h2mrR_6e_",
+    "https://short.icu/ZG66qRuYe",
+    "https://short.icu/4Qi1OIPhx",
+    "https://short.icu/OP5ActP-l",
+    "https://short.icu/t13NCPmkX",
+    "https://short.icu/8PagrZQiF",
+    "https://short.icu/H9WBDFsot",
+    "https://short.icu/PzRpaGfYm",
+    "https://short.icu/KFjqGLsAH",
+    "https://short.icu/1Cb2OY4kq",
+    "https://short.icu/MLVW2ckkF"
+  ]
+},
     "jujutsu-kaisen-s1": {
   "title": "JUJUTSU KAISEN - Season 1",
   "img": "https://image.tmdb.org/t/p/w500/fHQ2XHRdRix0rkDCShmGQ8c6d03.jpg",
@@ -597,6 +629,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
