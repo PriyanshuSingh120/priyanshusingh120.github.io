@@ -62,44 +62,6 @@ const movieDatabase = {
   "tmdb": "95479",
   "type": "series",
   "episodes": [
-    "https://short.icu/-k75AnmMf",
-    "https://short.icu/uAr3NPEma",
-    "https://short.icu/9jASzYtJX",
-    "https://short.icu/tKco_sdJp",
-    "https://short.icu/85Uu7ZM1V",
-    "https://short.icu/sy0EKz6Kr",
-    "https://short.icu/nMh3Q_pRSB",
-    "https://short.icu/DNC5NZTPJ",
-    "https://short.icu/_ZbO-Fuau",
-    "https://short.icu/6c9rMQiaR",
-    "https://short.icu/V30hn7_AZ",
-    "https://short.icu/Cd-nn8v7U",
-    "https://short.icu/iLxYjCAII",
-    "https://short.icu/fsxu1w_BI",
-    "https://short.icu/ObMBCuIMM",
-    "https://short.icu/lzxJigJso",
-    "https://short.icu/6p72Hyn54",
-    "https://short.icu/pPBYEAAKf",
-    "https://short.icu/5psZWQVaX",
-    "https://short.icu/wMIpo78-3",
-    "https://short.icu/SA2G552ke",
-    "https://short.icu/GQjiQ5IBL",
-    "https://short.icu/-LdnnkHEdm",
-    "https://short.icu/JEprqLwvPG",
-    "https://short.icu/ElFHWsS9v",
-    "https://short.icu/65kXkmw0p",
-    "https://short.icu/67LS3c-bu",
-    "https://short.icu/H4cIIdrNl",
-    "https://short.icu/K7orphdFd",
-    "https://short.icu/mfBvHpHI4",
-    "https://short.icu/9HdQ6HyEX",
-    "https://short.icu/77J_-Ay0_",
-    "https://short.icu/spR2pNhHG",
-    "https://short.icu/NQmCCwfbb",
-    "https://short.icu/HY_BK_YBX",
-    "https://short.icu/SjwGUY_6P",
-    "https://short.icu/B854BP1QW",
-    "https://short.icu/GRG6yb9kf",
     "https://short.icu/H8xqVkzrv",
     "https://short.icu/l7FJArdld",
     "https://short.icu/Pd4oRWTEA",
@@ -126,6 +88,7 @@ const movieDatabase = {
     "https://short.icu/uvSdk7hbCp"
   ]
 },
+    
     "special-ops-1-5-the-himmat-story": { 
   "title": "Special Ops 1.5 The Himmat Story", 
   "img": "https://image.tmdb.org/t/p/w500/nH5LDmNofN4p5mldUxxhVzfn4sk.jpg", 
@@ -629,6 +592,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
