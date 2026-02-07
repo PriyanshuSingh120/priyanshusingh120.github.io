@@ -495,153 +495,99 @@ const movieDatabase = {
     "raat-akeli-hai-the-bansal-murders": { "title": "Raat Akeli Hai - The Bansal Murders", "src": "https://short.icu/FYIdgZzZ7", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/8EpDSwnjMBc9dmTPEYBF4Bixmwf.jpg" }
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+            
+let currentSources = { s1: '', s2: '' };
+
+document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const movieId = urlParams.get('id');
-    const movie = movieDatabase[movieId];
+    const tmdbId = urlParams.get('tmdb');
+    const isHindi = urlParams.get('isHindi') === 'true'; // Set by app.js search
+    
+    const player = document.getElementById('mainVideoPlayer');
+    const titleEl = document.getElementById('displayTitle');
+    const switcher = document.getElementById('serverSwitcher');
 
-    if (movie) {
-        const player = document.getElementById('mainVideoPlayer');
-        const titleEl = document.getElementById('displayTitle');
-        const selectorArea = document.getElementById('episodeSelectorArea');
-        const dropdown = document.getElementById('episodeDropdown');
-
+    // Scenario 1: Local Movie Database
+    if (movieId && movieDatabase[movieId]) {
+        const movie = movieDatabase[movieId];
         titleEl.innerText = movie.title;
-
-        if (movie.episodes && movie.episodes.length > 0) {
-            selectorArea.style.display = 'block';
-            dropdown.innerHTML = ""; 
-            movie.episodes.forEach((url, index) => {
-                let opt = document.createElement('option');
-                opt.value = url;
-                opt.innerText = `Episode ${index + 1}`;
-                dropdown.appendChild(opt);
-            });
-            player.src = movie.episodes[0]; 
-        } else {
-            player.src = movie.src;
-            selectorArea.style.display = 'none';
+        
+        // Define Servers
+        currentSources.s1 = `https://player.videasy.net/movie/${movie.tmdb || ''}?color=e50914&overlay=true&autoplayNextEpisode=true`;
+        currentSources.s2 = movie.episodes ? movie.episodes[0] : movie.src;
+        
+        // Show switcher if title contains "hindi" or is explicit series from DB
+        if(isHindi || movie.title.toLowerCase().includes('hindi')) {
+            switcher.style.display = 'flex';
         }
 
-        // Pass isSeries flag to API fetcher
+        player.src = currentSources.s1; // Default to Server 1
         fetchMetaData(movie.title, movie.tmdb, movie.isSeries);
         generateRecommendations(movieId);
-    } else {
-        document.getElementById('displayTitle').innerText = "Movie Not Found";
+    } 
+    // Scenario 2: Direct TMDB Fallback Stream
+    else if (tmdbId) {
+        const title = urlParams.get('title') || "Now Playing";
+        titleEl.innerText = decodeURIComponent(title);
+        
+        currentSources.s1 = `https://player.videasy.net/movie/${tmdbId}?color=e50914&overlay=true`;
+        currentSources.s2 = `https://vidsrc.me/embed/movie?tmdb=${tmdbId}`; // Fast alternate
+        
+        if(isHindi) switcher.style.display = 'flex';
+        
+        player.src = currentSources.s1;
+        fetchMetaData(title, tmdbId, false);
+        generateRecommendations('random');
     }
 });
 
-function loadSpecificEpisode(url) {
-    document.getElementById('mainVideoPlayer').src = url;
+function switchServer(num) {
+    const player = document.getElementById('mainVideoPlayer');
+    const btns = document.querySelectorAll('.server-btn');
+    btns.forEach((btn, idx) => btn.classList.toggle('active', (idx + 1) === num));
+    
+    if (num === 1) player.src = currentSources.s1;
+    if (num === 2) player.src = currentSources.s2;
 }
 
+// ... existing fetchMetaData and generateRecommendations functions ...
 async function fetchMetaData(displayTitle, manualId, isSeries = false) {
     const ratingEl = document.getElementById('imdbRatingDisplay');
     const yearEl = document.getElementById('displayYear');
     const descEl = document.getElementById('movieDescription');
-
-    // Use /tv/ endpoint if it's a series, otherwise /movie/
     const type = isSeries ? 'tv' : 'movie';
-    let url = manualId 
-        ? `https://api.themoviedb.org/3/${type}/${manualId}?api_key=${TMDB_API_KEY}`
-        : `https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(displayTitle)}`;
-
+    let url = manualId ? `https://api.themoviedb.org/3/${type}/${manualId}?api_key=${TMDB_API_KEY}` : `https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(displayTitle)}`;
     try {
         const response = await fetch(url);
         const data = await response.json();
         const bestMatch = (data.results && data.results.length > 0) ? data.results[0] : data;
-
         if (bestMatch) {
             const rating = bestMatch.vote_average ? bestMatch.vote_average.toFixed(1) : "N/A";
             const date = bestMatch.release_date || bestMatch.first_air_date || "2025";
             const year = date.split('-')[0];
-
             ratingEl.innerHTML = `<i class="fab fa-imdb" style="color: #f5c518;"></i> IMDb: ${rating}`;
             yearEl.innerText = `📅 ${year}`;
             descEl.innerText = bestMatch.overview || "Overview not available.";
         }
-    } catch (e) {
-        console.error("Metadata Load Error", e);
-    }
+    } catch (e) { console.error("Meta error", e); }
 }
 
 function generateRecommendations(currentId) {
     const grid = document.getElementById('recommendationGrid');
     if (!grid) return;
-    
     const keys = Object.keys(movieDatabase).filter(key => key !== currentId);
     const randomMovies = keys.sort(() => 0.5 - Math.random()).slice(0, 8);
-
     grid.innerHTML = ""; 
-
     randomMovies.forEach(key => {
         const item = movieDatabase[key];
         const card = document.createElement('a');
         card.href = `player.html?id=${key}`;
         card.className = 'movie-link';
-        card.innerHTML = `
-            <div class="movie-card">
-                <div class="movie-poster-container">
-                    <img src="${item.img}" class="movie-poster" loading="lazy" onerror="this.src='https://via.placeholder.com/500x750?text=Poster+Missing'">
-                </div>
-                <div class="movie-info">
-                    <h3>${item.title}</h3>
-                </div>
-            </div>
-        `;
+        card.innerHTML = `<div class="movie-card"><div class="movie-poster-container"><img src="${item.img}" class="movie-poster" loading="lazy"></div><div class="movie-info"><h3>${item.title}</h3></div></div>`;
         grid.appendChild(card);
     });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
