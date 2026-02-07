@@ -495,49 +495,69 @@ const movieDatabase = {
     "raat-akeli-hai-the-bansal-murders": { "title": "Raat Akeli Hai - The Bansal Murders", "src": "https://short.icu/FYIdgZzZ7", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/8EpDSwnjMBc9dmTPEYBF4Bixmwf.jpg" }
 };
 
-            
+
 let currentSources = { s1: '', s2: '' };
 
 document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const movieId = urlParams.get('id');
     const tmdbId = urlParams.get('tmdb');
-    const isHindi = urlParams.get('isHindi') === 'true'; // Set by app.js search
+    const isHindiParam = urlParams.get('isHindi') === 'true';
+    const isSeriesParam = urlParams.get('type') === 'series'; // New parameter check
     
     const player = document.getElementById('mainVideoPlayer');
     const titleEl = document.getElementById('displayTitle');
     const switcher = document.getElementById('serverSwitcher');
 
-    // Scenario 1: Local Movie Database
+    // Scenario 1: Local Database
     if (movieId && movieDatabase[movieId]) {
         const movie = movieDatabase[movieId];
         titleEl.innerText = movie.title;
         
-        // Define Servers
-        currentSources.s1 = `https://player.videasy.net/movie/${movie.tmdb || ''}?color=e50914&overlay=true&autoplayNextEpisode=true`;
-        currentSources.s2 = movie.episodes ? movie.episodes[0] : movie.src;
+        // SERVER 1: Primary (Your Abyss/Short.icu Links)
+        currentSources.s1 = movie.episodes ? movie.episodes[0] : movie.src;
         
-        // Show switcher if title contains "hindi" or is explicit series from DB
-        if(isHindi || movie.title.toLowerCase().includes('hindi')) {
+        // SERVER 2: VIDEASY (Dynamic Path Construction to avoid "You are lost")
+        const typePath = movie.isSeries ? 'tv' : 'movie';
+        let videasyUrl = `https://player.videasy.net/${typePath}/${movie.tmdb || ''}`;
+        if (movie.isSeries) videasyUrl += `/1/1`; // Default to S1 E1
+        
+        const params = new URLSearchParams({
+            color: 'e50914',
+            overlay: 'true',
+            nextEpisode: 'true',
+            episodeSelector: 'true'
+        });
+        currentSources.s2 = `${videasyUrl}?${params.toString()}`;
+        
+        if(isHindiParam || movie.title.toLowerCase().includes('hindi')) {
             switcher.style.display = 'flex';
         }
 
-        player.src = currentSources.s1; // Default to Server 1
+        player.src = currentSources.s1;
         fetchMetaData(movie.title, movie.tmdb, movie.isSeries);
         generateRecommendations(movieId);
     } 
-    // Scenario 2: Direct TMDB Fallback Stream
+    // Scenario 2: TMDB Fallback (Search Results)
     else if (tmdbId) {
-        const title = urlParams.get('title') || "Now Playing";
+        const title = urlParams.get('title');
+        const isSeries = isSeriesParam;
         titleEl.innerText = decodeURIComponent(title);
         
-        currentSources.s1 = `https://player.videasy.net/movie/${tmdbId}?color=e50914&overlay=true`;
-        currentSources.s2 = `https://vidsrc.me/embed/movie?tmdb=${tmdbId}`; // Fast alternate
+        const typePath = isSeries ? 'tv' : 'movie';
         
-        if(isHindi) switcher.style.display = 'flex';
+        // Server 1: Fast Generic
+        currentSources.s1 = `https://vidsrc.me/embed/${typePath}?tmdb=${tmdbId}`;
+        
+        // Server 2: VIDEASY
+        let videasyBase = `https://player.videasy.net/${typePath}/${tmdbId}`;
+        if (isSeries) videasyBase += `/1/1`;
+        currentSources.s2 = `${videasyBase}?color=e50914&overlay=true&episodeSelector=true`;
+        
+        if(isHindiParam) switcher.style.display = 'flex';
         
         player.src = currentSources.s1;
-        fetchMetaData(title, tmdbId, false);
+        fetchMetaData(title, tmdbId, isSeries);
         generateRecommendations('random');
     }
 });
@@ -548,58 +568,15 @@ function switchServer(num) {
     btns.forEach((btn, idx) => btn.classList.toggle('active', (idx + 1) === num));
     
     if (num === 1) player.src = currentSources.s1;
-    if (num === 2) player.src = currentSources.s2;
+    if (num === 2) {
+        // Validation check for Server 2 to prevent "You are lost"
+        if (currentSources.s2.includes('//movie/') || currentSources.s2.includes('//tv/')) {
+            player.src = currentSources.s2;
+        } else {
+            console.error("Invalid VIDEASY ID");
+            // Show a custom message inside the frame if possible or alert
+        }
+    }
 }
 
 // ... existing fetchMetaData and generateRecommendations functions ...
-async function fetchMetaData(displayTitle, manualId, isSeries = false) {
-    const ratingEl = document.getElementById('imdbRatingDisplay');
-    const yearEl = document.getElementById('displayYear');
-    const descEl = document.getElementById('movieDescription');
-    const type = isSeries ? 'tv' : 'movie';
-    let url = manualId ? `https://api.themoviedb.org/3/${type}/${manualId}?api_key=${TMDB_API_KEY}` : `https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(displayTitle)}`;
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        const bestMatch = (data.results && data.results.length > 0) ? data.results[0] : data;
-        if (bestMatch) {
-            const rating = bestMatch.vote_average ? bestMatch.vote_average.toFixed(1) : "N/A";
-            const date = bestMatch.release_date || bestMatch.first_air_date || "2025";
-            const year = date.split('-')[0];
-            ratingEl.innerHTML = `<i class="fab fa-imdb" style="color: #f5c518;"></i> IMDb: ${rating}`;
-            yearEl.innerText = `📅 ${year}`;
-            descEl.innerText = bestMatch.overview || "Overview not available.";
-        }
-    } catch (e) { console.error("Meta error", e); }
-}
-
-function generateRecommendations(currentId) {
-    const grid = document.getElementById('recommendationGrid');
-    if (!grid) return;
-    const keys = Object.keys(movieDatabase).filter(key => key !== currentId);
-    const randomMovies = keys.sort(() => 0.5 - Math.random()).slice(0, 8);
-    grid.innerHTML = ""; 
-    randomMovies.forEach(key => {
-        const item = movieDatabase[key];
-        const card = document.createElement('a');
-        card.href = `player.html?id=${key}`;
-        card.className = 'movie-link';
-        card.innerHTML = `<div class="movie-card"><div class="movie-poster-container"><img src="${item.img}" class="movie-poster" loading="lazy"></div><div class="movie-info"><h3>${item.title}</h3></div></div>`;
-        grid.appendChild(card);
-    });
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
