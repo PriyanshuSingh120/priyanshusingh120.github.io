@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIDEASY Cinema | Stream Movies & TV</title>
+    <title>VIDEASY Hindi - Bollywood & Beyond</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -38,7 +38,7 @@
             overflow: hidden;
             border-radius: 16px;
             background: #000;
-            box-shadow: 0 0 50px rgba(59, 130, 246, 0.15);
+            box-shadow: 0 0 50px rgba(249, 115, 22, 0.15);
         }
 
         .aspect-video-container iframe {
@@ -56,7 +56,7 @@
             background: #050505;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #2563eb;
+            background: #f97316;
             border-radius: 10px;
         }
 
@@ -81,13 +81,16 @@
     <!-- Navigation -->
     <nav class="glass-nav fixed top-0 w-full z-50 px-6 py-4 flex items-center justify-between">
         <div class="flex items-center gap-10">
-            <h1 class="text-2xl font-extrabold tracking-tighter text-blue-500 cursor-pointer" onclick="goHome()">
-                VIDEASY<span class="text-white">.</span>
-            </h1>
+            <div class="flex flex-col cursor-pointer" onclick="goHome()">
+                <h1 class="text-2xl font-extrabold tracking-tighter text-orange-500">
+                    VIDEASY<span class="text-white">.</span>
+                </h1>
+                <span class="text-[10px] font-bold tracking-[0.2em] text-gray-400 uppercase -mt-1">Hindi Edition</span>
+            </div>
             <div class="hidden md:flex gap-8 text-sm font-semibold text-gray-400">
                 <button onclick="goHome()" class="hover:text-white transition-colors">Home</button>
-                <button onclick="filterType('movie')" class="hover:text-white transition-colors">Movies</button>
-                <button onclick="filterType('tv')" class="hover:text-white transition-colors">TV Shows</button>
+                <button onclick="filterType('movie')" class="hover:text-white transition-colors">Hindi Movies</button>
+                <button onclick="filterType('tv')" class="hover:text-white transition-colors">Hindi Shows</button>
             </div>
         </div>
         
@@ -96,8 +99,8 @@
                 <input 
                     id="searchInput"
                     type="text" 
-                    placeholder="Search titles..." 
-                    class="bg-white/5 border border-white/10 rounded-full py-2 px-5 pl-12 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 w-48 md:w-80 transition-all text-white placeholder-gray-500"
+                    placeholder="Search Hindi titles..." 
+                    class="bg-white/5 border border-white/10 rounded-full py-2 px-5 pl-12 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 w-48 md:w-80 transition-all text-white placeholder-gray-500"
                 >
                 <i class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
             </div>
@@ -113,13 +116,13 @@
             <div class="absolute inset-0 hero-overlay"></div>
             <div class="absolute bottom-0 left-0 p-8 md:p-16 w-full md:w-3/4">
                 <div class="flex items-center gap-3 mb-4">
-                    <span class="bg-blue-600/20 text-blue-400 text-[10px] font-bold px-3 py-1 rounded-full border border-blue-500/30 uppercase tracking-widest">Trending Today</span>
+                    <span class="bg-orange-600/20 text-orange-400 text-[10px] font-bold px-3 py-1 rounded-full border border-orange-500/30 uppercase tracking-widest">Trending in Hindi</span>
                     <span id="heroYear" class="text-gray-400 text-sm"></span>
                 </div>
                 <h2 id="heroTitle" class="text-5xl md:text-7xl font-black mb-6 leading-[1.1]"></h2>
                 <p id="heroOverview" class="text-gray-300 text-base md:text-lg line-clamp-3 mb-8 max-w-2xl leading-relaxed"></p>
                 <div class="flex gap-4">
-                    <button id="heroPlayBtn" class="bg-white text-black font-bold px-10 py-4 rounded-2xl flex items-center gap-3 hover:bg-blue-500 hover:text-white transition-all shadow-xl">
+                    <button id="heroPlayBtn" class="bg-white text-black font-bold px-10 py-4 rounded-2xl flex items-center gap-3 hover:bg-orange-500 hover:text-white transition-all shadow-xl">
                         <i class="fa-solid fa-play"></i> Watch Now
                     </button>
                 </div>
@@ -154,7 +157,7 @@
                             <div class="space-y-4">
                                 <div class="flex items-center justify-between">
                                     <span class="text-sm font-medium text-gray-300">Theme Color</span>
-                                    <input type="color" id="playerColor" value="#3b82f6" class="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-none">
+                                    <input type="color" id="playerColor" value="#f97316" class="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-none">
                                 </div>
                                 <p class="text-[10px] text-gray-500 leading-tight">Changes the player's primary UI color instantly.</p>
                             </div>
@@ -167,9 +170,9 @@
         <!-- Grid -->
         <section id="gridContainer">
             <div class="flex items-center justify-between mb-10">
-                <h3 id="gridTitle" class="text-2xl font-extrabold tracking-tight">Movies for you</h3>
+                <h3 id="gridTitle" class="text-2xl font-extrabold tracking-tight">Hindi Cinema</h3>
                 <div id="gridLoader" class="hidden">
-                    <i class="fa-solid fa-spinner fa-spin text-blue-500 text-xl"></i>
+                    <i class="fa-solid fa-spinner fa-spin text-orange-500 text-xl"></i>
                 </div>
             </div>
             
@@ -183,8 +186,8 @@
     <footer class="border-t border-white/5 py-16 px-6 mt-20">
         <div class="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
             <div class="text-center md:text-left">
-                <h4 class="text-xl font-black text-blue-500 mb-2">VIDEASY</h4>
-                <p class="text-gray-500 text-sm">The ultimate viewing experience. Powered by TMDB & VIDEASY Player.</p>
+                <h4 class="text-xl font-black text-orange-500 mb-2">VIDEASY HINDI</h4>
+                <p class="text-gray-500 text-sm">Premium Hindi Entertainment. Powered by TMDB & VIDEASY Player.</p>
             </div>
             <div class="flex gap-6 text-gray-400">
                 <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-instagram text-xl"></i></a>
@@ -200,7 +203,7 @@
         const IMG_URL = 'https://image.tmdb.org/t/p/w500';
         const BACKDROP_URL = 'https://image.tmdb.org/t/p/original';
 
-        let playerColor = '3b82f6';
+        let playerColor = 'f97316';
         let currentItem = null;
 
         // Elements
@@ -212,21 +215,23 @@
 
         // Init
         window.addEventListener('DOMContentLoaded', () => {
-            fetchTrending();
+            fetchHindiTrending();
             initSearch();
             initColorPicker();
             initMessaging();
         });
 
-        async function fetchTrending() {
+        // Optimized for Hindi: Uses 'discover' with language filter
+        async function fetchHindiTrending() {
             toggleLoader(true);
             try {
-                const res = await fetch(`${BASE_URL}/trending/all/week?api_key=${API_KEY}`);
+                // Discover Hindi movies sorted by popularity
+                const res = await fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_original_language=hi&sort_by=popularity.desc&include_adult=false`);
                 const data = await res.json();
                 const items = data.results.filter(i => i.poster_path);
                 
                 renderHero(items[0]);
-                renderGrid(items, "Discover Trending Content");
+                renderGrid(items, "Popular Hindi Movies");
             } catch (err) {
                 console.error(err);
             } finally {
@@ -242,9 +247,16 @@
                     const query = e.target.value.trim();
                     if (query.length > 2) {
                         toggleLoader(true);
+                        // TMDB multi-search doesn't support language filter in discovery, so we filter results client-side
                         const res = await fetch(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
                         const data = await res.json();
-                        renderGrid(data.results.filter(i => i.poster_path), `Search Results for "${query}"`);
+                        
+                        // STRICT FILTER: Only show items where original_language is Hindi
+                        const hindiOnly = data.results.filter(item => 
+                            item.original_language === 'hi' && item.poster_path
+                        );
+
+                        renderGrid(hindiOnly, `Hindi Results for "${query}"`);
                         heroSection.classList.add('hidden');
                     } else if (query === "") {
                         goHome();
@@ -265,7 +277,6 @@
                 try {
                     const data = JSON.parse(event.data);
                     console.log("VIDEASY Analytics:", data);
-                    // You could save this to localStorage for resume support
                 } catch (e) {}
             });
         }
@@ -284,6 +295,11 @@
             document.getElementById('gridTitle').textContent = title;
             movieGrid.innerHTML = '';
             
+            if (items.length === 0) {
+                movieGrid.innerHTML = '<div class="col-span-full py-20 text-center text-gray-500">No Hindi content found. Try a different search.</div>';
+                return;
+            }
+
             items.forEach(item => {
                 const type = item.media_type || (item.title ? 'movie' : 'tv');
                 const card = document.createElement('div');
@@ -298,13 +314,13 @@
                         <img src="${IMG_URL + item.poster_path}" class="w-full h-full object-cover" alt="">
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent opacity-0 group-hover:opacity-100 transition-opacity p-4 flex flex-col justify-end">
                             <div class="flex items-center gap-2 mb-2">
-                                <span class="bg-blue-600 text-[10px] font-extrabold px-2 py-0.5 rounded uppercase">${type}</span>
+                                <span class="bg-orange-600 text-[10px] font-extrabold px-2 py-0.5 rounded uppercase">${type}</span>
                                 <span class="bg-yellow-500 text-black text-[10px] font-extrabold px-2 py-0.5 rounded">★ ${rating}</span>
                             </div>
                         </div>
                     </div>
-                    <h4 class="font-bold text-sm line-clamp-1 group-hover:text-blue-400 transition-colors">${item.title || item.name}</h4>
-                    <p class="text-gray-500 text-xs mt-1">${year}</p>
+                    <h4 class="font-bold text-sm line-clamp-1 group-hover:text-orange-400 transition-colors">${item.title || item.name}</h4>
+                    <p class="text-gray-500 text-xs mt-1 font-medium">${year} • Hindi</p>
                 `;
                 movieGrid.appendChild(card);
             });
@@ -321,8 +337,8 @@
             
             const type = item.media_type || (item.title ? 'movie' : 'tv');
             document.getElementById('playerBadge').innerHTML = `
-                <span class="bg-blue-600/20 text-blue-400 text-xs font-black px-4 py-1.5 rounded-full border border-blue-500/20 uppercase tracking-tighter">
-                    Streaming ${type}
+                <span class="bg-orange-600/20 text-orange-400 text-xs font-black px-4 py-1.5 rounded-full border border-orange-500/20 uppercase tracking-tighter">
+                    Streaming Hindi ${type}
                 </span>
             `;
 
@@ -330,7 +346,7 @@
             document.getElementById('playerTags').innerHTML = `
                 <span class="bg-white/5 border border-white/10 px-3 py-1 rounded-lg text-gray-400">${year}</span>
                 <span class="bg-white/5 border border-white/10 px-3 py-1 rounded-lg text-yellow-500">★ ${item.vote_average.toFixed(1)} Rating</span>
-                <span class="bg-white/5 border border-white/10 px-3 py-1 rounded-lg text-gray-400">HD Available</span>
+                <span class="bg-white/5 border border-white/10 px-3 py-1 rounded-lg text-orange-400">Audio: Hindi</span>
             `;
 
             updatePlayerSource();
@@ -342,7 +358,7 @@
             const id = currentItem.id;
             
             let path = `/${type}/${id}`;
-            if (type === 'tv') path += '/1/1'; // Default to S1E1
+            if (type === 'tv') path += '/1/1';
             
             const params = new URLSearchParams({
                 color: playerColor,
@@ -359,21 +375,23 @@
             playerSection.classList.add('hidden');
             videoPlayer.src = '';
             currentItem = null;
-            if (searchInput.value === "") fetchTrending();
+            if (searchInput.value === "") fetchHindiTrending();
         }
 
         function goHome() {
             searchInput.value = '';
             closePlayer();
-            fetchTrending();
+            fetchHindiTrending();
         }
 
         async function filterType(type) {
             toggleLoader(true);
             closePlayer();
-            const res = await fetch(`${BASE_URL}/${type}/popular?api_key=${API_KEY}`);
+            // Using discover endpoint with language filter for both movies and tv
+            const endpoint = type === 'movie' ? 'discover/movie' : 'discover/tv';
+            const res = await fetch(`${BASE_URL}/${endpoint}?api_key=${API_KEY}&with_original_language=hi&sort_by=popularity.desc`);
             const data = await res.json();
-            renderGrid(data.results.filter(i => i.poster_path), `Popular ${type === 'movie' ? 'Movies' : 'TV Shows'}`);
+            renderGrid(data.results.filter(i => i.poster_path), `Popular Hindi ${type === 'movie' ? 'Movies' : 'TV Shows'}`);
             heroSection.classList.add('hidden');
             toggleLoader(false);
         }
