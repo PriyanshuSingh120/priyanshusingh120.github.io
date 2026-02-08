@@ -17,7 +17,7 @@ function initializeLibrary() {
 
     const movieElements = Array.from(movieGrid.getElementsByClassName('movie-link'));
     
-    // Sort local library: 2025/2026 content at the top
+    // Initial sort for local library
     movieElements.sort((a, b) => {
         const isNewA = /2025|2026|New/i.test(a.innerText);
         const isNewB = /2025|2026|New/i.test(b.innerText);
@@ -39,95 +39,183 @@ function initializeLibrary() {
 }
 
 /**
- * 2. SEARCH SYSTEM (English Names + Sorting + Duplicate Removal)
+ * 2. SEARCH SYSTEM (English, Sorted by Date & Popularity, No Duplicates)
  */
 async function handleSearch(e) {
     const term = e.target.value.toLowerCase().trim();
     const movieGrid = document.getElementById('movieGrid');
     const requestBox = document.getElementById('requestBox');
     
-    // Remove previous dynamic search results
+    // Clear dynamic results from previous searches
     document.querySelectorAll('.tmdb-result').forEach(el => el.remove());
 
-    let localFound = 0;
-    const localIds = new Set();
+    let localMatches = 0;
+    const localLibMap = new Set();
 
-    // Filter local cards
+    // 1. Local Filter & ID Mapping
     document.querySelectorAll('#movieGrid .movie-link').forEach(link => {
-        const title = link.querySelector('h3').innerText.toLowerCase();
-        const isMatch = title.includes(term);
+        const titleText = link.querySelector('h3').innerText.toLowerCase();
+        const isMatch = titleText.includes(term);
         link.style.display = isMatch ? '' : 'none';
-        if (isMatch) {
-            localFound++;
-            // Track local IDs to prevent duplicates (using dataset.id or title hash)
-            localIds.add(link.dataset.id || title);
-        }
+        
+        if (isMatch) localMatches++;
+        
+        // Map local content to prevent duplicates in TMDB search
+        // We use the TMDB ID from dataset if present, or the title text
+        if (link.dataset.id) localLibMap.add(link.dataset.id.toString());
+        localLibMap.add(titleText);
     });
 
-    // TMDB Fallback if local results are low/empty
+    // 2. TMDB Fallback Search
     if (term.length > 2) {
         try {
-            // Using language=en-US for English names
+            // Force English names with en-US
             const res = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(term)}&language=en-US`);
             const data = await res.json();
             
-            // 1. Filter: Hindi original language only 
-            // 2. Filter: Remove duplicates already in local library
-            let results = data.results.filter(m => 
-                m.original_language === 'hi' && 
-                !localIds.has(m.id.toString()) && 
-                !localIds.has(m.title?.toLowerCase() || m.name?.toLowerCase())
-            );
+            // Filter: Only Hindi originals + Remove Duplicates already in Local Lib
+            let results = data.results.filter(m => {
+                const isHindi = m.original_language === 'hi';
+                const mTitle = (m.title || m.name || "").toLowerCase();
+                const mId = (m.id || "").toString();
+                
+                // Return true only if it's Hindi AND not already in local library
+                return isHindi && !localLibMap.has(mId) && !localLibMap.has(mTitle);
+            });
 
-            // 3. Sort by Release Date (Latest on top)
+            // Sorting: Latest Date First, then by Popularity
             results.sort((a, b) => {
                 const dateA = new Date(a.release_date || a.first_air_date || '1900-01-01');
                 const dateB = new Date(b.release_date || b.first_air_date || '1900-01-01');
-                return dateB - dateA;
+                
+                if (dateB - dateA !== 0) {
+                    return dateB - dateA; // Sort by date
+                }
+                return b.popularity - a.popularity; // If same date, sort by popularity
             });
 
             if(results.length > 0) {
                 requestBox.classList.add('hidden');
-                results.slice(0, 8).forEach(movie => {
+                results.slice(0, 10).forEach(movie => {
                     const type = movie.media_type;
                     const tmdbCard = document.createElement('a');
                     tmdbCard.className = 'movie-link tmdb-result';
                     tmdbCard.href = `newplayer/player.html?tmdb=${movie.id}&title=${encodeURIComponent(movie.title || movie.name)}&isHindi=true&type=${type === 'tv' ? 'series' : 'movie'}`;
                     
-                    const year = (movie.release_date || movie.first_air_date || '').split('-')[0];
+                    const releaseYear = (movie.release_date || movie.first_air_date || 'N/A').split('-')[0];
 
                     tmdbCard.innerHTML = `
                         <div class="movie-card">
                             <div class="movie-poster-container">
-                                <span class="external-badge">LATEST</span>
+                                <span class="external-badge">${releaseYear >= 2025 ? 'NEW' : 'LIVE'}</span>
                                 <img src="${POSTER_BASE}${movie.poster_path}" class="movie-poster" onerror="this.src='https://via.placeholder.com/500x750?text=No+Poster'">
                             </div>
                             <div class="movie-info">
                                 <h3>${movie.title || movie.name}</h3>
-                                <p>${year} | ${type === 'tv' ? 'Series' : 'Movie'}</p>
+                                <p>${releaseYear} | ${type === 'tv' ? 'Series' : 'Hindi'}</p>
                             </div>
                         </div>
                     `;
                     movieGrid.appendChild(tmdbCard);
                 });
-            } else if (localFound === 0) {
+            } else if (localMatches === 0) {
                 requestBox.classList.remove('hidden');
             }
         } catch (err) {
-            console.error("TMDB Search Error", err);
+            console.error("Dynamic Search Error:", err);
         }
     } else if (term.length === 0) {
         requestBox.classList.add('hidden');
     }
 }
 
-// ... rest of Top 10, Slider, and Watchlist functions remain as provided previously ...
+/**
+ * 3. SLIDER & TOP 10 LOGIC
+ */
+async function loadTop10(localElements) {
+    const top10Grid = document.getElementById('top10Grid');
+    if (!top10Grid) return;
+    try {
+        const res = await fetch(`https://api.themoviedb.org/3/trending/all/day?api_key=${TMDB_API_KEY}`);
+        const data = await res.json();
+        const trending = data.results;
+        let matched = [];
+        trending.forEach(t => {
+            const tName = (t.title || t.name || "").toLowerCase();
+            const match = localElements.find(el => {
+                const localTitle = el.querySelector('h3').innerText.toLowerCase();
+                return el.dataset.id == t.id || localTitle.includes(tName);
+            });
+            if (match && !matched.includes(match)) matched.push(match);
+        });
+        if (matched.length < 10) matched = [...new Set([...matched, ...localElements.slice(0, 15)])].slice(0, 10);
+        top10Grid.innerHTML = "";
+        matched.slice(0, 10).forEach((el, index) => {
+            const clone = el.cloneNode(true); 
+            clone.className = 'top10-card';
+            const num = document.createElement('div');
+            num.className = 'rank-num';
+            num.innerText = index + 1;
+            clone.appendChild(num);
+            top10Grid.appendChild(clone);
+        });
+    } catch (e) { console.error("Top 10 failed"); }
+}
+
+async function updateSlider() {
+    if (movieData.length === 0) return;
+    const el = { 
+        title: document.getElementById('sliderTitle'), 
+        rating: document.getElementById('movieRating'), 
+        img: document.getElementById('sliderImg'), 
+        bg: document.getElementById('sliderBg'), 
+        btn: document.getElementById('playBtn') 
+    };
+    if (!el.title) return;
+    el.title.classList.add('skeleton'); el.rating.classList.add('skeleton'); el.img.style.opacity = "0";
+    let current = nextSlideCache || await fetchSlideData();
+    if (current && el.bg) {
+        el.bg.style.backgroundImage = `linear-gradient(to bottom, transparent, #121212), url('${current.backdrop}')`;
+        el.title.innerText = current.title; el.rating.innerHTML = `⭐ ${current.rating}`; el.img.src = current.poster; el.btn.href = current.link;
+        el.img.onload = () => { el.title.classList.remove('skeleton'); el.rating.classList.remove('skeleton'); el.img.style.opacity = "1"; };
+    }
+    prepareNextSlide();
+}
+
+async function fetchSlideData() {
+    if (movieData.length === 0) return null;
+    const movie = movieData[Math.floor(Math.random() * Math.min(movieData.length, 30))];
+    try {
+        const url = movie.id ? `https://api.themoviedb.org/3/find/${movie.id}?api_key=${TMDB_API_KEY}&external_source=imdb_id` : `https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(movie.searchTitle)}&language=en-US`;
+        const res = await fetch(url); const data = await res.json();
+        const result = movie.id ? (data.movie_results?.[0] || data.tv_results?.[0]) : data.results?.[0];
+        if (result) return { title: movie.title, rating: result.vote_average.toFixed(1), backdrop: BACKDROP_BASE + result.backdrop_path, poster: POSTER_BASE + result.poster_path, link: movie.link };
+    } catch (e) { return null; }
+}
+
+async function prepareNextSlide() { nextSlideCache = await fetchSlideData(); }
+
+/**
+ * 4. REQUESTS & WATCHLIST
+ */
+async function sendRequest() {
+    const input = document.querySelector('.search-input');
+    const movieName = input.value.trim();
+    if (!movieName) return;
+    const btn = document.getElementById('reqBtn');
+    btn.innerText = "Sending..."; btn.disabled = true;
+    const message = `<b>📥 NEW MOVIE REQUEST</b>\n\n<b>🎬 Movie:</b> ${movieName}\n\n<i>CineView User Request</i>`;
+    try {
+        await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: DISCUSSION_GROUP_ID, text: message, parse_mode: 'HTML' }) });
+        document.getElementById('requestBox').innerHTML = `<h3 style="color:#00ff00;">✅ Request Sent!</h3><p style="font-size: 13px; color: #888;">Admin notified.</p>`;
+    } catch (e) { btn.innerText = "Error! Retry"; btn.disabled = false; }
+}
 
 function refreshMovieData() {
     movieData = Array.from(document.querySelectorAll('#movieGrid .movie-link')).map(card => ({ 
         link: card.getAttribute('href'), 
         title: card.querySelector('h3')?.innerText || 'Untitled', 
-        id: card.dataset.id, 
+        id: card.dataset.id || "", 
         searchTitle: card.querySelector('h3')?.innerText.replace(/\[.*?\]/g, '').trim() || '' 
     }));
 }
@@ -176,4 +264,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeLibrary();
     const inputs = document.querySelectorAll('.search-input');
     inputs.forEach(input => input.addEventListener('input', handleSearch));
+    setInterval(updateSlider, 12000);
 });
