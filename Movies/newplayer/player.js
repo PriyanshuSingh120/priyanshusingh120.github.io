@@ -16,6 +16,14 @@ const movieDatabase = {
   "isSeries": true, 
   "episodes": ["https://short.icu/OECS7_O1Hh","https://short.icu/cy9s-nJSj","https://short.icu/2yMkFxb9V","https://short.icu/mUHwqpGa3","https://short.icu/Xw1za7G8e","https://short.icu/5cQX07cVU","https://short.icu/XDMYlF0qI","https://short.icu/ZiEXDePH10","https://short.icu/y6R6dRk4N","https://short.icu/GcXTWdzM3"] 
 },
+    "your-name-": {
+  "title": "Your Name.",
+  "img": "https://image.tmdb.org/t/p/w500/q719jXXEzOoYaps6babgKnONONX.jpg",
+  "year": "2016",
+  "tmdb": "372058",
+  "type": "movie",
+  "src": "https://short.icu/QHegprce3"
+},
     "chernobyl": { 
   "title": "Chernobyl", 
   "img": "https://image.tmdb.org/t/p/w500/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg", 
@@ -676,5 +684,6 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
