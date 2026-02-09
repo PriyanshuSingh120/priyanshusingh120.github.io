@@ -128,6 +128,14 @@ const movieDatabase = {
   "isSeries": true, 
   "episodes": ["https://short.icu/y9uRorwCc","https://short.icu/qMK0HMlZ5","https://short.icu/eWyyF4n_e","https://short.icu/oTwsxPQ9s","https://short.icu/DNTsfroMqS","https://short.icu/OS-fMBklp","https://short.icu/TjOYm-0G0"] 
 },
+    "the-train-of-death": {
+  "title": "The Train of Death",
+  "img": "https://image.tmdb.org/t/p/w500/entDxWSkkzcutRm5S9pRWNmvyOJ.jpg",
+  "year": "2024",
+  "tmdb": "1128936",
+  "type": "movie",
+  "src": "https://short.icu/Oi7hIYRZS"
+},
     "squid-game": { 
   "title": "Squid Game", 
   "img": "https://image.tmdb.org/t/p/w500/1QdXdRYfktUSONkl1oD5gc6Be0s.jpg", 
@@ -684,6 +692,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
