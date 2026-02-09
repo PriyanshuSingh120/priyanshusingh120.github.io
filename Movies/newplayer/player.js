@@ -16,6 +16,25 @@ const movieDatabase = {
   "isSeries": true, 
   "episodes": ["https://short.icu/OECS7_O1Hh","https://short.icu/cy9s-nJSj","https://short.icu/2yMkFxb9V","https://short.icu/mUHwqpGa3","https://short.icu/Xw1za7G8e","https://short.icu/5cQX07cVU","https://short.icu/XDMYlF0qI","https://short.icu/ZiEXDePH10","https://short.icu/y6R6dRk4N","https://short.icu/GcXTWdzM3"] 
 },
+    "vadh-2": {
+  "title": "Vadh 2",
+  "img": "https://image.tmdb.org/t/p/w500/pOJAaLMsc7T5rwVDTA7SRg9SAEU.jpg",
+  "year": "2026",
+  "genre": "Crime, Drama, Thriller",
+  "tmdb": "1595507",
+  "type": "movie",
+  "src": "https://short.icu/KAYMPxAD9"
+},
+    "rangasthalam": {
+  "title": "Rangasthalam",
+  "img": "https://image.tmdb.org/t/p/w500/yiEzDgBBFC25Zd6z0r7sMngn5vr.jpg",
+  "year": "2018",
+  "genre": "Action, Drama",
+  "tmdb": "461126",
+  "type": "movie",
+  "src": "https://short.icu/UWjCXkYpG"
+},
+    
     "your-name-": {
   "title": "Your Name.",
   "img": "https://image.tmdb.org/t/p/w500/q719jXXEzOoYaps6babgKnONONX.jpg",
@@ -24,6 +43,16 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/QHegprce3"
 },
+    "theri": {
+  "title": "Theri",
+  "img": "https://image.tmdb.org/t/p/w500/f6BhexotEqO3GejXa3FopBNGL6M.jpg",
+  "year": "2016",
+  "genre": "Action, Crime, Thriller",
+  "tmdb": "370076",
+  "type": "movie",
+  "src": "https://short.icu/FTibX8XjF"
+},
+    
     "chernobyl": { 
   "title": "Chernobyl", 
   "img": "https://image.tmdb.org/t/p/w500/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg", 
@@ -708,6 +737,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
