@@ -255,6 +255,14 @@ const movieDatabase = {
         "tmdb": "100147",
         "episodes": ["https://short.icu/DFMFBYw4O","https://short.icu/276sG4v3U","https://short.icu/aIWwkKsde","https://short.icu/UGi8ht-Jo","https://short.icu/jLoccqc_L","https://short.icu/7Gmq0saQg","https://short.icu/AY-YfajxG","https://short.icu/75cf0cYUH"] 
 },
+    "one-piece-film-red": {
+  "title": "One Piece Film Red",
+  "img": "https://image.tmdb.org/t/p/w500/m80kPdrmmtEh9wlLroCp0bwUGH0.jpg",
+  "year": "2022",
+  "tmdb": "900667",
+  "type": "movie",
+  "src": "https://short.icu/6r4MovW7d"
+},
     "panchayats3": { 
         "title": "Panchayat Season 3", 
         "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYnHIyZn59WEBrdmnjj6XQIchRvDPV2HWvdRWpbgDWOwalJzrKAcF-DkEh&s=10",
@@ -651,3 +659,4 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
