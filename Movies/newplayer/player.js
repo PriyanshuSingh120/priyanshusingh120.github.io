@@ -63,6 +63,22 @@ const movieDatabase = {
     "https://short.icu/MLVW2ckkF"
   ]
 },
+    "demon-slayer-kimetsu-no-yaiba-infinity-castle": {
+  "title": "Demon Slayer: Kimetsu no Yaiba Infinity Castle",
+  "img": "https://image.tmdb.org/t/p/w500/fWVSwgjpT2D78VUh6X8UBd2rorW.jpg",
+  "year": "2025",
+  "tmdb": "1311031",
+  "type": "movie",
+  "src": "https://short.icu/TW8VmJ33b"
+},
+    "rise-of-the-guardians": {
+  "title": "Rise of the Guardians",
+  "img": "https://image.tmdb.org/t/p/w500/sW4qOa9yF0Ikg7lppncQ0n5UhKX.jpg",
+  "year": "2012",
+  "tmdb": "81188",
+  "type": "movie",
+  "src": "https://short.icu/wUwcs_-dD"
+},
     "suzhal---the-vortex-s2": {
   "title": "Suzhal - The Vortex - Season 2",
   "img": "https://image.tmdb.org/t/p/w500/aScE4sIpKeHnGmmeOdN0AIvFRqp.jpg",
@@ -692,6 +708,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
