@@ -60,7 +60,7 @@
                 </div>
             </div>
 
-            <!-- Abyss Library Dual-Logic Explorer -->
+            <!-- Abyss Library -->
             <div class="glass-card rounded-3xl p-6">
                 <div class="flex justify-between items-center mb-4">
                     <div class="flex items-center gap-2">
@@ -79,7 +79,7 @@
         <!-- Right Column: Meta Form -->
         <div class="glass-card rounded-3xl p-6 space-y-4">
             <div class="grid grid-cols-2 gap-4">
-                <div>
+                <div class="col-span-2">
                     <label class="text-[10px] font-bold text-slate-500 uppercase">Title</label>
                     <input type="text" id="mName" oninput="updateOutputs()" class="w-full p-3 rounded-xl text-sm outline-none">
                 </div>
@@ -87,6 +87,16 @@
                     <label class="text-[10px] font-bold text-slate-500 uppercase">Slug / ID</label>
                     <input type="text" id="mId" oninput="updateOutputs()" class="w-full p-3 rounded-xl text-sm outline-none">
                 </div>
+                <div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase">Year</label>
+                    <input type="text" id="mYear" oninput="updateOutputs()" class="w-full p-3 rounded-xl text-sm outline-none">
+                </div>
+            </div>
+
+            <!-- Genre Field -->
+            <div>
+                <label class="text-[10px] font-bold text-slate-500 uppercase">Genres (Comma separated)</label>
+                <input type="text" id="mGenre" placeholder="Action, Animated, Sci-Fi" oninput="updateOutputs()" class="w-full p-3 rounded-xl text-sm outline-none">
             </div>
 
             <!-- Movie Box -->
@@ -104,14 +114,10 @@
                 <textarea id="mEpisodes" rows="4" oninput="updateOutputs()" placeholder="Episodes will append here line-by-line..." class="w-full p-3 rounded-xl text-xs outline-none font-mono"></textarea>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 gap-4">
                 <div>
                     <label class="text-[10px] font-bold text-slate-500 uppercase">Poster URL</label>
                     <input type="text" id="mImg" oninput="updateOutputs()" class="w-full p-3 rounded-xl text-sm outline-none">
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold text-slate-500 uppercase">Year</label>
-                    <input type="text" id="mYear" oninput="updateOutputs()" class="w-full p-3 rounded-xl text-sm outline-none">
                 </div>
             </div>
             
@@ -128,11 +134,11 @@
     <div class="glass-card rounded-3xl p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
             <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block tracking-widest">JavaScript Data Object</label>
-            <textarea id="outJS" rows="6" readonly class="w-full p-4 rounded-2xl text-[10px] font-mono text-blue-400 outline-none" onclick="this.select()"></textarea>
+            <textarea id="outJS" rows="8" readonly class="w-full p-4 rounded-2xl text-[10px] font-mono text-blue-400 outline-none" onclick="this.select()"></textarea>
         </div>
         <div>
             <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block tracking-widest">HTML Player Snippet</label>
-            <textarea id="outHTML" rows="6" readonly class="w-full p-4 rounded-2xl text-[10px] font-mono text-indigo-400 outline-none" onclick="this.select()"></textarea>
+            <textarea id="outHTML" rows="8" readonly class="w-full p-4 rounded-2xl text-[10px] font-mono text-indigo-400 outline-none" onclick="this.select()"></textarea>
         </div>
     </div>
 </div>
@@ -146,6 +152,16 @@ const ABYSS_API = '391ea7f7e967589e017d3b3924b1c33f';
 const TG_TOKEN = '7287243554:AAHa43wD_V2roGLep1aQgKHn0vqXHYlFp-M';
 const TG_CHAT = '-1003605866054';
 const IMG_BASE = 'https://image.tmdb.org/t/p/w500';
+
+// TMDB Genre Mapping - Animation mapped to "Animated"
+const GENRE_MAP = {
+    28: "Action", 12: "Adventure", 16: "Animated", 35: "Comedy", 80: "Crime", 
+    99: "Documentary", 18: "Drama", 10751: "Family", 14: "Fantasy", 36: "History", 
+    27: "Horror", 10402: "Music", 9648: "Mystery", 10749: "Romance", 878: "Sci-Fi", 
+    10770: "TV Movie", 53: "Thriller", 10752: "War", 37: "Western", 10759: "Action & Adventure",
+    10762: "Kids", 10763: "News", 10764: "Reality", 10765: "Sci-Fi & Fantasy", 
+    10766: "Soap", 10767: "Talk", 10768: "War & Politics"
+};
 
 let currentSeasons = [];
 let selectedMovie = null;
@@ -168,8 +184,6 @@ function toggleType() {
     document.getElementById('movieBox').classList.toggle('hidden', isSeries);
     document.getElementById('seriesBox').classList.toggle('hidden', !isSeries);
     document.getElementById('seasonWrapper').classList.add('hidden');
-    
-    // Mode switch par explorer reset
     currentFolderId = null;
     fetchAbyss();
     updateOutputs();
@@ -180,11 +194,6 @@ function clearEps() {
     updateOutputs();
 }
 
-/**
- * Abyss Library Logic:
- * Movie Mode -> Uses fixed API type=files
- * Series Mode -> Uses folder navigation
- */
 async function fetchAbyss(folderId = null) {
     currentFolderId = folderId;
     const list = document.getElementById('abyssList');
@@ -194,7 +203,6 @@ async function fetchAbyss(folderId = null) {
     
     list.innerHTML = '<p class="text-blue-500 animate-pulse text-[10px] uppercase font-bold py-10 w-full text-center">Syncing Abyss...</p>';
     
-    // --- MOVIE MODE: Direct File List ---
     if (type === 'movie') {
         backBtn.classList.add('hidden');
         pathLabel.innerText = "Browsing: Root Files";
@@ -210,17 +218,13 @@ async function fetchAbyss(folderId = null) {
                     updateOutputs();
                     showToast("Movie Link Added!");
                 };
-                div.innerHTML = `
-                    <div class="text-[8px] text-blue-500 font-black mb-1 uppercase tracking-widest">File</div>
-                    <div class="text-[10px] font-bold truncate">${file.name}</div>
-                `;
+                div.innerHTML = `<div class="text-[8px] text-blue-500 font-black mb-1 uppercase tracking-widest">File</div><div class="text-[10px] font-bold truncate">${file.name}</div>`;
                 list.appendChild(div);
             });
         } catch (e) { list.innerHTML = '<p class="text-red-500 text-[10px] py-10 w-full text-center">Error loading Abyss.</p>'; }
         return;
     }
 
-    // --- SERIES MODE: Navigation ---
     folderId ? backBtn.classList.remove('hidden') : backBtn.classList.add('hidden');
     pathLabel.innerText = folderId ? `Location: Subfolder (${folderId})` : "Location: Root folders";
 
@@ -230,20 +234,15 @@ async function fetchAbyss(folderId = null) {
         const res = await puter.net.fetch(url);
         const data = await res.json();
         list.innerHTML = '';
-
         data.items.forEach(item => {
             const isFolder = item.isDir === true;
-            // Root par sirf folder, subfolder par sirf file
             if (!folderId && !isFolder) return;
             if (folderId && isFolder) return;
-
             const div = document.createElement('div');
             div.className = `flex-shrink-0 w-36 glass-card p-3 rounded-2xl cursor-pointer hover:border-slate-500 transition-all card-active ${isFolder ? 'folder-card' : 'file-card'}`;
-            
             div.onclick = () => {
-                if (isFolder) {
-                    fetchAbyss(item.id);
-                } else {
+                if (isFolder) fetchAbyss(item.id);
+                else {
                     const embedLink = `https://short.icu/${item.id}`;
                     const epArea = document.getElementById('mEpisodes');
                     const current = epArea.value.trim();
@@ -252,19 +251,12 @@ async function fetchAbyss(folderId = null) {
                     showToast("Episode Added!");
                 }
             };
-
-            div.innerHTML = `
-                <div class="text-[18px] mb-1">${isFolder ? '📁' : '🎞️'}</div>
-                <div class="text-[10px] font-bold truncate">${item.name}</div>
-            `;
+            div.innerHTML = `<div class="text-[18px] mb-1">${isFolder ? '📁' : '🎞️'}</div><div class="text-[10px] font-bold truncate">${item.name}</div>`;
             list.appendChild(div);
         });
     } catch (e) { list.innerHTML = '<p class="text-red-500 text-[10px] py-10 w-full text-center font-bold">API Sync Failed.</p>'; }
 }
 
-/**
- * TMDB Logic
- */
 async function searchTMDB() {
     const query = document.getElementById('apiSearch').value.trim();
     const type = document.getElementById('contentType').value === 'series' ? 'tv' : 'movie';
@@ -280,10 +272,7 @@ async function searchTMDB() {
             const poster = item.poster_path ? IMG_BASE + item.poster_path : 'https://via.placeholder.com/200x300';
             const year = (item.release_date || item.first_air_date || 'N/A').split('-')[0];
             card.onclick = () => selectMovie(item, poster, year);
-            card.innerHTML = `
-                <img src="${poster}" class="w-full h-36 object-cover rounded-xl border border-slate-800 group-hover:border-blue-500 transition-all shadow-lg">
-                <p class="text-[9px] font-bold truncate uppercase tracking-tighter">${item.title || item.name}</p>
-            `;
+            card.innerHTML = `<img src="${poster}" class="w-full h-36 object-cover rounded-xl border border-slate-800 group-hover:border-blue-500 transition-all shadow-lg"><p class="text-[9px] font-bold truncate uppercase tracking-tighter">${item.title || item.name}</p>`;
             resDiv.appendChild(card);
         });
     } catch (e) {}
@@ -297,6 +286,11 @@ async function selectMovie(item, poster, year) {
     document.getElementById('mYear').value = year;
     document.getElementById('mTmdb').value = item.id;
     document.getElementById('mId').value = title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+
+    if (item.genre_ids) {
+        const names = item.genre_ids.map(id => GENRE_MAP[id] || "").filter(n => n !== "");
+        document.getElementById('mGenre').value = names.join(", ");
+    }
 
     if (document.getElementById('contentType').value === 'series') {
         const res = await fetch(`https://api.themoviedb.org/3/tv/${item.id}?api_key=${TMDB_API}`);
@@ -322,9 +316,6 @@ function applySeason(num) {
     updateOutputs();
 }
 
-/**
- * Result Generation
- */
 function updateOutputs() {
     const type = document.getElementById('contentType').value;
     const name = document.getElementById('mName').value;
@@ -332,13 +323,11 @@ function updateOutputs() {
     const img = document.getElementById('mImg').value;
     const year = document.getElementById('mYear').value;
     const tmdb = document.getElementById('mTmdb').value;
+    const genre = document.getElementById('mGenre').value;
 
-    let movieObj = { title: name, img: img, year: year, tmdb: tmdb, type: type };
-    if (type === 'series') {
-        movieObj.episodes = document.getElementById('mEpisodes').value.split('\n').filter(l => l.trim() !== "");
-    } else {
-        movieObj.src = document.getElementById('mSrc').value;
-    }
+    let movieObj = { title: name, img: img, year: year, genre: genre, tmdb: tmdb, type: type };
+    if (type === 'series') movieObj.episodes = document.getElementById('mEpisodes').value.split('\n').filter(l => l.trim() !== "");
+    else movieObj.src = document.getElementById('mSrc').value;
 
     document.getElementById('outJS').value = `"${id}": ${JSON.stringify(movieObj, null, 2)},`;
     document.getElementById('outHTML').value = `<a href="newplayer/player?id=${id}&tmdb=${tmdb}" class="movie-link" data-id="${tmdb}">
@@ -346,22 +335,19 @@ function updateOutputs() {
         <div class="movie-poster-container"><img src="${img}" class="movie-poster"></div>
         <div class="movie-info">
             <h3>${name}</h3>
-            <p>${year} | ${type === 'movie' ? 'Movie' : 'Web Series'}</p>
+            <p>${year} | ${genre || (type === 'movie' ? 'Movie' : 'Web Series')}</p>
         </div>
     </div>
 </a>`;
 }
 
-/**
- * Telegram Post Action
- */
 async function triggerTelegram() {
     if (!selectedMovie) return showToast("Select a movie first!", "bg-orange-600");
     const name = document.getElementById('mName').value;
     const img = document.getElementById('mImg').value;
     const id = document.getElementById('mId').value;
-    const msg = `🎬 *NEW ON CINEVIEW* \n\n🍿 *${name}*\n\n🔗 [WATCH NOW](https://prigames.netlify.app/movies/newplayer/player?id=${id})`;
-
+    const genre = document.getElementById('mGenre').value;
+    const msg = `🎬 *NEW ON CINEVIEW* \n\n🍿 *${name}*\n🏷️ ${genre}\n\n🔗 [WATCH NOW](https://prigames.netlify.app/movies/newplayer/player?id=${id})`;
     try {
         const res = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendPhoto`, {
             method: 'POST',
