@@ -55,6 +55,23 @@ const movieDatabase = {
     "https://short.icu/MLVW2ckkF"
   ]
 },
+    "suzhal---the-vortex-s2": {
+  "title": "Suzhal - The Vortex - Season 2",
+  "img": "https://image.tmdb.org/t/p/w500/aScE4sIpKeHnGmmeOdN0AIvFRqp.jpg",
+  "year": "2022",
+  "tmdb": "200861",
+  "type": "series",
+  "episodes": [
+    "https://short.icu/6ALJYztJt",
+    "https://short.icu/xksgqBfIi",
+    "https://short.icu/HFvY46BHV",
+    "https://short.icu/4HXLfZ-Xp",
+    "https://short.icu/YhM4rrjB9",
+    "https://short.icu/dSvtdxtFv4",
+    "https://short.icu/BybxIqw_F",
+    "https://short.icu/WRR6tQHk0"
+  ]
+},
     "jujutsu-kaisen-s1": {
   "title": "JUJUTSU KAISEN - Season 1",
   "img": "https://image.tmdb.org/t/p/w500/fHQ2XHRdRix0rkDCShmGQ8c6d03.jpg",
@@ -659,4 +676,5 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
