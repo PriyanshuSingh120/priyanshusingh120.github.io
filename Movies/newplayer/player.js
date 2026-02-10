@@ -581,9 +581,9 @@ const movieDatabase = {
     "teesmaarkhan": { "title": "Tees Maar Khan", "src": "https://short.icu/6NpMbWcZx", "year": "2010", "img": "https://m.media-amazon.com/images/M/MV5BYjJiZmZkZGYtYjA1OC00MjRkLWFlYTgtYjM4ODBlYWI1MjQwXkEyXkFqcGc@._V1_.jpg" },
     "texas-chainsaw": { "title": "Texas Chainsaw", "src": "https://short.icu/nstC2-MBm", "year": "2013", "img": "https://prigames.netlify.app/movies/images/13.jpg" },
     "rahu-ketu": { "title": "Rahu Ketu", "src": "https://short.icu/BR_0zqx3Q", "year": "2026", "img": "https://image.tmdb.org/t/p/w500/zjgWWOIsEqYNSa1fGRr82mBo3gv.jpg" },
-    "thamma": { "title": "Thamma", "src": "https://short.icu/KzjK4XScn", "year": "2025", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrNTel1Jb41WgqCGnOBv-8n6f_z0UfhMsL_dlyXqnE9Z-6Q6Phx5PzjmU&s=10" },
-    "theboy": { "title": "The Boy", "src": "https://short.icu/Vt5HcoHaO", "year": "2016", "img": "https://imgshare.info/images/2025/07/20/The-Boy-2016.jpg" },
-    "tholu": { "title": "Tholu Bommalata", "src": "https://short.icu/tZkPvr3YG", "year": "2019", "img": "https://m.media-amazon.com/images/M/MV5BZTQ1MmE3MjgtN2E4ZC00MTNlLThlZWQtYjIzZjIxZjI1YTkxXkEyXkFqcGc@._V1_.jpg" },
+    "thamma": { "title": "Thamma", "src": "https://short.icu/KzjK4XScn", "year": "2025", "img": "https://encrypted-tbn0.gstatic.com/imaGcQrNTel1Jb41WgqCGnOBv-8n6f_z0UfhMsL_dlyXqnE9Z-6Q6Phx5PzjmU&s=10" },
+    "theboy": { "title": "The Boy", "src": "https://shortear": "2016", "img": "https://imgshare.info/images/2025/07/20/The-Boy-2016.jpg" },
+    "tholu": { "title": "Tholu Bommalata", "src": "https://short.icu/tZkPvr3YG", "year": "2019", "img":on.com/images/M/MV5BZTQ1MmE3MjgtN2E4ZC00MTNlLThlZWQtYjIzZjIxZjI1YTkxXkEyXkFqcGc@._V1_.jpg" },
     "tomandjerry": { "title": "Tom & Jerry", "src": "https://short.icu/3kJxY71MP", "year": "2021", "img": "https://imgshare.info/images/2025/08/11/Tom.and.Jerry.2021..jpg" },
     "transformer": { "title": "Transformers", "src": "https://short.icu/hdPkF6s5J", "year": "2024", "img": "https://m.media-amazon.com/images/M/MV5BZWI1ZDY1YTQtMjRkNy00ZDZhLWE3OTItMTIwNzliY2Y1MTZhXkEyXkFqcGc@._V1_.jpg" },
     "udaipur": { "title": "Udaipur Files", "src": "https://short.icu/1fufyTDBx", "year": "2024", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSR9j0YPFQWnZQ9EQuwPg-fmmUWplio8H1JwhuQgMq2s6V9DZv9uUFhH0qi&s=10" },
@@ -616,21 +616,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     const selectorArea = document.getElementById('episodeSelectorArea');
     const dropdown = document.getElementById('episodeDropdown');
 
-    // SCENARIO 1: Movie found in your Local Database
     if (movieId && movieDatabase[movieId]) {
+        // SCENARIO: Local Database Item
         const movie = movieDatabase[movieId];
         const isSeries = movie.isSeries || false;
         const pathType = isSeries ? 'tv' : 'movie';
         titleEl.innerText = movie.title;
         
-        // S1: Abyss (Primary)
+        // S1: Abyss (Aapka primary upload)
         if (movie.episodes && movie.episodes.length > 0) {
             selectorArea.style.display = 'block';
             dropdown.innerHTML = ""; 
             movie.episodes.forEach((url, index) => {
                 let opt = document.createElement('option');
-                opt.value = url;
-                opt.innerText = `Episode ${index + 1}`;
+                opt.value = url; opt.innerText = `Episode ${index + 1}`;
                 dropdown.appendChild(opt);
             });
             currentSources.s1 = movie.episodes[0];
@@ -639,54 +638,50 @@ document.addEventListener('DOMContentLoaded', async () => {
             selectorArea.style.display = 'none';
         }
 
-        // S2: VIDEASY (Premium)
+        // S2: SmashyStream (Primary Hindi Support)
+        let sUrl = `https://player.smashy.stream/${pathType}/${movie.tmdb || ''}`;
+        if (isSeries) sUrl += `?s=1&e=1`; // S1E1 Default
+        currentSources.s2 = sUrl;
+
+        // S3: VIDEASY (High-Quality Backup)
         let vUrl = `https://player.videasy.net/${pathType}/${movie.tmdb || ''}?color=e50914&overlay=true&episodeSelector=true`;
         if (isSeries) vUrl += `/1/1`;
-        currentSources.s2 = vUrl;
+        currentSources.s3 = vUrl;
 
-        // S3: SMASHY STREAM (Hindi Support)
-        let sUrl = `https://player.smashy.stream/${pathType}/${movie.tmdb || ''}`;
-        if (isSeries) sUrl += `/1/1`;
-        currentSources.s3 = sUrl;
-
-        // S4: ANY EMBED
+        // S4: Multi-Embed
         currentSources.s4 = `https://www.2embed.cc/embed/${isSeries ? 'tv' : ''}${movie.tmdb || ''}${isSeries ? '&s=1&e=1' : ''}`;
 
         player.src = currentSources.s1;
         fetchMetaData(movie.title, movie.tmdb, isSeries);
 
     } else if (tmdbId) {
-        // SCENARIO 2: TMDB Search Fallback (Not in DB)
+        // SCENARIO: Search Results (External)
         const title = decodeURIComponent(urlParams.get('title') || "Now Playing");
         const isSeries = typeParam === 'series';
         const pathType = isSeries ? 'tv' : 'movie';
         titleEl.innerText = title;
         selectorArea.style.display = 'none';
 
-        // VIDEASY is Primary for Search Results
+        // SMASHY becomes Primary for search results
+        let sUrl = `https://player.smashy.stream/${pathType}/${tmdbId}`;
+        if (isSeries) sUrl += `?s=1&e=1`;
+        currentSources.s1 = sUrl;
+        document.getElementById('btn-s1').innerHTML = `<i class="fas fa-language"></i> SMASHY (Hindi)`;
+        
+        // VIDEASY becomes Backup
         let vUrl = `https://player.videasy.net/${pathType}/${tmdbId}?color=e50914&overlay=true&episodeSelector=true`;
         if (isSeries) vUrl += `/1/1`;
-        currentSources.s1 = vUrl;
-        document.getElementById('btn-s1').innerHTML = `<i class="fas fa-bolt"></i> VIDEASY (HD)`;
-        
-        // SMASHY becomes Server 2
-        let sUrl = `https://player.smashy.stream/${pathType}/${tmdbId}`;
-        if (isSeries) sUrl += `/1/1`;
-        currentSources.s2 = sUrl;
-        document.getElementById('btn-s2').innerHTML = `<i class="fas fa-fire"></i> SMASHY (Hindi)`;
+        currentSources.s2 = vUrl;
+        document.getElementById('btn-s2').innerHTML = `<i class="fas fa-bolt"></i> VIDEASY (HD)`;
 
         // Backup 3
         currentSources.s3 = `https://www.2embed.cc/embed/${isSeries ? 'tv' : ''}${tmdbId}${isSeries ? '&s=1&e=1' : ''}`;
-        document.getElementById('btn-s3').innerHTML = `<i class="fas fa-random"></i> Multi-Link`;
-
-        // Backup 4
-        currentSources.s4 = `https://player.autoembed.cc/embed/${pathType}/${tmdbId}`;
+        document.getElementById('btn-s3').innerHTML = `<i class="fas fa-random"></i> Multi-Embed`;
 
         player.src = currentSources.s1;
         fetchMetaData(title, tmdbId, isSeries);
     }
 
-    // Always show switcher for any Hindi content or Fallback search
     if (isHindiParam || tmdbId || (movieId && movieDatabase[movieId]?.title.toLowerCase().includes('hindi'))) {
         if(switcher) switcher.style.display = 'flex';
     }
@@ -699,20 +694,19 @@ function switchServer(num) {
     const btns = document.querySelectorAll('.server-btn');
     btns.forEach((btn, idx) => btn.classList.toggle('active', (idx + 1) === num));
     
-    const sources = [currentSources.s1, currentSources.s2, currentSources.s3, currentSources.s4];
-    if(sources[num-1]) player.src = sources[num-1];
+    const map = [currentSources.s1, currentSources.s2, currentSources.s3, currentSources.s4];
+    if(map[num-1]) player.src = map[num-1];
 }
 
 function loadSpecificEpisode(url) {
     document.getElementById('mainVideoPlayer').src = url;
-    currentSources.s1 = url; // abyss primary update
+    currentSources.s1 = url; // Update Abyss primary
 }
 
 async function fetchMetaData(displayTitle, manualId, isSeries = false) {
     const ratingEl = document.getElementById('imdbRatingDisplay');
     const yearEl = document.getElementById('displayYear');
     const descEl = document.getElementById('movieDescription');
-
     const cleanTitle = displayTitle.replace(/Season \d+/i, '').replace(/\[.*?\]/g, '').replace(/[^\x00-\x7F]/g, "").trim();
     const type = isSeries ? 'tv' : 'movie';
 
@@ -728,12 +722,11 @@ async function fetchMetaData(displayTitle, manualId, isSeries = false) {
         if (bestMatch && !bestMatch.status_message) {
             ratingEl.innerHTML = `<i class="fab fa-imdb" style="color: #f5c518;"></i> IMDb: ${bestMatch.vote_average?.toFixed(1) || "N/A"}`;
             yearEl.innerText = `📅 ${(bestMatch.release_date || bestMatch.first_air_date || "2025").split('-')[0]}`;
-            descEl.innerText = bestMatch.overview || "Overview coming soon...";
-            
+            descEl.innerText = bestMatch.overview || "Overview not available in English.";
             const engName = bestMatch.title || bestMatch.name;
             if(engName) document.getElementById('displayTitle').innerText = engName;
         }
-    } catch (e) { console.error("Metadata error", e); }
+    } catch (e) { console.error("Meta Load Error", e); }
 }
 
 function generateRecommendations(currentId) {
@@ -753,3 +746,4 @@ function generateRecommendations(currentId) {
     });
 }
         
+
