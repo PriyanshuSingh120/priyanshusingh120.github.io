@@ -599,6 +599,7 @@ const movieDatabase = {
     "raat-akeli-hai-the-bansal-murders": { "title": "Raat Akeli Hai - The Bansal Murders", "src": "https://short.icu/FYIdgZzZ7", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/8EpDSwnjMBc9dmTPEYBF4Bixmwf.jpg" }
 };
 
+    
     let currentSources = { s1: '', s2: '', s3: '', s4: '' };
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -614,13 +615,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const selectorArea = document.getElementById('episodeSelectorArea');
     const dropdown = document.getElementById('episodeDropdown');
 
-    // 1. SETUP SOURCES
     if (movieId && movieDatabase[movieId]) {
-        // CASE: Movie is in your database (Primary = Abyss)
+        // SCENARIO: Movie in your library (Abyss = Primary)
         const movie = movieDatabase[movieId];
         titleEl.innerText = movie.title;
         
-        // Server 1: Abyss (Database link)
+        // S1: Abyss (Aapka link)
         if (movie.episodes && movie.episodes.length > 0) {
             selectorArea.style.display = 'block';
             dropdown.innerHTML = ""; 
@@ -636,56 +636,52 @@ document.addEventListener('DOMContentLoaded', async () => {
             selectorArea.style.display = 'none';
         }
 
-        // Server 2: VIDEASY (Premium backup)
+        // S2: VIDEASY (Best Hindi/Multi support)
         const pathType = movie.isSeries ? 'tv' : 'movie';
         let vUrl = `https://player.videasy.net/${pathType}/${movie.tmdb || ''}?color=e50914&overlay=true&episodeSelector=true`;
         if (movie.isSeries) vUrl += `/1/1`;
         currentSources.s2 = vUrl;
 
-        // Server 3: VidSrc (Global backup)
-        currentSources.s3 = `https://vidsrc.me/embed/${pathType}?tmdb=${movie.tmdb || ''}`;
+        // S3: SmashyStream (Multi-audio focus)
+        currentSources.s3 = `https://embed.smashystream.com/playere.php?tmdb=${movie.tmdb || ''}`;
 
-        // Server 4: AutoEmbed
-        currentSources.s4 = `https://player.autoembed.cc/embed/${pathType}/${movie.tmdb || ''}`;
+        // S4: Multi-Embed
+        currentSources.s4 = `https://www.2embed.cc/embed/${pathType === 'tv' ? 'tv' : ''}${movie.tmdb || ''}${pathType === 'tv' ? '&s=1&e=1' : ''}`;
 
-        // Abyss is Primary
         player.src = currentSources.s1;
-        document.getElementById('btn-s1').classList.add('active');
         fetchMetaData(movie.title, movie.tmdb, movie.isSeries);
 
     } else if (tmdbId) {
-        // CASE: Not in database (TMDB Fallback Search result)
+        // SCENARIO: TMDB Search Fallback (VIDEASY = Primary)
         const title = decodeURIComponent(urlParams.get('title') || "Now Playing");
         const isSeries = typeParam === 'series';
         const pathType = isSeries ? 'tv' : 'movie';
         titleEl.innerText = title;
         selectorArea.style.display = 'none';
 
-        // VIDEASY becomes Primary for external results
+        // VIDEASY is best for external search, so it becomes Primary here
         let vUrl = `https://player.videasy.net/${pathType}/${tmdbId}?color=e50914&overlay=true&episodeSelector=true`;
         if (isSeries) vUrl += `/1/1`;
-        currentSources.s1 = vUrl; 
-        
-        // Hide Server 1 button text or change it to VIDEASY
+        currentSources.s1 = vUrl;
         document.getElementById('btn-s1').innerHTML = `<i class="fas fa-bolt"></i> VIDEASY (HD)`;
         
-        currentSources.s2 = `https://vidsrc.me/embed/${pathType}?tmdb=${tmdbId}`;
-        document.getElementById('btn-s2').innerHTML = `<i class="fas fa-globe"></i> VidSrc`;
+        // S2: SmashyStream
+        currentSources.s2 = `https://embed.smashystream.com/playere.php?tmdb=${tmdbId}`;
+        document.getElementById('btn-s2').innerHTML = `<i class="fas fa-fire"></i> Smashy (Hindi)`;
 
-        currentSources.s3 = `https://vidsrc.to/embed/${pathType}/${tmdbId}`;
-        document.getElementById('btn-s3').innerHTML = `<i class="fas fa-link"></i> Server 3`;
+        // S3: 2Embed
+        currentSources.s3 = `https://www.2embed.cc/embed/${isSeries ? 'tv' : ''}${tmdbId}${isSeries ? '&s=1&e=1' : ''}`;
+        document.getElementById('btn-s3').innerHTML = `<i class="fas fa-random"></i> Multi-Link`;
 
+        // Hide 4th server for search or use a simple embed
         currentSources.s4 = `https://player.autoembed.cc/embed/${pathType}/${tmdbId}`;
 
         player.src = currentSources.s1;
         fetchMetaData(title, tmdbId, isSeries);
     }
 
-    // Always show switcher for any Hindi content or Search results
-    if (isHindiParam || (movieId && movieDatabase[movieId]?.title.toLowerCase().includes('hindi'))) {
-        if(switcher) switcher.style.display = 'flex';
-    } else if (tmdbId) {
-        // Always show switcher for Search results to give options
+    // Swither check
+    if (isHindiParam || tmdbId || (movieId && movieDatabase[movieId]?.title.toLowerCase().includes('hindi'))) {
         if(switcher) switcher.style.display = 'flex';
     }
 
@@ -695,20 +691,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 function switchServer(num) {
     const player = document.getElementById('mainVideoPlayer');
     const btns = document.querySelectorAll('.server-btn');
+    btns.forEach((btn, idx) => btn.classList.toggle('active', (idx + 1) === num));
     
-    btns.forEach((btn, idx) => {
-        btn.classList.toggle('active', (idx + 1) === num);
-    });
-    
-    if (num === 1) player.src = currentSources.s1;
-    if (num === 2) player.src = currentSources.s2;
-    if (num === 3) player.src = currentSources.s3;
-    if (num === 4) player.src = currentSources.s4;
+    const srcMap = [currentSources.s1, currentSources.s2, currentSources.s3, currentSources.s4];
+    player.src = srcMap[num-1];
 }
 
 function loadSpecificEpisode(url) {
     document.getElementById('mainVideoPlayer').src = url;
-    currentSources.s1 = url; // Abyss default updated to selected episode
+    currentSources.s1 = url; 
 }
 
 async function fetchMetaData(displayTitle, manualId, isSeries = false) {
@@ -730,11 +721,9 @@ async function fetchMetaData(displayTitle, manualId, isSeries = false) {
 
         if (bestMatch && !bestMatch.status_message) {
             ratingEl.innerHTML = `<i class="fab fa-imdb" style="color: #f5c518;"></i> IMDb: ${bestMatch.vote_average?.toFixed(1) || "N/A"}`;
-            const date = bestMatch.release_date || bestMatch.first_air_date || "2025";
-            yearEl.innerText = `📅 ${date.split('-')[0]}`;
-            descEl.innerText = bestMatch.overview || "No English description available.";
+            yearEl.innerText = `📅 ${(bestMatch.release_date || bestMatch.first_air_date || "2025").split('-')[0]}`;
+            descEl.innerText = bestMatch.overview || "Hindi description coming soon...";
             
-            // Fix Name to English if TMDB finds it
             const engName = bestMatch.title || bestMatch.name;
             if(engName) document.getElementById('displayTitle').innerText = engName;
         }
@@ -757,12 +746,4 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
-
-
-
-
-
-
-
-
 
