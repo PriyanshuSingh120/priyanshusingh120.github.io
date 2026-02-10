@@ -278,6 +278,15 @@ const movieDatabase = {
   "isSeries": true, 
   "episodes": ["https://short.icu/QPjOsHaCQ","https://short.icu/QZD2usv2u","https://short.icu/AUC-QHlzi","https://short.icu/NYv37dBXEV","https://short.icu/sSwU2sfk4"] 
 },
+    "96": {
+  "title": "96",
+  "img": "https://image.tmdb.org/t/p/w500/nrVloCa2hCFOztRF1DZU2jnWIiQ.jpg",
+  "year": "2018",
+  "genre": "Romance",
+  "tmdb": "441717",
+  "type": "movie",
+  "src": "https://short.icu/NBKxpU4-N"
+},
     "special-ops": { 
   "title": "Special Ops", 
   "img": "https://image.tmdb.org/t/p/w500/rTOGcNzVMYGezpx9AxX7ilzLNEp.jpg", 
@@ -746,6 +755,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
