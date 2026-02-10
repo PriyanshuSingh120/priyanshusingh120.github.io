@@ -616,14 +616,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const selectorArea = document.getElementById('episodeSelectorArea');
     const dropdown = document.getElementById('episodeDropdown');
 
-    // SCENARIO 1: Movie is in your database
+    // SCENARIO 1: Movie in Database
     if (movieId && movieDatabase[movieId]) {
         const movie = movieDatabase[movieId];
         titleEl.innerText = movie.title;
         const isSeries = movie.isSeries || false;
         const pathType = isSeries ? 'tv' : 'movie';
 
-        // Server 1: Abyss (Your link)
+        // Set S1: Abyss (Your Link)
         if (movie.episodes && movie.episodes.length > 0) {
             selectorArea.style.display = 'block';
             dropdown.innerHTML = "";
@@ -638,17 +638,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             selectorArea.style.display = 'none';
         }
 
-        // Server 2: Smashy (Hindi Focus)
-        let sUrl = `https://player.smashy.stream/${pathType}/${movie.tmdb || ''}`;
-        if (isSeries) sUrl += `?s=1&e=1`;
-        currentSources.s2 = sUrl;
-
-        // Server 3: VIDEASY (Premium)
-        let vUrl = `https://player.videasy.net/${pathType}/${movie.tmdb || ''}?color=e50914&overlay=true&episodeSelector=true`;
-        if (isSeries) vUrl += `/1/1`;
-        currentSources.s3 = vUrl;
-
-        // Server 4: 2Embed
+        // Set Backups
+        currentSources.s2 = `https://player.smashy.stream/${pathType}/${movie.tmdb || ''}${isSeries ? '?s=1&e=1' : ''}`;
+        currentSources.s3 = `https://player.videasy.net/${pathType}/${movie.tmdb || ''}?color=e50914&overlay=true&episodeSelector=true`;
         currentSources.s4 = `https://www.2embed.cc/embed/${isSeries ? 'tv' : ''}${movie.tmdb || ''}${isSeries ? '&s=1&e=1' : ''}`;
 
         player.src = currentSources.s1;
@@ -656,7 +648,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         generateRecommendations(movieId);
 
     } 
-    // SCENARIO 2: External TMDB result (Fallback)
+    // SCENARIO 2: External/Search result
     else if (tmdbId) {
         const title = decodeURIComponent(urlParams.get('title') || "Now Playing");
         const isSeries = typeParam === 'series';
@@ -664,16 +656,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         titleEl.innerText = title;
         selectorArea.style.display = 'none';
 
-        // Swap Priority: Smashy becomes Primary for Search
-        let sUrl = `https://player.smashy.stream/${pathType}/${tmdbId}`;
-        if (isSeries) sUrl += `?s=1&e=1`;
-        currentSources.s1 = sUrl;
+        // Smashy is primary for search results
+        currentSources.s1 = `https://player.smashy.stream/${pathType}/${tmdbId}${isSeries ? '?s=1&e=1' : ''}`;
         document.getElementById('btn-s1').innerHTML = `<i class="fas fa-language"></i> Smashy`;
 
-        // VIDEASY Backup
-        let vUrl = `https://player.videasy.net/${pathType}/${tmdbId}?color=e50914&overlay=true`;
-        if (isSeries) vUrl += `/1/1`;
-        currentSources.s2 = vUrl;
+        currentSources.s2 = `https://player.videasy.net/${pathType}/${tmdbId}?color=e50914&overlay=true`;
         document.getElementById('btn-s2').innerHTML = `<i class="fas fa-bolt"></i> VIDEASY`;
 
         currentSources.s3 = `https://www.2embed.cc/embed/${isSeries ? 'tv' : ''}${tmdbId}${isSeries ? '&s=1&e=1' : ''}`;
@@ -684,7 +671,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         generateRecommendations('random');
     }
 
-    // Always show switcher for Hindi/Fallback results
+    // Swither toggle
     if (isHindi || tmdbId || (movieId && movieDatabase[movieId]?.title.toLowerCase().includes('hindi'))) {
         if(switcher) switcher.style.display = 'flex';
     }
@@ -695,13 +682,13 @@ function switchServer(num) {
     const btns = document.querySelectorAll('.server-btn');
     btns.forEach((btn, idx) => btn.classList.toggle('active', (idx + 1) === num));
     
-    const srcList = [currentSources.s1, currentSources.s2, currentSources.s3, currentSources.s4];
-    if(srcList[num-1]) player.src = srcList[num-1];
+    const srcs = [currentSources.s1, currentSources.s2, currentSources.s3, currentSources.s4];
+    if(srcs[num-1]) player.src = srcs[num-1];
 }
 
 function loadSpecificEpisode(url) {
     document.getElementById('mainVideoPlayer').src = url;
-    currentSources.s1 = url; 
+    currentSources.s1 = url; // Update S1 cache
 }
 
 async function fetchMetaData(title, id, isSeries = false) {
@@ -718,14 +705,15 @@ async function fetchMetaData(title, id, isSeries = false) {
         const best = (data.results && data.results.length > 0) ? data.results[0] : data;
 
         if (best && !best.status_message) {
-            document.getElementById('imdbRatingDisplay').innerHTML = `<i class="fab fa-imdb" style="color: #f5c518;"></i> Rating: ${best.vote_average?.toFixed(1) || 'N/A'}`;
+            document.getElementById('imdbRatingDisplay').innerHTML = `<i class="fab fa-imdb" style="color: #f5c518;"></i> IMDb: ${best.vote_average?.toFixed(1) || 'N/A'}`;
             document.getElementById('displayYear').innerHTML = `<i class="far fa-calendar"></i> Released: ${(best.release_date || best.first_air_date || '2025').split('-')[0]}`;
-            document.getElementById('movieDescription').innerText = best.overview || "No description available.";
+            document.getElementById('movieDescription').innerText = best.overview || "Metadata not available in English.";
             
+            // Auto-convert Hindi title to English if available
             const engTitle = best.title || best.name;
             if(engTitle) document.getElementById('displayTitle').innerText = engTitle;
         }
-    } catch (e) { console.error("Meta error", e); }
+    } catch (e) { console.error("Metadata error", e); }
 }
 
 function generateRecommendations(currentId) {
@@ -743,7 +731,7 @@ function generateRecommendations(currentId) {
         card.innerHTML = `
             <div class="movie-card">
                 <div class="movie-poster-container">
-                    <img src="${item.img}" class="movie-poster" loading="lazy" onerror="this.src='https://via.placeholder.com/300x450?text=Poster'">
+                    <img src="${item.img}" class="movie-poster" loading="lazy" onerror="this.src='https://via.placeholder.com/300x450?text=No+Img'">
                 </div>
                 <div class="movie-info"><h3>${item.title}</h3></div>
             </div>
@@ -751,11 +739,3 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
-
-
-
-
-
-
-
-
