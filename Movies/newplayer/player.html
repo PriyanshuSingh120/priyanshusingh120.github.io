@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #e50914; --bg: #050505; --card-bg: #121212; }
+        :root { --primary: #e50914; --bg: #050505; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: white; margin: 0; }
         
-        /* Premium Switcher Design */
+        /* Switcher Design */
         .server-switcher { 
             display: none; 
             margin: 20px 0; 
@@ -23,74 +23,22 @@
             align-items: center;
             flex-wrap: wrap;
         }
-        .server-label { 
-            font-size: 11px; 
-            font-weight: 800; 
-            color: #666; 
-            text-transform: uppercase; 
-            letter-spacing: 1.5px; 
-            margin-right: 10px;
-        }
+        .server-label { font-size: 11px; font-weight: 800; color: #666; text-transform: uppercase; margin-right: 10px; }
         .server-btn { 
-            background: #1a1a1a; 
-            color: #999; 
-            border: 1px solid #333; 
-            padding: 10px 20px; 
-            border-radius: 10px; 
-            cursor: pointer; 
-            font-size: 13px; 
-            font-weight: 700; 
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            background: #1a1a1a; color: #999; border: 1px solid #333; padding: 10px 20px; border-radius: 10px; 
+            cursor: pointer; font-size: 13px; font-weight: 700; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;
         }
-        .server-btn.active { 
-            background: var(--primary); 
-            color: white; 
-            border-color: var(--primary);
-            box-shadow: 0 5px 15px rgba(229, 9, 20, 0.3);
-        }
-        .server-btn:hover:not(.active) { background: #222; border-color: #555; color: white; }
+        .server-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Video Container Fix */
-        .video-player-container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 20px; box-sizing: border-box; }
-        .video-frame-area { 
-            position: relative; 
-            padding-bottom: 56.25%; 
-            height: 0; 
-            background: #000; 
-            border-radius: 16px; 
-            overflow: hidden; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
+        /* Video Area */
+        .video-player-container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 15px; }
+        .video-frame-area { position: relative; padding-bottom: 56.25%; height: 0; background: #000; border-radius: 16px; overflow: hidden; }
         .video-frame-area iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
-        /* Metadata Styling */
-        .player-content-area { margin-top: 25px; }
-        .player-title { font-size: 28px; font-weight: 800; margin-bottom: 10px; }
+        .player-title { font-size: 26px; font-weight: 800; margin: 20px 0 10px; }
         .player-metadata { display: flex; gap: 15px; color: #aaa; font-size: 14px; margin-bottom: 20px; }
-        .player-metadata span { display: flex; align-items: center; gap: 5px; }
-        .movie-description { color: #ccc; line-height: 1.6; font-size: 15px; max-width: 800px; }
-
-        /* Dropdown Styling */
         #episodeSelectorArea { margin-bottom: 20px; }
-        #episodeDropdown { 
-            background: #111; 
-            color: white; 
-            border: 1px solid #333; 
-            padding: 10px; 
-            border-radius: 8px; 
-            width: 100%; 
-            max-width: 300px;
-            outline: none;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            .player-title { font-size: 22px; }
-            .server-btn { padding: 8px 15px; font-size: 12px; }
-        }
+        #episodeDropdown { background: #111; color: white; border: 1px solid #333; padding: 10px; border-radius: 8px; width: 100%; max-width: 300px; }
     </style>
 </head>
 <body>
@@ -101,21 +49,20 @@
             </div>
 
             <div class="player-content-area">
-                <div id="displayTitle" class="player-title">Loading Title...</div>
+                <div id="displayTitle" class="player-title">Loading...</div>
                 
-                <!-- Premium Multi-Server Switcher -->
                 <div id="serverSwitcher" class="server-switcher">
                     <span class="server-label">Servers</span>
                     <button id="btn-s1" class="server-btn active" onclick="switchServer(1)"><i class="fas fa-play"></i> Abyss</button>
                     <button id="btn-s2" class="server-btn" onclick="switchServer(2)"><i class="fas fa-language"></i> Smashy</button>
                     <button id="btn-s3" class="server-btn" onclick="switchServer(3)"><i class="fas fa-bolt"></i> VIDEASY</button>
-                    <button id="btn-s4" class="server-btn" onclick="switchServer(4)"><i class="fas fa-random"></i> Server 4</button>
+                    <button id="btn-s4" class="server-btn" onclick="switchServer(4)"><i class="fas fa-globe"></i> Backup</button>
                 </div>
 
                 <div class="player-metadata">
-                    <span id="imdbRatingDisplay"><i class="fab fa-imdb" style="color: #f5c518;"></i> --</span>
-                    <span id="displayYear"><i class="far fa-calendar"></i> ----</span>
-                    <span><i class="fas fa-closed-captioning"></i> Hindi Dubbed</span>
+                    <span id="imdbRatingDisplay">--</span>
+                    <span id="displayYear">----</span>
+                    <span>HD | Hindi Dubbed</span>
                 </div>
 
                 <div id="episodeSelectorArea" style="display: none;">
@@ -124,17 +71,16 @@
             
                 <div class="movie-description-wrapper">
                     <h3 style="color: var(--primary); font-size: 18px;">Storyline</h3>
-                    <p id="movieDescription" class="movie-description">Sahi metadata load ho raha hai...</p>
+                    <p id="movieDescription" style="color: #ccc; line-height: 1.6;">Movie details fetch ho rahi hain...</p>
                 </div>
             </div>
         </div>
 
-        <div class="container" style="padding: 20px; max-width: 1200px; margin: 0 auto;">
-            <h3 style="margin-bottom: 20px;">⚡ More To Watch</h3>
+        <div class="container" style="padding: 20px;">
+            <h3>⚡ More To Watch</h3>
             <div id="recommendationGrid" class="movie-grid"></div>
         </div>
     </main>
-
     <script src="player.js"></script>
 </body>
 </html>
