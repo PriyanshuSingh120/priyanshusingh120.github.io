@@ -616,81 +616,97 @@ document.addEventListener('DOMContentLoaded', async () => {
     const selectorArea = document.getElementById('episodeSelectorArea');
     const dropdown = document.getElementById('episodeDropdown');
 
-    // SCENARIO 1: Movie in Database
+    // Scenario Handle Karne ka Logic
     if (movieId && movieDatabase[movieId]) {
+        // CASE 1: Database Movie (Aapka Abyss link priority hai)
         const movie = movieDatabase[movieId];
-        titleEl.innerText = movie.title;
         const isSeries = movie.isSeries || false;
         const pathType = isSeries ? 'tv' : 'movie';
+        titleEl.innerText = movie.title;
 
-        // Set S1: Abyss (Your Link)
+        // Set S1: Aapka Abyss/Local Link
         if (movie.episodes && movie.episodes.length > 0) {
-            selectorArea.style.display = 'block';
-            dropdown.innerHTML = "";
-            movie.episodes.forEach((url, i) => {
-                let opt = document.createElement('option');
-                opt.value = url; opt.innerText = `Episode ${i + 1}`;
-                dropdown.appendChild(opt);
-            });
+            if(selectorArea) selectorArea.style.display = 'block';
+            if(dropdown) {
+                dropdown.innerHTML = "";
+                movie.episodes.forEach((url, i) => {
+                    let opt = document.createElement('option');
+                    opt.value = url; opt.innerText = `Episode ${i + 1}`;
+                    dropdown.appendChild(opt);
+                });
+            }
             currentSources.s1 = movie.episodes[0];
         } else {
             currentSources.s1 = movie.src;
-            selectorArea.style.display = 'none';
+            if(selectorArea) selectorArea.style.display = 'none';
         }
 
-        // Set Backups
+        // Set Other Servers
         currentSources.s2 = `https://player.smashy.stream/${pathType}/${movie.tmdb || ''}${isSeries ? '?s=1&e=1' : ''}`;
         currentSources.s3 = `https://player.videasy.net/${pathType}/${movie.tmdb || ''}?color=e50914&overlay=true&episodeSelector=true`;
         currentSources.s4 = `https://www.2embed.cc/embed/${isSeries ? 'tv' : ''}${movie.tmdb || ''}${isSeries ? '&s=1&e=1' : ''}`;
 
+        // Load Default
         player.src = currentSources.s1;
+        
+        // Metadata load
         fetchMetaData(movie.title, movie.tmdb, isSeries);
         generateRecommendations(movieId);
 
-    } 
-    // SCENARIO 2: External/Search result
-    else if (tmdbId) {
+    } else if (tmdbId) {
+        // CASE 2: External/Search Fallback
         const title = decodeURIComponent(urlParams.get('title') || "Now Playing");
         const isSeries = typeParam === 'series';
         const pathType = isSeries ? 'tv' : 'movie';
         titleEl.innerText = title;
-        selectorArea.style.display = 'none';
+        if(selectorArea) selectorArea.style.display = 'none';
 
-        // Smashy is primary for search results
+        // Smashy Stream Manual ke according priority
         currentSources.s1 = `https://player.smashy.stream/${pathType}/${tmdbId}${isSeries ? '?s=1&e=1' : ''}`;
-        document.getElementById('btn-s1').innerHTML = `<i class="fas fa-language"></i> Smashy`;
-
         currentSources.s2 = `https://player.videasy.net/${pathType}/${tmdbId}?color=e50914&overlay=true`;
-        document.getElementById('btn-s2').innerHTML = `<i class="fas fa-bolt"></i> VIDEASY`;
-
         currentSources.s3 = `https://www.2embed.cc/embed/${isSeries ? 'tv' : ''}${tmdbId}${isSeries ? '&s=1&e=1' : ''}`;
-        document.getElementById('btn-s3').innerHTML = `<i class="fas fa-random"></i> Server 3`;
+
+        // Button Names Update (Agar search se hai toh local abyss nahi dikhayenge)
+        const btn1 = document.getElementById('btn-s1');
+        if(btn1) btn1.innerHTML = `<i class="fas fa-language"></i> Smashy (Hindi)`;
+        
+        const btn2 = document.getElementById('btn-s2');
+        if(btn2) btn2.innerHTML = `<i class="fas fa-bolt"></i> VIDEASY`;
 
         player.src = currentSources.s1;
         fetchMetaData(title, tmdbId, isSeries);
         generateRecommendations('random');
     }
 
-    // Swither toggle
+    // Switcher Show Logic
     if (isHindi || tmdbId || (movieId && movieDatabase[movieId]?.title.toLowerCase().includes('hindi'))) {
         if(switcher) switcher.style.display = 'flex';
     }
 });
 
+// Server Switch karne ka function
 function switchServer(num) {
     const player = document.getElementById('mainVideoPlayer');
     const btns = document.querySelectorAll('.server-btn');
-    btns.forEach((btn, idx) => btn.classList.toggle('active', (idx + 1) === num));
     
-    const srcs = [currentSources.s1, currentSources.s2, currentSources.s3, currentSources.s4];
-    if(srcs[num-1]) player.src = srcs[num-1];
+    // UI Update
+    btns.forEach((btn) => {
+        const btnId = `btn-s${num}`;
+        if(btn.id === btnId) btn.classList.add('active');
+        else btn.classList.remove('active');
+    });
+    
+    // Src Update
+    const srcList = [currentSources.s1, currentSources.s2, currentSources.s3, currentSources.s4];
+    if(srcList[num-1]) player.src = srcList[num-1];
 }
 
 function loadSpecificEpisode(url) {
     document.getElementById('mainVideoPlayer').src = url;
-    currentSources.s1 = url; // Update S1 cache
+    currentSources.s1 = url; // Update current S1 cache
 }
 
+// Meta Data Fetcher
 async function fetchMetaData(title, id, isSeries = false) {
     const type = isSeries ? 'tv' : 'movie';
     const cleanTitle = title.replace(/Season \d+/i, '').replace(/\[.*?\]/g, '').trim();
@@ -705,17 +721,22 @@ async function fetchMetaData(title, id, isSeries = false) {
         const best = (data.results && data.results.length > 0) ? data.results[0] : data;
 
         if (best && !best.status_message) {
-            document.getElementById('imdbRatingDisplay').innerHTML = `<i class="fab fa-imdb" style="color: #f5c518;"></i> IMDb: ${best.vote_average?.toFixed(1) || 'N/A'}`;
-            document.getElementById('displayYear').innerHTML = `<i class="far fa-calendar"></i> Released: ${(best.release_date || best.first_air_date || '2025').split('-')[0]}`;
-            document.getElementById('movieDescription').innerText = best.overview || "Metadata not available in English.";
+            const ratingEl = document.getElementById('imdbRatingDisplay');
+            const yearEl = document.getElementById('displayYear');
+            const descEl = document.getElementById('movieDescription');
+
+            if(ratingEl) ratingEl.innerHTML = `<i class="fab fa-imdb" style="color: #f5c518;"></i> IMDb: ${best.vote_average?.toFixed(1) || 'N/A'}`;
+            if(yearEl) yearEl.innerHTML = `<i class="far fa-calendar"></i> ${(best.release_date || best.first_air_date || '2025').split('-')[0]}`;
+            if(descEl) descEl.innerText = best.overview || "Storyline details not available.";
             
-            // Auto-convert Hindi title to English if available
+            // Convert Title to English
             const engTitle = best.title || best.name;
             if(engTitle) document.getElementById('displayTitle').innerText = engTitle;
         }
-    } catch (e) { console.error("Metadata error", e); }
+    } catch (e) { console.error("Metadata issue", e); }
 }
 
+// More to Watch Section
 function generateRecommendations(currentId) {
     const grid = document.getElementById('recommendationGrid');
     if (!grid) return;
@@ -731,7 +752,7 @@ function generateRecommendations(currentId) {
         card.innerHTML = `
             <div class="movie-card">
                 <div class="movie-poster-container">
-                    <img src="${item.img}" class="movie-poster" loading="lazy" onerror="this.src='https://via.placeholder.com/300x450?text=No+Img'">
+                    <img src="${item.img}" class="movie-poster" loading="lazy" onerror="this.src='https://via.placeholder.com/300x450?text=Poster'">
                 </div>
                 <div class="movie-info"><h3>${item.title}</h3></div>
             </div>
