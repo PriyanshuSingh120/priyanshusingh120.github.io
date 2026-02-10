@@ -600,7 +600,8 @@ const movieDatabase = {
 };
 
     
-    let currentSources = { s1: '', s2: '', s3: '', s4: '' };
+
+let currentSources = { s1: '', s2: '', s3: '', s4: '' };
 
 document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -615,12 +616,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const selectorArea = document.getElementById('episodeSelectorArea');
     const dropdown = document.getElementById('episodeDropdown');
 
+    // SCENARIO 1: Movie found in your Local Database
     if (movieId && movieDatabase[movieId]) {
-        // SCENARIO: Movie in your library (Abyss = Primary)
         const movie = movieDatabase[movieId];
+        const isSeries = movie.isSeries || false;
+        const pathType = isSeries ? 'tv' : 'movie';
         titleEl.innerText = movie.title;
         
-        // S1: Abyss (Aapka link)
+        // S1: Abyss (Primary)
         if (movie.episodes && movie.episodes.length > 0) {
             selectorArea.style.display = 'block';
             dropdown.innerHTML = ""; 
@@ -636,51 +639,54 @@ document.addEventListener('DOMContentLoaded', async () => {
             selectorArea.style.display = 'none';
         }
 
-        // S2: VIDEASY (Best Hindi/Multi support)
-        const pathType = movie.isSeries ? 'tv' : 'movie';
+        // S2: VIDEASY (Premium)
         let vUrl = `https://player.videasy.net/${pathType}/${movie.tmdb || ''}?color=e50914&overlay=true&episodeSelector=true`;
-        if (movie.isSeries) vUrl += `/1/1`;
+        if (isSeries) vUrl += `/1/1`;
         currentSources.s2 = vUrl;
 
-        // S3: SmashyStream (Multi-audio focus)
-        currentSources.s3 = `https://embed.smashystream.com/playere.php?tmdb=${movie.tmdb || ''}`;
+        // S3: SMASHY STREAM (Hindi Support)
+        let sUrl = `https://player.smashy.stream/${pathType}/${movie.tmdb || ''}`;
+        if (isSeries) sUrl += `/1/1`;
+        currentSources.s3 = sUrl;
 
-        // S4: Multi-Embed
-        currentSources.s4 = `https://www.2embed.cc/embed/${pathType === 'tv' ? 'tv' : ''}${movie.tmdb || ''}${pathType === 'tv' ? '&s=1&e=1' : ''}`;
+        // S4: ANY EMBED
+        currentSources.s4 = `https://www.2embed.cc/embed/${isSeries ? 'tv' : ''}${movie.tmdb || ''}${isSeries ? '&s=1&e=1' : ''}`;
 
         player.src = currentSources.s1;
-        fetchMetaData(movie.title, movie.tmdb, movie.isSeries);
+        fetchMetaData(movie.title, movie.tmdb, isSeries);
 
     } else if (tmdbId) {
-        // SCENARIO: TMDB Search Fallback (VIDEASY = Primary)
+        // SCENARIO 2: TMDB Search Fallback (Not in DB)
         const title = decodeURIComponent(urlParams.get('title') || "Now Playing");
         const isSeries = typeParam === 'series';
         const pathType = isSeries ? 'tv' : 'movie';
         titleEl.innerText = title;
         selectorArea.style.display = 'none';
 
-        // VIDEASY is best for external search, so it becomes Primary here
+        // VIDEASY is Primary for Search Results
         let vUrl = `https://player.videasy.net/${pathType}/${tmdbId}?color=e50914&overlay=true&episodeSelector=true`;
         if (isSeries) vUrl += `/1/1`;
         currentSources.s1 = vUrl;
         document.getElementById('btn-s1').innerHTML = `<i class="fas fa-bolt"></i> VIDEASY (HD)`;
         
-        // S2: SmashyStream
-        currentSources.s2 = `https://embed.smashystream.com/playere.php?tmdb=${tmdbId}`;
-        document.getElementById('btn-s2').innerHTML = `<i class="fas fa-fire"></i> Smashy (Hindi)`;
+        // SMASHY becomes Server 2
+        let sUrl = `https://player.smashy.stream/${pathType}/${tmdbId}`;
+        if (isSeries) sUrl += `/1/1`;
+        currentSources.s2 = sUrl;
+        document.getElementById('btn-s2').innerHTML = `<i class="fas fa-fire"></i> SMASHY (Hindi)`;
 
-        // S3: 2Embed
+        // Backup 3
         currentSources.s3 = `https://www.2embed.cc/embed/${isSeries ? 'tv' : ''}${tmdbId}${isSeries ? '&s=1&e=1' : ''}`;
         document.getElementById('btn-s3').innerHTML = `<i class="fas fa-random"></i> Multi-Link`;
 
-        // Hide 4th server for search or use a simple embed
+        // Backup 4
         currentSources.s4 = `https://player.autoembed.cc/embed/${pathType}/${tmdbId}`;
 
         player.src = currentSources.s1;
         fetchMetaData(title, tmdbId, isSeries);
     }
 
-    // Swither check
+    // Always show switcher for any Hindi content or Fallback search
     if (isHindiParam || tmdbId || (movieId && movieDatabase[movieId]?.title.toLowerCase().includes('hindi'))) {
         if(switcher) switcher.style.display = 'flex';
     }
@@ -693,13 +699,13 @@ function switchServer(num) {
     const btns = document.querySelectorAll('.server-btn');
     btns.forEach((btn, idx) => btn.classList.toggle('active', (idx + 1) === num));
     
-    const srcMap = [currentSources.s1, currentSources.s2, currentSources.s3, currentSources.s4];
-    player.src = srcMap[num-1];
+    const sources = [currentSources.s1, currentSources.s2, currentSources.s3, currentSources.s4];
+    if(sources[num-1]) player.src = sources[num-1];
 }
 
 function loadSpecificEpisode(url) {
     document.getElementById('mainVideoPlayer').src = url;
-    currentSources.s1 = url; 
+    currentSources.s1 = url; // abyss primary update
 }
 
 async function fetchMetaData(displayTitle, manualId, isSeries = false) {
@@ -722,12 +728,12 @@ async function fetchMetaData(displayTitle, manualId, isSeries = false) {
         if (bestMatch && !bestMatch.status_message) {
             ratingEl.innerHTML = `<i class="fab fa-imdb" style="color: #f5c518;"></i> IMDb: ${bestMatch.vote_average?.toFixed(1) || "N/A"}`;
             yearEl.innerText = `📅 ${(bestMatch.release_date || bestMatch.first_air_date || "2025").split('-')[0]}`;
-            descEl.innerText = bestMatch.overview || "Hindi description coming soon...";
+            descEl.innerText = bestMatch.overview || "Overview coming soon...";
             
             const engName = bestMatch.title || bestMatch.name;
             if(engName) document.getElementById('displayTitle').innerText = engName;
         }
-    } catch (e) { console.error("Meta Load Error", e); }
+    } catch (e) { console.error("Metadata error", e); }
 }
 
 function generateRecommendations(currentId) {
@@ -746,4 +752,4 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
-
+        
