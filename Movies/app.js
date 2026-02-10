@@ -17,7 +17,7 @@ function initializeLibrary() {
 
     const movieElements = Array.from(movieGrid.getElementsByClassName('movie-link'));
     
-    // Initial sort for local library
+    // Sort local library
     movieElements.sort((a, b) => {
         const isNewA = /2025|2026|New/i.test(a.innerText);
         const isNewB = /2025|2026|New/i.test(b.innerText);
@@ -39,20 +39,20 @@ function initializeLibrary() {
 }
 
 /**
- * 2. SEARCH SYSTEM (English, Sorted by Date & Popularity, No Duplicates)
+ * 2. GLOBAL SEARCH SYSTEM (All Restrictions Removed)
  */
 async function handleSearch(e) {
     const term = e.target.value.toLowerCase().trim();
     const movieGrid = document.getElementById('movieGrid');
     const requestBox = document.getElementById('requestBox');
     
-    // Clear dynamic results from previous searches
+    // Purane dynamic results clear karein
     document.querySelectorAll('.tmdb-result').forEach(el => el.remove());
 
     let localMatches = 0;
     const localLibMap = new Set();
 
-    // 1. Local Filter & ID Mapping
+    // 1. Local Library Filter
     document.querySelectorAll('#movieGrid .movie-link').forEach(link => {
         const titleText = link.querySelector('h3').innerText.toLowerCase();
         const isMatch = titleText.includes(term);
@@ -60,38 +60,34 @@ async function handleSearch(e) {
         
         if (isMatch) localMatches++;
         
-        // Map local content to prevent duplicates in TMDB search
-        // We use the TMDB ID from dataset if present, or the title text
+        // Local IDs ko map karein duplicates rokne ke liye
         if (link.dataset.id) localLibMap.add(link.dataset.id.toString());
         localLibMap.add(titleText);
     });
 
-    // 2. TMDB Fallback Search
+    // 2. TMDB Global Fallback Search
     if (term.length > 2) {
         try {
-            // Force English names with en-US
+            // Restriction Removed: No specific language filter in URL
             const res = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(term)}&language=en-US`);
             const data = await res.json();
             
-            // Filter: Only Hindi originals + Remove Duplicates already in Local Lib
+            // Sabhi movies aur TV shows ko allow karein
             let results = data.results.filter(m => {
-                const isHindi = m.original_language === 'hi';
+                const isValidMedia = (m.media_type === 'movie' || m.media_type === 'tv');
                 const mTitle = (m.title || m.name || "").toLowerCase();
                 const mId = (m.id || "").toString();
                 
-                // Return true only if it's Hindi AND not already in local library
-                return isHindi && !localLibMap.has(mId) && !localLibMap.has(mTitle);
+                // Condition: Valid media ho aur local library mein na ho
+                return isValidMedia && !localLibMap.has(mId) && !localLibMap.has(mTitle);
             });
 
-            // Sorting: Latest Date First, then by Popularity
+            // Latest releases ko priority dein
             results.sort((a, b) => {
                 const dateA = new Date(a.release_date || a.first_air_date || '1900-01-01');
                 const dateB = new Date(b.release_date || b.first_air_date || '1900-01-01');
-                
-                if (dateB - dateA !== 0) {
-                    return dateB - dateA; // Sort by date
-                }
-                return b.popularity - a.popularity; // If same date, sort by popularity
+                if (dateB - dateA !== 0) return dateB - dateA;
+                return b.popularity - a.popularity;
             });
 
             if(results.length > 0) {
@@ -100,6 +96,8 @@ async function handleSearch(e) {
                     const type = movie.media_type;
                     const tmdbCard = document.createElement('a');
                     tmdbCard.className = 'movie-link tmdb-result';
+                    
+                    // isHindi=true flag switcher ko activate rakhta hai isliye ise rakha gaya hai
                     tmdbCard.href = `newplayer/player.html?tmdb=${movie.id}&title=${encodeURIComponent(movie.title || movie.name)}&isHindi=true&type=${type === 'tv' ? 'series' : 'movie'}`;
                     
                     const releaseYear = (movie.release_date || movie.first_air_date || 'N/A').split('-')[0];
@@ -107,12 +105,12 @@ async function handleSearch(e) {
                     tmdbCard.innerHTML = `
                         <div class="movie-card">
                             <div class="movie-poster-container">
-                                <span class="external-badge">${releaseYear >= 2025 ? 'NEW' : 'LIVE'}</span>
+                                <span class="external-badge">${releaseYear >= 2025 ? 'NEW' : 'WEB'}</span>
                                 <img src="${POSTER_BASE}${movie.poster_path}" class="movie-poster" onerror="this.src='https://via.placeholder.com/500x750?text=No+Poster'">
                             </div>
                             <div class="movie-info">
                                 <h3>${movie.title || movie.name}</h3>
-                                <p>${releaseYear} | ${type === 'tv' ? 'Series' : 'Hindi'}</p>
+                                <p>${releaseYear} | ${type === 'tv' ? 'Series' : 'Movie'}</p>
                             </div>
                         </div>
                     `;
@@ -122,7 +120,7 @@ async function handleSearch(e) {
                 requestBox.classList.remove('hidden');
             }
         } catch (err) {
-            console.error("Dynamic Search Error:", err);
+            console.error("Search Error:", err);
         }
     } else if (term.length === 0) {
         requestBox.classList.add('hidden');
@@ -204,7 +202,7 @@ async function sendRequest() {
     if (!movieName) return;
     const btn = document.getElementById('reqBtn');
     btn.innerText = "Sending..."; btn.disabled = true;
-    const message = `<b>📥 NEW MOVIE REQUEST</b>\n\n<b>🎬 Movie:</b> ${movieName}\n\n<i>CineView User Request</i>`;
+    const message = `<b>📥 NEW MOVIE REQUEST</b>\n\n<b>🎬 Movie:</b> ${movieName}\n\n<i>CineView Global Request</i>`;
     try {
         await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: DISCUSSION_GROUP_ID, text: message, parse_mode: 'HTML' }) });
         document.getElementById('requestBox').innerHTML = `<h3 style="color:#00ff00;">✅ Request Sent!</h3><p style="font-size: 13px; color: #888;">Admin notified.</p>`;
