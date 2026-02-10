@@ -599,167 +599,147 @@ const movieDatabase = {
     "raat-akeli-hai-the-bansal-murders": { "title": "Raat Akeli Hai - The Bansal Murders", "src": "https://short.icu/FYIdgZzZ7", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/8EpDSwnjMBc9dmTPEYBF4Bixmwf.jpg" }
 };
 
-let currentSources = { s1: '', s2: '' };
+
+
+let sources = { s1: '', s2: '', s3: '', s4: '' };
 
 document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const movieId = urlParams.get('id');
     const tmdbId = urlParams.get('tmdb');
     const isHindiParam = urlParams.get('isHindi') === 'true';
-    const typeParam = urlParams.get('type'); // 'series' or 'movie'
-    
+    const typeParam = urlParams.get('type') || 'movie';
+
     const player = document.getElementById('mainVideoPlayer');
     const titleEl = document.getElementById('displayTitle');
     const switcher = document.getElementById('serverSwitcher');
     const selectorArea = document.getElementById('episodeSelectorArea');
     const dropdown = document.getElementById('episodeDropdown');
 
-    // 1. DATA FETCHING & PLAYER SETUP
+    // 1. Logic for Database Movies
     if (movieId && movieDatabase[movieId]) {
         const movie = movieDatabase[movieId];
         titleEl.innerText = movie.title;
-        
-        // Setup Server 1 (Database)
+        const isSeries = movie.isSeries || false;
+        const typePath = isSeries ? 'tv' : 'movie';
+
+        // S1: Abyss (Uploaded Link)
         if (movie.episodes && movie.episodes.length > 0) {
-            selectorArea.style.display = 'block';
-            dropdown.innerHTML = ""; 
-            movie.episodes.forEach((url, index) => {
+            if(selectorArea) selectorArea.style.display = 'block';
+            dropdown.innerHTML = "";
+            movie.episodes.forEach((url, i) => {
                 let opt = document.createElement('option');
-                opt.value = url;
-                opt.innerText = `Episode ${index + 1}`;
+                opt.value = url; opt.innerText = `Episode ${i + 1}`;
                 dropdown.appendChild(opt);
             });
-            currentSources.s1 = movie.episodes[0];
+            sources.s1 = movie.episodes[0];
         } else {
-            currentSources.s1 = movie.src;
-            selectorArea.style.display = 'none';
+            sources.s1 = movie.src;
+            if(selectorArea) selectorArea.style.display = 'none';
         }
 
-        // Setup Server 2 (VIDEASY)
-        const typePath = movie.isSeries ? 'tv' : 'movie';
-        let videasyUrl = `https://player.videasy.net/${typePath}/${movie.tmdb || ''}`;
-        if (movie.isSeries) videasyUrl += `/1/1`;
-        currentSources.s2 = `${videasyUrl}?color=e50914&overlay=true&episodeSelector=true&nextEpisode=true`;
+        // Backups using TMDB ID
+        sources.s2 = `https://player.smashy.stream/${typePath}/${movie.tmdb || ''}${isSeries ? '?s=1&e=1' : ''}`;
+        sources.s3 = `https://player.videasy.net/${typePath}/${movie.tmdb || ''}?color=e50914&overlay=true&episodeSelector=true`;
+        sources.s4 = `https://www.2embed.cc/embed/${isSeries ? 'tv' : ''}${movie.tmdb || ''}${isSeries ? '&s=1&e=1' : ''}`;
 
-        // Switcher Logic
-        if(isHindiParam || movie.title.toLowerCase().includes('hindi')) {
-            if(switcher) switcher.style.display = 'flex';
-        }
-
-        player.src = currentSources.s1;
-        fetchMetaData(movie.title, movie.tmdb, movie.isSeries);
+        player.src = sources.s1;
+        fetchMetaData(movie.title, movie.tmdb, isSeries);
         generateRecommendations(movieId);
-
-    } else if (tmdbId) {
-        // External TMDB Fallback
-        const title = urlParams.get('title') || "Now Playing";
+    } 
+    // 2. Logic for Search Results (External)
+    else if (tmdbId) {
+        const title = decodeURIComponent(urlParams.get('title') || "Now Playing");
         const isSeries = typeParam === 'series';
         const typePath = isSeries ? 'tv' : 'movie';
-        
-        titleEl.innerText = decodeURIComponent(title);
-        selectorArea.style.display = 'none';
+        titleEl.innerText = title;
+        if(selectorArea) selectorArea.style.display = 'none';
 
-        currentSources.s1 = `https://vidsrc.me/embed/${typePath}?tmdb=${tmdbId}`;
-        let videasyBase = `https://player.videasy.net/${typePath}/${tmdbId}`;
-        if (isSeries) videasyBase += `/1/1`;
-        currentSources.s2 = `${videasyBase}?color=e50914&overlay=true&episodeSelector=true`;
+        // Priority Swap for Search: Smashy is now Server 1
+        sources.s1 = `https://player.smashy.stream/${typePath}/${tmdbId}${isSeries ? '?s=1&e=1' : ''}`;
+        document.getElementById('btn-s1').innerHTML = `<i class="fas fa-language"></i> Smashy`;
 
-        if(isHindiParam) if(switcher) switcher.style.display = 'flex';
+        sources.s2 = `https://player.videasy.net/${typePath}/${tmdbId}?color=e50914&overlay=true`;
+        document.getElementById('btn-s2').innerHTML = `<i class="fas fa-bolt"></i> VIDEASY`;
 
-        player.src = currentSources.s1;
+        sources.s3 = `https://www.2embed.cc/embed/${isSeries ? 'tv' : ''}${tmdbId}${isSeries ? '&s=1&e=1' : ''}`;
+        document.getElementById('btn-s3').innerHTML = `<i class="fas fa-random"></i> Multi-Link`;
+
+        player.src = sources.s1;
         fetchMetaData(title, tmdbId, isSeries);
         generateRecommendations('random');
+    }
+
+    // Toggle Switcher Visibility
+    if (isHindiParam || tmdbId || (movieId && movieDatabase[movieId]?.title.toLowerCase().includes('hindi'))) {
+        if(switcher) switcher.style.display = 'flex';
     }
 });
 
 function switchServer(num) {
     const player = document.getElementById('mainVideoPlayer');
     const btns = document.querySelectorAll('.server-btn');
-    btns.forEach((btn, idx) => btn.classList.toggle('active', (idx + 1) === num));
     
-    if (num === 1) player.src = currentSources.s1;
-    if (num === 2) player.src = currentSources.s2;
+    // Update Button UI
+    btns.forEach((btn) => {
+        if(btn.id === `btn-s${num}`) btn.classList.add('active');
+        else btn.classList.remove('active');
+    });
+    
+    // Update Source
+    const srcList = [sources.s1, sources.s2, sources.s3, sources.s4];
+    if(srcList[num-1]) player.src = srcList[num-1];
 }
 
 function loadSpecificEpisode(url) {
     document.getElementById('mainVideoPlayer').src = url;
-    currentSources.s1 = url; // Update current source so switcher doesn't reset it
+    sources.s1 = url; // Sync S1
 }
 
-async function fetchMetaData(displayTitle, manualId, isSeries = false) {
-    const ratingEl = document.getElementById('imdbRatingDisplay');
-    const yearEl = document.getElementById('displayYear');
-    const descEl = document.getElementById('movieDescription');
-
-    // Clean title for better search (remove Season info and Brackets)
-    const cleanTitle = displayTitle.replace(/Season \d+/i, '').replace(/\[.*?\]/g, '').trim();
+async function fetchMetaData(title, id, isSeries = false) {
     const type = isSeries ? 'tv' : 'movie';
-
-    let url = manualId 
-        ? `https://api.themoviedb.org/3/${type}/${manualId}?api_key=${TMDB_API_KEY}`
-        : `https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(cleanTitle)}`;
+    const cleanTitle = title.replace(/Season \d+/i, '').replace(/\[.*?\]/g, '').trim();
+    let url = id 
+        ? `https://api.themoviedb.org/3/${type}/${id}?api_key=${TMDB_API_KEY}&language=en-US`
+        : `https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(cleanTitle)}&language=en-US`;
 
     try {
-        const response = await fetch(url);
-        const data = await response.json();
-        const bestMatch = (data.results && data.results.length > 0) ? data.results[0] : data;
+        const res = await fetch(url);
+        const data = await res.json();
+        const best = (data.results && data.results.length > 0) ? data.results[0] : data;
 
-        if (bestMatch && !bestMatch.status_message) {
-            const rating = bestMatch.vote_average ? bestMatch.vote_average.toFixed(1) : "N/A";
-            const date = bestMatch.release_date || bestMatch.first_air_date || "2025";
-            const year = date.split('-')[0];
-
-            ratingEl.innerHTML = `<i class="fab fa-imdb" style="color: #f5c518;"></i> IMDb: ${rating}`;
-            yearEl.innerText = `📅 ${year}`;
-            descEl.innerText = bestMatch.overview || "Overview not available.";
-        } else {
-            ratingEl.innerText = "IMDb: N/A";
-            yearEl.innerText = "📅 ----";
-            descEl.innerText = "Metadata could not be found for this title.";
+        if (best && !best.status_message) {
+            document.getElementById('imdbRatingDisplay').innerHTML = `<i class="fab fa-imdb" style="color: #f5c518;"></i> Rating: ${best.vote_average?.toFixed(1) || 'N/A'}`;
+            document.getElementById('displayYear').innerHTML = `<i class="far fa-calendar-alt"></i> ${(best.release_date || best.first_air_date || '2025').split('-')[0]}`;
+            document.getElementById('movieDescription').innerText = best.overview || "Overview not available.";
+            const engTitle = best.title || best.name;
+            if(engTitle) document.getElementById('displayTitle').innerText = engTitle;
         }
-    } catch (e) {
-        console.error("Metadata Load Error", e);
-    }
+    } catch (e) { console.error("Meta Data fetch failed"); }
 }
 
 function generateRecommendations(currentId) {
     const grid = document.getElementById('recommendationGrid');
     if (!grid) return;
-    
-    const allKeys = Object.keys(movieDatabase);
-    if (allKeys.length === 0) {
-        grid.innerHTML = "<p style='color:#666; padding: 20px;'>No recommendations available.</p>";
-        return;
-    }
-
-    const filteredKeys = allKeys.filter(key => key !== currentId);
-    const randomMovies = filteredKeys.sort(() => 0.5 - Math.random()).slice(0, 10);
-
-    grid.innerHTML = ""; 
-
-    randomMovies.forEach(key => {
-        const item = movieDatabase[key];
+    const keys = Object.keys(movieDatabase).filter(k => k !== currentId);
+    const shuffled = keys.sort(() => 0.5 - Math.random()).slice(0, 10);
+    grid.innerHTML = "";
+    shuffled.forEach(k => {
+        const item = movieDatabase[k];
         const card = document.createElement('a');
-        card.href = `player.html?id=${key}`;
+        card.href = `player.html?id=${k}`;
         card.className = 'movie-link';
         card.innerHTML = `
             <div class="movie-card">
                 <div class="movie-poster-container">
-                    <img src="${item.img}" class="movie-poster" loading="lazy" onerror="this.src='https://via.placeholder.com/500x750?text=Poster+Missing'">
+                    <img src="${item.img}" class="movie-poster" loading="lazy">
                 </div>
-                <div class="movie-info">
-                    <h3>${item.title}</h3>
-                </div>
+                <div class="movie-info"><h3>${item.title}</h3></div>
             </div>
         `;
         grid.appendChild(card);
     });
 }
-
-
-
-
-
 
 
 
