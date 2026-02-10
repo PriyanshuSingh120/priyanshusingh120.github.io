@@ -166,6 +166,15 @@ const movieDatabase = {
   "isSeries": true, 
   "episodes": ["https://short.icu/LmV_mN_cb","https://short.icu/UcVbbq_MD","https://short.icu/_iWWqQOVv","https://short.icu/oJHe9TNgr"] 
 },
+    "sarrainodu": {
+  "title": "Sarrainodu",
+  "img": "https://image.tmdb.org/t/p/w500/dYOlnzv8LmirzwtbXTU4ROGIebv.jpg",
+  "year": "2016",
+  "genre": "Action, Drama",
+  "tmdb": "374954",
+  "type": "movie",
+  "src": "https://short.icu/Y1ZLlHvaU"
+},
     "special-ops2": { 
   "title": "Special Ops 2", 
   "img": "https://image.tmdb.org/t/p/w500/rTOGcNzVMYGezpx9AxX7ilzLNEp.jpg", 
@@ -737,6 +746,7 @@ function generateRecommendations(currentId) {
         grid.appendChild(card);
     });
 }
+
 
 
 
