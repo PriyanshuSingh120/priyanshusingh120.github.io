@@ -380,6 +380,15 @@ const movieDatabase = {
         "tmdb": "66732",
         "episodes": ["https://short.icu/dhm7Qju2Y","https://short.icu/-jIY7Q0Jd","https://short.icu/duBAiUxLr","https://short.icu/ZVdWUzMSQ","https://short.icu/NQUwO_Vcs","https://short.icu/oAO22IYtJ","https://short.icu/fvsycrib8","https://short.icu/qXYiBfIkc"]
     },
+    "the-astronaut": {
+  "title": "The Astronaut",
+  "img": "https://image.tmdb.org/t/p/w500/souvvkJHYhztC1UqZ8lEVUiJa3J.jpg",
+  "year": "2025",
+  "genre": "Sci-Fi, Horror, Thriller",
+  "tmdb": "1086260",
+  "type": "movie",
+  "src": "https://short.icu/VIUrgX4mv"
+},
     "stranger2": { 
         "title": "Stranger Things Season 2", 
         "img": "https://rukminim2.flixcart.com/image/480/640/jnamvm80/poster/h/w/r/large-stranger-things-season-2-poster-a3-13-x-19-inches-original-imafay3m5fddv8pg.jpeg?q=90",
@@ -764,4 +773,5 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
