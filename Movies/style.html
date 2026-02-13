@@ -49,10 +49,10 @@
                         <option value="movie">Movie</option>
                         <option value="series">Series</option>
                     </select>
-                    <input type="text" id="apiSearch" oninput="searchTMDB()" placeholder="Search Movie/Series on TMDB..." class="flex-grow p-3 rounded-xl text-sm outline-none">
+                    <input type="text" id="apiSearch" oninput="searchTMDB()" placeholder="Search Title or enter TMDB ID..." class="flex-grow p-3 rounded-xl text-sm outline-none">
                 </div>
                 <div id="tmdbResults" class="flex gap-3 overflow-x-auto pb-4 custom-scroll min-h-[140px]">
-                    <p class="text-slate-600 text-xs italic py-10 w-full text-center">Type title to search...</p>
+                    <p class="text-slate-600 text-xs italic py-10 w-full text-center">Type title or ID to search...</p>
                 </div>
                 <div id="seasonWrapper" class="hidden bg-indigo-500/10 p-4 rounded-2xl border border-indigo-500/20">
                     <label class="text-[10px] font-bold text-indigo-400 uppercase mb-2 block">Season Selector</label>
@@ -153,7 +153,7 @@ const TG_TOKEN = '7287243554:AAHa43wD_V2roGLep1aQgKHn0vqXHYlFp-M';
 const TG_CHAT = '-1003605866054';
 const IMG_BASE = 'https://image.tmdb.org/t/p/w500';
 
-// TMDB Genre Mapping - Animation mapped to "Animated"
+// TMDB Genre Mapping - Animation labeled as "Animated"
 const GENRE_MAP = {
     28: "Action", 12: "Adventure", 16: "Animated", 35: "Comedy", 80: "Crime", 
     99: "Documentary", 18: "Drama", 10751: "Family", 14: "Fantasy", 36: "History", 
@@ -184,6 +184,7 @@ function toggleType() {
     document.getElementById('movieBox').classList.toggle('hidden', isSeries);
     document.getElementById('seriesBox').classList.toggle('hidden', !isSeries);
     document.getElementById('seasonWrapper').classList.add('hidden');
+    document.getElementById('tmdbResults').innerHTML = '<p class="text-slate-600 text-xs italic py-10 w-full text-center">Type title or ID to search...</p>';
     currentFolderId = null;
     fetchAbyss();
     updateOutputs();
@@ -257,25 +258,57 @@ async function fetchAbyss(folderId = null) {
     } catch (e) { list.innerHTML = '<p class="text-red-500 text-[10px] py-10 w-full text-center font-bold">API Sync Failed.</p>'; }
 }
 
+/**
+ * Intelligent TMDB Search: Handles both Keywords and Numeric IDs
+ */
 async function searchTMDB() {
     const query = document.getElementById('apiSearch').value.trim();
     const type = document.getElementById('contentType').value === 'series' ? 'tv' : 'movie';
     const resDiv = document.getElementById('tmdbResults');
+    
     if (query.length < 2) return;
+
+    // Detect if the input is a numeric ID
+    const isNumeric = /^\d+$/.test(query);
+
     try {
-        const res = await fetch(`https://api.themoviedb.org/3/search/${type}?api_key=${TMDB_API}&query=${encodeURIComponent(query)}`);
-        const data = await res.json();
+        let results = [];
+        if (isNumeric) {
+            // Direct ID Fetch
+            const res = await fetch(`https://api.themoviedb.org/3/${type}/${query}?api_key=${TMDB_API}`);
+            if (res.ok) {
+                const data = await res.json();
+                results = [data]; // Wrap in array to reuse display logic
+            }
+        } else {
+            // Standard Keyword Search
+            const res = await fetch(`https://api.themoviedb.org/3/search/${type}?api_key=${TMDB_API}&query=${encodeURIComponent(query)}`);
+            const data = await res.json();
+            results = data.results.slice(0, 10);
+        }
+
         resDiv.innerHTML = '';
-        data.results.slice(0, 10).forEach(item => {
+        if (results.length === 0) {
+            resDiv.innerHTML = '<p class="text-slate-600 text-xs italic py-10 w-full text-center">No results found.</p>';
+            return;
+        }
+
+        results.forEach(item => {
             const card = document.createElement('div');
             card.className = 'flex-shrink-0 w-24 text-center space-y-2 cursor-pointer group';
             const poster = item.poster_path ? IMG_BASE + item.poster_path : 'https://via.placeholder.com/200x300';
             const year = (item.release_date || item.first_air_date || 'N/A').split('-')[0];
+            
             card.onclick = () => selectMovie(item, poster, year);
-            card.innerHTML = `<img src="${poster}" class="w-full h-36 object-cover rounded-xl border border-slate-800 group-hover:border-blue-500 transition-all shadow-lg"><p class="text-[9px] font-bold truncate uppercase tracking-tighter">${item.title || item.name}</p>`;
+            card.innerHTML = `
+                <img src="${poster}" class="w-full h-36 object-cover rounded-xl border border-slate-800 group-hover:border-blue-500 transition-all shadow-lg">
+                <p class="text-[9px] font-bold truncate uppercase tracking-tighter">${item.title || item.name}</p>
+            `;
             resDiv.appendChild(card);
         });
-    } catch (e) {}
+    } catch (e) {
+        resDiv.innerHTML = '<p class="text-red-500 text-xs italic py-10 w-full text-center">Search Error.</p>';
+    }
 }
 
 async function selectMovie(item, poster, year) {
@@ -287,10 +320,14 @@ async function selectMovie(item, poster, year) {
     document.getElementById('mTmdb').value = item.id;
     document.getElementById('mId').value = title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
 
-    if (item.genre_ids) {
-        const names = item.genre_ids.map(id => GENRE_MAP[id] || "").filter(n => n !== "");
-        document.getElementById('mGenre').value = names.join(", ");
+    // Handle Genres from ID list or direct genres array (if ID fetch used)
+    let genreNames = [];
+    if (item.genres) {
+        genreNames = item.genres.map(g => g.name === "Animation" ? "Animated" : g.name);
+    } else if (item.genre_ids) {
+        genreNames = item.genre_ids.map(id => GENRE_MAP[id] || "").filter(n => n !== "");
     }
+    document.getElementById('mGenre').value = genreNames.join(", ");
 
     if (document.getElementById('contentType').value === 'series') {
         const res = await fetch(`https://api.themoviedb.org/3/tv/${item.id}?api_key=${TMDB_API}`);
@@ -361,4 +398,3 @@ async function triggerTelegram() {
 </script>
 </body>
 </html>
-
