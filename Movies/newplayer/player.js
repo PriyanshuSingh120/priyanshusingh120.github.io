@@ -109,6 +109,24 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/3DPzTITfw"
 },
+    "doctor": {
+  "title": "Doctor",
+  "img": "https://image.tmdb.org/t/p/w500/ySPT0USsuDFG9pqHjI50GYOeQmj.jpg",
+  "year": "2021",
+  "genre": "Thriller, Comedy, Action",
+  "tmdb": "673692",
+  "type": "movie",
+  "src": "https://short.icu/rTxfAqZ3m"
+},
+    "mark": {
+  "title": "Mark",
+  "img": "https://image.tmdb.org/t/p/w500/6LTDv6XHiHN0N77QIFg2tidVvhh.jpg",
+  "year": "2025",
+  "genre": "Action, Thriller",
+  "tmdb": "1510339",
+  "type": "movie",
+  "src": "https://short.icu/KzX1Mt0Kf"
+},
     "rise-of-the-guardians": {
   "title": "Rise of the Guardians",
   "img": "https://image.tmdb.org/t/p/w500/sW4qOa9yF0Ikg7lppncQ0n5UhKX.jpg",
@@ -773,5 +791,6 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
