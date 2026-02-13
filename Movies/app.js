@@ -1,23 +1,24 @@
 const TMDB_API_KEY = 'dc691868b09daaabe9acc238ed898cf7'; 
-const BACKDROP_BASE = "https://image.tmdb.org/t/p/w780"; 
-const POSTER_BASE = "https://image.tmdb.org/t/p/w342"; 
+const BACKDROP_BASE = "https://image.tmdb.org/t/p/w1280"; // Higher quality for slider
+const POSTER_BASE = "https://image.tmdb.org/t/p/w500"; 
 const DISCUSSION_GROUP_ID = '-1003555701279';
 const TELEGRAM_TOKEN = '7287243554:AAHa43wD_V2roGLep1aQgKHn0vqXHYlFp-M';
 
 let movieData = []; 
-let nextSlideCache = null;
+let sliderPool = []; // Pre-fetched high-quality slider items
+let currentSliderIndex = -1;
 let watchlist = JSON.parse(localStorage.getItem('cineview_watchlist')) || [];
 
 /**
  * 1. INITIALIZE LIBRARY
  */
-function initializeLibrary() {
+async function initializeLibrary() {
     const movieGrid = document.getElementById('movieGrid');
     if (!movieGrid) return;
 
     const movieElements = Array.from(movieGrid.getElementsByClassName('movie-link'));
     
-    // Sort local library
+    // Initial sort for local library (Latest first)
     movieElements.sort((a, b) => {
         const isNewA = /2025|2026|New/i.test(a.innerText);
         const isNewB = /2025|2026|New/i.test(b.innerText);
@@ -35,54 +36,128 @@ function initializeLibrary() {
     refreshMovieData();
     loadTop10(movieElements); 
     renderWatchlist();
-    prepareNextSlide().then(() => updateSlider());
+    
+    // Start Slider System with Pre-fetching
+    await prefetchSliderData();
+    updateSlider(); // First load
+    setInterval(updateSlider, 10000); // Auto change every 10s
 }
 
 /**
- * 2. GLOBAL SEARCH SYSTEM (All Restrictions Removed)
+ * 2. PRE-FETCH SLIDER DATA (Avoids slow per-slide fetching)
+ */
+async function prefetchSliderData() {
+    try {
+        // Fetch top 20 trending globally for high-quality hero content
+        const res = await fetch(`https://api.themoviedb.org/3/trending/all/day?api_key=${TMDB_API_KEY}`);
+        const data = await res.json();
+        
+        sliderPool = data.results.map(item => ({
+            title: item.title || item.name,
+            rating: item.vote_average.toFixed(1),
+            backdrop: BACKDROP_BASE + item.backdrop_path,
+            poster: POSTER_BASE + item.poster_path,
+            // Try to find a local link for this trending item, otherwise default to search
+            link: `newplayer/player.html?tmdb=${item.id}&title=${encodeURIComponent(item.title || item.name)}&type=${item.media_type === 'tv' ? 'series' : 'movie'}`
+        })).filter(item => item.backdrop && item.poster);
+        
+        // Shuffle the initial pool
+        sliderPool.sort(() => Math.random() - 0.5);
+    } catch (e) {
+        console.error("Slider prefetch failed", e);
+    }
+}
+
+/**
+ * 3. OPTIMIZED SLIDER UPDATE
+ */
+function updateSlider() {
+    if (sliderPool.length === 0) return;
+
+    // Pick next index, avoiding immediate repeats
+    let nextIndex;
+    do {
+        nextIndex = Math.floor(Math.random() * sliderPool.length);
+    } while (nextIndex === currentSliderIndex && sliderPool.length > 1);
+    
+    currentSliderIndex = nextIndex;
+    const current = sliderPool[currentSliderIndex];
+
+    const el = { 
+        title: document.getElementById('sliderTitle'), 
+        rating: document.getElementById('movieRating'), 
+        img: document.getElementById('sliderImg'), 
+        bg: document.getElementById('sliderBg'), 
+        btn: document.getElementById('playBtn') 
+    };
+
+    if (!el.title || !el.bg) return;
+
+    // Fast Transition: Preload images before showing
+    const tempImg = new Image();
+    const tempBg = new Image();
+    
+    let loadedCount = 0;
+    const onImgLoad = () => {
+        loadedCount++;
+        if (loadedCount === 2) {
+            // Apply data only after images are ready in cache
+            el.bg.style.backgroundImage = `linear-gradient(to bottom, transparent, #050505), url('${current.backdrop}')`;
+            el.img.src = current.poster;
+            el.title.innerText = current.title;
+            el.rating.innerHTML = `⭐ ${current.rating}`;
+            el.btn.href = current.link;
+            
+            el.title.classList.remove('skeleton');
+            el.rating.classList.remove('skeleton');
+            el.img.style.opacity = "1";
+        }
+    };
+
+    el.title.classList.add('skeleton');
+    el.rating.classList.add('skeleton');
+    el.img.style.opacity = "0.3"; // Dim instead of fully hiding for smoother feel
+
+    tempImg.onload = onImgLoad;
+    tempBg.onload = onImgLoad;
+    tempImg.src = current.poster;
+    tempBg.src = current.backdrop;
+}
+
+/**
+ * 4. GLOBAL SEARCH SYSTEM
  */
 async function handleSearch(e) {
     const term = e.target.value.toLowerCase().trim();
     const movieGrid = document.getElementById('movieGrid');
     const requestBox = document.getElementById('requestBox');
     
-    // Purane dynamic results clear karein
     document.querySelectorAll('.tmdb-result').forEach(el => el.remove());
 
     let localMatches = 0;
     const localLibMap = new Set();
 
-    // 1. Local Library Filter
     document.querySelectorAll('#movieGrid .movie-link').forEach(link => {
         const titleText = link.querySelector('h3').innerText.toLowerCase();
         const isMatch = titleText.includes(term);
         link.style.display = isMatch ? '' : 'none';
-        
         if (isMatch) localMatches++;
-        
-        // Local IDs ko map karein duplicates rokne ke liye
         if (link.dataset.id) localLibMap.add(link.dataset.id.toString());
         localLibMap.add(titleText);
     });
 
-    // 2. TMDB Global Fallback Search
     if (term.length > 2) {
         try {
-            // Restriction Removed: No specific language filter in URL
             const res = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(term)}&language=en-US`);
             const data = await res.json();
             
-            // Sabhi movies aur TV shows ko allow karein
             let results = data.results.filter(m => {
                 const isValidMedia = (m.media_type === 'movie' || m.media_type === 'tv');
                 const mTitle = (m.title || m.name || "").toLowerCase();
                 const mId = (m.id || "").toString();
-                
-                // Condition: Valid media ho aur local library mein na ho
                 return isValidMedia && !localLibMap.has(mId) && !localLibMap.has(mTitle);
             });
 
-            // Latest releases ko priority dein
             results.sort((a, b) => {
                 const dateA = new Date(a.release_date || a.first_air_date || '1900-01-01');
                 const dateB = new Date(b.release_date || b.first_air_date || '1900-01-01');
@@ -92,20 +167,17 @@ async function handleSearch(e) {
 
             if(results.length > 0) {
                 requestBox.classList.add('hidden');
-                results.slice(0, 10).forEach(movie => {
+                results.slice(0, 12).forEach(movie => {
                     const type = movie.media_type;
                     const tmdbCard = document.createElement('a');
                     tmdbCard.className = 'movie-link tmdb-result';
-                    
-                    // isHindi=true flag switcher ko activate rakhta hai isliye ise rakha gaya hai
                     tmdbCard.href = `newplayer/player.html?tmdb=${movie.id}&title=${encodeURIComponent(movie.title || movie.name)}&isHindi=true&type=${type === 'tv' ? 'series' : 'movie'}`;
                     
                     const releaseYear = (movie.release_date || movie.first_air_date || 'N/A').split('-')[0];
-
                     tmdbCard.innerHTML = `
                         <div class="movie-card">
                             <div class="movie-poster-container">
-                                <span class="external-badge">${releaseYear >= 2025 ? 'NEW' : 'WEB'}</span>
+                                <span class="external-badge">${releaseYear >= 2025 ? 'NEW' : 'LIVE'}</span>
                                 <img src="${POSTER_BASE}${movie.poster_path}" class="movie-poster" onerror="this.src='https://via.placeholder.com/500x750?text=No+Poster'">
                             </div>
                             <div class="movie-info">
@@ -119,16 +191,14 @@ async function handleSearch(e) {
             } else if (localMatches === 0) {
                 requestBox.classList.remove('hidden');
             }
-        } catch (err) {
-            console.error("Search Error:", err);
-        }
+        } catch (err) { console.error("Search Error:", err); }
     } else if (term.length === 0) {
         requestBox.classList.add('hidden');
     }
 }
 
 /**
- * 3. SLIDER & TOP 10 LOGIC
+ * 5. TOP 10, WATCHLIST & UTILS
  */
 async function loadTop10(localElements) {
     const top10Grid = document.getElementById('top10Grid');
@@ -157,45 +227,9 @@ async function loadTop10(localElements) {
             clone.appendChild(num);
             top10Grid.appendChild(clone);
         });
-    } catch (e) { console.error("Top 10 failed"); }
+    } catch (e) { console.error("Top 10 load failed"); }
 }
 
-async function updateSlider() {
-    if (movieData.length === 0) return;
-    const el = { 
-        title: document.getElementById('sliderTitle'), 
-        rating: document.getElementById('movieRating'), 
-        img: document.getElementById('sliderImg'), 
-        bg: document.getElementById('sliderBg'), 
-        btn: document.getElementById('playBtn') 
-    };
-    if (!el.title) return;
-    el.title.classList.add('skeleton'); el.rating.classList.add('skeleton'); el.img.style.opacity = "0";
-    let current = nextSlideCache || await fetchSlideData();
-    if (current && el.bg) {
-        el.bg.style.backgroundImage = `linear-gradient(to bottom, transparent, #121212), url('${current.backdrop}')`;
-        el.title.innerText = current.title; el.rating.innerHTML = `⭐ ${current.rating}`; el.img.src = current.poster; el.btn.href = current.link;
-        el.img.onload = () => { el.title.classList.remove('skeleton'); el.rating.classList.remove('skeleton'); el.img.style.opacity = "1"; };
-    }
-    prepareNextSlide();
-}
-
-async function fetchSlideData() {
-    if (movieData.length === 0) return null;
-    const movie = movieData[Math.floor(Math.random() * Math.min(movieData.length, 30))];
-    try {
-        const url = movie.id ? `https://api.themoviedb.org/3/find/${movie.id}?api_key=${TMDB_API_KEY}&external_source=imdb_id` : `https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(movie.searchTitle)}&language=en-US`;
-        const res = await fetch(url); const data = await res.json();
-        const result = movie.id ? (data.movie_results?.[0] || data.tv_results?.[0]) : data.results?.[0];
-        if (result) return { title: movie.title, rating: result.vote_average.toFixed(1), backdrop: BACKDROP_BASE + result.backdrop_path, poster: POSTER_BASE + result.poster_path, link: movie.link };
-    } catch (e) { return null; }
-}
-
-async function prepareNextSlide() { nextSlideCache = await fetchSlideData(); }
-
-/**
- * 4. REQUESTS & WATCHLIST
- */
 async function sendRequest() {
     const input = document.querySelector('.search-input');
     const movieName = input.value.trim();
@@ -262,5 +296,4 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeLibrary();
     const inputs = document.querySelectorAll('.search-input');
     inputs.forEach(input => input.addEventListener('input', handleSearch));
-    setInterval(updateSlider, 12000);
 });
