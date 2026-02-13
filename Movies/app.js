@@ -1,11 +1,11 @@
 const TMDB_API_KEY = 'dc691868b09daaabe9acc238ed898cf7'; 
-const BACKDROP_BASE = "https://image.tmdb.org/t/p/w1280"; // Higher quality for slider
+const BACKDROP_BASE = "https://image.tmdb.org/t/p/w1280"; 
 const POSTER_BASE = "https://image.tmdb.org/t/p/w500"; 
 const DISCUSSION_GROUP_ID = '-1003555701279';
 const TELEGRAM_TOKEN = '7287243554:AAHa43wD_V2roGLep1aQgKHn0vqXHYlFp-M';
 
 let movieData = []; 
-let sliderPool = []; // Pre-fetched high-quality slider items
+let sliderPool = []; 
 let currentSliderIndex = -1;
 let watchlist = JSON.parse(localStorage.getItem('cineview_watchlist')) || [];
 
@@ -18,7 +18,7 @@ async function initializeLibrary() {
 
     const movieElements = Array.from(movieGrid.getElementsByClassName('movie-link'));
     
-    // Initial sort for local library (Latest first)
+    // Sort local library (Latest 2025/2026 hits top par)
     movieElements.sort((a, b) => {
         const isNewA = /2025|2026|New/i.test(a.innerText);
         const isNewB = /2025|2026|New/i.test(b.innerText);
@@ -33,48 +33,60 @@ async function initializeLibrary() {
         addWatchlistButton(el); 
     });
 
+    // Pehle local data refresh karein taaki slider local links dhoond sake
     refreshMovieData();
     loadTop10(movieElements); 
     renderWatchlist();
     
-    // Start Slider System with Pre-fetching
+    // Phir slider start karein
     await prefetchSliderData();
-    updateSlider(); // First load
-    setInterval(updateSlider, 10000); // Auto change every 10s
+    updateSlider(); 
+    setInterval(updateSlider, 12000); 
 }
 
 /**
- * 2. PRE-FETCH SLIDER DATA (Avoids slow per-slide fetching)
+ * 2. PRE-FETCH SLIDER DATA (Smart Link Detection)
  */
 async function prefetchSliderData() {
     try {
-        // Fetch top 20 trending globally for high-quality hero content
+        // Trending content fetch karein
         const res = await fetch(`https://api.themoviedb.org/3/trending/all/day?api_key=${TMDB_API_KEY}`);
         const data = await res.json();
         
-        sliderPool = data.results.map(item => ({
-            title: item.title || item.name,
-            rating: item.vote_average.toFixed(1),
-            backdrop: BACKDROP_BASE + item.backdrop_path,
-            poster: POSTER_BASE + item.poster_path,
-            // Try to find a local link for this trending item, otherwise default to search
-            link: `newplayer/player.html?tmdb=${item.id}&title=${encodeURIComponent(item.title || item.name)}&type=${item.media_type === 'tv' ? 'series' : 'movie'}`
-        })).filter(item => item.backdrop && item.poster);
+        sliderPool = data.results.map(item => {
+            const tmdbId = item.id.toString();
+            const title = (item.title || item.name || "").toLowerCase();
+            
+            // Check karein ki kya ye movie hamari local library mein hai
+            const localMatch = movieData.find(m => 
+                (m.id && m.id === tmdbId) || 
+                m.title.toLowerCase() === title ||
+                title.includes(m.title.toLowerCase())
+            );
+
+            return {
+                title: item.title || item.name,
+                rating: item.vote_average.toFixed(1),
+                backdrop: BACKDROP_BASE + item.backdrop_path,
+                poster: POSTER_BASE + item.poster_path,
+                // Agar local match milta hai toh local link, warna search fallback
+                link: localMatch ? localMatch.link : `newplayer/player.html?tmdb=${item.id}&title=${encodeURIComponent(item.title || item.name)}&type=${item.media_type === 'tv' ? 'series' : 'movie'}&isHindi=true`
+            };
+        }).filter(item => item.backdrop && item.poster);
         
-        // Shuffle the initial pool
+        // Initial shuffle
         sliderPool.sort(() => Math.random() - 0.5);
     } catch (e) {
-        console.error("Slider prefetch failed", e);
+        console.error("Slider loading error", e);
     }
 }
 
 /**
- * 3. OPTIMIZED SLIDER UPDATE
+ * 3. FAST SLIDER UPDATE (No Repetition)
  */
 function updateSlider() {
     if (sliderPool.length === 0) return;
 
-    // Pick next index, avoiding immediate repeats
     let nextIndex;
     do {
         nextIndex = Math.floor(Math.random() * sliderPool.length);
@@ -93,15 +105,14 @@ function updateSlider() {
 
     if (!el.title || !el.bg) return;
 
-    // Fast Transition: Preload images before showing
+    // Image Pre-loading for Smooth Transition
     const tempImg = new Image();
     const tempBg = new Image();
-    
-    let loadedCount = 0;
-    const onImgLoad = () => {
-        loadedCount++;
-        if (loadedCount === 2) {
-            // Apply data only after images are ready in cache
+    let loaded = 0;
+
+    const checkAllLoaded = () => {
+        loaded++;
+        if (loaded === 2) {
             el.bg.style.backgroundImage = `linear-gradient(to bottom, transparent, #050505), url('${current.backdrop}')`;
             el.img.src = current.poster;
             el.title.innerText = current.title;
@@ -116,16 +127,16 @@ function updateSlider() {
 
     el.title.classList.add('skeleton');
     el.rating.classList.add('skeleton');
-    el.img.style.opacity = "0.3"; // Dim instead of fully hiding for smoother feel
+    el.img.style.opacity = "0.2"; 
 
-    tempImg.onload = onImgLoad;
-    tempBg.onload = onImgLoad;
+    tempImg.onload = checkAllLoaded;
+    tempBg.onload = checkAllLoaded;
     tempImg.src = current.poster;
     tempBg.src = current.backdrop;
 }
 
 /**
- * 4. GLOBAL SEARCH SYSTEM
+ * 4. GLOBAL SEARCH (No Restrictions)
  */
 async function handleSearch(e) {
     const term = e.target.value.toLowerCase().trim();
@@ -161,8 +172,7 @@ async function handleSearch(e) {
             results.sort((a, b) => {
                 const dateA = new Date(a.release_date || a.first_air_date || '1900-01-01');
                 const dateB = new Date(b.release_date || b.first_air_date || '1900-01-01');
-                if (dateB - dateA !== 0) return dateB - dateA;
-                return b.popularity - a.popularity;
+                return dateB - dateA || b.popularity - a.popularity;
             });
 
             if(results.length > 0) {
@@ -191,15 +201,24 @@ async function handleSearch(e) {
             } else if (localMatches === 0) {
                 requestBox.classList.remove('hidden');
             }
-        } catch (err) { console.error("Search Error:", err); }
+        } catch (err) { console.error("Search Error", err); }
     } else if (term.length === 0) {
         requestBox.classList.add('hidden');
     }
 }
 
 /**
- * 5. TOP 10, WATCHLIST & UTILS
+ * 5. UTILS & WATCHLIST
  */
+function refreshMovieData() {
+    movieData = Array.from(document.querySelectorAll('#movieGrid .movie-link')).map(card => ({ 
+        link: card.getAttribute('href'), 
+        title: card.querySelector('h3')?.innerText || 'Untitled', 
+        id: card.dataset.id || "", 
+        searchTitle: card.querySelector('h3')?.innerText.replace(/\[.*?\]/g, '').trim() || '' 
+    }));
+}
+
 async function loadTop10(localElements) {
     const top10Grid = document.getElementById('top10Grid');
     if (!top10Grid) return;
@@ -227,7 +246,7 @@ async function loadTop10(localElements) {
             clone.appendChild(num);
             top10Grid.appendChild(clone);
         });
-    } catch (e) { console.error("Top 10 load failed"); }
+    } catch (e) { console.error("Top 10 error"); }
 }
 
 async function sendRequest() {
@@ -236,20 +255,11 @@ async function sendRequest() {
     if (!movieName) return;
     const btn = document.getElementById('reqBtn');
     btn.innerText = "Sending..."; btn.disabled = true;
-    const message = `<b>📥 NEW MOVIE REQUEST</b>\n\n<b>🎬 Movie:</b> ${movieName}\n\n<i>CineView Global Request</i>`;
+    const message = `<b>📥 NEW MOVIE REQUEST</b>\n\n<b>🎬 Movie:</b> ${movieName}\n\n<i>CineView User Request</i>`;
     try {
         await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: DISCUSSION_GROUP_ID, text: message, parse_mode: 'HTML' }) });
         document.getElementById('requestBox').innerHTML = `<h3 style="color:#00ff00;">✅ Request Sent!</h3><p style="font-size: 13px; color: #888;">Admin notified.</p>`;
     } catch (e) { btn.innerText = "Error! Retry"; btn.disabled = false; }
-}
-
-function refreshMovieData() {
-    movieData = Array.from(document.querySelectorAll('#movieGrid .movie-link')).map(card => ({ 
-        link: card.getAttribute('href'), 
-        title: card.querySelector('h3')?.innerText || 'Untitled', 
-        id: card.dataset.id || "", 
-        searchTitle: card.querySelector('h3')?.innerText.replace(/\[.*?\]/g, '').trim() || '' 
-    }));
 }
 
 function addWatchlistButton(card) {
