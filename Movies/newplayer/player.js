@@ -100,6 +100,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/TW8VmJ33b"
 },
+    "o-romeo": {
+  "title": "O'Romeo",
+  "img": "https://image.tmdb.org/t/p/w500/Apqc5JSXQtUJPcBGm6tBO6wQaoq.jpg",
+  "year": "2026",
+  "genre": "Crime, Drama, Action",
+  "tmdb": "1275574",
+  "type": "movie",
+  "src": "https://short.icu/3DPzTITfw"
+},
     "rise-of-the-guardians": {
   "title": "Rise of the Guardians",
   "img": "https://image.tmdb.org/t/p/w500/sW4qOa9yF0Ikg7lppncQ0n5UhKX.jpg",
@@ -755,3 +764,4 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
