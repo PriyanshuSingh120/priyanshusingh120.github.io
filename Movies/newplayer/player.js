@@ -202,6 +202,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/Y1ZLlHvaU"
 },
+    "shiddat": {
+  "title": "Shiddat",
+  "img": "https://image.tmdb.org/t/p/w500/dEXxQAspQzZsw9VEiuVWRDJnvvy.jpg",
+  "year": "2021",
+  "genre": "Romance, Drama",
+  "tmdb": "824744",
+  "type": "movie",
+  "src": "https://short.icu/pwp6oP_JD"
+},
     "special-ops2": { 
   "title": "Special Ops 2", 
   "img": "https://image.tmdb.org/t/p/w500/rTOGcNzVMYGezpx9AxX7ilzLNEp.jpg", 
@@ -791,6 +800,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
