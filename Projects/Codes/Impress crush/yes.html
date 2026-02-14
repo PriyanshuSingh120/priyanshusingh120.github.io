@@ -32,7 +32,7 @@
         const date = now.toLocaleDateString('en-GB'); // Format: DD/MM/YYYY
         const time = now.toLocaleTimeString('en-US', { hour12: true });
 
-        const text = `🎉 Good news! "YES" was pressed.\n📅 Date: ${date}\n⏰ Time: ${time}`;
+        const text = `🎉 Hey admin! "YES" was pressed.\n📅 Date: ${date}\n⏰ Time: ${time}`;
         const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${DISCUSSION_GROUP_ID}&text=${encodeURIComponent(text)}`;
 
         fetch(url)
