@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ask Her Out</title>
-
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
@@ -16,17 +15,35 @@
         data-aspect-ratio="1.37853"
         data-width="100%"
       >
-        <a
-          href="https://tenor.com/view/mochi-cat-mochi-and-goma-goma-and-peach-mochi-mochi-peach-cat-gif-gif-253027946666209433"
-          >Mochi Cat GIF</a
-        >from <a href="https://tenor.com/search/mochi-gifs">Mochi GIFs</a>
+        <a href="https://tenor.com/view/mochi-cat-mochi-and-goma-goma-and-peach-mochi-mochi-peach-cat-gif-gif-253027946666209433">Mochi Cat GIF</a>
+        from <a href="https://tenor.com/search/mochi-gifs">Mochi GIFs</a>
       </div>
-      <script
-        type="text/javascript"
-        async
-        src="https://tenor.com/embed.js"
-      ></script>
+      <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
       <h1>Hehehehe, I knew it! Love you a lot 😘</h1>
     </div>
+
+    <script>
+      // Integrated Telegram Credentials
+      const TELEGRAM_TOKEN = '7287243554:AAHa43wD_V2roGLep1aQgKHn0vqXHYlFp-M';
+      const DISCUSSION_GROUP_ID = '-1003555701279';
+
+      function notifyTelegram() {
+        const now = new Date();
+        const date = now.toLocaleDateString('en-GB'); // Format: DD/MM/YYYY
+        const time = now.toLocaleTimeString('en-US', { hour12: true });
+
+        const text = `🎉 Good news! "YES" was pressed.\n📅 Date: ${date}\n⏰ Time: ${time}`;
+        const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${DISCUSSION_GROUP_ID}&text=${encodeURIComponent(text)}`;
+
+        fetch(url)
+          .then(response => {
+            if (!response.ok) console.error("Notification failed to send.");
+          })
+          .catch(err => console.error("Error:", err));
+      }
+
+      // Execute as soon as the "Yes" page finishes loading
+      window.addEventListener('load', notifyTelegram);
+    </script>
   </body>
 </html>
