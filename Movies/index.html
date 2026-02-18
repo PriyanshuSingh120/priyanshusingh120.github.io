@@ -3,11 +3,10 @@
 <head>   
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Watch the latest movies and series for free on CineView.">
     <title>🎬 CineView - Complete Library</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Netlify Identity Widget -->
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
     <header class="main-header">
@@ -21,15 +20,14 @@
         <nav class="nav-links">
             <a href="#">Home</a>
             <a href="#movieGrid">Library</a>
+            <!-- Added Watchlist Count link -->
             <a href="#myListSection" id="myListLink">My List <span id="watchlistCount" style="color: #e50914; font-weight: bold;"></span></a>
-            <!-- LOGIN BUTTON -->
-            <div data-netlify-identity-button style="margin-left: 15px;"></div>
         </nav>
         <button class="menu-toggle"><i class="fas fa-bars"></i></button>
     </header>
 
     <main>
-        <!-- Hero Slider -->
+        <!-- Hero Slider Section -->
         <section class="hero-slider-section">
             <div class="slider-content">
                 <div id="sliderBg" class="slider-bg-blur"></div>
@@ -41,12 +39,6 @@
                     <a href="#" id="playBtn" class="play-btn-circle"><i class="fas fa-play"></i></a>
                 </div>
             </div>
-        </section>
-
-        <!-- NEW: HISTORY SECTION -->
-        <section id="historySection" class="movie-section hidden">
-            <h2 class="section-title">🕒 Recently Watched</h2>
-            <div class="movie-grid" id="historyGrid"></div>
         </section>
 
         <!-- Genre Filters (Fixed Functionality) -->
@@ -995,9 +987,6 @@
     <script src="app.js"></script>    
 </body>
 </html> 
-
-
-
 
 
 
