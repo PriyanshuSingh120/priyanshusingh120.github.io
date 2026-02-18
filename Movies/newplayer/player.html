@@ -4,127 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">Cineview Premium Player</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script type="module" src="cineview-cloud.js"></script>
     <style>
-        :root { --primary: #e50914; --bg: #050505; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: white; margin: 0; }
+        .interaction-bar { display: flex; align-items: center; gap: 20px; margin: 20px 0; border-bottom: 1px solid #222; padding-bottom: 20px; }
+        .like-btn { background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        .like-btn.liked { background: #e50914; border-color: #e50914; }
         
-        /* Premium Switcher Styling */
-        .server-switcher { 
-            display: none; 
-            margin: 20px 0; 
-            gap: 10px; 
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .server-label { 
-            font-size: 11px; 
-            font-weight: 800; 
-            color: #777; 
-            text-transform: uppercase; 
-            letter-spacing: 1px;
-            margin-right: 5px;
-        }
-        .server-btn { 
-            background: #1a1a1a; 
-            color: #999; 
-            border: 1px solid #333; 
-            padding: 12px 20px; 
-            border-radius: 12px; 
-            cursor: pointer; 
-            font-size: 13px; 
-            font-weight: 700; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .server-btn.active { 
-            background: var(--primary); 
-            color: white; 
-            border-color: var(--primary);
-            box-shadow: 0 8px 25px rgba(229, 9, 20, 0.4);
-            transform: translateY(-2px);
-        }
-        .server-btn:hover:not(.active) { background: #222; border-color: #555; color: white; }
-
-        /* Layout Fixes */
-        .video-player-container { width: 100%; max-width: 1240px; margin: 0 auto; padding: 20px; box-sizing: border-box; }
-        .video-frame-area { 
-            position: relative; padding-bottom: 56.25%; height: 0; 
-            background: #000; border-radius: 20px; overflow: hidden; 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.9);
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .video-frame-area iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-
-        .player-title { font-size: 32px; font-weight: 800; margin: 25px 0 10px; color: #fff; }
-        .player-metadata { display: flex; gap: 20px; color: #888; font-size: 15px; margin-bottom: 20px; }
-        .player-metadata span i { color: var(--primary); }
-        
-        #episodeSelectorArea { margin: 20px 0; }
-        #episodeDropdown { 
-            background: #111; color: #fff; border: 1px solid #333; padding: 14px; 
-            border-radius: 12px; width: 100%; max-width: 320px; cursor: pointer; font-weight: 600;
-        }
-
-        .movie-description { color: #aaa; line-height: 1.7; font-size: 16px; max-width: 850px; }
-
-        @media (max-width: 768px) {
-            .player-title { font-size: 24px; }
-            .server-btn { padding: 10px 15px; font-size: 12px; }
-            .video-player-container { padding: 10px; }
-        }
+        .comment-section { margin-top: 40px; background: #0a0a0a; padding: 25px; border-radius: 20px; border: 1px solid #1a1a1a; }
+        .comment-input-area { display: flex; gap: 10px; margin-bottom: 30px; }
+        .comment-input-area input { flex: 1; background: #1a1a1a; border: 1px solid #333; padding: 12px; border-radius: 10px; color: white; }
+        .comment-list { display: flex; flex-direction: column; gap: 15px; }
+        .comment-item { background: #151515; padding: 15px; border-radius: 12px; }
+        .comment-user { font-weight: bold; font-size: 14px; color: #e50914; margin-bottom: 5px; display: block; }
+        .comment-text { font-size: 15px; color: #ccc; }
     </style>
 </head>
 <body>
-    <main>
-        <div class="video-player-container">
-            <div class="video-frame-area">
-                <iframe id="mainVideoPlayer" src="" allowfullscreen allow="autoplay; encrypted-media"></iframe>
-            </div>
+    <div class="video-player-container">
+        <div class="video-frame-area">
+            <iframe id="mainVideoPlayer" src="" allowfullscreen></iframe>
+        </div>
 
-            <div class="player-content-area">
-                <h1 id="displayTitle" class="player-title">Loading Movie...</h1>
-                
-                <div id="serverSwitcher" class="server-switcher">
-                    <span class="server-label">Servers:</span>
-                    <button id="btn-s1" class="server-btn active" onclick="switchServer(1)"><i class="fas fa-play"></i> Abyss</button>
-                    <button id="btn-s2" class="server-btn" onclick="switchServer(2)"><i class="fas fa-language"></i> Smashy</button>
-                    <button id="btn-s3" class="server-btn" onclick="switchServer(3)"><i class="fas fa-bolt"></i> VIDEASY</button>
-                    <button id="btn-s4" class="server-btn" onclick="switchServer(4)"><i class="fas fa-server"></i> Backup</button>
-                </div>
-
-                <div class="player-metadata">
-                    <span id="imdbRatingDisplay">N/A</span>
-                    <span id="displayYear">----</span>
-                    <span><i class="fas fa-check-circle"></i> HD | multi-language</span>
-                </div>
-
-                <div id="episodeSelectorArea" style="display: none;">
-                    <select id="episodeDropdown" onchange="loadSpecificEpisode(this.value)"></select>
-                </div>
-            
-                <div class="movie-description-wrapper">
-                    <h3 style="color: var(--primary); font-size: 14px; text-transform: uppercase; margin-bottom: 10px;">Storyline</h3>
-                    <p id="movieDescription" class="movie-description">Fetching movie overview...</p>
-                </div>
+        <h1 id="displayTitle" class="player-title">Loading...</h1>
+        
+        <div class="interaction-bar">
+            <button id="likeMovieBtn" class="like-btn">
+                <i class="fas fa-heart"></i> <span id="likeCount">Like</span>
+            </button>
+            <div class="player-metadata">
+                <span id="imdbRatingDisplay">N/A</span>
+                <span id="displayYear">----</span>
             </div>
         </div>
 
-        <div class="container" style="padding: 20px; max-width: 1240px; margin: 0 auto;">
-            <h3 style="margin-bottom: 25px; font-size: 22px;">⚡ More Recommendations</h3>
-            <div id="recommendationGrid" class="movie-grid"></div>
+        <!-- Comment Section -->
+        <div class="comment-section">
+            <h3>💬 Community Discussion</h3>
+            <div id="commentBox" class="comment-input-area">
+                <input type="text" id="userCommentInput" placeholder="Write a comment...">
+                <button id="postCommentBtn" class="server-btn active">Post</button>
+            </div>
+            <div id="commentsContainer" class="comment-list">
+                <p style="color: #666;">Loading comments...</p>
+            </div>
         </div>
-    </main>
+
+        <!-- Recommendations... -->
+        <div id="recommendationGrid" class="movie-grid"></div>
+    </div>
     <script src="player.js"></script>
 </body>
 </html>
-
 
