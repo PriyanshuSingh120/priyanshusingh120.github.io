@@ -713,84 +713,160 @@ const movieDatabase = {
 
 
 
-async function cloudTrack(action, data = {}) {
-    if (typeof netlifyIdentity === 'undefined') return null;
-    const user = netlifyIdentity.currentUser();
-    if (!user && action !== 'getComments') return null;
-    try {
-        const res = await fetch('/.netlify/functions/api', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action, userId: user?.id, userName: user?.email?.split('@')[0], ...data })
-        });
-        return await res.json();
-    } catch (e) { return null; }
-}
+let sources = { s1: '', s2: '', s3: '', s4: '' };
 
 function initPlayer() {
     const urlParams = new URLSearchParams(window.location.search);
     const movieId = urlParams.get('id');
     const tmdbId = urlParams.get('tmdb');
+    const isHindi = urlParams.get('isHindi') === 'true';
+    const typeParam = urlParams.get('type') || 'movie';
+
     const player = document.getElementById('mainVideoPlayer');
     const titleEl = document.getElementById('displayTitle');
+    const switcher = document.getElementById('serverSwitcher');
+    const selectorArea = document.getElementById('episodeSelectorArea');
+    const dropdown = document.getElementById('episodeDropdown');
 
+    if(switcher) switcher.style.display = 'none';
+
+    // SCENARIO 1: Movie is in movieDatabase
     if (movieId && movieDatabase[movieId]) {
         const movie = movieDatabase[movieId];
+        const isSeries = movie.isSeries || false;
+        const typePath = isSeries ? 'tv' : 'movie';
+        
+        // Use database title (Prevents manipulation)
         titleEl.innerText = movie.title;
-        player.src = movie.episodes ? movie.episodes[0] : movie.src;
-        
-        // Save to History
-        cloudTrack('addHistory', { 
-            movieId: movieId, 
-            movieData: { id: movieId, title: movie.title, img: movie.img, link: window.location.href } 
-        });
-        loadComments(movieId);
-    } else if (tmdbId) {
-        const title = decodeURIComponent(urlParams.get('title') || "Now Playing");
-        titleEl.innerText = title;
-        player.src = `https://player.smashy.stream/movie/${tmdbId}`;
-        
-        cloudTrack('addHistory', { 
-            movieId: tmdbId, 
-            movieData: { id: tmdbId, title: title, img: `https://image.tmdb.org/t/p/w500/${tmdbId}`, link: window.location.href } 
-        });
-        loadComments(tmdbId);
-    }
-}
 
-async function loadComments(movieId) {
-    const container = document.getElementById('commentsContainer');
-    if (!container) return;
-    const comments = await cloudTrack('getComments', { movieId });
-    if (comments) {
-        container.innerHTML = comments.map(c => `
-            <div style="background:#111; padding:10px; border-radius:8px; margin-bottom:10px;">
-                <strong style="color:#e50914">@${c.user_name}</strong>
-                <p style="margin:5px 0 0; color:#ccc">${c.text}</p>
-            </div>
-        `).join('') || "<p>No comments yet.</p>";
-    }
-}
-
-// Add event listener for Post button
-document.addEventListener('DOMContentLoaded', () => {
-    const postBtn = document.getElementById('postCommentBtn');
-    if (postBtn) {
-        postBtn.onclick = async () => {
-            const input = document.getElementById('commentInput');
-            const urlParams = new URLSearchParams(window.location.search);
-            const movieId = urlParams.get('id') || urlParams.get('tmdb');
-            if (input.value.trim()) {
-                await cloudTrack('postComment', { movieId, text: input.value });
-                input.value = "";
-                loadComments(movieId);
+        // Setup S1 (Local)
+        if (movie.episodes && movie.episodes.length > 0) {
+            if(selectorArea) selectorArea.style.display = 'block';
+            if(dropdown) {
+                dropdown.innerHTML = "";
+                movie.episodes.forEach((url, i) => {
+                    let opt = document.createElement('option');
+                    opt.value = url; opt.innerText = `Episode ${i + 1}`;
+                    dropdown.appendChild(opt);
+                });
             }
-        };
+            sources.s1 = movie.episodes[0];
+        } else {
+            sources.s1 = movie.src;
+            if(selectorArea) selectorArea.style.display = 'none';
+        }
+
+        // Setup Backups using manual-compliant URLs
+        if (movie.tmdb) {
+            sources.s2 = `https://player.smashy.stream/${typePath}/${movie.tmdb}${isSeries ? '?s=1&e=1' : ''}`;
+            sources.s3 = `https://player.videasy.net/${typePath}/${movie.tmdb}?color=e50914&overlay=true&episodeSelector=true`;
+            sources.s4 = `https://vidsrc.xyz/embed/${typePath}/${movie.tmdb}`;
+            if(switcher) switcher.style.display = 'flex';
+        }
+
+        player.src = sources.s1;
+        fetchMetaData(movie.title, movie.tmdb, isSeries, false); // false = Don't change title
+        generateRecommendations(movieId);
+    } 
+    // SCENARIO 2: External Search Results
+    else if (tmdbId) {
+        const title = decodeURIComponent(urlParams.get('title') || "Now Playing");
+        const isSeries = typeParam === 'series';
+        const typePath = isSeries ? 'tv' : 'movie';
+        titleEl.innerText = title;
+        if(selectorArea) selectorArea.style.display = 'none';
+
+        // Smashy Priority for external
+        sources.s1 = `https://player.smashy.stream/${typePath}/${tmdbId}${isSeries ? '?s=1&e=1' : ''}`;
+        sources.s2 = `https://player.videasy.net/${typePath}/${tmdbId}?color=e50914&overlay=true`;
+        sources.s3 = `https://vidsrc.xyz/embed/${typePath}/${tmdbId}`;
+        sources.s4 = `https://www.2embed.cc/embed/${isSeries ? 'tv' : ''}${tmdbId}${isSeries ? '&s=1&e=1' : ''}`;
+
+        // Label updates
+        if(document.getElementById('btn-s1')) document.getElementById('btn-s1').innerHTML = `<i class="fas fa-language"></i> Smashy`;
+        if(document.getElementById('btn-s2')) document.getElementById('btn-s2').innerHTML = `<i class="fas fa-bolt"></i> VIDEASY`;
+        if(document.getElementById('btn-s3')) document.getElementById('btn-s3').innerHTML = `<i class="fas fa-server"></i> Vidsrc`;
+
+        if(switcher) switcher.style.display = 'flex';
+        player.src = sources.s1;
+        fetchMetaData(title, tmdbId, isSeries, true); // true = allow title update for search
+        generateRecommendations('random');
     }
-});
+}
 
+function switchServer(num) {
+    const player = document.getElementById('mainVideoPlayer');
+    const btns = document.querySelectorAll('.server-btn');
+    btns.forEach(btn => {
+        if(btn.id === `btn-s${num}`) btn.classList.add('active');
+        else btn.classList.remove('active');
+    });
+    const srcList = [sources.s1, sources.s2, sources.s3, sources.s4];
+    if(srcList[num-1]) player.src = srcList[num-1];
+}
+
+function loadSpecificEpisode(url) {
+    document.getElementById('mainVideoPlayer').src = url;
+    sources.s1 = url;
+}
+
+async function fetchMetaData(title, id, isSeries, updateTitle) {
+    const type = isSeries ? 'tv' : 'movie';
+    const cleanTitle = title.replace(/Season \d+/i, '').replace(/\[.*?\]/g, '').trim();
+    let url = id 
+        ? `https://api.themoviedb.org/3/${type}/${id}?api_key=${TMDB_API_KEY}&language=en-US`
+        : `https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(cleanTitle)}&language=en-US`;
+
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
+        const best = (data.results && data.results.length > 0) ? data.results[0] : data;
+
+        if (best && !best.status_message) {
+            const ratingEl = document.getElementById('imdbRatingDisplay');
+            const yearEl = document.getElementById('displayYear');
+            const descEl = document.getElementById('movieDescription');
+
+            if(ratingEl) ratingEl.innerHTML = `<i class="fab fa-imdb" style="color: #f5c518;"></i> Rating: ${best.vote_average?.toFixed(1) || 'N/A'}`;
+            if(yearEl) yearEl.innerHTML = `<i class="far fa-calendar-alt"></i> ${(best.release_date || best.first_air_date || '2025').split('-')[0]}`;
+            if(descEl) descEl.innerText = best.overview || "Storyline details not available.";
+            
+            // Fix: Update title ONLY if search scenario, not for database items
+            if(updateTitle) {
+                const engTitle = best.title || best.name;
+                if(engTitle) document.getElementById('displayTitle').innerText = engTitle;
+            }
+        }
+    } catch (e) { console.error("Meta failed"); }
+}
+
+function generateRecommendations(currentId) {
+    const grid = document.getElementById('recommendationGrid');
+    if (!grid) return;
+    const keys = Object.keys(movieDatabase).filter(k => k !== currentId);
+    const shuffled = keys.sort(() => 0.5 - Math.random()).slice(0, 10);
+    grid.innerHTML = "";
+    shuffled.forEach(k => {
+        const item = movieDatabase[k];
+        const card = document.createElement('a');
+        // This ensures the recommendation link carries all needed params
+        const finalHref = item.tmdb ? `player.html?id=${k}&tmdb=${item.tmdb}&type=${item.isSeries ? 'series' : 'movie'}` : `player.html?id=${k}`;
+        card.href = finalHref;
+        card.className = 'movie-link';
+        card.innerHTML = `
+            <div class="movie-card">
+                <div class="movie-poster-container">
+                    <img src="${item.img}" class="movie-poster" loading="lazy">
+                </div>
+                <div class="movie-info"><h3>${item.title}</h3></div>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+// Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
-
 
 
 
