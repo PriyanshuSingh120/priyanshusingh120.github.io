@@ -16,6 +16,51 @@ const movieDatabase = {
   "isSeries": true, 
   "episodes": ["https://short.icu/OECS7_O1Hh","https://short.icu/cy9s-nJSj","https://short.icu/2yMkFxb9V","https://short.icu/mUHwqpGa3","https://short.icu/Xw1za7G8e","https://short.icu/5cQX07cVU","https://short.icu/XDMYlF0qI","https://short.icu/ZiEXDePH10","https://short.icu/y6R6dRk4N","https://short.icu/GcXTWdzM3"] 
 },
+    "mercy": {
+  "title": "Mercy",
+  "img": "https://image.tmdb.org/t/p/w500/pyok1kZJCfyuFapYXzHcy7BLlQa.jpg",
+  "year": "2026",
+  "genre": "Sci-Fi, Action, Thriller",
+  "tmdb": "1236153",
+  "type": "movie",
+  "src": "https://short.icu/8vi-2dDjV"
+},
+    "vanaveera": {
+  "title": "Vanaveera",
+  "img": "https://image.tmdb.org/t/p/w500/gCrNwHpoZ0haxm0jZxc9JHgyLq7.jpg",
+  "year": "2026",
+  "genre": "Drama, Action",
+  "tmdb": "1588621",
+  "type": "movie",
+  "src": "https://short.icu/ZY8wrb8si"
+},
+    "harry-potter-and-the-deathly-hallows-part-2": {
+  "title": "Harry Potter and the Deathly Hallows: Part 2",
+  "img": "https://image.tmdb.org/t/p/w500/c54HpQmuwXjHq2C9wmoACjxoom3.jpg",
+  "year": "2011",
+  "genre": "Adventure, Fantasy",
+  "tmdb": "12445",
+  "type": "movie",
+  "src": "https://short.icu/rJ3U8nKF1"
+},
+    "harry-potter-and-the-deathly-hallows-part-1": {
+  "title": "Harry Potter and the Deathly Hallows: Part 1",
+  "img": "https://image.tmdb.org/t/p/w500/iGoXIpQb7Pot00EEdwpwPajheZ5.jpg",
+  "year": "2010",
+  "genre": "Adventure, Fantasy",
+  "tmdb": "12444",
+  "type": "movie",
+  "src": "https://short.icu/XoDotskI6"
+},
+    "how-to-train-your-dragon": {
+  "title": "How to Train Your Dragon",
+  "img": "https://image.tmdb.org/t/p/w500/ygGmAO60t8GyqUo9xYeYxSZAR3b.jpg",
+  "year": "2010",
+  "genre": "Fantasy, Adventure, Animated, Family",
+  "tmdb": "10191",
+  "type": "movie",
+  "src": "https://short.icu/du8P_P4oS"
+},
     "vadh-2": {
   "title": "Vadh 2",
   "img": "https://image.tmdb.org/t/p/w500/pOJAaLMsc7T5rwVDTA7SRg9SAEU.jpg",
@@ -800,6 +845,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
