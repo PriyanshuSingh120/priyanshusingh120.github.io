@@ -9,15 +9,14 @@ let sliderPool = [];
 let currentSliderIndex = -1;
 let watchlist = JSON.parse(localStorage.getItem('cineview_watchlist')) || [];
 
-// --- CLOUD SYNC HELPERS (Neon DB + Netlify Identity) ---
+// --- CLOUD SYNC HELPERS (Relative to root) ---
 async function cloudFetch(action, data = {}) {
     if (typeof netlifyIdentity === 'undefined') return null;
     const user = netlifyIdentity.currentUser();
-    
-    // Allow 'getComments' without login, others require it
     if (!user && (action !== 'getComments')) return null;
     
     try {
+        // Path is ALWAYS root-based for Netlify Functions
         const res = await fetch('/.netlify/functions/api', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -35,15 +34,11 @@ async function cloudFetch(action, data = {}) {
     }
 }
 
-// History Sync
 async function loadHistory() {
     const history = await cloudFetch('getHistory');
     const grid = document.getElementById('historyGrid');
     const section = document.getElementById('historySection');
-    if (!grid || !history || history.length === 0) {
-        if(section) section.classList.add('hidden');
-        return;
-    }
+    if (!grid || !history || history.length === 0) return;
 
     section.classList.remove('hidden');
     grid.innerHTML = history.map(m => `
@@ -64,8 +59,6 @@ async function initializeLibrary() {
     if (!movieGrid) return;
 
     const movieElements = Array.from(movieGrid.getElementsByClassName('movie-link'));
-    
-    // Sort logic
     movieElements.sort((a, b) => {
         const isNewA = /2025|2026|New/i.test(a.innerText);
         const isNewB = /2025|2026|New/i.test(b.innerText);
@@ -74,21 +67,17 @@ async function initializeLibrary() {
 
     movieGrid.innerHTML = "";
     movieElements.forEach(el => {
-        const img = el.querySelector('img');
-        if (img) img.setAttribute('loading', 'lazy');
         movieGrid.appendChild(el);
         addWatchlistButton(el); 
     });
 
     refreshMovieData();
-    loadTop10(movieElements); 
+    loadTop10(movieElements); // Restored original logic
     renderWatchlist();
-    
     await prefetchSliderData();
     updateSlider(); 
     setInterval(updateSlider, 12000); 
 
-    // Handle Identity Login
     if (typeof netlifyIdentity !== 'undefined') {
         netlifyIdentity.on('login', () => {
             cloudFetch('getWatchlist').then(ids => {
@@ -100,16 +89,12 @@ async function initializeLibrary() {
             });
             loadHistory();
         });
-        
-        // Initial check if already logged in
-        if (netlifyIdentity.currentUser()) {
-            loadHistory();
-        }
+        if (netlifyIdentity.currentUser()) loadHistory();
     }
 }
 
 /**
- * 2. SLIDER & SEARCH LOGIC
+ * 2. SLIDER & SEARCH
  */
 async function prefetchSliderData() {
     try {
@@ -136,13 +121,7 @@ function updateSlider() {
     if (sliderPool.length === 0) return;
     currentSliderIndex = (currentSliderIndex + 1) % sliderPool.length;
     const current = sliderPool[currentSliderIndex];
-    const el = { 
-        title: document.getElementById('sliderTitle'), 
-        rating: document.getElementById('movieRating'), 
-        img: document.getElementById('sliderImg'), 
-        bg: document.getElementById('sliderBg'), 
-        btn: document.getElementById('playBtn') 
-    };
+    const el = { title: document.getElementById('sliderTitle'), rating: document.getElementById('movieRating'), img: document.getElementById('sliderImg'), bg: document.getElementById('sliderBg'), btn: document.getElementById('playBtn') };
     if (!el.title || !el.bg) return;
     el.bg.style.backgroundImage = `linear-gradient(to bottom, transparent, #050505), url('${current.backdrop}')`;
     el.img.src = current.poster;
@@ -163,59 +142,39 @@ function refreshMovieData() {
 }
 
 /**
- * 3. GLOBAL SEARCH
+ * 3. TOP 10 LOGIC (RESTORED TO ORIGINAL DESIGN)
  */
-async function handleSearch(e) {
-    const term = e.target.value.toLowerCase().trim();
-    const movieGrid = document.getElementById('movieGrid');
-    const requestBox = document.getElementById('requestBox');
-    
-    document.querySelectorAll('.tmdb-result').forEach(el => el.remove());
+async function loadTop10(localElements) {
+    const top10Grid = document.getElementById('top10Grid');
+    if (!top10Grid) return;
+    try {
+        const res = await fetch(`https://api.themoviedb.org/3/trending/all/day?api_key=${TMDB_API_KEY}`);
+        const data = await res.json();
+        const trending = data.results;
+        let matched = [];
+        
+        trending.forEach(t => {
+            const tName = (t.title || t.name || "").toLowerCase();
+            const match = localElements.find(el => {
+                const localTitle = el.querySelector('h3').innerText.toLowerCase();
+                return el.dataset.id == t.id || localTitle.includes(tName);
+            });
+            if (match && !matched.includes(match)) matched.push(match);
+        });
 
-    let localMatches = 0;
-    const localLibMap = new Set();
-
-    document.querySelectorAll('#movieGrid .movie-link').forEach(link => {
-        const titleText = link.querySelector('h3').innerText.toLowerCase();
-        const isMatch = titleText.includes(term);
-        link.style.display = isMatch ? '' : 'none';
-        if (isMatch) localMatches++;
-        const mId = link.getAttribute('href').split('id=')[1]?.split('&')[0];
-        if (mId) localLibMap.add(mId.toString());
-    });
-
-    if (term.length > 2) {
-        try {
-            const res = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(term)}&language=en-US`);
-            const data = await res.json();
-            let results = data.results.filter(m => (m.media_type === 'movie' || m.media_type === 'tv') && !localLibMap.has(m.id.toString()));
-
-            if(results.length > 0) {
-                if(requestBox) requestBox.classList.add('hidden');
-                results.slice(0, 12).forEach(movie => {
-                    const tmdbCard = document.createElement('a');
-                    tmdbCard.className = 'movie-link tmdb-result';
-                    tmdbCard.href = `newplayer/player.html?tmdb=${movie.id}&title=${encodeURIComponent(movie.title || movie.name)}&type=${movie.media_type === 'tv' ? 'series' : 'movie'}`;
-                    tmdbCard.innerHTML = `
-                        <div class="movie-card">
-                            <div class="movie-poster-container">
-                                <img src="${POSTER_BASE}${movie.poster_path}" class="movie-poster" onerror="this.src='https://via.placeholder.com/500x750?text=No+Poster'">
-                            </div>
-                            <div class="movie-info">
-                                <h3>${movie.title || movie.name}</h3>
-                                <p>${(movie.release_date || movie.first_air_date || '').split('-')[0]} | External</p>
-                            </div>
-                        </div>
-                    `;
-                    movieGrid.appendChild(tmdbCard);
-                });
-            } else if (localMatches === 0 && requestBox) {
-                requestBox.classList.remove('hidden');
-            }
-        } catch (err) { console.error(err); }
-    } else if (term.length === 0 && requestBox) {
-        requestBox.classList.add('hidden');
-    }
+        if (matched.length < 10) matched = [...new Set([...matched, ...localElements.slice(0, 15)])].slice(0, 10);
+        
+        top10Grid.innerHTML = "";
+        matched.slice(0, 10).forEach((el, index) => {
+            const clone = el.cloneNode(true); 
+            clone.className = 'top10-card'; // This class handles the specific sizing in your CSS
+            const num = document.createElement('div');
+            num.className = 'rank-num';
+            num.innerText = index + 1;
+            clone.appendChild(num);
+            top10Grid.appendChild(clone);
+        });
+    } catch (e) { console.error("Top 10 error"); }
 }
 
 /**
@@ -271,38 +230,42 @@ function filterByCategory(cat) {
     });
 }
 
-async function loadTop10(localElements) {
-    const top10Grid = document.getElementById('top10Grid');
-    if (!top10Grid) return;
-    try {
-        const res = await fetch(`https://api.themoviedb.org/3/trending/all/day?api_key=${TMDB_API_KEY}`);
-        const data = await res.json();
-        const trending = data.results.slice(0, 10);
-        top10Grid.innerHTML = "";
-        trending.forEach((t, index) => {
-            const tName = (t.title || t.name || "").toLowerCase();
-            const match = localElements.find(el => el.querySelector('h3').innerText.toLowerCase().includes(tName));
-            
-            const card = document.createElement('div');
-            card.className = 'top10-card';
-            const num = document.createElement('div');
-            num.className = 'rank-num';
-            num.innerText = index + 1;
-            
-            if (match) {
-                const clone = match.cloneNode(true);
-                clone.appendChild(num);
-                top10Grid.appendChild(clone);
-            } else {
-                const ext = document.createElement('a');
-                ext.href = `newplayer/player.html?tmdb=${t.id}&title=${encodeURIComponent(t.title || t.name)}&type=${t.media_type === 'tv' ? 'series' : 'movie'}`;
-                ext.className = 'movie-link';
-                ext.innerHTML = `<div class="movie-card"><div class="movie-poster-container"><img src="${POSTER_BASE}${t.poster_path}" class="movie-poster"></div><div class="movie-info"><h3>${t.title || t.name}</h3></div></div>`;
-                ext.appendChild(num);
-                top10Grid.appendChild(ext);
-            }
-        });
-    } catch (e) { console.error(e); }
+async function handleSearch(e) {
+    const term = e.target.value.toLowerCase().trim();
+    const movieGrid = document.getElementById('movieGrid');
+    const requestBox = document.getElementById('requestBox');
+    if(!movieGrid) return;
+
+    document.querySelectorAll('.tmdb-result').forEach(el => el.remove());
+    let localMatches = 0;
+    const localLibMap = new Set();
+
+    document.querySelectorAll('#movieGrid .movie-link').forEach(link => {
+        const titleText = link.querySelector('h3').innerText.toLowerCase();
+        const isMatch = titleText.includes(term);
+        link.style.display = isMatch ? '' : 'none';
+        if (isMatch) localMatches++;
+        const mId = link.getAttribute('href').split('id=')[1]?.split('&')[0];
+        if (mId) localLibMap.add(mId.toString());
+    });
+
+    if (term.length > 2) {
+        try {
+            const res = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(term)}&language=en-US`);
+            const data = await res.json();
+            let results = data.results.filter(m => (m.media_type === 'movie' || m.media_type === 'tv') && !localLibMap.has(m.id.toString()));
+            if(results.length > 0) {
+                if(requestBox) requestBox.classList.add('hidden');
+                results.slice(0, 12).forEach(movie => {
+                    const tmdbCard = document.createElement('a');
+                    tmdbCard.className = 'movie-link tmdb-result';
+                    tmdbCard.href = `newplayer/player.html?tmdb=${movie.id}&title=${encodeURIComponent(movie.title || movie.name)}&type=${movie.media_type === 'tv' ? 'series' : 'movie'}`;
+                    tmdbCard.innerHTML = `<div class="movie-card"><div class="movie-poster-container"><img src="${POSTER_BASE}${movie.poster_path}" class="movie-poster"></div><div class="movie-info"><h3>${movie.title || movie.name}</h3></div></div>`;
+                    movieGrid.appendChild(tmdbCard);
+                });
+            } else if (localMatches === 0 && requestBox) requestBox.classList.remove('hidden');
+        } catch (err) { console.error(err); }
+    } else if (term.length === 0 && requestBox) requestBox.classList.add('hidden');
 }
 
 async function sendRequest() {
@@ -310,14 +273,10 @@ async function sendRequest() {
     const movieName = input.value.trim();
     if (!movieName) return;
     const message = `<b>📥 NEW MOVIE REQUEST</b>\n\n<b>🎬 Movie:</b> ${movieName}`;
-    try {
-        await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: DISCUSSION_GROUP_ID, text: message, parse_mode: 'HTML' }) });
-        alert("Request Sent!");
-    } catch (e) { console.error(e); }
+    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: DISCUSSION_GROUP_ID, text: message, parse_mode: 'HTML' }) });
+    alert("Request Sent!");
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    initializeLibrary();
-    const inputs = document.querySelectorAll('.search-input');
-    inputs.forEach(input => input.addEventListener('input', handleSearch));
-});
+document.addEventListener('DOMContentLoaded', initializeLibrary);
+const inputs = document.querySelectorAll('.search-input');
+inputs.forEach(input => input.addEventListener('input', handleSearch));
