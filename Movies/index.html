@@ -6,7 +6,8 @@
     <title>🎬 CineView - Complete Library</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script type="module" src="https://prigames.netlify.app/movies/cineview-cloud.js"></script>
+    <!-- Netlify Identity Widget -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
     <header class="main-header">
@@ -19,29 +20,16 @@
         </div>
         <nav class="nav-links">
             <a href="#">Home</a>
-            <a href="#myListSection">Watchlist</a>
-            <!-- New User Button -->
-            <button id="userProfileBtn" class="user-auth-btn">
-                <i class="fas fa-user-circle"></i> <span id="userNameDisplay">Login</span>
-            </button>
+            <a href="#movieGrid">Library</a>
+            <a href="#myListSection" id="myListLink">My List <span id="watchlistCount" style="color: #e50914; font-weight: bold;"></span></a>
+            <!-- LOGIN BUTTON -->
+            <div data-netlify-identity-button style="margin-left: 15px;"></div>
         </nav>
+        <button class="menu-toggle"><i class="fas fa-bars"></i></button>
     </header>
 
-    <!-- Login Modal -->
-    <div id="authModal" class="modal-overlay hidden">
-        <div class="modal-content">
-            <button class="close-modal">&times;</button>
-            <h2 id="modalTitle">Welcome Back</h2>
-            <p>Join CineView to save your progress and chat with others.</p>
-            <div id="authError" class="auth-error hidden"></div>
-            <input type="email" id="authEmail" placeholder="Email Address">
-            <input type="password" id="authPassword" placeholder="Password">
-            <button id="authSubmitBtn" class="primary-btn">Continue</button>
-            <p class="toggle-auth">Don't have an account? <span id="toggleAuthMode">Sign Up</span></p>
-        </div>
-    </div>
-
     <main>
+        <!-- Hero Slider -->
         <section class="hero-slider-section">
             <div class="slider-content">
                 <div id="sliderBg" class="slider-bg-blur"></div>
@@ -53,7 +41,9 @@
                     <a href="#" id="playBtn" class="play-btn-circle"><i class="fas fa-play"></i></a>
                 </div>
             </div>
-          <!-- NEW: Watch History Section -->
+        </section>
+
+        <!-- NEW: HISTORY SECTION -->
         <section id="historySection" class="movie-section hidden">
             <h2 class="section-title">🕒 Recently Watched</h2>
             <div class="movie-grid" id="historyGrid"></div>
@@ -1005,6 +995,7 @@
     <script src="app.js"></script>    
 </body>
 </html> 
+
 
 
 
