@@ -90,15 +90,7 @@ const movieDatabase = {
     "https://short.icu/b6yjD36xK"
   ]
 },
-    "rangasthalam": {
-  "title": "Rangasthalam",
-  "img": "https://image.tmdb.org/t/p/w500/yiEzDgBBFC25Zd6z0r7sMngn5vr.jpg",
-  "year": "2018",
-  "genre": "Action, Drama",
-  "tmdb": "461126",
-  "type": "movie",
-  "src": "https://short.icu/UWjCXkYpG"
-},
+    
     
     "your-name-": {
   "title": "Your Name.",
@@ -865,6 +857,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
