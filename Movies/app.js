@@ -307,3 +307,4 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputs = document.querySelectorAll('.search-input');
     inputs.forEach(input => input.addEventListener('input', handleSearch));
 });
+
