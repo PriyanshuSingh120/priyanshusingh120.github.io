@@ -39,17 +39,28 @@
             </div>
         </div>
 
-        <!-- Comment Section -->
-        <div class="comment-section">
-            <h3>💬 Community Discussion</h3>
-            <div id="commentBox" class="comment-input-area">
-                <input type="text" id="userCommentInput" placeholder="Write a comment...">
-                <button id="postCommentBtn" class="server-btn active">Post</button>
-            </div>
-            <div id="commentsContainer" class="comment-list">
-                <p style="color: #666;">Loading comments...</p>
-            </div>
+        <div class="player-interaction" style="margin-top: 20px; border-top: 1px solid #222; padding-top: 20px;">
+    <div style="display: flex; gap: 15px; margin-bottom: 30px;">
+        <button id="likeBtn" style="background: #111; color: white; border: 1px solid #333; padding: 10px 20px; border-radius: 8px; cursor: pointer;">
+            <i class="far fa-heart"></i> Add to Watchlist
+        </button>
+        <button onclick="document.getElementById('commentInput').focus()" style="background: #111; color: white; border: 1px solid #333; padding: 10px 20px; border-radius: 8px; cursor: pointer;">
+            <i class="far fa-comment"></i> Comment
+        </button>
+    </div>
+
+    <!-- COMMENTS AREA -->
+    <div id="commentSection">
+        <h3 style="margin-bottom: 15px;">💬 Community Comments</h3>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <input type="text" id="commentInput" placeholder="Add a public comment..." style="flex: 1; background: #111; border: 1px solid #333; color: white; padding: 12px; border-radius: 8px;">
+            <button id="postCommentBtn" style="background: #e50914; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer;">Post</button>
         </div>
+        <div id="commentsContainer" style="display: flex; flex-direction: column; gap: 15px;">
+            <!-- Comments load here -->
+        </div>
+    </div>
+</div>
 
         <!-- Recommendations... -->
         <div id="recommendationGrid" class="movie-grid"></div>
@@ -57,5 +68,6 @@
     <script src="player.js"></script>
 </body>
 </html>
+
 
 
