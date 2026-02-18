@@ -117,6 +117,16 @@ const movieDatabase = {
   "isSeries": true, 
   "episodes": ["https://short.icu/e8a-E1--B","https://short.icu/H5epjTQ_4","https://short.icu/aV192cp_m","https://short.icu/-xiyaOk8x","https://short.icu/9iODPJ5pf"] 
 },
+    "rangasthalam": {
+  "title": "Rangasthalam",
+  "img": "https://image.tmdb.org/t/p/w500/yiEzDgBBFC25Zd6z0r7sMngn5vr.jpg",
+  "year": "2018",
+  "genre": "Action, Drama",
+  "tmdb": "461126",
+  "type": "movie",
+  "src": "https://short.icu/UWjCXkYpG"
+},
+    
     "jujutsu-kaisen-s2": {
   "title": "JUJUTSU KAISEN - Season 2",
   "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNLedtKonJc-_VedlguVLuQyGDbzAt6XNGDlc8iCsJ8vskP6h93Zmc4Ns&s=10",
@@ -857,6 +867,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
