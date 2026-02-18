@@ -70,6 +70,26 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/KAYMPxAD9"
 },
+    "suicide-squad-isekai-s1": {
+  "title": "Suicide Squad Isekai - Season 1",
+  "img": "https://image.tmdb.org/t/p/w500/mCEeR8Fidw9Ck5oySoe96snj0BZ.jpg",
+  "year": "2024",
+  "genre": "Animated, Action & Adventure, Sci-Fi & Fantasy",
+  "tmdb": "229926",
+  "type": "series",
+  "episodes": [
+    "https://short.icu/JAnpqV7hR",
+    "https://short.icu/xs8ETTRaT",
+    "https://short.icu/fTjIuwTVg",
+    "https://short.icu/GNRfrdj3F",
+    "https://short.icu/Vw7kFPL4W",
+    "https://short.icu/gi6CZjKQ8",
+    "https://short.icu/TuO2WxU9r",
+    "https://short.icu/0a1aYvv6Z",
+    "https://short.icu/8V3G8l8Cy",
+    "https://short.icu/b6yjD36xK"
+  ]
+},
     "rangasthalam": {
   "title": "Rangasthalam",
   "img": "https://image.tmdb.org/t/p/w500/yiEzDgBBFC25Zd6z0r7sMngn5vr.jpg",
@@ -845,6 +865,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
