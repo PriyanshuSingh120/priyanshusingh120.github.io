@@ -202,6 +202,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/wUwcs_-dD"
 },
+    "spy-x-family-code-white": {
+  "title": "SPY x FAMILY CODE: White",
+  "img": "https://image.tmdb.org/t/p/w500/xlIQf4y9eB14iYzNN142tROIWON.jpg",
+  "year": "2023",
+  "genre": "Animated, Comedy, Adventure, Action",
+  "tmdb": "1062807",
+  "type": "movie",
+  "src": "https://short.icu/YY6hkB-6p"
+},
     "suzhal---the-vortex-s2": {
   "title": "Suzhal - The Vortex - Season 2",
   "img": "https://image.tmdb.org/t/p/w500/aScE4sIpKeHnGmmeOdN0AIvFRqp.jpg",
@@ -867,6 +876,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
