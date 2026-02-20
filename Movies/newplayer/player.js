@@ -52,6 +52,42 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/XoDotskI6"
 },
+    "hijack-1971": {
+  "title": "Hijack 1971",
+  "img": "https://image.tmdb.org/t/p/w500/68jNkFi61MQjrJEqj2up5wZ4w5R.jpg",
+  "year": "2024",
+  "genre": "Action, Thriller, Crime",
+  "tmdb": "1147710",
+  "type": "movie",
+  "src": "https://short.icu/ZHv_jyFUda"
+},
+    "uri-the-surgical-strike": {
+  "title": "Uri: The Surgical Strike",
+  "img": "https://image.tmdb.org/t/p/w500/yNySAgpAnWmPpYinim9E0tUzJWG.jpg",
+  "year": "2019",
+  "genre": "Action, Drama, War",
+  "tmdb": "554600",
+  "type": "movie",
+  "src": "https://short.icu/WhtvsMPgo"
+},
+    "mersal": {
+  "title": "Mersal",
+  "img": "https://image.tmdb.org/t/p/w500/65Q1wpRPZ5E3UVUv2V5JBbJQCcj.jpg",
+  "year": "2017",
+  "genre": "Thriller, Action, Crime",
+  "tmdb": "456287",
+  "type": "movie",
+  "src": "https://short.icu/1IYGD7uE3"
+},
+    "ikkis": {
+  "title": "Ikkis",
+  "img": "https://image.tmdb.org/t/p/w500/8PWu0V10nMqG5SrA13wLRXTD2fH.jpg",
+  "year": "2026",
+  "genre": "History, War, Drama",
+  "tmdb": "1196946",
+  "type": "movie",
+  "src": "https://short.icu/F1Z3TsblK"
+},
     "how-to-train-your-dragon": {
   "title": "How to Train Your Dragon",
   "img": "https://image.tmdb.org/t/p/w500/ygGmAO60t8GyqUo9xYeYxSZAR3b.jpg",
@@ -876,6 +912,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
