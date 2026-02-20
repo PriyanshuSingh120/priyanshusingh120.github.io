@@ -145,6 +145,16 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/FTibX8XjF"
 },
+
+    "insurgent": {
+  "title": "Insurgent",
+  "img": "https://image.tmdb.org/t/p/w500/dP5Fb6YRfzmCQtRbHOr2kO7tJW9.jpg",
+  "year": "2015",
+  "genre": "Action, Sci-Fi, Thriller",
+  "tmdb": "262500",
+  "type": "movie",
+  "src": "https://short.icu/n9jXIPJvI"
+},
     
     "chernobyl": { 
   "title": "Chernobyl", 
@@ -912,6 +922,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
