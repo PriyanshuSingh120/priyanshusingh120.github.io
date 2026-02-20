@@ -146,6 +146,16 @@ const movieDatabase = {
   "src": "https://short.icu/FTibX8XjF"
 },
 
+    "captain-america-civil-war": {
+  "title": "Captain America: Civil War",
+  "img": "https://image.tmdb.org/t/p/w500/rAGiXaUfPzY7CDEyNKUofk3Kw2e.jpg",
+  "year": "2016",
+  "genre": "Adventure, Action, Sci-Fi",
+  "tmdb": "271110",
+  "type": "movie",
+  "src": "https://short.icu/8YtAR-Jr1"
+},
+
     "insurgent": {
   "title": "Insurgent",
   "img": "https://image.tmdb.org/t/p/w500/dP5Fb6YRfzmCQtRbHOr2kO7tJW9.jpg",
@@ -922,6 +932,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
