@@ -61,6 +61,41 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/aiWeEtXoL"
 },
+    "attack-on-titan-s1": {
+  "title": "Attack on Titan - Season 1",
+  "img": "https://image.tmdb.org/t/p/w500/3Npd9yTdy76kHzoFpL0SOIxE6Uv.jpg",
+  "year": "2013",
+  "genre": "Animated, Sci-Fi & Fantasy, Action & Adventure",
+  "tmdb": "1429",
+  "type": "series",
+  "episodes": [
+    "https://short.icu/_8YV-gnty",
+    "https://short.icu/FFYVnUeYk",
+    "https://short.icu/7uOVU-LiF",
+    "https://short.icu/lElQHJbA9",
+    "https://short.icu/y9DRpfOOB",
+    "https://short.icu/Nz5gsRo2n",
+    "https://short.icu/4K0aE4EBL",
+    "https://short.icu/9_xnDtmcq",
+    "https://short.icu/viRS_Vt9v",
+    "https://short.icu/eXk4atxyuh",
+    "https://short.icu/qi2aj6d9Y",
+    "https://short.icu/FF6JUnB2e",
+    "https://short.icu/zZwHUuwy4z",
+    "https://short.icu/YWRrExxUH",
+    "https://short.icu/LXvosr7OE",
+    "https://short.icu/Tqzjriye0",
+    "https://short.icu/5A9dENyFb",
+    "https://short.icu/PpVRgMHBd",
+    "https://short.icu/2T61YtpPM",
+    "https://short.icu/iyGVxJQiI",
+    "https://short.icu/Kr602Malp",
+    "https://short.icu/fCYO84aiB",
+    "https://short.icu/BGb1zyU4U",
+    "https://short.icu/9tWCbR87s",
+    "https://short.icu/WSmCPjE8c"
+  ]
+},
     "hijack-1971": {
   "title": "Hijack 1971",
   "img": "https://image.tmdb.org/t/p/w500/68jNkFi61MQjrJEqj2up5wZ4w5R.jpg",
@@ -941,6 +976,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
