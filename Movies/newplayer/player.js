@@ -52,6 +52,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/XoDotskI6"
 },
+    "ramayana-the-legend-of-prince-rama": {
+  "title": "Ramayana: The Legend of Prince Rama",
+  "img": "https://image.tmdb.org/t/p/w500/l4MNBj7Zn2iVNfwBdm80Am0Ll7w.jpg",
+  "year": "1993",
+  "genre": "Animated, Action, Adventure, Fantasy",
+  "tmdb": "84092",
+  "type": "movie",
+  "src": "https://short.icu/aiWeEtXoL"
+},
     "hijack-1971": {
   "title": "Hijack 1971",
   "img": "https://image.tmdb.org/t/p/w500/68jNkFi61MQjrJEqj2up5wZ4w5R.jpg",
@@ -932,6 +941,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
