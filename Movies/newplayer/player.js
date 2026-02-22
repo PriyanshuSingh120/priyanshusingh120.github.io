@@ -150,6 +150,28 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/LXfWeKb33"
 },
+    "death-parade-s1": {
+  "title": "Death Parade - Season 1",
+  "img": "https://image.tmdb.org/t/p/w500/qeD9wDenN7CPA99FScSErJCvcWb.jpg",
+  "year": "2015",
+  "genre": "Animated, Drama, Mystery",
+  "tmdb": "61901",
+  "type": "series",
+  "episodes": [
+    "https://short.icu/1s_ZWXbiW",
+    "https://short.icu/xVw1csEAe",
+    "https://short.icu/Khfgb2Ghq",
+    "https://short.icu/cotOlk8UW",
+    "https://short.icu/h9qngUB1V",
+    "https://short.icu/UHNqB_iO2",
+    "https://short.icu/ZutankJCg",
+    "https://short.icu/Ct7-JyLY6",
+    "https://short.icu/npjdjpghT",
+    "https://short.icu/KaBwZZ045",
+    "https://short.icu/4fGmCECWF",
+    "https://short.icu/aXuRzNqai"
+  ]
+},
     "ikkis": {
   "title": "Ikkis",
   "img": "https://image.tmdb.org/t/p/w500/8PWu0V10nMqG5SrA13wLRXTD2fH.jpg",
@@ -167,6 +189,15 @@ const movieDatabase = {
   "tmdb": "10191",
   "type": "movie",
   "src": "https://short.icu/du8P_P4oS"
+},
+    "dj-duvvada-jagannadham": {
+  "title": "DJ: Duvvada Jagannadham",
+  "img": "https://image.tmdb.org/t/p/w500/okq2Q1f2alXGWQMLsCi4wXoAXt4.jpg",
+  "year": "2017",
+  "genre": "Action, Comedy, Crime",
+  "tmdb": "443635",
+  "type": "movie",
+  "src": "https://short.icu/Vr_rQ3B4q"
 },
     "one-piece-clockwork-island-adventure": {
   "title": "One Piece: Clockwork Island Adventure",
@@ -1012,6 +1043,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
