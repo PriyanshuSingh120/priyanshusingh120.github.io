@@ -141,6 +141,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/1IYGD7uE3"
 },
+    "penguins-of-madagascar": {
+  "title": "Penguins of Madagascar",
+  "img": "https://image.tmdb.org/t/p/w500/dXbpNrPDZDMEbujFoOxmMNQVMHa.jpg",
+  "year": "2014",
+  "genre": "Family, Animated, Adventure, Comedy",
+  "tmdb": "270946",
+  "type": "movie",
+  "src": "https://short.icu/LXfWeKb33"
+},
     "ikkis": {
   "title": "Ikkis",
   "img": "https://image.tmdb.org/t/p/w500/8PWu0V10nMqG5SrA13wLRXTD2fH.jpg",
@@ -158,6 +167,15 @@ const movieDatabase = {
   "tmdb": "10191",
   "type": "movie",
   "src": "https://short.icu/du8P_P4oS"
+},
+    "one-piece-clockwork-island-adventure": {
+  "title": "One Piece: Clockwork Island Adventure",
+  "img": "https://image.tmdb.org/t/p/w500/phrVSY5cpUkybc0gU41crWi2XIP.jpg",
+  "year": "2001",
+  "genre": "Action, Animated, Adventure",
+  "tmdb": "23446",
+  "type": "movie",
+  "src": "https://short.icu/Zp3G-6lj9"
 },
     "vadh-2": {
   "title": "Vadh 2",
@@ -994,6 +1012,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
