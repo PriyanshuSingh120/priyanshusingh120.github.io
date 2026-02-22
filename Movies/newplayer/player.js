@@ -105,6 +105,24 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/ZHv_jyFUda"
 },
+    "spider-man-into-the-spider-verse": {
+  "title": "Spider-Man: Into the Spider-Verse",
+  "img": "https://image.tmdb.org/t/p/w500/iiZZdoQBEYBv6id8su7ImL0oCbD.jpg",
+  "year": "2018",
+  "genre": "Animated, Action, Adventure, Sci-Fi",
+  "tmdb": "324857",
+  "type": "movie",
+  "src": "https://short.icu/SZ2o6SUnV"
+},
+    "migration": {
+  "title": "Migration",
+  "img": "https://image.tmdb.org/t/p/w500/ldfCF9RhR40mppkzmftxapaHeTo.jpg",
+  "year": "2023",
+  "genre": "Family, Comedy, Adventure, Animated",
+  "tmdb": "940551",
+  "type": "movie",
+  "src": "https://short.icu/_E8AVFjzd"
+},
     "uri-the-surgical-strike": {
   "title": "Uri: The Surgical Strike",
   "img": "https://image.tmdb.org/t/p/w500/yNySAgpAnWmPpYinim9E0tUzJWG.jpg",
@@ -976,6 +994,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
