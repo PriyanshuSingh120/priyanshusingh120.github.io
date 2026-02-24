@@ -150,6 +150,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/LXfWeKb33"
 },
+    "naruto-the-movie-ninja-clash-in-the-land-of-snow": {
+  "title": "Naruto the Movie: Ninja Clash in the Land of Snow",
+  "img": "https://image.tmdb.org/t/p/w500/eUNRUeSNzm8LktH4HRaYiAReB6R.jpg",
+  "year": "2004",
+  "genre": "Comedy, Action, Animated, Adventure",
+  "tmdb": "16907",
+  "type": "movie",
+  "src": "https://short.icu/e-HmWJbeh"
+},
     "death-parade-s1": {
   "title": "Death Parade - Season 1",
   "img": "https://image.tmdb.org/t/p/w500/qeD9wDenN7CPA99FScSErJCvcWb.jpg",
@@ -1043,6 +1052,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
