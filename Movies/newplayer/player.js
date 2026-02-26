@@ -150,6 +150,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/LXfWeKb33"
 },
+    "the-wolf-of-wall-street": {
+  "title": "[18+]The Wolf of Wall Street",
+  "img": "https://image.tmdb.org/t/p/w500/kW9LmvYHAaS9iA0tHmZVq8hQYoq.jpg",
+  "year": "2013",
+  "genre": "Crime, Drama, Comedy",
+  "tmdb": "106646",
+  "type": "movie",
+  "src": "https://short.icu/jZiSSjOku"
+},
     "naruto-the-movie-ninja-clash-in-the-land-of-snow": {
   "title": "Naruto the Movie: Ninja Clash in the Land of Snow",
   "img": "https://image.tmdb.org/t/p/w500/eUNRUeSNzm8LktH4HRaYiAReB6R.jpg",
@@ -1052,6 +1061,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
