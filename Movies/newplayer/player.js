@@ -25,6 +25,23 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/8vi-2dDjV"
 },
+    "breaking-bad-s1": {
+  "title": "Breaking Bad - Season 1",
+  "img": "https://image.tmdb.org/t/p/w500/1BP4xYv9ZG4ZVHkL7ocOziBbSYH.jpg",
+  "year": "2008",
+  "genre": "Drama, Crime",
+  "tmdb": "1396",
+  "type": "series",
+  "episodes": [
+    "https://short.icu/pa9ehnMRE",
+    "https://short.icu/i6PZVESwl",
+    "https://short.icu/a1Ltc1GGQ",
+    "https://short.icu/Fv9hGjATq",
+    "https://short.icu/Wju7rDSVD",
+    "https://short.icu/UoYov94PV",
+    "https://short.icu/_ND3-wLHj"
+  ]
+},
     "vanaveera": {
   "title": "Vanaveera",
   "img": "https://image.tmdb.org/t/p/w500/gCrNwHpoZ0haxm0jZxc9JHgyLq7.jpg",
@@ -1061,6 +1078,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
