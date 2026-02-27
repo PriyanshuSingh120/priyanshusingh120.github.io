@@ -87,6 +87,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/HNAjQaF4P"
 },
+    "lyle-lyle-crocodile": {
+  "title": "Lyle, Lyle, Crocodile",
+  "img": "https://image.tmdb.org/t/p/w500/dN6XnCEP3AO7N4XFOFyZ8V8kZF5.jpg",
+  "year": "2022",
+  "genre": "Comedy, Family, Music",
+  "tmdb": "830784",
+  "type": "movie",
+  "src": "https://short.icu/3aWKJFRbV"
+},
     "attack-on-titan-s1": {
   "title": "Attack on Titan - Season 1",
   "img": "https://image.tmdb.org/t/p/w500/3Npd9yTdy76kHzoFpL0SOIxE6Uv.jpg",
@@ -1096,6 +1105,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
