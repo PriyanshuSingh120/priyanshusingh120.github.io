@@ -122,6 +122,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/ZHv_jyFUda"
 },
+    "how-to-train-your-dragon-2": {
+  "title": "How to Train Your Dragon 2",
+  "img": "https://image.tmdb.org/t/p/w500/d13Uj86LdbDLrfDoHR5aDOFYyJC.jpg",
+  "year": "2014",
+  "genre": "Fantasy, Action, Adventure, Animated, Comedy, Family",
+  "tmdb": "82702",
+  "type": "movie",
+  "src": "https://short.icu/qR43V5r84"
+},
     "spider-man-into-the-spider-verse": {
   "title": "Spider-Man: Into the Spider-Verse",
   "img": "https://image.tmdb.org/t/p/w500/iiZZdoQBEYBv6id8su7ImL0oCbD.jpg",
@@ -1078,6 +1087,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
