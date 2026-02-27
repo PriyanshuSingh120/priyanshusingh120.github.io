@@ -78,6 +78,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/aiWeEtXoL"
 },
+    "avengers-endgame": {
+  "title": "Avengers: Endgame",
+  "img": "https://image.tmdb.org/t/p/w500/ulzhLuWrPK07P1YkdWQLZnQh1JL.jpg",
+  "year": "2019",
+  "genre": "Adventure, Sci-Fi, Action",
+  "tmdb": "299534",
+  "type": "movie",
+  "src": "https://short.icu/HNAjQaF4P"
+},
     "attack-on-titan-s1": {
   "title": "Attack on Titan - Season 1",
   "img": "https://image.tmdb.org/t/p/w500/3Npd9yTdy76kHzoFpL0SOIxE6Uv.jpg",
@@ -1087,6 +1096,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
