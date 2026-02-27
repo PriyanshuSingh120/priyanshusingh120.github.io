@@ -60,6 +60,24 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/rJ3U8nKF1"
 },
+    "the-boss-baby-family-business": {
+  "title": "The Boss Baby: Family Business",
+  "img": "https://image.tmdb.org/t/p/w500/kv2Qk9MKFFQo4WQPaYta599HkJP.jpg",
+  "year": "2021",
+  "genre": "Animated, Comedy, Adventure, Family",
+  "tmdb": "459151",
+  "type": "movie",
+  "src": "https://short.icu/QoJvSHPYP"
+},
+    "minions-the-rise-of-gru": {
+  "title": "Minions: The Rise of Gru",
+  "img": "https://image.tmdb.org/t/p/w500/wKiOkZTN9lUUUNZLmtnwubZYONg.jpg",
+  "year": "2022",
+  "genre": "Family, Comedy, Adventure, Animated, Sci-Fi, Fantasy",
+  "tmdb": "438148",
+  "type": "movie",
+  "src": "https://short.icu/cMHRwnmgt"
+},
     "harry-potter-and-the-deathly-hallows-part-1": {
   "title": "Harry Potter and the Deathly Hallows: Part 1",
   "img": "https://image.tmdb.org/t/p/w500/iGoXIpQb7Pot00EEdwpwPajheZ5.jpg",
@@ -1105,6 +1123,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
