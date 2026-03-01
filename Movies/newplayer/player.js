@@ -16,6 +16,24 @@ const movieDatabase = {
   "isSeries": true, 
   "episodes": ["https://short.icu/OECS7_O1Hh","https://short.icu/cy9s-nJSj","https://short.icu/2yMkFxb9V","https://short.icu/mUHwqpGa3","https://short.icu/Xw1za7G8e","https://short.icu/5cQX07cVU","https://short.icu/XDMYlF0qI","https://short.icu/ZiEXDePH10","https://short.icu/y6R6dRk4N","https://short.icu/GcXTWdzM3"] 
 },
+    "wanted": {
+  "title": "Wanted",
+  "img": "https://image.tmdb.org/t/p/w500/uUACJpxcFADB590MZRj2sSDMLcn.jpg",
+  "year": "2025",
+  "genre": "Action, Western",
+  "tmdb": "1503879",
+  "type": "movie",
+  "src": "https://short.icu/otrJQmvHn"
+},
+    "the-bluff": {
+  "title": "The Bluff",
+  "img": "https://image.tmdb.org/t/p/w500/sojEzvfxR2DBcDSJyAisX8TWjov.jpg",
+  "year": "2026",
+  "genre": "Action, Thriller",
+  "tmdb": "799882",
+  "type": "movie",
+  "src": "https://short.icu/JSeETVAxU"
+},
     "mercy": {
   "title": "Mercy",
   "img": "https://image.tmdb.org/t/p/w500/pyok1kZJCfyuFapYXzHcy7BLlQa.jpg",
@@ -1123,6 +1141,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
