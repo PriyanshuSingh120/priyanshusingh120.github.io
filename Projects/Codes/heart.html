@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Elite Aesthetic Heart</title>
+    <style>
+        body { 
+            margin: 0; background: #000; overflow: hidden; 
+            display: flex; justify-content: center; align-items: center; 
+            height: 100vh; width: 100vw; perspective: 1000px;
+        }
+        canvas { 
+            max-width: 95%; max-height: 95%;
+            filter: drop-shadow(0 0 10px #f73487) contrast(1.2);
+            transition: transform 0.1s ease-out;
+            pointer-events: none;
+        }
+        /* Subtle scanline effect for that "Cyber" aesthetic */
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 2px, 3px 100%; pointer-events: none; z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+<div class="overlay"></div>
+<canvas id="turtleCanvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('turtleCanvas');
+    const ctx = canvas.getContext('2d');
+    let i = 0, hasDrawnA = false, particles = [];
+    let mouse = { x: 0, y: 0 };
+
+    function resize() {
+        const size = Math.min(window.innerWidth, window.innerHeight) * 0.9;
+        canvas.width = size; canvas.height = size;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const scale = canvas.width / 38;
+
+    // Your Exact Math
+    const hearta = (k) => 15 * Math.pow(Math.sin(k), 3);
+    const heartb = (k) => 13 * Math.cos(k) - 5 * Math.cos(2*k) - 2 * Math.cos(3*k) - Math.cos(4*k);
+
+    class Ember {
+        constructor(x, y) {
+            this.x = x; this.y = y;
+            this.size = Math.random() * 2 + 0.5;
+            this.life = 1;
+            this.vx = (Math.random() - 0.5) * 1;
+            this.vy = -Math.random() * 1.5 - 0.5;
+        }
+        update() { this.x += this.vx; this.y += this.vy; this.life -= 0.01; }
+        draw() {
+            ctx.fillStyle = `rgba(247, 52, 135, ${this.life})`;
+            ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill();
+        }
+    }
+
+    function drawEliteA() {
+        const drawLayer = (color, width, offset) => {
+            ctx.strokeStyle = color; ctx.lineWidth = width * (canvas.width/800);
+            ctx.lineCap = "round"; ctx.lineJoin = "round";
+            ctx.beginPath();
+            ctx.moveTo(centerX - (scale * 2) + offset, centerY + (scale * 2.5));
+            ctx.lineTo(centerX + offset, centerY - (scale * 3.5));
+            ctx.lineTo(centerX + (scale * 2) + offset, centerY + (scale * 2.5));
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(centerX - (scale * 1.1) + offset, centerY + (scale * 0.3));
+            ctx.quadraticCurveTo(centerX + offset, centerY + (scale * 0.8), centerX + (scale * 1.1) + offset, centerY + (scale * 0.3));
+            ctx.stroke();
+        };
+
+        // Chromatic Aberration Effect
+        drawLayer("rgba(255,0,0,0.5)", 8, -2); // Red Shift
+        drawLayer("rgba(0,255,255,0.5)", 8, 2); // Cyan Shift
+        drawLayer("#f73487", 6, 0);             // Main Pink
+        drawLayer("white", 1.8, 0);             // Sharp Core
+    }
+
+    // Touch/Mouse Parallax Logic
+    window.addEventListener('mousemove', (e) => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 20;
+        const y = (e.clientY / window.innerHeight - 0.5) * -20;
+        canvas.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+    });
+
+    function render() {
+        // Draw 10 lines per frame for smooth "drawing" look
+        for (let j = 0; j < 10; j++) {
+            if (i < 6000) {
+                let x = centerX + hearta(i) * scale;
+                let y = centerY - heartb(i) * scale;
+                ctx.strokeStyle = "#f73487"; ctx.lineWidth = 2.5 * (canvas.width/800);
+                ctx.beginPath(); ctx.moveTo(x, y);
+                i += 0.4;
+                let nx = centerX + hearta(i) * scale;
+                let ny = centerY - heartb(i) * scale;
+                ctx.lineTo(nx, ny); ctx.stroke();
+
+                if (Math.random() > 0.9) particles.push(new Ember(nx, ny));
+                if (Math.floor(i) === 150 && !hasDrawnA) { drawEliteA(); hasDrawnA = true; }
+            }
+        }
+
+        // Particle System for Embers
+        particles = particles.filter(p => p.life > 0);
+        particles.forEach(p => { p.update(); p.draw(); });
+
+        requestAnimationFrame(render);
+    }
+    render();
+</script>
+</body>
+</html>
