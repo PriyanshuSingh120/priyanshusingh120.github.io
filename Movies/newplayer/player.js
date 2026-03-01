@@ -60,6 +60,15 @@ const movieDatabase = {
     "https://short.icu/_ND3-wLHj"
   ]
 },
+   "lokah-chapter-1-chandra": {
+  "title": "Lokah Chapter 1: Chandra",
+  "img": "https://image.tmdb.org/t/p/w500/nRn6is4m5sikO1rSoCoRT2rYtXB.jpg",
+  "year": "2025",
+  "genre": "Action, Adventure, Fantasy",
+  "tmdb": "1290190",
+  "type": "movie",
+  "src": "https://short.icu/Oh0j8f1nF"
+}, 
     "vanaveera": {
   "title": "Vanaveera",
   "img": "https://image.tmdb.org/t/p/w500/gCrNwHpoZ0haxm0jZxc9JHgyLq7.jpg",
@@ -1141,6 +1150,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
