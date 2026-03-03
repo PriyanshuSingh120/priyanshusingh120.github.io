@@ -60,6 +60,24 @@ const movieDatabase = {
     "https://short.icu/_ND3-wLHj"
   ]
 },
+    "panchayat-s4": {
+  "title": "Panchayat - Season 4",
+  "img": "https://image.tmdb.org/t/p/w500/sGjqP4lKCcvTgappoIb0N0ojR7T.jpg",
+  "year": "2020",
+  "genre": "Comedy, Drama",
+  "tmdb": "101352",
+  "type": "series",
+  "episodes": [
+    "https://short.icu/A7tm31SBn",
+    "https://short.icu/hmwDSJpaJ",
+    "https://short.icu/pffgRvIKj",
+    "https://short.icu/3TOo-RxB3",
+    "https://short.icu/sa975lS_T",
+    "https://short.icu/2Z7W1WgtIa",
+    "https://short.icu/vcekuQ7ui",
+    "https://short.icu/n73E3vuVx"
+  ]
+},
    "lokah-chapter-1-chandra": {
   "title": "Lokah Chapter 1: Chandra",
   "img": "https://image.tmdb.org/t/p/w500/nRn6is4m5sikO1rSoCoRT2rYtXB.jpg",
@@ -1150,6 +1168,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
