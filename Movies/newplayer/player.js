@@ -43,6 +43,24 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/8vi-2dDjV"
 },
+    "bagheera": {
+  "title": "Bagheera",
+  "img": "https://image.tmdb.org/t/p/w500/ziXyy0zgmwf4oTunSsUHDyOZBeC.jpg",
+  "year": "2024",
+  "genre": "Action, Adventure",
+  "tmdb": "777292",
+  "type": "movie",
+  "src": "https://short.icu/M384C-NJPl"
+},
+    "iron-man-2": {
+  "title": "Iron Man 2",
+  "img": "https://image.tmdb.org/t/p/w500/6WBeq4fCfn7AN0o21W9qNcRF2l9.jpg",
+  "year": "2010",
+  "genre": "Adventure, Action, Sci-Fi",
+  "tmdb": "10138",
+  "type": "movie",
+  "src": "https://short.icu/pH5pXzQof"
+},
     "breaking-bad-s1": {
   "title": "Breaking Bad - Season 1",
   "img": "https://image.tmdb.org/t/p/w500/1BP4xYv9ZG4ZVHkL7ocOziBbSYH.jpg",
@@ -1168,6 +1186,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
