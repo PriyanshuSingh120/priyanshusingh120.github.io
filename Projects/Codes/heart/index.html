@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Particle Morphing</title>
+    <title>3D Particle - Prigames</title>
     <style>
         body {
             margin: 0;
@@ -109,7 +109,7 @@
             const textPoints = sampleText(text);
             isTextMode = textPoints !== null && textPoints.length > 0;
             
-            // Fırlanmanı hər iki rejimdə sıfırlayırıq ki, obyekt düz qalsın
+
             if (particles) {
                 particles.rotation.y = 0;
                 particles.rotation.x = 0;
@@ -247,7 +247,6 @@
 
             posAttr.needsUpdate = true;
 
-            // Bütün rotasiya kodları silindi və ya sıfırlandı
             particles.rotation.y = 0;
             particles.rotation.z = 0;
             particles.rotation.x = 0;
