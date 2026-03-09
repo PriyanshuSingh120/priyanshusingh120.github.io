@@ -3,209 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Star Sports Live | Ad-Free Experience</title>
+    <title>Star Sports Live | Ad-Slayer Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --brand-green: #00ff6a;
-            --brand-bg: #050505;
-        }
-        body {
-            background-color: var(--brand-bg);
-            color: white;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        :root { --p: #00ff6a; --b: #050505; }
+        body { 
+            background: var(--b); 
+            color: #fff; 
+            font-family: system-ui, -apple-system, sans-serif; 
             overflow: hidden;
-            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior: none;
         }
-        .glass {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .glow-green {
-            box-shadow: 0 0 15px rgba(0, 255, 106, 0.4);
-        }
-        .stream-container {
-            aspect-ratio: 16 / 9;
+        .video-wrapper {
             width: 100%;
-            max-width: 1100px;
-            position: relative;
+            max-width: 1000px;
+            aspect-ratio: 16/9;
             background: #000;
-            border-radius: 16px;
+            position: relative;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            border: 1px solid rgba(255,255,255,0.05);
         }
         iframe {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1;
         }
-        /* Ad-Interceptor Overlay */
-        #ad-guard {
+        /* The Ad-Slayer Shield */
+        #shield {
             position: absolute;
             inset: 0;
-            z-index: 10;
-            background: transparent;
-            cursor: pointer;
-        }
-        #ad-guard.cleared {
-            pointer-events: none;
-            display: none;
-        }
-        .live-indicator {
-            display: inline-flex;
+            z-index: 9999;
+            background: rgba(0,0,0,0.01); /* Nearly invisible but catches clicks */
+            display: flex;
             align-items: center;
-            background: rgba(255, 0, 0, 0.1);
-            color: #ff4d4d;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .shield-btn {
+            background: var(--p);
+            color: #000;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 20px var(--p);
+            pointer-events: none;
+        }
+        .live-tag {
+            background: #ff0000;
             padding: 2px 8px;
             border-radius: 4px;
             font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 1px;
-            border: 1px solid rgba(255, 0, 0, 0.2);
+            font-weight: bold;
+            animation: pulse 1s infinite;
         }
-        .live-dot {
-            width: 6px;
-            height: 6px;
-            background: #ff4d4d;
-            border-radius: 50%;
-            margin-right: 6px;
-            animation: blink 1s infinite;
-        }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
 
-    <div class="w-full max-w-6xl flex flex-col gap-6">
+    <div class="w-full max-w-4xl flex flex-col gap-4">
         
-        <!-- Top Bar -->
-        <div class="flex items-center justify-between px-1">
-            <div class="flex items-center gap-3">
-                <div class="bg-[#00ff6a]/10 p-2 rounded-xl border border-[#00ff6a]/20">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#00ff6a" class="filter drop-shadow-sm"><path d="M7 4v16l13-8z"/></svg>
-                </div>
-                <div>
-                    <h1 class="text-lg font-extrabold tracking-tight">Star Sports 1 <span class="text-[#00ff6a]">HD</span></h1>
-                    <div class="live-indicator">
-                        <span class="live-dot"></span> LIVE
-                    </div>
+        <!-- Header -->
+        <div class="flex items-center justify-between w-full px-1">
+            <div class="flex flex-col">
+                <h1 class="text-xl font-black italic tracking-tighter">STAR SPORTS <span class="text-[#00ff6a]">1 HINDI</span></h1>
+                <div class="flex items-center gap-2">
+                    <span class="live-tag">LIVE</span>
+                    <span class="text-[10px] text-white/40 uppercase tracking-widest">Ultra HD Stream</span>
                 </div>
             </div>
-            
-            <button onclick="toggleFullScreen()" class="glass p-3 rounded-xl hover:scale-105 active:scale-95 transition-all">
+            <button onclick="toggleFS()" class="bg-white/5 p-2 rounded-lg border border-white/10">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
             </button>
         </div>
 
-        <!-- Player Section -->
-        <div class="relative group">
-            <div class="stream-container mx-auto border border-white/5">
-                <!-- The Ad Guard: This intercepts the first few clicks that usually trigger popups -->
-                <div id="ad-guard" onclick="clearAdGuard()" title="Click to Play">
-                    <div class="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity group-hover:bg-black/40">
-                         <div class="flex flex-col items-center gap-4">
-                            <div class="w-16 h-16 rounded-full bg-[#00ff6a] flex items-center justify-center glow-green animate-bounce">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="black"><path d="M8 5v14l11-7z"/></svg>
-                            </div>
-                            <p class="text-sm font-bold tracking-widest text-white/80 uppercase">Tap to start Stream</p>
-                         </div>
+        <!-- Player Container -->
+        <div class="video-wrapper">
+            <!-- Ad Shield: Catches the invisible redirects -->
+            <div id="shield" onclick="handleShieldClick()">
+                <div class="bg-black/80 absolute inset-0 backdrop-blur-md flex flex-col items-center justify-center gap-4 transition-opacity duration-500" id="shield-ui">
+                    <div class="w-16 h-16 rounded-full bg-[#00ff6a] flex items-center justify-center animate-bounce shadow-[0_0_30px_#00ff6a]">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="black"><path d="M8 5v14l11-7z"/></svg>
                     </div>
+                    <p class="text-[#00ff6a] font-bold text-sm tracking-widest uppercase">Tap to start Ad-Free</p>
                 </div>
-
-                <iframe 
-                    id="stream-player"
-                    src="https://allrounder-live.pages.dev/star/star-1-hindi" 
-                    allow="autoplay; encrypted-media; fullscreen" 
-                    allowfullscreen="true"
-                    scrolling="no">
-                </iframe>
             </div>
 
-            <!-- Bottom Stats & Share -->
-            <div class="mt-6 glass rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-6">
-                <div class="flex items-center gap-8">
-                    <div class="text-center sm:text-left">
-                        <p class="text-[10px] text-white/30 font-bold uppercase tracking-wider mb-1">Status</p>
-                        <p class="text-sm font-mono text-[#00ff6a] font-bold">Excellent</p>
-                    </div>
-                    <div class="text-center sm:text-left border-l border-white/10 pl-8">
-                        <p class="text-[10px] text-white/30 font-bold uppercase tracking-wider mb-1">Viewers</p>
-                        <p class="text-sm font-mono font-bold" id="v-count">18,402</p>
-                    </div>
-                </div>
+            <iframe 
+                id="stream"
+                src="https://allrounder-live.pages.dev/star/star-1-hindi" 
+                allow="autoplay; encrypted-media; fullscreen" 
+                allowfullscreen="true"
+                scrolling="no">
+            </iframe>
+        </div>
 
-                <div class="flex gap-3 w-full sm:w-auto">
-                    <button onclick="handleShare()" class="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-[#00ff6a] text-black px-8 py-3 rounded-xl font-black text-sm hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg glow-green uppercase">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
-                        Share
-                    </button>
-                    <button onclick="refreshStream()" class="glass p-3 rounded-xl hover:bg-white/10" title="Refresh">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-                    </button>
-                </div>
+        <!-- Footer Actions -->
+        <div class="flex flex-col sm:flex-row items-center gap-3 w-full">
+            <button onclick="shareStream()" class="w-full sm:flex-1 bg-[#00ff6a] text-black h-12 rounded-xl font-black uppercase text-sm flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+                Share Stream
+            </button>
+            
+            <div class="flex gap-2 w-full sm:w-auto">
+                <button onclick="refresh()" class="flex-1 sm:w-14 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center hover:bg-white/10">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                </button>
             </div>
         </div>
 
-        <p class="text-center text-[9px] text-white/20 uppercase tracking-[0.2em]">
-            Secure Stream Encryption Enabled &bull; No Buffering Engine v4.2
-        </p>
+        <div id="status" class="text-[10px] text-center text-white/20 uppercase tracking-[0.3em] mt-2">
+            Optimized for low-latency playback
+        </div>
     </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed top-8 left-1/2 -translate-x-1/2 glass px-8 py-3 rounded-full text-xs font-bold tracking-widest uppercase opacity-0 -translate-y-4 transition-all z-[100] border-[#00ff6a]/30">
-        Link Copied
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-10 bg-white text-black px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest opacity-0 translate-y-4 transition-all z-[10000]">
+        Action Completed
     </div>
 
     <script>
-        // Ad-Guard Logic: Prevents the first click from redirecting
-        function clearAdGuard() {
-            const guard = document.getElementById('ad-guard');
-            guard.style.opacity = '0';
-            setTimeout(() => {
-                guard.classList.add('cleared');
-                showToast("Stream Secured");
-            }, 300);
+        let clickCount = 0;
+        const shield = document.getElementById('shield');
+        const shieldUI = document.getElementById('shield-ui');
+
+        // This intercepts the clicks that would normally open popups
+        function handleShieldClick() {
+            clickCount++;
+            
+            // On first click, hide UI but keep the shield to catch the second "hidden" ad trigger
+            if (clickCount === 1) {
+                shieldUI.style.opacity = '0';
+                showToast("Ads Blocked...");
+            } 
+            
+            // On second click, remove the shield entirely to allow video interaction
+            if (clickCount >= 2) {
+                shield.style.display = 'none';
+                showToast("Stream Ready!");
+            }
         }
 
-        // Native Share + Clipboard Fallback
-        async function handleShare() {
+        async function shareStream() {
             const data = {
                 title: 'Star Sports 1 Live',
-                text: 'Join me watching Star Sports 1 HD Live!',
+                text: 'Watching Star Sports 1 Hindi HD Live!',
                 url: window.location.href
             };
+
             try {
                 if (navigator.share) {
                     await navigator.share(data);
                 } else {
-                    copyLink();
+                    const temp = document.createElement('input');
+                    document.body.appendChild(temp);
+                    temp.value = window.location.href;
+                    temp.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(temp);
+                    showToast("Link Copied!");
                 }
-            } catch (e) { copyLink(); }
+            } catch (e) {
+                console.log("Share failed");
+            }
         }
 
-        function copyLink() {
-            const el = document.createElement('textarea');
-            el.value = window.location.href;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
-            showToast("Copied to Clipboard");
-        }
-
-        function refreshStream() {
-            const frame = document.getElementById('stream-player');
+        function refresh() {
+            const frame = document.getElementById('stream');
             const src = frame.src;
             frame.src = '';
             setTimeout(() => { frame.src = src; }, 50);
-            showToast("Reloading Stream...");
+            showToast("Refreshing...");
         }
 
-        function toggleFullScreen() {
+        function toggleFS() {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen();
             } else {
@@ -216,25 +192,18 @@
         function showToast(msg) {
             const t = document.getElementById('toast');
             t.textContent = msg;
-            t.classList.remove('opacity-0', '-translate-y-4');
+            t.classList.remove('opacity-0', 'translate-y-4');
             t.classList.add('opacity-100', 'translate-y-0');
             setTimeout(() => {
-                t.classList.add('opacity-0', '-translate-y-4');
+                t.classList.add('opacity-0', 'translate-y-4');
                 t.classList.remove('opacity-100', 'translate-y-0');
-            }, 2500);
+            }, 2000);
         }
 
-        // Prevent Right Click & DevTools
-        document.addEventListener('contextmenu', e => e.preventDefault());
+        // Disable Inspect
         document.onkeydown = (e) => {
             if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false;
         };
-
-        // Viewer Counter Simulation
-        setInterval(() => {
-            const val = Math.floor(18000 + Math.random() * 500);
-            document.getElementById('v-count').textContent = val.toLocaleString();
-        }, 3000);
     </script>
 </body>
 </html>
