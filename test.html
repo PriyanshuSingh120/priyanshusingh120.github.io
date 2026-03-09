@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Star Sports Live | Ad-Slayer Edition</title>
+    <title>Star Sports Live | Powered by Prigames</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root { --p: #00ff6a; --b: #050505; }
@@ -11,7 +11,7 @@
             background: var(--b); 
             color: #fff; 
             font-family: system-ui, -apple-system, sans-serif; 
-            overflow: hidden;
+            overflow-x: hidden;
             overscroll-behavior: none;
         }
         .video-wrapper {
@@ -23,35 +23,12 @@
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
         }
         iframe {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1;
-        }
-        /* The Ad-Slayer Shield */
-        #shield {
-            position: absolute;
-            inset: 0;
-            z-index: 9999;
-            background: rgba(0,0,0,0.01); /* Nearly invisible but catches clicks */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .shield-btn {
-            background: var(--p);
-            color: #000;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 0 20px var(--p);
-            pointer-events: none;
         }
         .live-tag {
             background: #ff0000;
@@ -62,6 +39,11 @@
             animation: pulse 1s infinite;
         }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen p-4">
@@ -71,29 +53,19 @@
         <!-- Header -->
         <div class="flex items-center justify-between w-full px-1">
             <div class="flex flex-col">
-                <h1 class="text-xl font-black italic tracking-tighter">STAR SPORTS <span class="text-[#00ff6a]">1 HINDI</span></h1>
+                <h1 class="text-xl font-black italic tracking-tighter uppercase">Star Sports <span class="text-[#00ff6a]">1 Hindi</span></h1>
                 <div class="flex items-center gap-2">
                     <span class="live-tag">LIVE</span>
-                    <span class="text-[10px] text-white/40 uppercase tracking-widest">Ultra HD Stream</span>
+                    <span class="text-[10px] text-white/40 uppercase tracking-widest font-bold">Ultra HD Experience</span>
                 </div>
             </div>
-            <button onclick="toggleFS()" class="bg-white/5 p-2 rounded-lg border border-white/10">
+            <button onclick="toggleFS()" class="bg-white/5 p-2.5 rounded-xl border border-white/10 hover:bg-white/10 transition-all">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
             </button>
         </div>
 
         <!-- Player Container -->
         <div class="video-wrapper">
-            <!-- Ad Shield: Catches the invisible redirects -->
-            <div id="shield" onclick="handleShieldClick()">
-                <div class="bg-black/80 absolute inset-0 backdrop-blur-md flex flex-col items-center justify-center gap-4 transition-opacity duration-500" id="shield-ui">
-                    <div class="w-16 h-16 rounded-full bg-[#00ff6a] flex items-center justify-center animate-bounce shadow-[0_0_30px_#00ff6a]">
-                        <svg width="30" height="30" viewBox="0 0 24 24" fill="black"><path d="M8 5v14l11-7z"/></svg>
-                    </div>
-                    <p class="text-[#00ff6a] font-bold text-sm tracking-widest uppercase">Tap to start Ad-Free</p>
-                </div>
-            </div>
-
             <iframe 
                 id="stream"
                 src="https://allrounder-live.pages.dev/star/star-1-hindi" 
@@ -104,55 +76,42 @@
         </div>
 
         <!-- Footer Actions -->
-        <div class="flex flex-col sm:flex-row items-center gap-3 w-full">
-            <button onclick="shareStream()" class="w-full sm:flex-1 bg-[#00ff6a] text-black h-12 rounded-xl font-black uppercase text-sm flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
-                Share Stream
-            </button>
-            
-            <div class="flex gap-2 w-full sm:w-auto">
-                <button onclick="refresh()" class="flex-1 sm:w-14 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center hover:bg-white/10">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        <div class="flex flex-col gap-3 w-full">
+            <div class="flex flex-col sm:flex-row gap-3">
+                <a href="https://t.me/prigames" target="_blank" class="w-full sm:flex-1 bg-sky-500 text-white h-12 rounded-xl font-bold uppercase text-xs flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-sky-500/20">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.69-.52.35-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.24.35-.49.96-.75 3.78-1.65 6.31-2.74 7.58-3.27 3.61-1.5 4.35-1.76 4.84-1.77.11 0 .35.03.51.16.13.11.17.26.18.37 0 .04 0 .09-.01.13z"/></svg>
+                    Join Telegram Channel
+                </a>
+                
+                <button onclick="shareStream()" class="w-full sm:flex-1 bg-[#00ff6a] text-black h-12 rounded-xl font-black uppercase text-xs flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#00ff6a]/20">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+                    Share
+                </button>
+            </div>
+
+            <div class="glass p-4 rounded-xl flex items-center justify-between">
+                <div class="flex flex-col">
+                    <span class="text-[10px] text-white/30 uppercase font-bold tracking-widest">Copyright</span>
+                    <span class="text-sm font-bold text-white/80">© Prigames</span>
+                </div>
+                <button onclick="refresh()" class="bg-white/5 p-2 rounded-lg border border-white/10 hover:bg-white/20 transition-all">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
                 </button>
             </div>
         </div>
-
-        <div id="status" class="text-[10px] text-center text-white/20 uppercase tracking-[0.3em] mt-2">
-            Optimized for low-latency playback
-        </div>
     </div>
 
-    <!-- Toast -->
-    <div id="toast" class="fixed bottom-10 bg-white text-black px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest opacity-0 translate-y-4 transition-all z-[10000]">
-        Action Completed
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-10 bg-white text-black px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest opacity-0 translate-y-4 transition-all z-[999]">
+        Link Copied
     </div>
 
     <script>
-        let clickCount = 0;
-        const shield = document.getElementById('shield');
-        const shieldUI = document.getElementById('shield-ui');
-
-        // This intercepts the clicks that would normally open popups
-        function handleShieldClick() {
-            clickCount++;
-            
-            // On first click, hide UI but keep the shield to catch the second "hidden" ad trigger
-            if (clickCount === 1) {
-                shieldUI.style.opacity = '0';
-                showToast("Ads Blocked...");
-            } 
-            
-            // On second click, remove the shield entirely to allow video interaction
-            if (clickCount >= 2) {
-                shield.style.display = 'none';
-                showToast("Stream Ready!");
-            }
-        }
-
+        // Native Share + Clipboard Fallback
         async function shareStream() {
             const data = {
                 title: 'Star Sports 1 Live',
-                text: 'Watching Star Sports 1 Hindi HD Live!',
+                text: 'Join me watching Star Sports 1 Hindi HD Live by Prigames!',
                 url: window.location.href
             };
 
@@ -169,7 +128,7 @@
                     showToast("Link Copied!");
                 }
             } catch (e) {
-                console.log("Share failed");
+                showToast("Failed to share");
             }
         }
 
@@ -178,7 +137,7 @@
             const src = frame.src;
             frame.src = '';
             setTimeout(() => { frame.src = src; }, 50);
-            showToast("Refreshing...");
+            showToast("Reloading Stream...");
         }
 
         function toggleFS() {
@@ -200,7 +159,7 @@
             }, 2000);
         }
 
-        // Disable Inspect
+        // Standard protection
         document.onkeydown = (e) => {
             if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false;
         };
