@@ -168,6 +168,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/HNAjQaF4P"
 },
+    "shaitaan": {
+  "title": "Shaitaan",
+  "img": "https://image.tmdb.org/t/p/w500/oRvFzcagAcC6Q317xtV7QXzwBnj.jpg",
+  "year": "2024",
+  "genre": "Thriller, Horror",
+  "tmdb": "1187619",
+  "type": "movie",
+  "src": "https://short.icu/mzkdesMvQ"
+},
     "lyle-lyle-crocodile": {
   "title": "Lyle, Lyle, Crocodile",
   "img": "https://image.tmdb.org/t/p/w500/dN6XnCEP3AO7N4XFOFyZ8V8kZF5.jpg",
@@ -1186,6 +1195,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
