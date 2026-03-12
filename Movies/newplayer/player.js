@@ -104,7 +104,16 @@ const movieDatabase = {
   "tmdb": "1290190",
   "type": "movie",
   "src": "https://short.icu/Oh0j8f1nF"
-}, 
+},
+    "jailer": {
+  "title": "Jailer",
+  "img": "https://image.tmdb.org/t/p/w500/pTmMxAHqX4vsIDE6HPPxOR0Q6TN.jpg",
+  "year": "2023",
+  "genre": "Action, Crime, Thriller, Comedy, Adventure",
+  "tmdb": "937020",
+  "type": "movie",
+  "src": "https://short.icu/wxQapMrqr"
+},
     "vanaveera": {
   "title": "Vanaveera",
   "img": "https://image.tmdb.org/t/p/w500/gCrNwHpoZ0haxm0jZxc9JHgyLq7.jpg",
@@ -1195,6 +1204,7 @@ function generateRecommendations(currentId) {
 
 // Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
+
 
 
 
