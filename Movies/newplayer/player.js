@@ -52,6 +52,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/M384C-NJPl"
 },
+    "dhurandhar-the-revenge": {
+  "title": "Dhurandhar: The Revenge",
+  "img": "https://image.tmdb.org/t/p/w500/ov8vrRLZGoXHpYjSY9Vpv1tHJX7.jpg",
+  "year": "2026",
+  "genre": "Action, Crime, Thriller",
+  "tmdb": "1582770",
+  "type": "movie",
+  "src": "https://short.icu/7fOcPKH0O"
+},
     "iron-man-2": {
   "title": "Iron Man 2",
   "img": "https://image.tmdb.org/t/p/w500/6WBeq4fCfn7AN0o21W9qNcRF2l9.jpg",
