@@ -43,6 +43,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/8vi-2dDjV"
 },
+    "k-g-f-chapter-2": {
+  "title": "K.G.F: Chapter 2",
+  "img": "https://image.tmdb.org/t/p/w500/khNVygolU0TxLIDWff5tQlAhZ23.jpg",
+  "year": "2022",
+  "genre": "Action, Thriller, Adventure, Crime",
+  "tmdb": "587412",
+  "type": "movie",
+  "src": "https://short.icu/EPtVqpNuQ"
+},
     "bagheera": {
   "title": "Bagheera",
   "img": "https://image.tmdb.org/t/p/w500/ziXyy0zgmwf4oTunSsUHDyOZBeC.jpg",
