@@ -61,6 +61,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/M384C-NJPl"
 },
+    "fight-club": {
+  "title": "Fight Club",
+  "img": "https://image.tmdb.org/t/p/w500/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg",
+  "year": "1999",
+  "genre": "Drama, Thriller",
+  "tmdb": "550",
+  "type": "movie",
+  "src": "https://short.icu/AIR9ncg6i"
+},
     "dhurandhar-the-revenge": {
   "title": "Dhurandhar: The Revenge",
   "img": "https://image.tmdb.org/t/p/w500/ov8vrRLZGoXHpYjSY9Vpv1tHJX7.jpg",
