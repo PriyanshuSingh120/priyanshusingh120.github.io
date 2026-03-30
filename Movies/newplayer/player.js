@@ -43,6 +43,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://short.icu/8vi-2dDjV"
 },
+    "se7en": {
+  "title": "Se7en",
+  "img": "https://image.tmdb.org/t/p/w500/191nKfP0ehp3uIvWqgPbFmI4lv9.jpg",
+  "year": "1995",
+  "genre": "Crime, Mystery, Thriller",
+  "tmdb": "807",
+  "type": "movie",
+  "src": "https://short.icu/NEEBGmlT9H"
+},
     "k-g-f-chapter-2": {
   "title": "K.G.F: Chapter 2",
   "img": "https://image.tmdb.org/t/p/w500/khNVygolU0TxLIDWff5tQlAhZ23.jpg",
