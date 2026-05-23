@@ -16,6 +16,15 @@ const movieDatabase = {
   "isSeries": true, 
   "episodes": ["https://short.icu/OECS7_O1Hh","https://short.icu/cy9s-nJSj","https://short.icu/2yMkFxb9V","https://short.icu/mUHwqpGa3","https://short.icu/Xw1za7G8e","https://short.icu/5cQX07cVU","https://short.icu/XDMYlF0qI","https://short.icu/ZiEXDePH10","https://short.icu/y6R6dRk4N","https://short.icu/GcXTWdzM3"] 
 },
+    "marty-supreme": {
+  "title": "Marty Supreme",
+  "img": "https://image.tmdb.org/t/p/w500/lYWEXbQgRTR4ZQleSXAgRbxAjvq.jpg",
+  "year": "2025",
+  "genre": "Drama, Thriller",
+  "tmdb": "1317288",
+  "type": "movie",
+  "src": "https://abyssplayer.com/tvwtQKBX4"
+},
     "wanted": {
   "title": "Wanted",
   "img": "https://image.tmdb.org/t/p/w500/uUACJpxcFADB590MZRj2sSDMLcn.jpg",
