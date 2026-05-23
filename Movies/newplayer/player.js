@@ -25,6 +25,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://abyssplayer.com/tvwtQKBX4"
 },
+    "k-g-f-chapter-2": {
+  "title": "K.G.F: Chapter 2",
+  "img": "https://image.tmdb.org/t/p/w500/khNVygolU0TxLIDWff5tQlAhZ23.jpg",
+  "year": "2022",
+  "genre": "Action, Thriller, Adventure, Crime",
+  "tmdb": "587412",
+  "type": "movie",
+  "src": "https://abyssplayer.com/KbtLXv2m_"
+},
     "wanted": {
   "title": "Wanted",
   "img": "https://image.tmdb.org/t/p/w500/uUACJpxcFADB590MZRj2sSDMLcn.jpg",
