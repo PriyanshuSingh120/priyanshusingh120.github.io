@@ -86,7 +86,7 @@ const movieDatabase = {
   "genre": "Action, Crime, Thriller",
   "tmdb": "1582770",
   "type": "movie",
-  "src": "https://short.icu/7fOcPKH0O"
+  "src": "https://abyssplayer.com/hBkTELV-L"
 },
     "iron-man-2": {
   "title": "Iron Man 2",
