@@ -1160,9 +1160,9 @@ function initPlayer() {
 
         // Smashy Priority for external
         sources.s1 = `https://player.smashy.stream/${typePath}/${tmdbId}${isSeries ? '?s=1&e=1' : ''}`;
-        sources.s2 = `https://player.videasy.net/${typePath}/${tmdbId}?color=e50914&overlay=true`;
-        sources.s3 = `https://vidsrc.xyz/embed/${typePath}/${tmdbId}`;
-        sources.s4 = `https://www.2embed.cc/embed/${isSeries ? 'tv' : ''}${tmdbId}${isSeries ? '&s=1&e=1' : ''}`;
+        //sources.s2 = `https://player.videasy.net/${typePath}/${tmdbId}?color=e50914&overlay=true`;
+        sources.s3 = `https://vsembed.su/embed/${typePath}/${tmdbId}`;
+        sources.s2 = `https://www.2embed.cc/embed/${isSeries ? 'tv' : ''}${tmdbId}${isSeries ? '&s=1&e=1' : ''}`;
 
         // Label updates
         if(document.getElementById('btn-s1')) document.getElementById('btn-s1').innerHTML = `<i class="fas fa-language"></i> Smashy`;
