@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +7,11 @@
     <title>Star Sports Live | Powered by Prigames</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root { --p: #00ff6a; --b: #050505; }
+        :root { 
+            --p: #00ff6a; 
+            --b: #050505; 
+            --card-bg: rgba(18, 18, 18, 0.6);
+        }
         body { 
             background: var(--b); 
             color: #fff; 
@@ -14,104 +19,365 @@
             overflow-x: hidden;
             overscroll-behavior: none;
         }
+        
+        /* Neon glowing effects */
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(0, 255, 106, 0.15);
+        }
+        .neon-border {
+            border: 1px solid rgba(0, 255, 106, 0.2);
+        }
+        .neon-border:hover {
+            border: 1px solid rgba(0, 255, 106, 0.5);
+        }
+
+        /* Player wrapper maintaining precise aspect ratio */
         .video-wrapper {
             width: 100%;
             max-width: 1000px;
             aspect-ratio: 16/9;
             background: #000;
             position: relative;
-            border-radius: 12px;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.9);
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        
+        .video-wrapper.theatre {
+            max-width: 100% !important;
+            border-radius: 0;
+            border-left: none;
+            border-right: none;
+        }
+
         iframe {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1;
+            z-index: 2;
+            background: transparent;
         }
+        
         .live-tag {
-            background: #ff0000;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: bold;
-            animation: pulse 1s infinite;
+            background: #ff0055;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            animation: pulse 1.5s infinite;
         }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        @keyframes pulse { 
+            0% { opacity: 1; transform: scale(1); } 
+            50% { opacity: 0.6; transform: scale(0.96); } 
+            100% { opacity: 1; transform: scale(1); } 
+        }
+        
         .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Custom server button transitions */
+        .srv-btn {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Hidden scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #222;
+            border-radius: 3px;
         }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen p-4">
+<body class="flex flex-col items-center justify-start min-h-screen p-4 md:p-6 pb-12">
 
-    <div class="w-full max-w-4xl flex flex-col gap-4">
+    <div class="w-full max-w-4xl flex flex-col gap-5 mt-2 md:mt-6">
         
         <!-- Header -->
         <div class="flex items-center justify-between w-full px-1">
             <div class="flex flex-col">
-                <h1 class="text-xl font-black italic tracking-tighter uppercase">Star Sports <span class="text-[#00ff6a]">1</span></h1>
                 <div class="flex items-center gap-2">
+                    <h1 class="text-2xl md:text-3xl font-black italic tracking-tighter uppercase leading-none">
+                        Star Sports <span class="text-[#00ff6a]">1</span>
+                    </h1>
+                </div>
+                <div class="flex items-center gap-2 mt-1.5">
                     <span class="live-tag">LIVE</span>
-                    <span class="text-[10px] text-white/40 uppercase tracking-widest font-bold">Ultra HD Experience</span>
+                    <span class="text-[10px] text-white/40 uppercase tracking-widest font-bold">Ultra HD 1080p Stream</span>
                 </div>
             </div>
-            <button onclick="toggleFS()" class="bg-white/5 p-2.5 rounded-xl border border-white/10 hover:bg-white/10 transition-all">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
-            </button>
+            
+            <div class="flex items-center gap-2">
+                <!-- Theatre Mode Toggler -->
+                <button onclick="toggleTheatre()" title="Theatre Mode" class="bg-white/5 p-2.5 rounded-xl border border-white/10 hover:bg-white/10 active:scale-95 transition-all hidden md:flex">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="4" width="20" height="16" rx="2" stroke-dasharray="0" />
+                        <path d="M6 8h12v8H6z" fill="rgba(255,255,255,0.1)"/>
+                    </svg>
+                </button>
+                <!-- Fullscreen Toggler -->
+                <button onclick="toggleFS()" title="Fullscreen" class="bg-white/5 p-2.5 rounded-xl border border-white/10 hover:bg-white/10 active:scale-95 transition-all">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                </button>
+            </div>
         </div>
 
-        <!-- Player Container -->
-        <div class="video-wrapper">
+        <!-- Player Container & Custom Overlays -->
+        <div id="player-container" class="video-wrapper">
+            
+            <!-- Loading Indicator Overlay -->
+            <div id="player-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-black/90 z-20 pointer-events-none transition-opacity duration-300">
+                <div class="relative w-12 h-12 mb-3">
+                    <div class="absolute inset-0 rounded-full border-4 border-white/10"></div>
+                    <div class="absolute inset-0 rounded-full border-4 border-t-[#00ff6a] animate-spin"></div>
+                </div>
+                <p class="text-xs font-bold text-white/50 uppercase tracking-widest">Connecting to Server...</p>
+            </div>
+
+            <!-- Server 3 Custom URL Form Setup (Loads when source is empty) -->
+            <div id="custom-setup-overlay" class="absolute inset-0 flex flex-col items-center justify-center bg-zinc-950/95 p-6 text-center z-10 hidden">
+                <div class="max-w-md w-full flex flex-col items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-[#00ff6a]/10 flex items-center justify-center border border-[#00ff6a]/20 mb-1">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00ff6a" stroke-width="2">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-black uppercase tracking-tight">Configure Custom Server</h3>
+                        <p class="text-xs text-white/50 mt-1 max-w-sm mx-auto">
+                            Paste any live stream webpage, m3u8 player link, or custom iframe URL below to stream it here.
+                        </p>
+                    </div>
+                    <div class="w-full flex flex-col sm:flex-row gap-2 mt-2">
+                        <input 
+                            type="text" 
+                            id="custom-url-input" 
+                            placeholder="https://example.com/stream-iframe" 
+                            class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#00ff6a]/40 focus:border-[#00ff6a] text-white/90 placeholder-white/20"
+                        >
+                        <button onclick="saveCustomServer()" class="bg-[#00ff6a] text-black font-black px-5 py-3 rounded-xl text-xs uppercase tracking-wider hover:brightness-115 active:scale-95 transition-all">
+                            Load Link
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actual Iframe Frame -->
             <iframe 
                 id="stream"
                 src="https://live.khantv.pk/update/?id=star_sports1" 
                 allow="autoplay; encrypted-media; fullscreen" 
                 allowfullscreen="true"
-                scrolling="no">
+                scrolling="no"
+                onload="hideLoader()">
             </iframe>
+        </div>
+
+        <!-- Server Selector Dashboard -->
+        <div class="glass p-3 rounded-2xl flex flex-col gap-2.5">
+            <div class="flex items-center justify-between px-1.5">
+                <span class="text-[10px] text-white/40 uppercase font-black tracking-widest">Select Alternate Server Backup</span>
+                <span id="active-server-badge" class="text-[9px] bg-[#00ff6a]/10 text-[#00ff6a] px-2 py-0.5 rounded-full font-bold uppercase tracking-wide">
+                    Server 1 Active
+                </span>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-2">
+                <!-- Server 1 -->
+                <button 
+                    onclick="switchServer(1)" 
+                    id="srv-btn-1" 
+                    class="srv-btn py-3 px-2 rounded-xl text-xs font-black uppercase tracking-wider bg-[#00ff6a] text-black text-center truncate shadow-md shadow-[#00ff6a]/10">
+                    Server 1
+                </button>
+                <!-- Server 2 -->
+                <button 
+                    onclick="switchServer(2)" 
+                    id="srv-btn-2" 
+                    class="srv-btn py-3 px-2 rounded-xl text-xs font-black uppercase tracking-wider bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/5 text-center truncate">
+                    Server 2
+                </button>
+                <!-- Server 3 -->
+                <button 
+                    onclick="switchServer(3)" 
+                    id="srv-btn-3" 
+                    class="srv-btn py-3 px-2 rounded-xl text-xs font-black uppercase tracking-wider bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/5 text-center truncate flex items-center justify-center gap-1">
+                    Server 3 <span id="srv3-indicator" class="text-[9px] text-white/30 italic font-medium">(Empty)</span>
+                </button>
+            </div>
         </div>
 
         <!-- Footer Actions -->
         <div class="flex flex-col gap-3 w-full">
             <div class="flex flex-col sm:flex-row gap-3">
-                <a href="https://t.me/prigames" target="_blank" class="w-full sm:flex-1 bg-sky-500 text-white h-12 rounded-xl font-bold uppercase text-xs flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-sky-500/20">
+                <!-- Telegram Channel Link -->
+                <a href="https://t.me/prigames" target="_blank" class="w-full sm:flex-1 bg-sky-500 text-white h-13 py-3.5 rounded-xl font-bold uppercase text-xs flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-sky-500/20">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.69-.52.35-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.24.35-.49.96-.75 3.78-1.65 6.31-2.74 7.58-3.27 3.61-1.5 4.35-1.76 4.84-1.77.11 0 .35.03.51.16.13.11.17.26.18.37 0 .04 0 .09-.01.13z"/></svg>
                     Join Telegram Channel
                 </a>
                 
-                <button onclick="shareStream()" class="w-full sm:flex-1 bg-[#00ff6a] text-black h-12 rounded-xl font-black uppercase text-xs flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#00ff6a]/20">
+                <!-- Share Button -->
+                <button onclick="shareStream()" class="w-full sm:flex-1 bg-[#00ff6a] text-black h-13 py-3.5 rounded-xl font-black uppercase text-xs flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#00ff6a]/25">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
-                    Share
+                    Share Stream
                 </button>
             </div>
 
-            <div class="glass p-4 rounded-xl flex items-center justify-between">
-                <div class="flex flex-col">
-                    <span class="text-[10px] text-white/30 uppercase font-bold tracking-widest">Copyright</span>
-                    <span class="text-sm font-bold text-white/80">© Prigames</span>
+            <!-- Branding / Reset Box -->
+            <div class="glass p-4 rounded-2xl flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-sm font-black text-[#00ff6a]">
+                        ⚡
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[9px] text-white/30 uppercase font-bold tracking-widest leading-none">Broadcaster</span>
+                        <span class="text-sm font-black text-white/90">© Prigames Live</span>
+                    </div>
                 </div>
-                <button onclick="refresh()" class="bg-white/5 p-2 rounded-lg border border-white/10 hover:bg-white/20 transition-all">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-                </button>
+                <div class="flex gap-1.5">
+                    <!-- Reset server configuration button if customized -->
+                    <button id="reset-custom-btn" onclick="resetCustomServer()" class="bg-white/5 p-2.5 rounded-xl border border-white/10 hover:bg-white/10 transition-all hidden" title="Clear Custom Server">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2.5"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    </button>
+                    <!-- Refresh Stream -->
+                    <button onclick="refresh()" title="Reload Stream Connection" class="bg-white/5 p-2.5 rounded-xl border border-white/10 hover:bg-white/15 transition-all active:scale-95">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-10 bg-white text-black px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest opacity-0 translate-y-4 transition-all z-[999]">
-        Link Copied
+    <div id="toast" class="fixed bottom-6 bg-white text-black px-6 py-3 rounded-full text-xs font-bold uppercase tracking-wider opacity-0 translate-y-4 transition-all duration-300 z-[9999] shadow-2xl">
+        Loaded Server
     </div>
 
     <script>
-        // Native Share + Clipboard Fallback
+        // Server URL Configurations
+        const SERVERS = {
+            1: "https://live.khantv.pk/update/?id=star_sports1",
+            2: "https://go.webcric.com/starsports1.htm",
+            3: "" // Starts completely blank! Editable dynamically.
+        };
+
+        let currentActiveServer = 1;
+
+        // Automatically hide player loader when iframe finishes rendering content
+        function hideLoader() {
+            const loader = document.getElementById('player-loader');
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 300);
+        }
+
+        function showLoader() {
+            const loader = document.getElementById('player-loader');
+            loader.style.display = 'flex';
+            loader.style.opacity = '1';
+        }
+
+        // Handle Switching Servers
+        function switchServer(index) {
+            currentActiveServer = index;
+            const iframe = document.getElementById('stream');
+            const customOverlay = document.getElementById('custom-setup-overlay');
+            const activeBadge = document.getElementById('active-server-badge');
+            
+            showLoader();
+
+            // Reset UI selections on buttons
+            for (let i = 1; i <= 3; i++) {
+                const btn = document.getElementById(`srv-btn-${i}`);
+                if (i === index) {
+                    btn.className = "srv-btn py-3 px-2 rounded-xl text-xs font-black uppercase tracking-wider bg-[#00ff6a] text-black text-center truncate shadow-md shadow-[#00ff6a]/15";
+                } else {
+                    btn.className = "srv-btn py-3 px-2 rounded-xl text-xs font-black uppercase tracking-wider bg-white/5 text-white/60 hover:bg-white/10 hover:text-white border border-white/5 text-center truncate";
+                }
+            }
+
+            // Update status text
+            activeBadge.innerText = `Server ${index} Active`;
+
+            if (index === 3 && !SERVERS[3]) {
+                // Server 3 is selected but still blank - show config panel overlay
+                iframe.src = "about:blank";
+                customOverlay.classList.remove('hidden');
+                document.getElementById('reset-custom-btn').classList.add('hidden');
+                hideLoader();
+                showToast("Server 3: Setup Backup URL");
+            } else {
+                // Standard servers with configured sources
+                customOverlay.classList.add('hidden');
+                iframe.src = SERVERS[index];
+                
+                if (index === 3) {
+                    document.getElementById('reset-custom-btn').classList.remove('hidden');
+                } else {
+                    document.getElementById('reset-custom-btn').classList.add('hidden');
+                }
+                
+                showToast(`Switched to Server ${index}`);
+            }
+        }
+
+        // Custom Link configurations for Server 3
+        function saveCustomServer() {
+            const inputField = document.getElementById('custom-url-input');
+            let urlVal = inputField.value.trim();
+
+            if (!urlVal) {
+                showToast("Please enter a valid link");
+                return;
+            }
+
+            // Simple URL fix protocol fallback helper
+            if (!/^https?:\/\//i.test(urlVal)) {
+                urlVal = 'https://' + urlVal;
+            }
+
+            // Update configuration
+            SERVERS[3] = urlVal;
+            
+            // Adjust Indicators
+            const indicator = document.getElementById('srv3-indicator');
+            indicator.innerText = "(Active)";
+            indicator.className = "text-[9px] text-green-400 font-bold italic";
+
+            // Refresh Switch State to trigger iframe loader
+            switchServer(3);
+            inputField.value = '';
+        }
+
+        function resetCustomServer() {
+            SERVERS[3] = "";
+            const indicator = document.getElementById('srv3-indicator');
+            indicator.innerText = "(Empty)";
+            indicator.className = "text-[9px] text-white/30 italic font-medium";
+            
+            showToast("Server 3 Config Cleared");
+            if (currentActiveServer === 3) {
+                switchServer(3);
+            }
+        }
+
+        // Native Web Share + Secure Direct Copying fallback
         async function shareStream() {
             const data = {
                 title: 'Star Sports 1 Live',
-                text: 'Join me watching Star Sports 1 Hindi HD Live by Prigames!',
+                text: 'Watch Star Sports 1 Hindi HD live stream powered by Prigames!',
                 url: window.location.href
             };
 
@@ -125,45 +391,76 @@
                     temp.select();
                     document.execCommand('copy');
                     document.body.removeChild(temp);
-                    showToast("Link Copied!");
+                    showToast("Link copied to clipboard!");
                 }
             } catch (e) {
-                showToast("Failed to share");
+                showToast("Failed to share link");
             }
         }
 
+        // Refresh stream connection safely
         function refresh() {
             const frame = document.getElementById('stream');
-            const src = frame.src;
-            frame.src = '';
-            setTimeout(() => { frame.src = src; }, 50);
-            showToast("Reloading Stream...");
+            
+            if (currentActiveServer === 3 && !SERVERS[3]) {
+                showToast("No active stream on Server 3");
+                return;
+            }
+
+            showLoader();
+            const currentSrc = frame.src;
+            frame.src = 'about:blank';
+            setTimeout(() => { 
+                frame.src = currentSrc; 
+            }, 100);
+            showToast("Reloading Live Connection...");
         }
 
+        // Fullscreen Toggle controller
         function toggleFS() {
+            const container = document.getElementById('player-container');
             if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
+                container.requestFullscreen().catch(err => {
+                    // Fallback to body-level full screen if element-level is restricted
+                    document.documentElement.requestFullscreen();
+                });
             } else {
                 document.exitFullscreen();
             }
         }
 
+        // Theatre Mode Controller for layout toggling
+        function toggleTheatre() {
+            const wrapper = document.getElementById('player-container');
+            wrapper.classList.toggle('theatre');
+            if (wrapper.classList.contains('theatre')) {
+                showToast("Theatre Mode Enabled");
+            } else {
+                showToast("Theatre Mode Disabled");
+            }
+        }
+
+        // Clean Visual Toast notifications
+        let toastTimeout;
         function showToast(msg) {
             const t = document.getElementById('toast');
             t.textContent = msg;
             t.classList.remove('opacity-0', 'translate-y-4');
             t.classList.add('opacity-100', 'translate-y-0');
-            setTimeout(() => {
+            
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
                 t.classList.add('opacity-0', 'translate-y-4');
                 t.classList.remove('opacity-100', 'translate-y-0');
-            }, 2000);
+            }, 2500);
         }
 
-        // Standard protection
+        // Standard console/inspect-key security protection
         document.onkeydown = (e) => {
-            if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false;
+            if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) {
+                return false;
+            }
         };
     </script>
 </body>
 </html>
-
