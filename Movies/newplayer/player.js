@@ -9,6 +9,25 @@ const movieDatabase = {
         "tmdb": "1399",
         "episodes": ["https://short.icu/iCoJ7LxST","https://short.icu/HDBdhe2r2","https://short.icu/KFfmh0oAX","https://short.icu/FPNbWnfQI","https://short.icu/nki1MkRAB6","https://short.icu/rsTXTuU1Qt","https://short.icu/jQ-ai9T6K","https://short.icu/yL89Eg2QV","https://short.icu/-RaIXDOaz","https://short.icu/KtwsCC_iV"]
     },
+    "house-of-the-dragon-s1": {
+  "title": "House of the Dragon - Season 1",
+  "img": "https://image.tmdb.org/t/p/w500/lx6hsqWXq4aVrXPjCqnMHFrGL5u.jpg",
+  "year": "2022",
+  "genre": "Sci-Fi & Fantasy, Drama, Action & Adventure",
+  "tmdb": "94997",
+  "type": "series",
+  "episodes": [
+    "https://abyssplayer.com/D98ebVXRT",
+    "https://abyssplayer.com/mVb0nC0LG",
+    "https://abyssplayer.com/oHIQDnGgp",
+    "https://abyssplayer.com/kBsMuONhD",
+    "https://abyssplayer.com/83Wicjh29",
+    "https://abyssplayer.com/Hg3iGDYJa",
+    "https://abyssplayer.com/4VqG-qUrvy",
+    "https://abyssplayer.com/XXLVID5CK",
+    "https://abyssplayer.com/RYdveGq1_"
+  ]
+},
     "the-traitors": { 
   "title": "The Traitors", 
   "img": "https://image.tmdb.org/t/p/w500/82gKEb78UPkYAMjXLSswwVzpCbI.jpg", 
