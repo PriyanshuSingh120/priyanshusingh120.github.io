@@ -45,6 +45,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://abyssplayer.com/tvwtQKBX4"
 },
+    "welcome-to-the-jungle": {
+  "title": "Welcome to the Jungle",
+  "img": "https://image.tmdb.org/t/p/w500/1JlfUuvvX5xLP2LIDah4JhWUtTx.jpg",
+  "year": "2026",
+  "genre": "Action, Comedy, Adventure, Crime",
+  "tmdb": "1169516",
+  "type": "movie",
+  "src": "https://abyssplayer.com/CQvfn9d4a"
+},
     "k-g-f-chapter-2": {
   "title": "K.G.F: Chapter 2",
   "img": "https://image.tmdb.org/t/p/w500/khNVygolU0TxLIDWff5tQlAhZ23.jpg",
