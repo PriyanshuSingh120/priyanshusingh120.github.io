@@ -54,6 +54,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://abyssplayer.com/CQvfn9d4a"
 },
+    "peddi": {
+  "title": "Peddi",
+  "img": "https://image.tmdb.org/t/p/w500/kJAJNNBYlbqAcpTDxBNnaILSMTy.jpg",
+  "year": "2026",
+  "genre": "Action, Drama",
+  "tmdb": "1057265",
+  "type": "movie",
+  "src": "https://abyssplayer.com/J0odHzM2e"
+},
     "k-g-f-chapter-2": {
   "title": "K.G.F: Chapter 2",
   "img": "https://image.tmdb.org/t/p/w500/khNVygolU0TxLIDWff5tQlAhZ23.jpg",
