@@ -1212,7 +1212,6 @@ function initPlayer() {
         sources.s2 = `https://www.2embed.cc/embed/${isSeries ? 'tv' : ''}${tmdbId}${isSeries ? '&s=1&e=1' : ''}`;
 
         // Label updates
-        if(document.getElementById('btn-s1')) document.getElementById('btn-s1').innerHTML = `<i class="fas fa-language"></i> Smashy`;
         if(document.getElementById('btn-s2')) document.getElementById('btn-s2').innerHTML = `<i class="fas fa-bolt"></i> VIDEASY`;
         if(document.getElementById('btn-s3')) document.getElementById('btn-s3').innerHTML = `<i class="fas fa-server"></i> Vidsrc`;
 
