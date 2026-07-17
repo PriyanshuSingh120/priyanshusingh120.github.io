@@ -1206,7 +1206,6 @@ function initPlayer() {
         if(selectorArea) selectorArea.style.display = 'none';
 
         // Smashy Priority for external
-        sources.s1 = `https://player.smashy.stream/${typePath}/${tmdbId}${isSeries ? '?s=1&e=1' : ''}`;
         //sources.s2 = `https://player.videasy.net/${typePath}/${tmdbId}?color=e50914&overlay=true`;
         sources.s3 = `https://vsembed.su/embed/${typePath}/${tmdbId}`;
         sources.s2 = `https://www.2embed.cc/embed/${isSeries ? 'tv' : ''}${tmdbId}${isSeries ? '&s=1&e=1' : ''}`;
@@ -1216,7 +1215,7 @@ function initPlayer() {
         if(document.getElementById('btn-s3')) document.getElementById('btn-s3').innerHTML = `<i class="fas fa-server"></i> Vidsrc`;
 
         if(switcher) switcher.style.display = 'flex';
-        player.src = sources.s1;
+        player.src = sources.s3;
         fetchMetaData(title, tmdbId, isSeries, true); // true = allow title update for search
         generateRecommendations('random');
     }
@@ -1235,7 +1234,7 @@ function switchServer(num) {
 
 function loadSpecificEpisode(url) {
     document.getElementById('mainVideoPlayer').src = url;
-    sources.s1 = url;
+    sources.s3= url;
 }
 
 async function fetchMetaData(title, id, isSeries, updateTitle) {
