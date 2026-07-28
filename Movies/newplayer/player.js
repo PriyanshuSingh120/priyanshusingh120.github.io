@@ -29,6 +29,15 @@ const movieDatabase = {
     "https://abyssplayer.com/ZkfDijg5x"
   ]
 },
+    "jana-nayagan": {
+  "title": "Jana Nayagan",
+  "img": "https://image.tmdb.org/t/p/w500/jt8pfSIdi47YpFMMWVRr8w5u2S0.jpg",
+  "year": "2026",
+  "genre": "Action, Drama",
+  "tmdb": "1235877",
+  "type": "movie",
+  "src": "https://play.abyssplayer.com/0uqqpwKZ0"
+},
     "the-traitors": { 
   "title": "The Traitors", 
   "img": "https://image.tmdb.org/t/p/w500/82gKEb78UPkYAMjXLSswwVzpCbI.jpg", 
