@@ -63,6 +63,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://abyssplayer.com/CQvfn9d4a"
 },
+    "spider-man-brand-new-day": {
+  "title": "Spider-Man: Brand New Day",
+  "img": "https://image.tmdb.org/t/p/w500/iPOn6DinuVyLY17YM9mKuPofV08.jpg",
+  "year": "2026",
+  "genre": "Sci-Fi, Action, Adventure",
+  "tmdb": "969681",
+  "type": "movie",
+  "src": "https://play.abyssplayer.com/Xq9mpGiwX"
+},
     "peddi": {
   "title": "Peddi",
   "img": "https://image.tmdb.org/t/p/w500/kJAJNNBYlbqAcpTDxBNnaILSMTy.jpg",
