@@ -63,6 +63,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://abyssplayer.com/CQvfn9d4a"
 },
+    "the-paradise": {
+  "title": "The Paradise",
+  "img": "https://image.tmdb.org/t/p/w500/nwfbqtbFbgqQuMfAtkesuCVHJjq.jpg",
+  "year": "2026",
+  "genre": "Action, Thriller, Drama",
+  "tmdb": "1376856",
+  "type": "movie",
+  "src": "https://player.abyssplayer.com/-7S6HEDQr"
+},
     "spider-man-brand-new-day": {
   "title": "Spider-Man: Brand New Day",
   "img": "https://image.tmdb.org/t/p/w500/iPOn6DinuVyLY17YM9mKuPofV08.jpg",
