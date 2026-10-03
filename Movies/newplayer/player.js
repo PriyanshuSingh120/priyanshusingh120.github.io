@@ -29,6 +29,15 @@ const movieDatabase = {
     "https://abyssplayer.com/ZkfDijg5x"
   ]
 },
+    "drishyam-the-conclusion": {
+  "title": "Drishyam: The Conclusion",
+  "img": "https://image.tmdb.org/t/p/w500/67FsF2kpgEZ1T5Qos4adgqm9dLf.jpg",
+  "year": "2026",
+  "genre": "Thriller, Drama, Mystery, Crime",
+  "tmdb": "1269325",
+  "type": "movie",
+  "src": "https://player.abyssplayer.com/NdXBSYV9B"
+},
     "jana-nayagan": {
   "title": "Jana Nayagan",
   "img": "https://image.tmdb.org/t/p/w500/jt8pfSIdi47YpFMMWVRr8w5u2S0.jpg",
