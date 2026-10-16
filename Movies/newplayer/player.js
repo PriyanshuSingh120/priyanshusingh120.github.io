@@ -1213,20 +1213,44 @@ function initPlayer() {
     const titleEl = document.getElementById('displayTitle');
     const switcher = document.getElementById('serverSwitcher');
     const selectorArea = document.getElementById('episodeSelectorArea');
+    const dropdown = document.getElementById('episodeDropdown');
 
-    // Hide server switcher completely since only VidLink is used
+    // Server switcher is not needed since only Abyss + VidLink fallback is active
     if (switcher) switcher.style.display = 'none';
-    if (selectorArea) selectorArea.style.display = 'none';
 
-    // SCENARIO 1: Movie/Series is in movieDatabase
+    // ==========================================
+    // PRIORITY 1: Check Abyss Database First
+    // ==========================================
     if (movieId && typeof movieDatabase !== 'undefined' && movieDatabase[movieId]) {
         const movie = movieDatabase[movieId];
         const isSeries = movie.isSeries || false;
 
         if (titleEl) titleEl.innerText = movie.title;
 
-        // Use movie.tmdb for VidLink
-        if (movie.tmdb) {
+        // 1A. Multi-episode Abyss series
+        if (movie.episodes && movie.episodes.length > 0) {
+            if (selectorArea) selectorArea.style.display = 'block';
+            if (dropdown) {
+                dropdown.innerHTML = "";
+                movie.episodes.forEach((url, i) => {
+                    let opt = document.createElement('option');
+                    opt.value = url;
+                    opt.innerText = `Episode ${i + 1}`;
+                    dropdown.appendChild(opt);
+                });
+            }
+            currentStreamUrl = movie.episodes[0];
+            player.src = currentStreamUrl;
+        } 
+        // 1B. Single Abyss stream (Movie / Direct link)
+        else if (movie.src) {
+            if (selectorArea) selectorArea.style.display = 'none';
+            currentStreamUrl = movie.src;
+            player.src = currentStreamUrl;
+        } 
+        // 1C. In Database, but missing Abyss link -> Fallback to VidLink via TMDB
+        else if (movie.tmdb) {
+            if (selectorArea) selectorArea.style.display = 'none';
             currentStreamUrl = buildVidLinkUrl(movie.tmdb, isSeries, 1, 1);
             player.src = currentStreamUrl;
         }
@@ -1234,18 +1258,30 @@ function initPlayer() {
         fetchMetaData(movie.title, movie.tmdb, isSeries, false);
         generateRecommendations(movieId);
     } 
-    // SCENARIO 2: External Search Results via TMDB ID
+    // ==========================================
+    // PRIORITY 2: Not in Database -> Use VidLink
+    // ==========================================
     else if (tmdbId) {
         const title = decodeURIComponent(urlParams.get('title') || "Now Playing");
         const isSeries = typeParam === 'series' || typeParam === 'tv';
 
         if (titleEl) titleEl.innerText = title;
+        if (selectorArea) selectorArea.style.display = 'none';
 
         currentStreamUrl = buildVidLinkUrl(tmdbId, isSeries, 1, 1);
         player.src = currentStreamUrl;
 
         fetchMetaData(title, tmdbId, isSeries, true);
         generateRecommendations('random');
+    }
+}
+
+// Function to handle switching Abyss episodes from the dropdown
+function loadSpecificEpisode(url) {
+    const player = document.getElementById('mainVideoPlayer');
+    if (player && url) {
+        currentStreamUrl = url;
+        player.src = url;
     }
 }
 
