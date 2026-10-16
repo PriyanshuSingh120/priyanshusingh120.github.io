@@ -1178,16 +1178,15 @@ const movieDatabase = {
 
 
 
-let sources = { s1: '', s2: '', s3: '', s4: '' };
+let currentStreamUrl = '';
 
 /**
- * Builds a VidLink.pro URL matching their documentation.
- * Allows adding styling/behavior query parameters.
+ * Builds the VidLink.pro URL based on documentation.
  */
-function buildVidLinkUrl(id, isSeries, season = 1, episode = 1) {
+function buildVidLinkUrl(tmdbId, isSeries, season = 1, episode = 1) {
     const base = isSeries 
-        ? `https://vidlink.pro/tv/${id}/${season}/${episode}`
-        : `https://vidlink.pro/movie/${id}`;
+        ? `https://vidlink.pro/tv/${tmdbId}/${season}/${episode}`
+        : `https://vidlink.pro/movie/${tmdbId}`;
 
     const params = new URLSearchParams({
         primaryColor: 'e50914',
@@ -1208,120 +1207,46 @@ function initPlayer() {
     const urlParams = new URLSearchParams(window.location.search);
     const movieId = urlParams.get('id');
     const tmdbId = urlParams.get('tmdb');
-    const isHindi = urlParams.get('isHindi') === 'true';
     const typeParam = urlParams.get('type') || 'movie';
 
     const player = document.getElementById('mainVideoPlayer');
     const titleEl = document.getElementById('displayTitle');
     const switcher = document.getElementById('serverSwitcher');
     const selectorArea = document.getElementById('episodeSelectorArea');
-    const dropdown = document.getElementById('episodeDropdown');
 
+    // Hide server switcher completely since only VidLink is used
     if (switcher) switcher.style.display = 'none';
+    if (selectorArea) selectorArea.style.display = 'none';
 
-    // SCENARIO 1: Movie is in movieDatabase
+    // SCENARIO 1: Movie/Series is in movieDatabase
     if (movieId && typeof movieDatabase !== 'undefined' && movieDatabase[movieId]) {
         const movie = movieDatabase[movieId];
         const isSeries = movie.isSeries || false;
-        const typePath = isSeries ? 'tv' : 'movie';
 
-        // Use database title
         if (titleEl) titleEl.innerText = movie.title;
 
-        // Setup S1 (Local / Direct Storage)
-        if (movie.episodes && movie.episodes.length > 0) {
-            if (selectorArea) selectorArea.style.display = 'block';
-            if (dropdown) {
-                dropdown.innerHTML = "";
-                movie.episodes.forEach((url, i) => {
-                    let opt = document.createElement('option');
-                    opt.value = url;
-                    opt.innerText = `Episode ${i + 1}`;
-                    dropdown.appendChild(opt);
-                });
-            }
-            sources.s1 = movie.episodes[0];
-        } else {
-            sources.s1 = movie.src;
-            if (selectorArea) selectorArea.style.display = 'none';
-        }
-
-        // Setup Fallback Sources with VidLink as Secondary (S2)
+        // Use movie.tmdb for VidLink
         if (movie.tmdb) {
-            // S2: VidLink.pro
-            sources.s2 = buildVidLinkUrl(movie.tmdb, isSeries, 1, 1);
-
-            // S3: Videasy / EmbedSU
-            sources.s3 = `https://player.videasy.net/${typePath}/${movie.tmdb}?color=e50914&overlay=true&episodeSelector=true`;
-
-            // S4: VidSrc
-            sources.s4 = `https://vidsrc.xyz/embed/${typePath}/${movie.tmdb}`;
-
-            // Update UI Button Labels
-            if (document.getElementById('btn-s2')) document.getElementById('btn-s2').innerHTML = `<i class="fas fa-play-circle"></i> VidLink`;
-            if (document.getElementById('btn-s3')) document.getElementById('btn-s3').innerHTML = `<i class="fas fa-server"></i> Videasy`;
-            if (document.getElementById('btn-s4')) document.getElementById('btn-s4').innerHTML = `<i class="fas fa-film"></i> VidSrc`;
-
-            if (switcher) switcher.style.display = 'flex';
+            currentStreamUrl = buildVidLinkUrl(movie.tmdb, isSeries, 1, 1);
+            player.src = currentStreamUrl;
         }
 
-        player.src = sources.s1;
         fetchMetaData(movie.title, movie.tmdb, isSeries, false);
         generateRecommendations(movieId);
     } 
-    // SCENARIO 2: External Search Results
+    // SCENARIO 2: External Search Results via TMDB ID
     else if (tmdbId) {
         const title = decodeURIComponent(urlParams.get('title') || "Now Playing");
         const isSeries = typeParam === 'series' || typeParam === 'tv';
-        const typePath = isSeries ? 'tv' : 'movie';
 
         if (titleEl) titleEl.innerText = title;
-        if (selectorArea) selectorArea.style.display = 'none';
 
-        // S1: Embed.su (Primary for direct external results)
-        sources.s1 = `https://embed.su/embed/${typePath}/${tmdbId}${isSeries ? '/1/1' : ''}`;
+        currentStreamUrl = buildVidLinkUrl(tmdbId, isSeries, 1, 1);
+        player.src = currentStreamUrl;
 
-        // S2: VidLink.pro (Secondary player)
-        sources.s2 = buildVidLinkUrl(tmdbId, isSeries, 1, 1);
-
-        // S3: Vidsrc
-        sources.s3 = `https://vsembed.su/embed/${typePath}/${tmdbId}`;
-
-        // S4: 2Embed
-        sources.s4 = `https://www.2embed.cc/embed/${isSeries ? 'tv/' : ''}${tmdbId}${isSeries ? '&s=1&e=1' : ''}`;
-
-        // Update UI Button Labels
-        if (document.getElementById('btn-s1')) document.getElementById('btn-s1').innerHTML = `<i class="fas fa-play"></i> Server 1`;
-        if (document.getElementById('btn-s2')) document.getElementById('btn-s2').innerHTML = `<i class="fas fa-bolt"></i> VidLink`;
-        if (document.getElementById('btn-s3')) document.getElementById('btn-s3').innerHTML = `<i class="fas fa-server"></i> Server 3`;
-        if (document.getElementById('btn-s4')) document.getElementById('btn-s4').innerHTML = `<i class="fas fa-film"></i> Server 4`;
-
-        if (switcher) switcher.style.display = 'flex';
-        
-        // Defaults to S1, but S2 is ready on button click
-        player.src = sources.s1;
         fetchMetaData(title, tmdbId, isSeries, true);
         generateRecommendations('random');
     }
-}
-
-function switchServer(num) {
-    const player = document.getElementById('mainVideoPlayer');
-    const btns = document.querySelectorAll('.server-btn');
-    btns.forEach(btn => {
-        if (btn.id === `btn-s${num}`) btn.classList.add('active');
-        else btn.classList.remove('active');
-    });
-
-    const srcList = [sources.s1, sources.s2, sources.s3, sources.s4];
-    if (srcList[num - 1]) {
-        player.src = srcList[num - 1];
-    }
-}
-
-function loadSpecificEpisode(url) {
-    document.getElementById('mainVideoPlayer').src = url;
-    sources.s1 = url;
 }
 
 async function fetchMetaData(title, id, isSeries, updateTitle) {
@@ -1353,16 +1278,18 @@ async function fetchMetaData(title, id, isSeries, updateTitle) {
             }
         }
     } catch (e) {
-        console.error("Meta failed", e);
+        console.error("Meta fetch failed", e);
     }
 }
 
 function generateRecommendations(currentId) {
     const grid = document.getElementById('recommendationGrid');
     if (!grid || typeof movieDatabase === 'undefined') return;
+
     const keys = Object.keys(movieDatabase).filter(k => k !== currentId);
     const shuffled = keys.sort(() => 0.5 - Math.random()).slice(0, 10);
     grid.innerHTML = "";
+
     shuffled.forEach(k => {
         const item = movieDatabase[k];
         const card = document.createElement('a');
@@ -1384,17 +1311,3 @@ function generateRecommendations(currentId) {
 }
 
 window.onload = initPlayer;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
