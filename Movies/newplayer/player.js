@@ -1196,22 +1196,23 @@ function initPlayer() {
     if(switcher) switcher.style.display = 'none';
 
     // SCENARIO 1: Movie is in movieDatabase
-    if (movieId && movieDatabase[movieId]) {
+    if (movieId && typeof movieDatabase !== 'undefined' && movieDatabase[movieId]) {
         const movie = movieDatabase[movieId];
         const isSeries = movie.isSeries || false;
         const typePath = isSeries ? 'tv' : 'movie';
         
         // Use database title (Prevents manipulation)
-        titleEl.innerText = movie.title;
+        if (titleEl) titleEl.innerText = movie.title;
 
-        // Setup S1 (Local)
+        // Setup S1 (Local / Direct Storage)
         if (movie.episodes && movie.episodes.length > 0) {
             if(selectorArea) selectorArea.style.display = 'block';
             if(dropdown) {
                 dropdown.innerHTML = "";
                 movie.episodes.forEach((url, i) => {
                     let opt = document.createElement('option');
-                    opt.value = url; opt.innerText = `Episode ${i + 1}`;
+                    opt.value = url; 
+                    opt.innerText = `Episode ${i + 1}`;
                     dropdown.appendChild(opt);
                 });
             }
@@ -1221,38 +1222,61 @@ function initPlayer() {
             if(selectorArea) selectorArea.style.display = 'none';
         }
 
-        // Setup Backups using manual-compliant URLs
+        // Updated Backup Embed Streams
         if (movie.tmdb) {
-            sources.s2 = `https://player.smashy.stream/${typePath}/${movie.tmdb}${isSeries ? '?s=1&e=1' : ''}`;
-            sources.s3 = `https://player.videasy.net/${typePath}/${movie.tmdb}?color=e50914&overlay=true&episodeSelector=true`;
-            sources.s4 = `https://vidsrc.xyz/embed/${typePath}/${movie.tmdb}`;
+            // VidLink (fast, low buffering)
+            sources.s2 = isSeries 
+                ? `https://vidlink.pro/tv/${movie.tmdb}/1/1` 
+                : `https://vidlink.pro/movie/${movie.tmdb}`;
+
+            // VidSrc.cc / VidSrc.pm
+            sources.s3 = isSeries 
+                ? `https://vidsrc.cc/v2/embed/tv/${movie.tmdb}/1/1` 
+                : `https://vidsrc.cc/v2/embed/movie/${movie.tmdb}`;
+
+            // Embed.su (clean UI fallback)
+            sources.s4 = `https://embed.su/embed/${typePath}/${movie.tmdb}${isSeries ? '/1/1' : ''}`;
+
             if(switcher) switcher.style.display = 'flex';
         }
 
         player.src = sources.s1;
-        fetchMetaData(movie.title, movie.tmdb, isSeries, false); // false = Don't change title
+        fetchMetaData(movie.title, movie.tmdb, isSeries, false);
         generateRecommendations(movieId);
     } 
     // SCENARIO 2: External Search Results
     else if (tmdbId) {
         const title = decodeURIComponent(urlParams.get('title') || "Now Playing");
-        const isSeries = typeParam === 'series';
+        const isSeries = typeParam === 'series' || typeParam === 'tv';
         const typePath = isSeries ? 'tv' : 'movie';
-        titleEl.innerText = title;
-        if(selectorArea) selectorArea.style.display = 'none';
+        
+        if (titleEl) titleEl.innerText = title;
+        if (selectorArea) selectorArea.style.display = 'none';
 
-        // Smashy Priority for external
-        //sources.s2 = `https://player.videasy.net/${typePath}/${tmdbId}?color=e50914&overlay=true`;
-        sources.s3 = `https://vsembed.su/embed/${typePath}/${tmdbId}`;
-        sources.s2 = `https://www.2embed.cc/embed/${isSeries ? 'tv' : ''}${tmdbId}${isSeries ? '&s=1&e=1' : ''}`;
+        // Up-to-date working sources
+        sources.s1 = isSeries 
+            ? `https://vidlink.pro/tv/${tmdbId}/1/1` 
+            : `https://vidlink.pro/movie/${tmdbId}`;
 
-        // Label updates
-        if(document.getElementById('btn-s2')) document.getElementById('btn-s2').innerHTML = `<i class="fas fa-bolt"></i> VIDEASY`;
-        if(document.getElementById('btn-s3')) document.getElementById('btn-s3').innerHTML = `<i class="fas fa-server"></i> Vidsrc`;
+        sources.s2 = isSeries 
+            ? `https://vidsrc.cc/v2/embed/tv/${tmdbId}/1/1` 
+            : `https://vidsrc.cc/v2/embed/movie/${tmdbId}`;
+
+        sources.s3 = `https://embed.su/embed/${typePath}/${tmdbId}${isSeries ? '/1/1' : ''}`;
+
+        sources.s4 = `https://multiembed.mov/?video_id=${tmdbId}&tmdb=1${isSeries ? '&s=1&e=1' : ''}`;
+
+        // Label updates for switcher buttons
+        if(document.getElementById('btn-s1')) document.getElementById('btn-s1').innerHTML = `<i class="fas fa-play"></i> Server 1 (VidLink)`;
+        if(document.getElementById('btn-s2')) document.getElementById('btn-s2').innerHTML = `<i class="fas fa-bolt"></i> Server 2 (VidSrc)`;
+        if(document.getElementById('btn-s3')) document.getElementById('btn-s3').innerHTML = `<i class="fas fa-server"></i> Server 3 (EmbedSU)`;
+        if(document.getElementById('btn-s4')) document.getElementById('btn-s4').innerHTML = `<i class="fas fa-film"></i> Server 4 (Multi)`;
 
         if(switcher) switcher.style.display = 'flex';
-        player.src = sources.s3;
-        fetchMetaData(title, tmdbId, isSeries, true); // true = allow title update for search
+        
+        // Default to VidLink on load
+        player.src = sources.s1;
+        fetchMetaData(title, tmdbId, isSeries, true);
         generateRecommendations('random');
     }
 }
@@ -1270,7 +1294,7 @@ function switchServer(num) {
 
 function loadSpecificEpisode(url) {
     document.getElementById('mainVideoPlayer').src = url;
-    sources.s3= url;
+    sources.s1 = url; // Kept to S1 since local selector feeds primary source
 }
 
 async function fetchMetaData(title, id, isSeries, updateTitle) {
@@ -1291,29 +1315,33 @@ async function fetchMetaData(title, id, isSeries, updateTitle) {
             const descEl = document.getElementById('movieDescription');
 
             if(ratingEl) ratingEl.innerHTML = `<i class="fab fa-imdb" style="color: #f5c518;"></i> Rating: ${best.vote_average?.toFixed(1) || 'N/A'}`;
-            if(yearEl) yearEl.innerHTML = `<i class="far fa-calendar-alt"></i> ${(best.release_date || best.first_air_date || '2025').split('-')[0]}`;
+            if(yearEl) yearEl.innerHTML = `<i class="far fa-calendar-alt"></i> ${(best.release_date || best.first_air_date || 'N/A').split('-')[0]}`;
             if(descEl) descEl.innerText = best.overview || "Storyline details not available.";
             
-            // Fix: Update title ONLY if search scenario, not for database items
             if(updateTitle) {
                 const engTitle = best.title || best.name;
-                if(engTitle) document.getElementById('displayTitle').innerText = engTitle;
+                if(engTitle && document.getElementById('displayTitle')) {
+                    document.getElementById('displayTitle').innerText = engTitle;
+                }
             }
         }
-    } catch (e) { console.error("Meta failed"); }
+    } catch (e) { 
+        console.error("Meta failed", e); 
+    }
 }
 
 function generateRecommendations(currentId) {
     const grid = document.getElementById('recommendationGrid');
-    if (!grid) return;
+    if (!grid || typeof movieDatabase === 'undefined') return;
     const keys = Object.keys(movieDatabase).filter(k => k !== currentId);
     const shuffled = keys.sort(() => 0.5 - Math.random()).slice(0, 10);
     grid.innerHTML = "";
     shuffled.forEach(k => {
         const item = movieDatabase[k];
         const card = document.createElement('a');
-        // This ensures the recommendation link carries all needed params
-        const finalHref = item.tmdb ? `player.html?id=${k}&tmdb=${item.tmdb}&type=${item.isSeries ? 'series' : 'movie'}` : `player.html?id=${k}`;
+        const finalHref = item.tmdb 
+            ? `player.html?id=${k}&tmdb=${item.tmdb}&type=${item.isSeries ? 'series' : 'movie'}` 
+            : `player.html?id=${k}`;
         card.href = finalHref;
         card.className = 'movie-link';
         card.innerHTML = `
@@ -1328,9 +1356,7 @@ function generateRecommendations(currentId) {
     });
 }
 
-// Fixed: Window onload to ensure recommendation links work
 window.onload = initPlayer;
-
 
 
 
