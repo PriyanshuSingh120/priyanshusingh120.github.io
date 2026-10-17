@@ -11,7 +11,6 @@
         :root { --primary: #e50914; --bg: #050505; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: white; margin: 0; }
         
-        /* Premium Switcher Styling */
         .server-switcher { 
             display: none; 
             margin: 20px 0; 
@@ -54,7 +53,6 @@
         }
         .server-btn:hover:not(.active) { background: #222; border-color: #555; color: white; }
 
-        /* Layout */
         .video-player-container { width: 100%; max-width: 1240px; margin: 0 auto; padding: 20px; box-sizing: border-box; }
         .video-frame-area { 
             position: relative; padding-bottom: 56.25%; height: 0; 
@@ -68,11 +66,26 @@
         .player-metadata { display: flex; gap: 20px; color: #888; font-size: 15px; margin-bottom: 20px; }
         .player-metadata span i { color: var(--primary); }
         
-        #episodeSelectorArea { margin: 20px 0; }
-        #episodeDropdown { 
-            background: #111; color: #fff; border: 1px solid #333; padding: 14px; 
-            border-radius: 12px; width: 100%; max-width: 320px; cursor: pointer; font-weight: 600; 
+        /* Dropdowns for Series Selector */
+        .selector-controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 20px 0;
         }
+        .custom-dropdown { 
+            background: #111; 
+            color: #fff; 
+            border: 1px solid #333; 
+            padding: 14px; 
+            border-radius: 12px; 
+            width: 100%; 
+            max-width: 240px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            outline: none;
+        }
+        .custom-dropdown:focus { border-color: var(--primary); }
 
         .movie-description { color: #aaa; line-height: 1.7; font-size: 16px; max-width: 850px; }
 
@@ -80,6 +93,7 @@
             .player-title { font-size: 24px; }
             .server-btn { padding: 10px 15px; font-size: 12px; }
             .video-player-container { padding: 10px; }
+            .custom-dropdown { max-width: 100%; }
         }
     </style>
 </head>
@@ -91,9 +105,8 @@
             </div>
 
             <div class="player-content-area">
-                <h1 id="displayTitle" class="player-title">Loading Movie...</h1>
+                <h1 id="displayTitle" class="player-title">Loading...</h1>
                 
-                <!-- 2-Server Switcher -->
                 <div id="serverSwitcher" class="server-switcher">
                     <span class="server-label">Servers:</span>
                     <button id="btn-s1" class="server-btn active" onclick="switchServer(1)"><i class="fas fa-play"></i> Abyss</button>
@@ -106,13 +119,15 @@
                     <span><i class="fas fa-check-circle"></i> HD | multi-language</span>
                 </div>
 
-                <div id="episodeSelectorArea" style="display: none;">
-                    <select id="episodeDropdown" onchange="loadSpecificEpisode(this.value)"></select>
+                <!-- Series Selector (Handles Abyss and VidLink) -->
+                <div id="episodeSelectorArea" class="selector-controls" style="display: none;">
+                    <select id="seasonDropdown" class="custom-dropdown" style="display: none;" onchange="onSeasonChange(this.value)"></select>
+                    <select id="episodeDropdown" class="custom-dropdown" onchange="onEpisodeChange(this.value)"></select>
                 </div>
             
                 <div class="movie-description-wrapper">
                     <h3 style="color: var(--primary); font-size: 14px; text-transform: uppercase; margin-bottom: 10px;">Storyline</h3>
-                    <p id="movieDescription" class="movie-description">Fetching movie overview...</p>
+                    <p id="movieDescription" class="movie-description">Fetching overview...</p>
                 </div>
             </div>
         </div>
