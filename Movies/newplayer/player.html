@@ -16,20 +16,20 @@
             display: none; 
             margin: 20px 0; 
             gap: 10px; 
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            align-items: center;
-            flex-wrap: wrap;
+            padding: 15px; 
+            background: rgba(255, 255, 255, 0.04); 
+            border-radius: 16px; 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            align-items: center; 
+            flex-wrap: wrap; 
         }
         .server-label { 
             font-size: 11px; 
             font-weight: 800; 
             color: #777; 
             text-transform: uppercase; 
-            letter-spacing: 1px;
-            margin-right: 5px;
+            letter-spacing: 1px; 
+            margin-right: 5px; 
         }
         .server-btn { 
             background: #1a1a1a; 
@@ -40,27 +40,27 @@
             cursor: pointer; 
             font-size: 13px; 
             font-weight: 700; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
         }
         .server-btn.active { 
             background: var(--primary); 
             color: white; 
-            border-color: var(--primary);
-            box-shadow: 0 8px 25px rgba(229, 9, 20, 0.4);
-            transform: translateY(-2px);
+            border-color: var(--primary); 
+            box-shadow: 0 8px 25px rgba(229, 9, 20, 0.4); 
+            transform: translateY(-2px); 
         }
         .server-btn:hover:not(.active) { background: #222; border-color: #555; color: white; }
 
-        /* Layout Fixes */
+        /* Layout */
         .video-player-container { width: 100%; max-width: 1240px; margin: 0 auto; padding: 20px; box-sizing: border-box; }
         .video-frame-area { 
             position: relative; padding-bottom: 56.25%; height: 0; 
             background: #000; border-radius: 20px; overflow: hidden; 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.9);
-            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.9); 
+            border: 1px solid rgba(255,255,255,0.05); 
         }
         .video-frame-area iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
@@ -71,7 +71,7 @@
         #episodeSelectorArea { margin: 20px 0; }
         #episodeDropdown { 
             background: #111; color: #fff; border: 1px solid #333; padding: 14px; 
-            border-radius: 12px; width: 100%; max-width: 320px; cursor: pointer; font-weight: 600;
+            border-radius: 12px; width: 100%; max-width: 320px; cursor: pointer; font-weight: 600; 
         }
 
         .movie-description { color: #aaa; line-height: 1.7; font-size: 16px; max-width: 850px; }
@@ -87,17 +87,17 @@
     <main>
         <div class="video-player-container">
             <div class="video-frame-area">
-                <iframe id="mainVideoPlayer" src="" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+                <iframe id="mainVideoPlayer" src="" allowfullscreen allow="autoplay; fullscreen; encrypted-media; picture-in-picture"></iframe>
             </div>
 
             <div class="player-content-area">
                 <h1 id="displayTitle" class="player-title">Loading Movie...</h1>
                 
+                <!-- 2-Server Switcher -->
                 <div id="serverSwitcher" class="server-switcher">
                     <span class="server-label">Servers:</span>
                     <button id="btn-s1" class="server-btn active" onclick="switchServer(1)"><i class="fas fa-play"></i> Abyss</button>
-                    <button id="btn-s3" class="server-btn" onclick="switchServer(3)"><i class="fas fa-bolt"></i> VIDEASY</button>
-                    <button id="btn-s4" class="server-btn" onclick="switchServer(4)"><i class="fas fa-server"></i> Backup</button>
+                    <button id="btn-s2" class="server-btn" onclick="switchServer(2)"><i class="fas fa-bolt"></i> VidLink</button>
                 </div>
 
                 <div class="player-metadata">
@@ -126,5 +126,3 @@
     <script src="https://iamcdn.net/players/replace-domain.js"></script>
 </body>
 </html>
-
-
