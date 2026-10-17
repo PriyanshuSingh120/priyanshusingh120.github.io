@@ -1179,6 +1179,11 @@ const movieDatabase = {
 
 
 let sources = { s1: '', s2: '' };
+let currentActiveServer = 1; // 1 = Abyss (or VidLink default), 2 = VidLink
+let currentTmdbId = null;
+let currentIsSeries = false;
+let currentSeason = 1;
+let currentEpisode = 1;
 
 /**
  * Builds the VidLink.pro URL based on documentation.
@@ -1203,7 +1208,7 @@ function buildVidLinkUrl(tmdbId, isSeries, season = 1, episode = 1) {
     return `${base}?${params.toString()}`;
 }
 
-function initPlayer() {
+async function initPlayer() {
     const urlParams = new URLSearchParams(window.location.search);
     const movieId = urlParams.get('id');
     const tmdbId = urlParams.get('tmdb');
@@ -1213,15 +1218,17 @@ function initPlayer() {
     const titleEl = document.getElementById('displayTitle');
     const switcher = document.getElementById('serverSwitcher');
     const selectorArea = document.getElementById('episodeSelectorArea');
-    const dropdown = document.getElementById('episodeDropdown');
+    const seasonSelect = document.getElementById('seasonDropdown');
+    const episodeSelect = document.getElementById('episodeDropdown');
 
     if (switcher) switcher.style.display = 'none';
     if (selectorArea) selectorArea.style.display = 'none';
 
-    // SCENARIO 1: Movie/Series is present in local database
+    // SCENARIO 1: Movie/Series exists in movieDatabase
     if (movieId && typeof movieDatabase !== 'undefined' && movieDatabase[movieId]) {
         const movie = movieDatabase[movieId];
-        const isSeries = movie.isSeries || false;
+        currentIsSeries = movie.isSeries || false;
+        currentTmdbId = movie.tmdb || null;
 
         if (titleEl) titleEl.innerText = movie.title;
 
@@ -1230,95 +1237,207 @@ function initPlayer() {
         const hasAbyss = hasAbyssEpisodes || hasAbyssSingle;
         const hasTmdb = Boolean(movie.tmdb);
 
-        // CASE A: Both Abyss and TMDB (VidLink) are available -> Enable 2 servers
+        // CASE A: Both Abyss and VidLink are available
         if (hasAbyss && hasTmdb) {
-            if (hasAbyssEpisodes) {
-                if (selectorArea) selectorArea.style.display = 'block';
-                if (dropdown) {
-                    dropdown.innerHTML = "";
-                    movie.episodes.forEach((url, i) => {
-                        let opt = document.createElement('option');
-                        opt.value = url;
-                        opt.innerText = `Episode ${i + 1}`;
-                        dropdown.appendChild(opt);
-                    });
-                }
-                sources.s1 = movie.episodes[0];
-            } else {
-                sources.s1 = movie.src;
-            }
+            setupAbyssSource(movie);
+            sources.s2 = buildVidLinkUrl(movie.tmdb, currentIsSeries, 1, 1);
 
-            sources.s2 = buildVidLinkUrl(movie.tmdb, isSeries, 1, 1);
-
-            // Show switcher with Abyss active
             if (switcher) switcher.style.display = 'flex';
+            currentActiveServer = 1;
             setActiveButton(1);
             player.src = sources.s1;
         }
-        // CASE B: Abyss only (no TMDB ID in database item)
+        // CASE B: Abyss only
         else if (hasAbyss) {
-            if (hasAbyssEpisodes) {
-                if (selectorArea) selectorArea.style.display = 'block';
-                if (dropdown) {
-                    dropdown.innerHTML = "";
-                    movie.episodes.forEach((url, i) => {
-                        let opt = document.createElement('option');
-                        opt.value = url;
-                        opt.innerText = `Episode ${i + 1}`;
-                        dropdown.appendChild(opt);
-                    });
-                }
-                sources.s1 = movie.episodes[0];
-            } else {
-                sources.s1 = movie.src;
-            }
-
+            setupAbyssSource(movie);
             sources.s2 = '';
+            currentActiveServer = 1;
             player.src = sources.s1;
         }
-        // CASE C: Item in database has NO Abyss stream -> fallback to VidLink as main
+        // CASE C: In database, but no Abyss -> fallback to VidLink as Server 1
         else if (hasTmdb) {
-            sources.s1 = buildVidLinkUrl(movie.tmdb, isSeries, 1, 1);
+            sources.s1 = buildVidLinkUrl(movie.tmdb, currentIsSeries, 1, 1);
             sources.s2 = '';
+            currentActiveServer = 1;
             player.src = sources.s1;
+            if (currentIsSeries) setupVidLinkEpisodes(movie.tmdb);
         }
 
-        fetchMetaData(movie.title, movie.tmdb, isSeries, false);
+        fetchMetaData(movie.title, movie.tmdb, currentIsSeries, false);
         generateRecommendations(movieId);
     } 
-    // SCENARIO 2: External Search / Not in database -> Use VidLink directly
+    // SCENARIO 2: External TMDB Search -> VidLink only
     else if (tmdbId) {
         const title = decodeURIComponent(urlParams.get('title') || "Now Playing");
-        const isSeries = typeParam === 'series' || typeParam === 'tv';
+        currentIsSeries = (typeParam === 'series' || typeParam === 'tv');
+        currentTmdbId = tmdbId;
 
         if (titleEl) titleEl.innerText = title;
 
-        sources.s1 = buildVidLinkUrl(tmdbId, isSeries, 1, 1);
+        sources.s1 = buildVidLinkUrl(tmdbId, currentIsSeries, 1, 1);
         sources.s2 = '';
+        currentActiveServer = 1;
         player.src = sources.s1;
 
-        fetchMetaData(title, tmdbId, isSeries, true);
+        if (currentIsSeries) {
+            setupVidLinkEpisodes(tmdbId);
+        }
+
+        fetchMetaData(title, tmdbId, currentIsSeries, true);
         generateRecommendations('random');
+    }
+}
+
+/**
+ * Loads Abyss episodes into dropdown
+ */
+function setupAbyssSource(movie) {
+    const selectorArea = document.getElementById('episodeSelectorArea');
+    const seasonSelect = document.getElementById('seasonDropdown');
+    const episodeSelect = document.getElementById('episodeDropdown');
+
+    if (movie.episodes && movie.episodes.length > 0) {
+        if (selectorArea) selectorArea.style.display = 'flex';
+        if (seasonSelect) seasonSelect.style.display = 'none'; // Abyss uses 1 flat list
+        if (episodeSelect) {
+            episodeSelect.innerHTML = "";
+            movie.episodes.forEach((url, i) => {
+                let opt = document.createElement('option');
+                opt.value = url;
+                opt.innerText = `Episode ${i + 1}`;
+                episodeSelect.appendChild(opt);
+            });
+        }
+        sources.s1 = movie.episodes[0];
+    } else {
+        sources.s1 = movie.src;
+        if (selectorArea) selectorArea.style.display = 'none';
+    }
+}
+
+/**
+ * Fetches TMDB series seasons/episodes for VidLink
+ */
+async function setupVidLinkEpisodes(tmdbId) {
+    const selectorArea = document.getElementById('episodeSelectorArea');
+    const seasonSelect = document.getElementById('seasonDropdown');
+    if (!selectorArea || !seasonSelect || typeof TMDB_API_KEY === 'undefined') return;
+
+    try {
+        const res = await fetch(`https://api.themoviedb.org/3/tv/${tmdbId}?api_key=${TMDB_API_KEY}&language=en-US`);
+        const data = await res.json();
+
+        if (data.seasons && data.seasons.length > 0) {
+            selectorArea.style.display = 'flex';
+            seasonSelect.style.display = 'block';
+            seasonSelect.innerHTML = "";
+
+            // Filter out Season 0 (Specials) if preferred
+            const validSeasons = data.seasons.filter(s => s.season_number > 0);
+            const seasonsToRender = validSeasons.length > 0 ? validSeasons : data.seasons;
+
+            seasonsToRender.forEach(s => {
+                let opt = document.createElement('option');
+                opt.value = s.season_number;
+                opt.innerText = s.name || `Season ${s.season_number}`;
+                seasonSelect.appendChild(opt);
+            });
+
+            currentSeason = seasonsToRender[0].season_number;
+            await loadTmdbEpisodes(tmdbId, currentSeason);
+        }
+    } catch (e) {
+        console.error("Failed to load TMDB TV details", e);
+    }
+}
+
+async function loadTmdbEpisodes(tmdbId, seasonNumber) {
+    const episodeSelect = document.getElementById('episodeDropdown');
+    if (!episodeSelect) return;
+
+    try {
+        const res = await fetch(`https://api.themoviedb.org/3/tv/${tmdbId}/season/${seasonNumber}?api_key=${TMDB_API_KEY}&language=en-US`);
+        const data = await res.json();
+
+        episodeSelect.innerHTML = "";
+        if (data.episodes && data.episodes.length > 0) {
+            data.episodes.forEach(ep => {
+                let opt = document.createElement('option');
+                opt.value = ep.episode_number;
+                opt.innerText = `Ep ${ep.episode_number}: ${ep.name || 'Episode ' + ep.episode_number}`;
+                episodeSelect.appendChild(opt);
+            });
+            currentEpisode = data.episodes[0].episode_number;
+        }
+    } catch (e) {
+        console.error("Failed to fetch episodes", e);
+    }
+}
+
+/**
+ * Handle season change for VidLink
+ */
+async function onSeasonChange(seasonNum) {
+    currentSeason = parseInt(seasonNum, 10);
+    if (currentTmdbId) {
+        await loadTmdbEpisodes(currentTmdbId, currentSeason);
+        // Play episode 1 of the selected season
+        onEpisodeChange(currentEpisode);
+    }
+}
+
+/**
+ * Unified episode switcher (handles both Abyss links and VidLink episode numbers)
+ */
+function onEpisodeChange(val) {
+    const player = document.getElementById('mainVideoPlayer');
+
+    // 1. If currently using VidLink (Server 2 OR Server 1 when fallback)
+    const isUsingVidLink = (currentActiveServer === 2) || (currentActiveServer === 1 && !sources.s2 && currentTmdbId);
+
+    if (isUsingVidLink && currentTmdbId && currentIsSeries) {
+        currentEpisode = parseInt(val, 10);
+        const newUrl = buildVidLinkUrl(currentTmdbId, true, currentSeason, currentEpisode);
+        if (currentActiveServer === 2) sources.s2 = newUrl;
+        else sources.s1 = newUrl;
+        player.src = newUrl;
+    } 
+    // 2. Abyss mode (val is direct URL)
+    else {
+        sources.s1 = val;
+        player.src = val;
     }
 }
 
 function switchServer(num) {
     const player = document.getElementById('mainVideoPlayer');
     const selectorArea = document.getElementById('episodeSelectorArea');
+    const seasonSelect = document.getElementById('seasonDropdown');
+    currentActiveServer = num;
 
     if (num === 1 && sources.s1) {
         player.src = sources.s1;
         setActiveButton(1);
-        // Show episode dropdown if Abyss has multiple episodes
-        const dropdown = document.getElementById('episodeDropdown');
-        if (dropdown && dropdown.options.length > 0) {
-            if (selectorArea) selectorArea.style.display = 'block';
+
+        // Reset episode controls to Abyss mode
+        const urlParams = new URLSearchParams(window.location.search);
+        const movieId = urlParams.get('id');
+        if (movieId && movieDatabase[movieId] && movieDatabase[movieId].episodes?.length > 0) {
+            setupAbyssSource(movieDatabase[movieId]);
+        } else {
+            if (selectorArea) selectorArea.style.display = 'none';
         }
-    } else if (num === 2 && sources.s2) {
+    } 
+    else if (num === 2 && sources.s2) {
         player.src = sources.s2;
         setActiveButton(2);
-        // VidLink has its own episode UI, hide the local dropdown
-        if (selectorArea) selectorArea.style.display = 'none';
+
+        // Switch episode controls to TMDB/VidLink mode
+        if (currentIsSeries && currentTmdbId) {
+            setupVidLinkEpisodes(currentTmdbId);
+        } else {
+            if (selectorArea) selectorArea.style.display = 'none';
+        }
     }
 }
 
@@ -1327,13 +1446,6 @@ function setActiveButton(num) {
     const btn2 = document.getElementById('btn-s2');
     if (btn1) btn1.classList.toggle('active', num === 1);
     if (btn2) btn2.classList.toggle('active', num === 2);
-}
-
-function loadSpecificEpisode(url) {
-    const player = document.getElementById('mainVideoPlayer');
-    sources.s1 = url; // Update current Abyss episode
-    player.src = url;
-    setActiveButton(1);
 }
 
 async function fetchMetaData(title, id, isSeries, updateTitle) {
