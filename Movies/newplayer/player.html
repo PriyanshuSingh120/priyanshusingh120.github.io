@@ -66,7 +66,6 @@
         .player-metadata { display: flex; gap: 20px; color: #888; font-size: 15px; margin-bottom: 20px; }
         .player-metadata span i { color: var(--primary); }
         
-        /* Dropdowns for Series Selector */
         .selector-controls {
             display: flex;
             gap: 12px;
@@ -107,10 +106,12 @@
             <div class="player-content-area">
                 <h1 id="displayTitle" class="player-title">Loading...</h1>
                 
+                <!-- 3 Server Switcher -->
                 <div id="serverSwitcher" class="server-switcher">
                     <span class="server-label">Servers:</span>
                     <button id="btn-s1" class="server-btn active" onclick="switchServer(1)"><i class="fas fa-play"></i> Abyss</button>
                     <button id="btn-s2" class="server-btn" onclick="switchServer(2)"><i class="fas fa-bolt"></i> VidLink</button>
+                    <button id="btn-s3" class="server-btn" onclick="switchServer(3)"><i class="fas fa-server"></i> MultiEmbed</button>
                 </div>
 
                 <div class="player-metadata">
@@ -119,7 +120,6 @@
                     <span><i class="fas fa-check-circle"></i> HD | multi-language</span>
                 </div>
 
-                <!-- Series Selector (Handles Abyss and VidLink) -->
                 <div id="episodeSelectorArea" class="selector-controls" style="display: none;">
                     <select id="seasonDropdown" class="custom-dropdown" style="display: none;" onchange="onSeasonChange(this.value)"></select>
                     <select id="episodeDropdown" class="custom-dropdown" onchange="onEpisodeChange(this.value)"></select>
