@@ -1227,12 +1227,12 @@ const STREAM_PROVIDERS = [
                  : `https://www.2embed.cc/embed/${id}`
     },
     {
-        id: "peachify",
-        name: "Peachify",
+        id: "videm",
+        name: "VidEm",
         icon: "fas fa-play-circle",
         getUrl: (id, isTv, s, e) => 
-            isTv ? `https://peachify.top/embed/tv/${id}/${s}/${e}` 
-                 : `https://peachify.top/embed/movie/${id}`
+            isTv ? `https://videm.xyz/embed/tv/${id}/${s}/${e}?autoplay=true` 
+                 : `https://videm.xyz/embed/movie/${id}?autoplay=true`
     },
     {
         id: "vidcore",
