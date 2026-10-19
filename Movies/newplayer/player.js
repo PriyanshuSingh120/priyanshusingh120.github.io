@@ -47,6 +47,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://play.abyssplayer.com/0uqqpwKZ0"
 },
+    "the-notebook": {
+  "title": "The Notebook",
+  "img": "https://image.tmdb.org/t/p/w500/rNzQyW4f8B8cQeg7Dgj3n6eT5k9.jpg",
+  "year": "2004",
+  "genre": "Romance, Drama",
+  "tmdb": "11036",
+  "isSeries": false,
+  "src": "https://player.abyssplayer.com/UeS1eFu1i"
+},
     "the-traitors": { 
   "title": "The Traitors", 
   "img": "https://image.tmdb.org/t/p/w500/82gKEb78UPkYAMjXLSswwVzpCbI.jpg", 
