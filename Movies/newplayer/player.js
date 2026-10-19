@@ -1186,12 +1186,79 @@ const movieDatabase = {
 };
 
 
-let sources = { s1: '', s2: '', s3: '' };
-let currentActiveServer = 1;
+let currentActiveServer = 's1';
 let currentTmdbId = null;
 let currentIsSeries = false;
 let currentSeason = 1;
 let currentEpisode = 1;
+
+// Stores generated URLs for the currently loaded title
+let activeServerList = []; 
+
+/**
+ * Server Registry: Maps each provider's URL structure for movies and TV series
+ */
+const STREAM_PROVIDERS = [
+    {
+        id: "vidlink",
+        name: "VidLink",
+        icon: "fas fa-bolt",
+        getUrl: (id, isTv, s, e) => {
+            const base = isTv 
+                ? `https://vidlink.pro/tv/${id}/${s}/${e}` 
+                : `https://vidlink.pro/movie/${id}`;
+            const params = new URLSearchParams({
+                primaryColor: 'e50914',
+                secondaryColor: '170000',
+                icons: 'vid',
+                autoplay: 'false',
+                poster: 'true'
+            });
+            if (isTv) params.append('nextbutton', 'true');
+            return `${base}?${params.toString()}`;
+        }
+    },
+    {
+        id: "2embed",
+        name: "2Embed",
+        icon: "fas fa-server",
+        getUrl: (id, isTv, s, e) => 
+            isTv ? `https://www.2embed.cc/embedtv/${id}&s=${s}&e=${e}` 
+                 : `https://www.2embed.cc/embed/${id}`
+    },
+    {
+        id: "peachify",
+        name: "Peachify",
+        icon: "fas fa-play-circle",
+        getUrl: (id, isTv, s, e) => 
+            isTv ? `https://peachify.top/embed/tv/${id}/${s}/${e}` 
+                 : `https://peachify.top/embed/movie/${id}`
+    },
+    {
+        id: "vidcore",
+        name: "VidCore",
+        icon: "fas fa-film",
+        getUrl: (id, isTv, s, e) => 
+            isTv ? `https://vidcore.io/tv/${id}/${s}/${e}?autoplay=true` 
+                 : `https://vidcore.io/movie/${id}?autoplay=true`
+    },
+    {
+        id: "vidlove",
+        name: "VidLove",
+        icon: "fas fa-heart",
+        getUrl: (id, isTv, s, e) => 
+            isTv ? `https://player.vidlove.cc/embed/tv/${id}-${s}-${e}?autoplay=true` 
+                 : `https://player.vidlove.cc/embed/movie/${id}?autoplay=true`
+    },
+    {
+        id: "vixsrc",
+        name: "VixSrc",
+        icon: "fas fa-tv",
+        getUrl: (id, isTv, s, e) => 
+            isTv ? `https://vixsrc.to/tv/${id}/${s}/${e}?autoplay=true` 
+                 : `https://vixsrc.to/movie/${id}?autoplay=true`
+    }
+];
 
 /**
  * Updates both the onscreen <h1> and the browser tab <title>
@@ -1208,39 +1275,6 @@ function updatePageAndDisplayTitle(title) {
     document.title = fullTitle;
 }
 
-/**
- * Builds the VidLink.pro URL
- */
-function buildVidLinkUrl(tmdbId, isSeries, season = 1, episode = 1) {
-    const base = isSeries 
-        ? `https://vidlink.pro/tv/${tmdbId}/${season}/${episode}`
-        : `https://vidlink.pro/movie/${tmdbId}`;
-
-    const params = new URLSearchParams({
-        primaryColor: 'e50914',
-        secondaryColor: '170000',
-        icons: 'vid',
-        autoplay: 'false',
-        poster: 'true'
-    });
-
-    if (isSeries) {
-        params.append('nextbutton', 'true');
-    }
-
-    return `${base}?${params.toString()}`;
-}
-
-/**
- * Builds the MultiEmbed.mov URL
- */
-function buildMultiEmbedUrl(tmdbId, isSeries, season = 1, episode = 1) {
-    if (isSeries) {
-        return `https://multiembed.mov/?video_id=${tmdbId}&tmdb=1&s=${season}&e=${episode}`;
-    }
-    return `https://multiembed.mov/?video_id=${tmdbId}&tmdb=1`;
-}
-
 async function initPlayer() {
     const urlParams = new URLSearchParams(window.location.search);
     const movieId = urlParams.get('id');
@@ -1254,84 +1288,96 @@ async function initPlayer() {
     if (switcher) switcher.style.display = 'none';
     if (selectorArea) selectorArea.style.display = 'none';
 
+    activeServerList = [];
+
     // SCENARIO 1: Movie/Series exists in local database
     if (movieId && typeof movieDatabase !== 'undefined' && movieDatabase[movieId]) {
         const movie = movieDatabase[movieId];
         currentIsSeries = movie.isSeries || false;
         currentTmdbId = movie.tmdb || null;
 
-        // Syncs H1 and browser tab title
         updatePageAndDisplayTitle(movie.title);
 
         const hasAbyssEpisodes = movie.episodes && movie.episodes.length > 0;
         const hasAbyssSingle = Boolean(movie.src);
         const hasAbyss = hasAbyssEpisodes || hasAbyssSingle;
-        const hasTmdb = Boolean(movie.tmdb);
 
-        // CASE A: Abyss is available
+        // 1. Add Abyss as Server 1 if available
         if (hasAbyss) {
             setupAbyssSource(movie);
-
-            if (hasTmdb) {
-                sources.s2 = buildVidLinkUrl(movie.tmdb, currentIsSeries, 1, 1);
-                sources.s3 = buildMultiEmbedUrl(movie.tmdb, currentIsSeries, 1, 1);
-                if (switcher) switcher.style.display = 'flex';
-                setBtnLabels("Abyss", "VidLink", "MultiEmbed");
-            } else {
-                sources.s2 = '';
-                sources.s3 = '';
-            }
-
-            currentActiveServer = 1;
-            setActiveButton(1);
-            player.src = sources.s1;
+            activeServerList.push({
+                id: 'abyss',
+                name: 'Abyss',
+                icon: 'fas fa-play',
+                isAbyss: true,
+                url: hasAbyssEpisodes ? movie.episodes[0] : movie.src
+            });
         }
-        // CASE B: In database, but no Abyss -> fallback to VidLink as main & MultiEmbed as backup
-        else if (hasTmdb) {
-            sources.s1 = buildVidLinkUrl(movie.tmdb, currentIsSeries, 1, 1);
-            sources.s2 = buildMultiEmbedUrl(movie.tmdb, currentIsSeries, 1, 1);
-            sources.s3 = '';
 
-            // Adjust buttons for the 2 available external servers
-            setBtnLabels("VidLink", "MultiEmbed", "");
-            const btn3 = document.getElementById('btn-s3');
-            if (btn3) btn3.style.display = 'none';
+        // 2. Add all external servers via TMDB
+        if (currentTmdbId) {
+            STREAM_PROVIDERS.forEach(prov => {
+                activeServerList.push({
+                    id: prov.id,
+                    name: prov.name,
+                    icon: prov.icon,
+                    isAbyss: false,
+                    getUrl: prov.getUrl,
+                    url: prov.getUrl(currentTmdbId, currentIsSeries, 1, 1)
+                });
+            });
+        }
 
-            if (switcher) switcher.style.display = 'flex';
-            currentActiveServer = 1;
-            setActiveButton(1);
-            player.src = sources.s1;
+        buildServerButtons();
+        
+        // Start playback with the first available server
+        if (activeServerList.length > 0) {
+            currentActiveServer = activeServerList[0].id;
+            player.src = activeServerList[0].url;
+            setActiveButtonUI(currentActiveServer);
 
-            if (currentIsSeries) setupExternalEpisodes(movie.tmdb);
+            if (currentIsSeries) {
+                if (activeServerList[0].isAbyss) {
+                    setupAbyssSource(movie);
+                } else {
+                    setupExternalEpisodes(currentTmdbId);
+                }
+            }
         }
 
         fetchMetaData(movie.title, movie.tmdb, currentIsSeries, false);
         generateRecommendations(movieId);
     } 
-    // SCENARIO 2: External Search / Not in database -> VidLink + MultiEmbed
+    // SCENARIO 2: External Search / Not in database
     else if (tmdbId) {
         const title = decodeURIComponent(urlParams.get('title') || "Now Playing");
         currentIsSeries = (typeParam === 'series' || typeParam === 'tv');
         currentTmdbId = tmdbId;
 
-        // Syncs H1 and browser tab title
         updatePageAndDisplayTitle(title);
 
-        sources.s1 = buildVidLinkUrl(tmdbId, currentIsSeries, 1, 1);
-        sources.s2 = buildMultiEmbedUrl(tmdbId, currentIsSeries, 1, 1);
-        sources.s3 = '';
+        // Populate with external servers only
+        STREAM_PROVIDERS.forEach(prov => {
+            activeServerList.push({
+                id: prov.id,
+                name: prov.name,
+                icon: prov.icon,
+                isAbyss: false,
+                getUrl: prov.getUrl,
+                url: prov.getUrl(tmdbId, currentIsSeries, 1, 1)
+            });
+        });
 
-        setBtnLabels("VidLink", "MultiEmbed", "");
-        const btn3 = document.getElementById('btn-s3');
-        if (btn3) btn3.style.display = 'none';
+        buildServerButtons();
 
-        if (switcher) switcher.style.display = 'flex';
-        currentActiveServer = 1;
-        setActiveButton(1);
-        player.src = sources.s1;
+        if (activeServerList.length > 0) {
+            currentActiveServer = activeServerList[0].id;
+            player.src = activeServerList[0].url;
+            setActiveButtonUI(currentActiveServer);
 
-        if (currentIsSeries) {
-            setupExternalEpisodes(tmdbId);
+            if (currentIsSeries) {
+                setupExternalEpisodes(tmdbId);
+            }
         }
 
         fetchMetaData(title, tmdbId, currentIsSeries, true);
@@ -1340,7 +1386,79 @@ async function initPlayer() {
 }
 
 /**
- * Loads Abyss episodes into dropdown
+ * Builds dynamic server switch buttons in #serverSwitcher
+ */
+function buildServerButtons() {
+    const switcher = document.getElementById('serverSwitcher');
+    if (!switcher) return;
+
+    if (activeServerList.length <= 1) {
+        switcher.style.display = 'none';
+        return;
+    }
+
+    switcher.innerHTML = '<span class="server-label">Servers:</span>';
+
+    activeServerList.forEach((server, index) => {
+        const btn = document.createElement('button');
+        btn.id = `btn-${server.id}`;
+        btn.className = `server-btn ${index === 0 ? 'active' : ''}`;
+        btn.innerHTML = `<i class="${server.icon}"></i> ${server.name}`;
+        btn.onclick = () => switchServer(server.id);
+        switcher.appendChild(btn);
+    });
+
+    switcher.style.display = 'flex';
+}
+
+function switchServer(serverId) {
+    const player = document.getElementById('mainVideoPlayer');
+    const selectorArea = document.getElementById('episodeSelectorArea');
+    const seasonSelect = document.getElementById('seasonDropdown');
+    const target = activeServerList.find(s => s.id === serverId);
+
+    if (!target) return;
+
+    currentActiveServer = serverId;
+    setActiveButtonUI(serverId);
+
+    // Abyss Server active
+    if (target.isAbyss) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const movieId = urlParams.get('id');
+        const movie = movieDatabase[movieId];
+
+        if (movie.episodes?.length > 0) {
+            setupAbyssSource(movie);
+            player.src = movie.episodes[currentEpisode - 1] || movie.episodes[0];
+        } else {
+            player.src = movie.src;
+            if (selectorArea) selectorArea.style.display = 'none';
+        }
+    } 
+    // External Stream Provider active
+    else {
+        const newUrl = target.getUrl(currentTmdbId, currentIsSeries, currentSeason, currentEpisode);
+        target.url = newUrl;
+        player.src = newUrl;
+
+        if (currentIsSeries && currentTmdbId) {
+            setupExternalEpisodes(currentTmdbId);
+            if (seasonSelect) seasonSelect.style.display = 'block';
+        } else {
+            if (selectorArea) selectorArea.style.display = 'none';
+        }
+    }
+}
+
+function setActiveButtonUI(serverId) {
+    document.querySelectorAll('.server-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.id === `btn-${serverId}`);
+    });
+}
+
+/**
+ * Loads Abyss episodes into single dropdown
  */
 function setupAbyssSource(movie) {
     const selectorArea = document.getElementById('episodeSelectorArea');
@@ -1354,20 +1472,19 @@ function setupAbyssSource(movie) {
             episodeSelect.innerHTML = "";
             movie.episodes.forEach((url, i) => {
                 let opt = document.createElement('option');
-                opt.value = url;
+                opt.value = i + 1; // 1-based index
                 opt.innerText = `Episode ${i + 1}`;
                 episodeSelect.appendChild(opt);
             });
+            episodeSelect.value = currentEpisode;
         }
-        sources.s1 = movie.episodes[0];
     } else {
-        sources.s1 = movie.src;
         if (selectorArea) selectorArea.style.display = 'none';
     }
 }
 
 /**
- * Loads TMDB seasons and episodes for external servers
+ * Fetches TMDB series seasons/episodes for external multi-server playback
  */
 async function setupExternalEpisodes(tmdbId) {
     const selectorArea = document.getElementById('episodeSelectorArea');
@@ -1393,7 +1510,7 @@ async function setupExternalEpisodes(tmdbId) {
                 seasonSelect.appendChild(opt);
             });
 
-            currentSeason = seasonsToRender[0].season_number;
+            seasonSelect.value = currentSeason;
             await loadTmdbEpisodes(tmdbId, currentSeason);
         }
     } catch (e) {
@@ -1417,7 +1534,7 @@ async function loadTmdbEpisodes(tmdbId, seasonNumber) {
                 opt.innerText = `Ep ${ep.episode_number}: ${ep.name || 'Episode ' + ep.episode_number}`;
                 episodeSelect.appendChild(opt);
             });
-            currentEpisode = data.episodes[0].episode_number;
+            episodeSelect.value = currentEpisode;
         }
     } catch (e) {
         console.error("Failed to fetch episodes", e);
@@ -1426,6 +1543,7 @@ async function loadTmdbEpisodes(tmdbId, seasonNumber) {
 
 async function onSeasonChange(seasonNum) {
     currentSeason = parseInt(seasonNum, 10);
+    currentEpisode = 1; // Reset to ep 1 when season changes
     if (currentTmdbId) {
         await loadTmdbEpisodes(currentTmdbId, currentSeason);
         onEpisodeChange(currentEpisode);
@@ -1434,84 +1552,26 @@ async function onSeasonChange(seasonNum) {
 
 function onEpisodeChange(val) {
     const player = document.getElementById('mainVideoPlayer');
+    currentEpisode = parseInt(val, 10);
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const movieId = urlParams.get('id');
-    const isAbyssActive = (currentActiveServer === 1 && movieId && typeof movieDatabase !== 'undefined' && movieDatabase[movieId] && (movieDatabase[movieId].src || movieDatabase[movieId].episodes));
+    const activeServer = activeServerList.find(s => s.id === currentActiveServer);
 
-    if (isAbyssActive) {
-        sources.s1 = val;
-        player.src = val;
-    } else {
-        currentEpisode = parseInt(val, 10);
-        updateExternalServerStreams();
-        player.src = sources[`s${currentActiveServer}`];
-    }
-}
-
-function updateExternalServerStreams() {
-    if (!currentTmdbId) return;
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const movieId = urlParams.get('id');
-    const hasAbyss = movieId && typeof movieDatabase !== 'undefined' && movieDatabase[movieId] && (movieDatabase[movieId].src || movieDatabase[movieId].episodes);
-
-    if (hasAbyss) {
-        sources.s2 = buildVidLinkUrl(currentTmdbId, currentIsSeries, currentSeason, currentEpisode);
-        sources.s3 = buildMultiEmbedUrl(currentTmdbId, currentIsSeries, currentSeason, currentEpisode);
-    } else {
-        sources.s1 = buildVidLinkUrl(currentTmdbId, currentIsSeries, currentSeason, currentEpisode);
-        sources.s2 = buildMultiEmbedUrl(currentTmdbId, currentIsSeries, currentSeason, currentEpisode);
-    }
-}
-
-function switchServer(num) {
-    const player = document.getElementById('mainVideoPlayer');
-    const selectorArea = document.getElementById('episodeSelectorArea');
-
-    currentActiveServer = num;
-    setActiveButton(num);
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const movieId = urlParams.get('id');
-    const hasAbyss = movieId && typeof movieDatabase !== 'undefined' && movieDatabase[movieId] && (movieDatabase[movieId].src || movieDatabase[movieId].episodes);
-
-    if (hasAbyss && num === 1) {
-        player.src = sources.s1;
-        if (movieDatabase[movieId].episodes?.length > 0) {
-            setupAbyssSource(movieDatabase[movieId]);
-        } else {
-            if (selectorArea) selectorArea.style.display = 'none';
+    // Abyss Episode Handling
+    if (activeServer && activeServer.isAbyss) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const movieId = urlParams.get('id');
+        const movie = movieDatabase[movieId];
+        if (movie.episodes && movie.episodes[currentEpisode - 1]) {
+            const epUrl = movie.episodes[currentEpisode - 1];
+            activeServer.url = epUrl;
+            player.src = epUrl;
         }
-    } else {
-        updateExternalServerStreams();
-        player.src = sources[`s${num}`];
-
-        if (currentIsSeries && currentTmdbId) {
-            setupExternalEpisodes(currentTmdbId);
-        } else {
-            if (selectorArea) selectorArea.style.display = 'none';
-        }
-    }
-}
-
-function setActiveButton(num) {
-    [1, 2, 3].forEach(n => {
-        const btn = document.getElementById(`btn-s${n}`);
-        if (btn) btn.classList.toggle('active', n === num);
-    });
-}
-
-function setBtnLabels(label1, label2, label3) {
-    const btn1 = document.getElementById('btn-s1');
-    const btn2 = document.getElementById('btn-s2');
-    const btn3 = document.getElementById('btn-s3');
-
-    if (btn1 && label1) btn1.innerHTML = `<i class="fas fa-play"></i> ${label1}`;
-    if (btn2 && label2) btn2.innerHTML = `<i class="fas fa-bolt"></i> ${label2}`;
-    if (btn3 && label3) {
-        btn3.style.display = 'flex';
-        btn3.innerHTML = `<i class="fas fa-server"></i> ${label3}`;
+    } 
+    // External Stream Providers (VidLink, Peachify, etc.)
+    else if (activeServer && activeServer.getUrl) {
+        const updatedUrl = activeServer.getUrl(currentTmdbId, currentIsSeries, currentSeason, currentEpisode);
+        activeServer.url = updatedUrl;
+        player.src = updatedUrl;
     }
 }
 
@@ -1541,7 +1601,6 @@ async function fetchMetaData(title, id, isSeries, updateTitle) {
             if (updateTitle) {
                 const engTitle = best.title || best.name;
                 if (engTitle) {
-                    // Syncs both onscreen text and tab title after TMDB returns official title
                     updatePageAndDisplayTitle(engTitle);
                 }
             }
