@@ -1185,6 +1185,17 @@ const movieDatabase = {
     "raat-akeli-hai-the-bansal-murders": { "title": "Raat Akeli Hai - The Bansal Murders", "src": "https://short.icu/FYIdgZzZ7", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/8EpDSwnjMBc9dmTPEYBF4Bixmwf.jpg" }
 };
 
+function updatePageAndDisplayTitle(title) {
+    const titleEl = document.getElementById('displayTitle');
+    const pageTitle = document.getElementById('pageTitle');
+    
+    if (titleEl) titleEl.innerText = title;
+    
+    // Updates the browser tab title
+    const fullTitle = `${title} | Cineview Premium Player`;
+    if (pageTitle) pageTitle.innerText = fullTitle;
+    document.title = fullTitle;
+}
 
 
 let sources = { s1: '', s2: '', s3: '' };
