@@ -1185,18 +1185,6 @@ const movieDatabase = {
     "raat-akeli-hai-the-bansal-murders": { "title": "Raat Akeli Hai - The Bansal Murders", "src": "https://short.icu/FYIdgZzZ7", "year": "2025", "img": "https://image.tmdb.org/t/p/w500/8EpDSwnjMBc9dmTPEYBF4Bixmwf.jpg" }
 };
 
-function updatePageAndDisplayTitle(title) {
-    const titleEl = document.getElementById('displayTitle');
-    const pageTitle = document.getElementById('pageTitle');
-    
-    if (titleEl) titleEl.innerText = title;
-    
-    // Updates the browser tab title
-    const fullTitle = `${title} | Cineview Premium Player`;
-    if (pageTitle) pageTitle.innerText = fullTitle;
-    document.title = fullTitle;
-}
-
 
 let sources = { s1: '', s2: '', s3: '' };
 let currentActiveServer = 1;
@@ -1204,6 +1192,21 @@ let currentTmdbId = null;
 let currentIsSeries = false;
 let currentSeason = 1;
 let currentEpisode = 1;
+
+/**
+ * Updates both the onscreen <h1> and the browser tab <title>
+ */
+function updatePageAndDisplayTitle(title) {
+    if (!title) return;
+    const titleEl = document.getElementById('displayTitle');
+    const pageTitle = document.getElementById('pageTitle');
+
+    if (titleEl) titleEl.innerText = title;
+
+    const fullTitle = `${title} | Cineview Premium Player`;
+    if (pageTitle) pageTitle.innerText = fullTitle;
+    document.title = fullTitle;
+}
 
 /**
  * Builds the VidLink.pro URL
@@ -1245,7 +1248,6 @@ async function initPlayer() {
     const typeParam = urlParams.get('type') || 'movie';
 
     const player = document.getElementById('mainVideoPlayer');
-    const titleEl = document.getElementById('displayTitle');
     const switcher = document.getElementById('serverSwitcher');
     const selectorArea = document.getElementById('episodeSelectorArea');
 
@@ -1258,7 +1260,8 @@ async function initPlayer() {
         currentIsSeries = movie.isSeries || false;
         currentTmdbId = movie.tmdb || null;
 
-        if (titleEl) titleEl.innerText = movie.title;
+        // Syncs H1 and browser tab title
+        updatePageAndDisplayTitle(movie.title);
 
         const hasAbyssEpisodes = movie.episodes && movie.episodes.length > 0;
         const hasAbyssSingle = Boolean(movie.src);
@@ -1311,7 +1314,8 @@ async function initPlayer() {
         currentIsSeries = (typeParam === 'series' || typeParam === 'tv');
         currentTmdbId = tmdbId;
 
-        if (titleEl) titleEl.innerText = title;
+        // Syncs H1 and browser tab title
+        updatePageAndDisplayTitle(title);
 
         sources.s1 = buildVidLinkUrl(tmdbId, currentIsSeries, 1, 1);
         sources.s2 = buildMultiEmbedUrl(tmdbId, currentIsSeries, 1, 1);
@@ -1431,7 +1435,6 @@ async function onSeasonChange(seasonNum) {
 function onEpisodeChange(val) {
     const player = document.getElementById('mainVideoPlayer');
 
-    // If active on Abyss (Server 1 with database item)
     const urlParams = new URLSearchParams(window.location.search);
     const movieId = urlParams.get('id');
     const isAbyssActive = (currentActiveServer === 1 && movieId && typeof movieDatabase !== 'undefined' && movieDatabase[movieId] && (movieDatabase[movieId].src || movieDatabase[movieId].episodes));
@@ -1440,7 +1443,6 @@ function onEpisodeChange(val) {
         sources.s1 = val;
         player.src = val;
     } else {
-        // Active on VidLink or MultiEmbed
         currentEpisode = parseInt(val, 10);
         updateExternalServerStreams();
         player.src = sources[`s${currentActiveServer}`];
@@ -1449,8 +1451,7 @@ function onEpisodeChange(val) {
 
 function updateExternalServerStreams() {
     if (!currentTmdbId) return;
-    
-    // Check if Abyss exists
+
     const urlParams = new URLSearchParams(window.location.search);
     const movieId = urlParams.get('id');
     const hasAbyss = movieId && typeof movieDatabase !== 'undefined' && movieDatabase[movieId] && (movieDatabase[movieId].src || movieDatabase[movieId].episodes);
@@ -1467,8 +1468,7 @@ function updateExternalServerStreams() {
 function switchServer(num) {
     const player = document.getElementById('mainVideoPlayer');
     const selectorArea = document.getElementById('episodeSelectorArea');
-    const seasonSelect = document.getElementById('seasonDropdown');
-    
+
     currentActiveServer = num;
     setActiveButton(num);
 
@@ -1477,7 +1477,6 @@ function switchServer(num) {
     const hasAbyss = movieId && typeof movieDatabase !== 'undefined' && movieDatabase[movieId] && (movieDatabase[movieId].src || movieDatabase[movieId].episodes);
 
     if (hasAbyss && num === 1) {
-        // Abyss Server active
         player.src = sources.s1;
         if (movieDatabase[movieId].episodes?.length > 0) {
             setupAbyssSource(movieDatabase[movieId]);
@@ -1485,7 +1484,6 @@ function switchServer(num) {
             if (selectorArea) selectorArea.style.display = 'none';
         }
     } else {
-        // External Server (VidLink or MultiEmbed) active
         updateExternalServerStreams();
         player.src = sources[`s${num}`];
 
@@ -1542,8 +1540,9 @@ async function fetchMetaData(title, id, isSeries, updateTitle) {
 
             if (updateTitle) {
                 const engTitle = best.title || best.name;
-                if (engTitle && document.getElementById('displayTitle')) {
-                    document.getElementById('displayTitle').innerText = engTitle;
+                if (engTitle) {
+                    // Syncs both onscreen text and tab title after TMDB returns official title
+                    updatePageAndDisplayTitle(engTitle);
                 }
             }
         }
