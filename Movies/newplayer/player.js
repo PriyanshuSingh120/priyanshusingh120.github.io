@@ -47,6 +47,15 @@ const movieDatabase = {
   "type": "movie",
   "src": "https://play.abyssplayer.com/0uqqpwKZ0"
 },
+    "jailer-2": {
+  "title": "Jailer 2",
+  "img": "https://image.tmdb.org/t/p/w500/upwdEyhhYZ7pT2hD535fr2MGfpx.jpg",
+  "year": "2026",
+  "genre": "Action, Comedy",
+  "tmdb": "1234139",
+  "isSeries": false,
+  "src": "https://player.abyssplayer.com/0UBU7KxIO"
+},
     "the-notebook": {
   "title": "The Notebook",
   "img": "https://image.tmdb.org/t/p/w500/rNzQyW4f8B8cQeg7Dgj3n6eT5k9.jpg",
