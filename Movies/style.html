@@ -259,7 +259,7 @@ async function fetchAbyss(folderId = null) {
 }
 
 /**
- * Intelligent TMDB Search: Handles both Keywords and Numeric IDs
+ * Intelligent TMDB Search via Puter (Bypasses ISP DNS Blocks & CORS)
  */
 async function searchTMDB() {
     const query = document.getElementById('apiSearch').value.trim();
@@ -268,23 +268,24 @@ async function searchTMDB() {
     
     if (query.length < 2) return;
 
-    // Detect if the input is a numeric ID
+    resDiv.innerHTML = '<p class="text-blue-500 animate-pulse text-xs italic py-10 w-full text-center">Searching via Puter...</p>';
+
     const isNumeric = /^\d+$/.test(query);
 
     try {
         let results = [];
         if (isNumeric) {
-            // Direct ID Fetch
-            const res = await fetch(`https://api.themoviedb.org/3/${type}/${query}?api_key=${TMDB_API}`);
+            // Direct ID Fetch through Puter
+            const res = await puter.net.fetch(`https://api.themoviedb.org/3/${type}/${query}?api_key=${TMDB_API}`);
             if (res.ok) {
                 const data = await res.json();
-                results = [data]; // Wrap in array to reuse display logic
+                results = [data];
             }
         } else {
-            // Standard Keyword Search
-            const res = await fetch(`https://api.themoviedb.org/3/search/${type}?api_key=${TMDB_API}&query=${encodeURIComponent(query)}`);
+            // Text Query Search through Puter
+            const res = await puter.net.fetch(`https://api.themoviedb.org/3/search/${type}?api_key=${TMDB_API}&query=${encodeURIComponent(query)}`);
             const data = await res.json();
-            results = data.results.slice(0, 10);
+            results = data.results ? data.results.slice(0, 10) : [];
         }
 
         resDiv.innerHTML = '';
@@ -307,7 +308,8 @@ async function searchTMDB() {
             resDiv.appendChild(card);
         });
     } catch (e) {
-        resDiv.innerHTML = '<p class="text-red-500 text-xs italic py-10 w-full text-center">Search Error.</p>';
+        console.error("TMDB search via Puter failed:", e);
+        resDiv.innerHTML = '<p class="text-red-500 text-xs italic py-10 w-full text-center">Search Error via Puter.</p>';
     }
 }
 
@@ -320,7 +322,7 @@ async function selectMovie(item, poster, year) {
     document.getElementById('mTmdb').value = item.id;
     document.getElementById('mId').value = title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
 
-    // Handle Genres from ID list or direct genres array (if ID fetch used)
+    // Handle Genres from ID list or direct genres array
     let genreNames = [];
     if (item.genres) {
         genreNames = item.genres.map(g => g.name === "Animation" ? "Animated" : g.name);
@@ -329,27 +331,38 @@ async function selectMovie(item, poster, year) {
     }
     document.getElementById('mGenre').value = genreNames.join(", ");
 
+    // Fetch TV Seasons through Puter
     if (document.getElementById('contentType').value === 'series') {
-        const res = await fetch(`https://api.themoviedb.org/3/tv/${item.id}?api_key=${TMDB_API}`);
-        const data = await res.json();
-        currentSeasons = data.seasons;
-        const picker = document.getElementById('seasonPicker');
-        picker.innerHTML = '<option value="">-- Choose Season --</option>';
-        currentSeasons.forEach(s => {
-            if (s.season_number === 0) return;
-            picker.innerHTML += `<option value="${s.season_number}">${s.name} (${s.episode_count} Eps)</option>`;
-        });
-        document.getElementById('seasonWrapper').classList.remove('hidden');
+        try {
+            const res = await puter.net.fetch(`https://api.themoviedb.org/3/tv/${item.id}?api_key=${TMDB_API}`);
+            const data = await res.json();
+            currentSeasons = data.seasons || [];
+            const picker = document.getElementById('seasonPicker');
+            picker.innerHTML = '<option value="">-- Choose Season --</option>';
+            currentSeasons.forEach(s => {
+                if (s.season_number === 0) return;
+                picker.innerHTML += `<option value="${s.season_number}">${s.name} (${s.episode_count} Eps)</option>`;
+            });
+            document.getElementById('seasonWrapper').classList.remove('hidden');
+        } catch (e) {
+            console.error("Season details fetch failed:", e);
+        }
     }
     updateOutputs();
 }
 
 function applySeason(num) {
-    if(!num) return;
+    if (!num || !selectedMovie) return;
     const s = currentSeasons.find(i => i.season_number == num);
+    if (!s) return;
+
     document.getElementById('mName').value = `${selectedMovie.name} - Season ${num}`;
     document.getElementById('mId').value = `${selectedMovie.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-s${num}`;
-    if(s.poster_path) document.getElementById('mImg').value = IMG_BASE + s.poster_path;
+    
+    // Poster fallback to series poster if season poster does not exist
+    const seriesPoster = selectedMovie.poster_path ? IMG_BASE + selectedMovie.poster_path : document.getElementById('mImg').value;
+    document.getElementById('mImg').value = s.poster_path ? (IMG_BASE + s.poster_path) : seriesPoster;
+    
     updateOutputs();
 }
 
@@ -362,12 +375,23 @@ function updateOutputs() {
     const tmdb = document.getElementById('mTmdb').value;
     const genre = document.getElementById('mGenre').value;
 
-    let movieObj = { title: name, img: img, year: year, genre: genre, tmdb: tmdb, type: type };
-    if (type === 'series') movieObj.episodes = document.getElementById('mEpisodes').value.split('\n').filter(l => l.trim() !== "");
-    else movieObj.src = document.getElementById('mSrc').value;
+    let movieObj = { 
+        title: name, 
+        img: img, 
+        year: year, 
+        genre: genre, 
+        tmdb: tmdb, 
+        isSeries: type === 'series'
+    };
+
+    if (type === 'series') {
+        movieObj.episodes = document.getElementById('mEpisodes').value.split('\n').filter(l => l.trim() !== "");
+    } else {
+        movieObj.src = document.getElementById('mSrc').value;
+    }
 
     document.getElementById('outJS').value = `"${id}": ${JSON.stringify(movieObj, null, 2)},`;
-    document.getElementById('outHTML').value = `<a href="newplayer/player?id=${id}&tmdb=${tmdb}" class="movie-link" data-id="${tmdb}">
+    document.getElementById('outHTML').value = `<a href="newplayer/player?id=${id}&tmdb=${tmdb}&type=${type}" class="movie-link" data-id="${tmdb}">
     <div class="movie-card">
         <div class="movie-poster-container"><img src="${img}" class="movie-poster"></div>
         <div class="movie-info">
