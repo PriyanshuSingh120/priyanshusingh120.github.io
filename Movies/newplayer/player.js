@@ -1186,17 +1186,17 @@ const movieDatabase = {
 };
 
 
-let currentActiveServer = 's1';
+let currentActiveServer = 'abyss';
 let currentTmdbId = null;
 let currentIsSeries = false;
 let currentSeason = 1;
 let currentEpisode = 1;
 
-// Stores generated URLs for the currently loaded title
-let activeServerList = []; 
+// Holds active providers for current movie/series
+let activeServerList = [];
 
 /**
- * Server Registry: Maps each provider's URL structure for movies and TV series
+ * External Stream Providers (Used as backups or for non-database titles)
  */
 const STREAM_PROVIDERS = [
     {
@@ -1290,7 +1290,9 @@ async function initPlayer() {
 
     activeServerList = [];
 
-    // SCENARIO 1: Movie/Series exists in local database
+    // ================================================================
+    // SCENARIO 1: Movie/Series is in movieDatabase (Abyss Priority)
+    // ================================================================
     if (movieId && typeof movieDatabase !== 'undefined' && movieDatabase[movieId]) {
         const movie = movieDatabase[movieId];
         currentIsSeries = movie.isSeries || false;
@@ -1302,19 +1304,18 @@ async function initPlayer() {
         const hasAbyssSingle = Boolean(movie.src);
         const hasAbyss = hasAbyssEpisodes || hasAbyssSingle;
 
-        // 1. Add Abyss as Server 1 if available
+        // PRIORITY 1: Push Abyss to Slot 1
         if (hasAbyss) {
-            setupAbyssSource(movie);
             activeServerList.push({
                 id: 'abyss',
-                name: 'Abyss',
+                name: 'Abyss (Main)',
                 icon: 'fas fa-play',
                 isAbyss: true,
                 url: hasAbyssEpisodes ? movie.episodes[0] : movie.src
             });
         }
 
-        // 2. Add all external servers via TMDB
+        // Add external providers as backups if TMDB ID exists
         if (currentTmdbId) {
             STREAM_PROVIDERS.forEach(prov => {
                 activeServerList.push({
@@ -1329,26 +1330,33 @@ async function initPlayer() {
         }
 
         buildServerButtons();
-        
-        // Start playback with the first available server
-        if (activeServerList.length > 0) {
+
+        // Lock in Abyss as the active player immediately
+        if (hasAbyss) {
+            currentActiveServer = 'abyss';
+            player.src = activeServerList[0].url;
+            setActiveButtonUI('abyss');
+
+            if (hasAbyssEpisodes) {
+                setupAbyssEpisodes(movie);
+            }
+        } else if (activeServerList.length > 0) {
+            // In database, but no Abyss links -> Fallback to Server 1 of externals
             currentActiveServer = activeServerList[0].id;
             player.src = activeServerList[0].url;
             setActiveButtonUI(currentActiveServer);
 
             if (currentIsSeries) {
-                if (activeServerList[0].isAbyss) {
-                    setupAbyssSource(movie);
-                } else {
-                    setupExternalEpisodes(currentTmdbId);
-                }
+                setupExternalEpisodes(currentTmdbId);
             }
         }
 
         fetchMetaData(movie.title, movie.tmdb, currentIsSeries, false);
         generateRecommendations(movieId);
     } 
-    // SCENARIO 2: External Search / Not in database
+    // ================================================================
+    // SCENARIO 2: External Search / TMDB ID only (No Abyss DB entry)
+    // ================================================================
     else if (tmdbId) {
         const title = decodeURIComponent(urlParams.get('title') || "Now Playing");
         currentIsSeries = (typeParam === 'series' || typeParam === 'tv');
@@ -1356,7 +1364,6 @@ async function initPlayer() {
 
         updatePageAndDisplayTitle(title);
 
-        // Populate with external servers only
         STREAM_PROVIDERS.forEach(prov => {
             activeServerList.push({
                 id: prov.id,
@@ -1386,7 +1393,7 @@ async function initPlayer() {
 }
 
 /**
- * Builds dynamic server switch buttons in #serverSwitcher
+ * Builds dynamic server switch buttons
  */
 function buildServerButtons() {
     const switcher = document.getElementById('serverSwitcher');
@@ -1422,21 +1429,21 @@ function switchServer(serverId) {
     currentActiveServer = serverId;
     setActiveButtonUI(serverId);
 
-    // Abyss Server active
+    // If switching back to Abyss
     if (target.isAbyss) {
         const urlParams = new URLSearchParams(window.location.search);
         const movieId = urlParams.get('id');
         const movie = movieDatabase[movieId];
 
-        if (movie.episodes?.length > 0) {
-            setupAbyssSource(movie);
+        if (movie.episodes && movie.episodes.length > 0) {
+            setupAbyssEpisodes(movie);
             player.src = movie.episodes[currentEpisode - 1] || movie.episodes[0];
         } else {
             player.src = movie.src;
             if (selectorArea) selectorArea.style.display = 'none';
         }
     } 
-    // External Stream Provider active
+    // If switching to an external provider (VidLink, 2Embed, etc.)
     else {
         const newUrl = target.getUrl(currentTmdbId, currentIsSeries, currentSeason, currentEpisode);
         target.url = newUrl;
@@ -1458,21 +1465,22 @@ function setActiveButtonUI(serverId) {
 }
 
 /**
- * Loads Abyss episodes into single dropdown
+ * Loads Abyss series episodes into the dropdown directly from movieDatabase
  */
-function setupAbyssSource(movie) {
+function setupAbyssEpisodes(movie) {
     const selectorArea = document.getElementById('episodeSelectorArea');
     const seasonSelect = document.getElementById('seasonDropdown');
     const episodeSelect = document.getElementById('episodeDropdown');
 
     if (movie.episodes && movie.episodes.length > 0) {
         if (selectorArea) selectorArea.style.display = 'flex';
-        if (seasonSelect) seasonSelect.style.display = 'none';
+        if (seasonSelect) seasonSelect.style.display = 'none'; // Abyss uses 1 flat list
+        
         if (episodeSelect) {
             episodeSelect.innerHTML = "";
             movie.episodes.forEach((url, i) => {
                 let opt = document.createElement('option');
-                opt.value = i + 1; // 1-based index
+                opt.value = i + 1;
                 opt.innerText = `Episode ${i + 1}`;
                 episodeSelect.appendChild(opt);
             });
@@ -1543,7 +1551,7 @@ async function loadTmdbEpisodes(tmdbId, seasonNumber) {
 
 async function onSeasonChange(seasonNum) {
     currentSeason = parseInt(seasonNum, 10);
-    currentEpisode = 1; // Reset to ep 1 when season changes
+    currentEpisode = 1;
     if (currentTmdbId) {
         await loadTmdbEpisodes(currentTmdbId, currentSeason);
         onEpisodeChange(currentEpisode);
@@ -1556,7 +1564,7 @@ function onEpisodeChange(val) {
 
     const activeServer = activeServerList.find(s => s.id === currentActiveServer);
 
-    // Abyss Episode Handling
+    // If currently on Abyss
     if (activeServer && activeServer.isAbyss) {
         const urlParams = new URLSearchParams(window.location.search);
         const movieId = urlParams.get('id');
@@ -1567,7 +1575,7 @@ function onEpisodeChange(val) {
             player.src = epUrl;
         }
     } 
-    // External Stream Providers (VidLink, Peachify, etc.)
+    // If currently on an External Server
     else if (activeServer && activeServer.getUrl) {
         const updatedUrl = activeServer.getUrl(currentTmdbId, currentIsSeries, currentSeason, currentEpisode);
         activeServer.url = updatedUrl;
