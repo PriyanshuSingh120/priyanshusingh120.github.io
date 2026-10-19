@@ -215,7 +215,7 @@ async function fetchAbyss(folderId = null) {
                 const div = document.createElement('div');
                 div.className = 'flex-shrink-0 w-36 glass-card p-3 rounded-2xl cursor-pointer hover:border-blue-500 transition-all file-card';
                 div.onclick = () => {
-                    document.getElementById('mSrc').value = `https://short.icu/${file.id}`;
+                    document.getElementById('mSrc').value = `https://player.abyssplayer.com/${file.id}`;
                     updateOutputs();
                     showToast("Movie Link Added!");
                 };
@@ -244,7 +244,7 @@ async function fetchAbyss(folderId = null) {
             div.onclick = () => {
                 if (isFolder) fetchAbyss(item.id);
                 else {
-                    const embedLink = `https://short.icu/${item.id}`;
+                    const embedLink = `https://player.abyssplayer.com/${item.id}`;
                     const epArea = document.getElementById('mEpisodes');
                     const current = epArea.value.trim();
                     epArea.value = current ? (current + '\n' + embedLink) : embedLink;
