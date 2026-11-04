@@ -198,7 +198,7 @@
                         <div>
                             <h3 class="text-lg font-black uppercase tracking-tight text-white">Custom Backup Server</h3>
                             <p class="text-xs text-zinc-400 mt-1 max-w-sm mx-auto">
-                                Enter a live stream stream URL, web page, or HLS/iframe embed to broadcast on Server 3.
+                                Enter a live stream URL, web page, or HLS/iframe embed to broadcast on Server 3.
                             </p>
                         </div>
                         <div class="w-full flex flex-col sm:flex-row gap-2 mt-2">
@@ -266,7 +266,7 @@
                         <span class="w-2 h-2 rounded-full bg-zinc-500"></span>
                         Server 2
                     </span>
-                    <span class="text-[10px] text-[#00ff6a] font-bold">VIP</span>
+                    <span class="text-[10px] text-[#00ff6a] font-bold">SONY</span>
                 </button>
 
                 <!-- Server 3 -->
@@ -360,14 +360,14 @@
         // Server URL Configurations
         const SERVERS = {
             1: "https://live.khantv.pk/update/?id=star_sports1",
-            2: "https://api.touchcric.vip/DRM2/player.php?id=270",
+            2: "https://trendy48.online/live-tv?ch=sonysportsnetwork-in",
             3: "https://freecdn.st/hembedplayer/csstream1/1/960/540",
             4: "https://live.khantv.pk/update/?id=ch2"
         };
 
         const SERVER_NAMES = {
             1: "Server 1",
-            2: "Server 2",
+            2: "Server 2 (Sony)",
             3: "Server 3",
             4: "Server 4"
         };
@@ -417,12 +417,9 @@
             activeBadge.innerText = SERVER_NAMES[index] || `Server ${index}`;
             headerTag.innerText = `SERVER ${index} ACTIVE`;
 
-            // If it's Server 2 or any stream that might block frame ancestors, show the direct pop-out banner
-            if (index === 2) {
-                embedNotice.classList.remove('hidden');
-                directLink.href = SERVERS[2];
-            } else {
-                embedNotice.classList.add('hidden');
+            // Always link the fallback popup to the selected server's direct URL
+            if (SERVERS[index]) {
+                directLink.href = SERVERS[index];
             }
 
             if (index === 3 && !SERVERS[3]) {
