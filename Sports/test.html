@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Live Stream Multi-Server Hub</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#fdf2f2',
+              500: '#ef4444',
+              600: '#dc2626',
+              700: '#b91c1c',
+            },
+            dark: {
+              base: '#0B0F17',
+              surface: '#111827',
+              card: '#182234',
+              border: '#1F2E45',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0f17;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1f2e45;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #ef4444;
+    }
+
+    /* Pulse animation */
+    @keyframes liveGlow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.15); }
+    }
+    .live-pulse {
+      animation: liveGlow 1.8s infinite ease-in-out;
+    }
+
+    /* Smooth iframe transition state */
+    .stream-container iframe {
+      transition: opacity 0.25s ease-in-out;
+    }
+  </style>
+</head>
+<body class="bg-dark-base text-gray-100 min-h-screen flex flex-col font-sans selection:bg-red-500 selection:text-white">
+
+  <!-- Top Navigation Bar -->
+  <header class="border-b border-dark-border bg-dark-surface/90 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-amber-500 flex items-center justify-center shadow-lg shadow-brand-600/20">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none"></polygon>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-lg tracking-tight bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">StreamHub Pro</span>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/20">
+              <span class="w-1.5 h-1.5 rounded-full bg-red-500 mr-1.5 live-pulse"></span> LIVE
+            </span>
+          </div>
+          <p class="text-[11px] text-gray-400 font-mono -mt-0.5">8 Dedicated Mirror Servers</p>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="flex items-center gap-2.5">
+        <button id="theaterBtn" title="Toggle Theater Mode" class="px-3 py-1.5 rounded-lg border border-dark-border bg-dark-card hover:bg-dark-border text-xs font-medium text-gray-300 transition flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <rect x="2" y="4" width="20" height="16" rx="2" stroke-width="2"/>
+            <path d="M7 15h10" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="hidden sm:inline">Theater</span>
+        </button>
+        <button id="reloadBtn" title="Reload Active Stream" class="p-2 rounded-lg border border-dark-border bg-dark-card hover:bg-dark-border text-gray-300 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Layout -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+
+    <!-- Active Stream Showcase Grid -->
+    <section id="playerLayoutContainer" class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start transition-all duration-300">
+      
+      <!-- Video Player Column (Spans 3 cols on desktop) -->
+      <div id="playerWrapperCol" class="lg:col-span-3 space-y-4">
+        
+        <!-- Video Screen Frame -->
+        <div class="relative bg-black rounded-2xl border border-dark-border overflow-hidden shadow-2xl shadow-black/80 aspect-video group">
+          
+          <!-- Stream Iframe Wrapper -->
+          <div id="iframeMount" class="w-full h-full stream-container relative bg-zinc-950 flex items-center justify-center">
+            <!-- Dynamic Iframe will be injected here -->
+          </div>
+
+          <!-- Loading Indicator Overlay -->
+          <div id="streamLoader" class="absolute inset-0 bg-dark-base/80 backdrop-blur-sm flex flex-col items-center justify-center gap-3 z-20 pointer-events-none opacity-0 transition-opacity duration-200">
+            <div class="w-10 h-10 border-3 border-brand-500/20 border-t-brand-500 rounded-full animate-spin"></div>
+            <p id="loaderMessage" class="text-xs text-gray-300 font-mono tracking-wider">Connecting to server...</p>
+          </div>
+
+          <!-- Overlay Quick Controls (Bottom Bar) -->
+          <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3 sm:p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-between z-30 pointer-events-auto">
+            <div class="flex items-center gap-2">
+              <span id="activeBadge" class="bg-red-500/90 text-white text-[11px] font-bold px-2 py-0.5 rounded shadow">Server 1</span>
+              <span id="activeTitle" class="text-sm font-semibold text-white truncate max-w-[200px] sm:max-w-md">TNT Sports 2 AQ</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <button id="copyUrlBtn" class="text-xs px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+                <span>Copy Source</span>
+              </button>
+              <button id="fullscreenBtn" class="text-xs px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+                <span>Full</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Player Meta and Diagnostic Bar -->
+        <div class="bg-dark-card border border-dark-border rounded-xl p-4 flex flex-wrap items-center justify-between gap-4">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <h2 id="currentStreamHeader" class="text-base font-bold text-white">TNT Sports 2 AQ</h2>
+              <span id="currentStatusDot" class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/50"></span>
+            </div>
+            <p id="currentStreamUrl" class="text-xs font-mono text-gray-400 truncate max-w-sm sm:max-w-lg md:max-w-xl">https://api.touchcric.vip/DRM2/player.php?id=270</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="text-right">
+              <div class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Feed Type</div>
+              <div id="currentStreamType" class="text-xs font-mono text-amber-400 font-semibold">Web Embed (DRM)</div>
+            </div>
+            <div class="h-8 w-[1px] bg-dark-border"></div>
+            <div class="text-right">
+              <div class="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Latency Mode</div>
+              <div class="text-xs font-mono text-emerald-400 font-semibold">Ultra-Low</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Dedicated Dedicated Server Switcher Sidebar -->
+      <aside class="lg:col-span-1 space-y-3">
+        <div class="flex items-center justify-between px-1">
+          <div class="flex items-center gap-2">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Dedicated Mirrors</h3>
+            <span class="text-[11px] font-mono px-1.5 py-0.2 rounded bg-dark-border text-gray-300">8 Online</span>
+          </div>
+          <button id="checkAllBtn" class="text-[11px] text-brand-500 hover:text-brand-400 transition font-medium">Reset</button>
+        </div>
+
+        <!-- Servers List (Dynamically Rendered) -->
+        <div id="serverListContainer" class="space-y-2 max-h-[580px] overflow-y-auto pr-1">
+          <!-- Server buttons dynamically injected here -->
+        </div>
+
+        <!-- Helpful Streaming Tips Card -->
+        <div class="bg-gradient-to-br from-dark-surface to-dark-card border border-dark-border rounded-xl p-3.5 text-xs text-gray-400 space-y-2">
+          <div class="font-semibold text-gray-200 flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Playback Troubleshooting
+          </div>
+          <p class="leading-relaxed">
+            If a server fails to buffer or gives a playback refusal, switch to another mirror. iOS and Fast CDN servers offer direct MP4/HLS encapsulation for lower latency.
+          </p>
+        </div>
+      </aside>
+
+    </section>
+
+    <!-- Additional Stream Inventory & Detail Matrix -->
+    <section class="border-t border-dark-border pt-6">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h2 class="text-base font-bold text-white">Full Server Matrix & Specifications</h2>
+          <p class="text-xs text-gray-400">Direct links, encapsulation protocols, and access points for every mirror.</p>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto rounded-xl border border-dark-border bg-dark-card">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-dark-surface/90 text-gray-400 uppercase font-mono text-[10px] border-b border-dark-border">
+            <tr>
+              <th class="py-3 px-4">Server</th>
+              <th class="py-3 px-4">Channel / Title</th>
+              <th class="py-3 px-4">Stream Protocol</th>
+              <th class="py-3 px-4">Quality / Format</th>
+              <th class="py-3 px-4">Action</th>
+            </tr>
+          </thead>
+          <tbody id="matrixTableBody" class="divide-y divide-dark-border text-gray-300 font-mono">
+            <!-- Table rows dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Notification Toast Container -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-12 opacity-0 pointer-events-none transition-all duration-300 bg-dark-card border border-dark-border text-white text-xs px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2">
+    <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+    <span id="toastMsg">Message</span>
+  </div>
+
+  <!-- Player and Server Management Script -->
+  <script>
+    // Complete server registry extracted directly from the HTML source
+    const streamServers = [
+      {
+        id: 0,
+        name: "Server 01",
+        label: "TNT Sports 2 AQ",
+        url: "https://api.touchcric.vip/DRM2/player.php?id=270",
+        type: "DRM Embedded Player",
+        quality: "Auto / Adaptive HD",
+        badge: "AQ Stream",
+        category: "Cricket / Sports"
+      },
+      {
+        id: 1,
+        name: "Server 02",
+        label: "SONY LIv AQ",
+        url: "https://api.touchcric.vip/DRM2/player.php?id=347",
+        type: "DRM Embedded Player",
+        quality: "Auto / Adaptive HD",
+        badge: "AQ Stream",
+        category: "Sony Sports"
+      },
+      {
+        id: 2,
+        name: "Server 03",
+        label: "SONLiv Hindi AQ",
+        url: "https://api.touchcric.vip/DRM2/player.php?id=348",
+        type: "DRM Embedded Player",
+        quality: "Auto / Adaptive HD",
+        badge: "Hindi Feed",
+        category: "Sony Sports"
+      },
+      {
+        id: 3,
+        name: "Server 04",
+        label: "Willow AQ",
+        url: "https://api.touchcric.vip/DRM2/player.php?id=265",
+        type: "DRM Embedded Player",
+        quality: "Auto / Adaptive HD",
+        badge: "USA Feed",
+        category: "Willow Network"
+      },
+      {
+        id: 4,
+        name: "Server 05",
+        label: "Cricbuzz fast iOS",
+        url: "https://freecdn.st/hembedplayer/csstream1/1/960/540",
+        type: "Fast CDN HLS/Embed",
+        quality: "960x540 iOS Opt.",
+        badge: "Fast CDN",
+        category: "Cricbuzz Engine"
+      },
+      {
+        id: 5,
+        name: "Server 06",
+        label: "TapMad 🇵🇰🇧🇩",
+        url: "https://api.touchcric.vip/m3u8.php?id=https://tencent-cdn.tapmad.com/v1/01a145abfb3a1ea540a81c2b41b751/01a145ae0ac115fc600b1e3e9683da/main.m3u8",
+        type: "Tencent M3U8 Relay",
+        quality: "Adaptive HLS",
+        badge: "M3U8 Gateway",
+        category: "TapMad Official"
+      },
+      {
+        id: 6,
+        name: "Server 07",
+        label: "Willow SD iOS",
+        url: "https://taifood-blog.asia/embed/247-willow",
+        type: "Web Embed SD",
+        quality: "Standard Def iOS",
+        badge: "Mobile Alt",
+        category: "Willow SD"
+      },
+      {
+        id: 7,
+        name: "Server 08",
+        label: "Willow AQ",
+        url: "https://api.touchcric.vip/DRM2/player.php?id=263",
+        type: "DRM Embedded Player",
+        quality: "Auto / Adaptive HD",
+        badge: "AQ Backup",
+        category: "Willow Network"
+      }
+    ];
+
+    let activeServerIndex = 0;
+    let isTheater = false;
+
+    // DOM Elements
+    const iframeMount = document.getElementById('iframeMount');
+    const serverListContainer = document.getElementById('serverListContainer');
+    const matrixTableBody = document.getElementById('matrixTableBody');
+    const streamLoader = document.getElementById('streamLoader');
+    const loaderMessage = document.getElementById('loaderMessage');
+    const activeBadge = document.getElementById('activeBadge');
+    const activeTitle = document.getElementById('activeTitle');
+    const currentStreamHeader = document.getElementById('currentStreamHeader');
+    const currentStreamUrl = document.getElementById('currentStreamUrl');
+    const currentStreamType = document.getElementById('currentStreamType');
+    const copyUrlBtn = document.getElementById('copyUrlBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const theaterBtn = document.getElementById('theaterBtn');
+    const reloadBtn = document.getElementById('reloadBtn');
+    const checkAllBtn = document.getElementById('checkAllBtn');
+    const playerLayoutContainer = document.getElementById('playerLayoutContainer');
+    const playerWrapperCol = document.getElementById('playerWrapperCol');
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toastMsg');
+
+    // Show temporary toast message
+    function showToast(message) {
+      toastMsg.textContent = message;
+      toast.classList.remove('translate-y-12', 'opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('translate-y-12', 'opacity-0', 'pointer-events-none');
+      }, 2600);
+    }
+
+    // Render the server button list
+    function renderServerSidebar() {
+      serverListContainer.innerHTML = '';
+      
+      streamServers.forEach((server, index) => {
+        const isActive = index === activeServerIndex;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `w-full text-left p-3 rounded-xl border transition-all flex items-center justify-between gap-3 ${
+          isActive 
+            ? 'bg-gradient-to-r from-brand-600/20 to-red-600/10 border-brand-500 shadow-md shadow-brand-500/10' 
+            : 'bg-dark-card border-dark-border hover:bg-dark-border/80 text-gray-300'
+        }`;
+
+        btn.innerHTML = `
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-8 h-8 rounded-lg ${isActive ? 'bg-brand-500 text-white font-bold' : 'bg-dark-border text-gray-400'} flex items-center justify-center text-xs font-mono shrink-0">
+              0${index + 1}
+            </div>
+            <div class="truncate">
+              <div class="flex items-center gap-1.5">
+                <span class="text-xs font-bold ${isActive ? 'text-white' : 'text-gray-200'} truncate">${server.label}</span>
+              </div>
+              <span class="text-[11px] text-gray-400 font-mono block truncate">${server.type}</span>
+            </div>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[10px] font-mono shrink-0 ${
+            isActive ? 'bg-brand-500/30 text-red-300 border border-brand-500/40' : 'bg-dark-border text-gray-400'
+          }">
+            ${server.badge}
+          </span>
+        `;
+
+        btn.addEventListener('click', () => switchServer(index));
+        serverListContainer.appendChild(btn);
+      });
+    }
+
+    // Render Bottom Matrix Table
+    function renderMatrixTable() {
+      matrixTableBody.innerHTML = '';
+      streamServers.forEach((server, index) => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-dark-surface/60 transition";
+        tr.innerHTML = `
+          <td class="py-3 px-4 font-bold text-white">#0${index + 1}</td>
+          <td class="py-3 px-4 text-gray-200">${server.label}</td>
+          <td class="py-3 px-4 text-emerald-400">${server.type}</td>
+          <td class="py-3 px-4 text-gray-400">${server.quality}</td>
+          <td class="py-3 px-4">
+            <button class="px-2.5 py-1 rounded bg-brand-500/20 text-red-400 hover:bg-brand-500 hover:text-white transition text-[11px] font-semibold launch-btn" data-index="${index}">
+              Connect
+            </button>
+          </td>
+        `;
+        matrixTableBody.appendChild(tr);
+      });
+
+      matrixTableBody.querySelectorAll('.launch-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const idx = parseInt(e.currentTarget.getAttribute('data-index'), 10);
+          switchServer(idx);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+    }
+
+    // Switch active server & inject optimized iframe
+    function switchServer(index) {
+      if (index < 0 || index >= streamServers.length) return;
+      activeServerIndex = index;
+      const target = streamServers[activeServerIndex];
+
+      // Update loader state
+      loaderMessage.textContent = `Connecting to ${target.name} (${target.label})...`;
+      streamLoader.classList.remove('opacity-0');
+
+      // Clear mount
+      iframeMount.innerHTML = '';
+
+      // Create new iframe with sandbox & permission flags
+      const iframe = document.createElement('iframe');
+      iframe.src = target.url;
+      iframe.className = "w-full h-full border-0 absolute inset-0";
+      iframe.setAttribute('allowfullscreen', 'true');
+      iframe.setAttribute('webkitallowfullscreen', 'true');
+      iframe.setAttribute('mozallowfullscreen', 'true');
+      iframe.setAttribute('scrolling', 'no');
+      iframe.setAttribute('marginwidth', '0');
+      iframe.setAttribute('marginheight', '0');
+      iframe.setAttribute('frameborder', '0');
+      iframe.setAttribute('allow', 'encrypted-media; autoplay; fullscreen; picture-in-picture; accelerometer; gyroscope');
+      iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+
+      // Hide loader once iframe reports load
+      iframe.onload = () => {
+        setTimeout(() => {
+          streamLoader.classList.add('opacity-0');
+        }, 400);
+      };
+
+      // In case onload doesn't fire due to cross-origin policies
+      setTimeout(() => {
+        streamLoader.classList.add('opacity-0');
+      }, 2000);
+
+      iframeMount.appendChild(iframe);
+
+      // Update UI elements
+      activeBadge.textContent = target.name;
+      activeTitle.textContent = target.label;
+      currentStreamHeader.textContent = `${target.name} - ${target.label}`;
+      currentStreamUrl.textContent = target.url;
+      currentStreamType.textContent = target.type;
+
+      // Re-render sidebar active indicators
+      renderServerSidebar();
+      showToast(`Switched to ${target.name} (${target.label})`);
+    }
+
+    // Clipboard copy with iframe workaround
+    copyUrlBtn.addEventListener('click', () => {
+      const activeUrl = streamServers[activeServerIndex].url;
+      const tempInput = document.createElement('input');
+      tempInput.value = activeUrl;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand('copy');
+        showToast("Stream endpoint URL copied to clipboard!");
+      } catch (err) {
+        showToast("Unable to copy URL");
+      }
+      document.body.removeChild(tempInput);
+    });
+
+    // Fullscreen support
+    fullscreenBtn.addEventListener('click', () => {
+      const container = document.querySelector('.aspect-video');
+      if (!document.fullscreenElement) {
+        if (container.requestFullscreen) {
+          container.requestFullscreen();
+        } else if (container.webkitRequestFullscreen) {
+          container.webkitRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    });
+
+    // Theater Mode Toggle
+    theaterBtn.addEventListener('click', () => {
+      isTheater = !isTheater;
+      if (isTheater) {
+        playerWrapperCol.classList.remove('lg:col-span-3');
+        playerWrapperCol.classList.add('lg:col-span-4');
+        theaterBtn.classList.add('bg-brand-600', 'text-white', 'border-brand-500');
+        showToast("Theater mode enabled");
+      } else {
+        playerWrapperCol.classList.remove('lg:col-span-4');
+        playerWrapperCol.classList.add('lg:col-span-3');
+        theaterBtn.classList.remove('bg-brand-600', 'text-white', 'border-brand-500');
+        showToast("Default layout restored");
+      }
+    });
+
+    // Reload active server
+    reloadBtn.addEventListener('click', () => {
+      showToast("Reloading current stream feed...");
+      switchServer(activeServerIndex);
+    });
+
+    // Reset to primary server
+    checkAllBtn.addEventListener('click', () => {
+      switchServer(0);
+    });
+
+    // Initialize on window load
+    window.addEventListener('DOMContentLoaded', () => {
+      renderServerSidebar();
+      renderMatrixTable();
+      switchServer(0); // Launch Server 01 as default
+    });
+  </script>
+</body>
+</html>
