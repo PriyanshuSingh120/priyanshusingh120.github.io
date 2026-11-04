@@ -161,6 +161,18 @@
         <!-- Main Video Streaming Box -->
         <main class="w-full flex flex-col items-center">
             <div id="player-container" class="player-frame-wrapper w-full">
+                <!-- Fallback / External Player Notice for Restricted iFrames -->
+                <div id="embed-notice-bar" class="absolute top-3 left-3 right-3 z-20 flex items-center justify-between bg-black/80 backdrop-blur-md border border-white/10 px-3 py-2 rounded-xl text-xs hidden">
+                    <span class="text-zinc-300 flex items-center gap-1.5 text-[11px]">
+                        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                        Stream blocked by provider in iframe?
+                    </span>
+                    <a id="direct-stream-link" href="#" target="_blank" rel="noopener noreferrer" class="bg-[#00ff6a] hover:bg-[#00e65f] text-black px-2.5 py-1 rounded-lg font-black text-[10px] uppercase tracking-wider flex items-center gap-1 transition-all">
+                        <span>Open Direct Stream</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                    </a>
+                </div>
+
                 <!-- Stream Loading Overlay -->
                 <div id="player-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#07090c]/95 z-20 transition-opacity duration-300">
                     <div class="relative w-14 h-14 mb-3.5">
@@ -207,10 +219,11 @@
                 <iframe 
                     id="stream"
                     src="https://live.khantv.pk/update/?id=star_sports1" 
-                    allow="autoplay; encrypted-media; fullscreen; picture-in-picture" 
+                    allow="autoplay; encrypted-media; fullscreen; picture-in-picture; cross-origin-isolated" 
                     allowfullscreen="true"
                     scrolling="no"
                     referrerpolicy="no-referrer"
+                    sandbox="allow-scripts allow-same-origin allow-presentation allow-forms"
                     onload="hideLoader()">
                 </iframe>
             </div>
@@ -231,7 +244,7 @@
                 </div>
             </div>
             
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 <!-- Server 1 -->
                 <button 
                     onclick="switchServer(1)" 
@@ -253,7 +266,7 @@
                         <span class="w-2 h-2 rounded-full bg-zinc-500"></span>
                         Server 2
                     </span>
-                    <span class="text-[10px] text-[#00ff6a] font-bold">HD</span>
+                    <span class="text-[10px] text-[#00ff6a] font-bold">VIP</span>
                 </button>
 
                 <!-- Server 3 -->
@@ -266,6 +279,18 @@
                         Server 3
                     </span>
                     <span id="srv3-indicator" class="text-[10px] text-zinc-400 font-bold">Backup</span>
+                </button>
+
+                <!-- Server 4 -->
+                <button 
+                    onclick="switchServer(4)" 
+                    id="srv-btn-4" 
+                    class="py-3 px-3 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/5 text-white/70 hover:bg-white/10 hover:text-white border border-white/5 text-center transition-all flex items-center justify-between">
+                    <span class="flex items-center gap-2 font-black">
+                        <span class="w-2 h-2 rounded-full bg-zinc-500"></span>
+                        Server 4
+                    </span>
+                    <span class="text-[10px] text-[#00ff6a] font-bold">HD</span>
                 </button>
             </div>
         </section>
@@ -336,13 +361,15 @@
         const SERVERS = {
             1: "https://live.khantv.pk/update/?id=star_sports1",
             2: "https://api.touchcric.vip/DRM2/player.php?id=270",
-            3: "https://freecdn.st/hembedplayer/csstream1/1/960/540"
+            3: "https://freecdn.st/hembedplayer/csstream1/1/960/540",
+            4: "https://live.khantv.pk/update/?id=ch2"
         };
 
         const SERVER_NAMES = {
             1: "Server 1",
             2: "Server 2",
-            3: "Server 3"
+            3: "Server 3",
+            4: "Server 4"
         };
 
         let currentActiveServer = 1;
@@ -367,12 +394,15 @@
             const customOverlay = document.getElementById('custom-setup-overlay');
             const activeBadge = document.getElementById('active-server-badge');
             const headerTag = document.getElementById('header-server-tag');
+            const embedNotice = document.getElementById('embed-notice-bar');
+            const directLink = document.getElementById('direct-stream-link');
             
             showLoader();
 
-            // Update button styles
-            for (let i = 1; i <= 3; i++) {
+            // Update button styles for all 4 servers
+            for (let i = 1; i <= 4; i++) {
                 const btn = document.getElementById(`srv-btn-${i}`);
+                if (!btn) continue;
                 const dot = btn.querySelector('span > span');
                 
                 if (i === index) {
@@ -386,6 +416,14 @@
 
             activeBadge.innerText = SERVER_NAMES[index] || `Server ${index}`;
             headerTag.innerText = `SERVER ${index} ACTIVE`;
+
+            // If it's Server 2 or any stream that might block frame ancestors, show the direct pop-out banner
+            if (index === 2) {
+                embedNotice.classList.remove('hidden');
+                directLink.href = SERVERS[2];
+            } else {
+                embedNotice.classList.add('hidden');
+            }
 
             if (index === 3 && !SERVERS[3]) {
                 iframe.src = "about:blank";
