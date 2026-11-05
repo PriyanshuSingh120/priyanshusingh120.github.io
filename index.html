@@ -40,6 +40,9 @@
     </script>
 </head>
 <body>
+    <div id="offlineNotice" style="display:none; position:fixed; top:10px; left:50%; transform:translateX(-50%); background:#e74c3c; color:#fff; padding:6px 16px; border-radius:20px; z-index:99999; font-size:13px; font-weight:bold;">
+    Offline Mode (Using Cached Data)
+  </div>
 
     <!-- =========================================
          MODERN GLASS FLOATING NAVBAR
@@ -611,5 +614,17 @@
             });
         });
     </script>
+    <script>
+        const notice = document.getElementById('offlineNotice');
+  window.addEventListener('offline', () => notice.style.display = 'block');
+  window.addEventListener('online', () => notice.style.display = 'none');
+    if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('Offline service worker ready:', reg.scope))
+      .catch(err => console.error('Service worker failed:', err));
+  });
+}
+        </script>
 </body>
 </html>
