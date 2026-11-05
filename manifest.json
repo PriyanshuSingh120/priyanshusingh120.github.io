@@ -1,0 +1,24 @@
+{
+"name": "Prigames - Best Free Games & Code",
+"short_name": "Prigames",
+"start_url": "./index.html",
+"display": "standalone",
+"background_color": "#07090e",
+"theme_color": "#07090e",
+"orientation": "portrait-primary",
+"description": "Download 100% working compressed PC games, explore Python scripts, and play web games offline.",
+"icons": [
+{
+"src": "bg.png",
+"sizes": "192x192",
+"type": "image/png",
+"purpose": "any maskable"
+},
+{
+"src": "bg.png",
+"sizes": "512x512",
+"type": "image/png",
+"purpose": "any maskable"
+}
+]
+}
