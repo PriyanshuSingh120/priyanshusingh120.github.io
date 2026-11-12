@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Prigames Sports Live | Official Streaming Hub</title>
+    
+    <!-- Preconnect & DNS-Prefetch for instant handshake with streaming hosts -->
+    <link rel="dns-prefetch" href="https://webcric.im">
+    <link rel="preconnect" href="https://webcric.im" crossorigin>
+    <link rel="dns-prefetch" href="https://trendy48.online">
+    <link rel="preconnect" href="https://trendy48.online" crossorigin>
+    <link rel="dns-prefetch" href="https://freecdn.st">
+    <link rel="preconnect" href="https://freecdn.st" crossorigin>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,17 +43,11 @@
 
         /* Glassmorphism styling */
         .glass-panel {
-            background: rgba(18, 22, 28, 0.7);
+            background: rgba(18, 22, 28, 0.75);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(8px);
         }
 
         /* Stream frame styling */
@@ -57,7 +60,7 @@
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(0, 255, 106, 0.08);
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .player-frame-wrapper.theatre {
@@ -125,13 +128,40 @@
                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ff6a] opacity-75"></span>
                             <span class="relative inline-flex rounded-full h-2 w-2 bg-[#00ff6a]"></span>
                         </span>
-                        <span class="text-[11px] text-zinc-400 font-medium tracking-wide">Live Stream Broadcast</span>
+                        <span class="text-[11px] text-zinc-400 font-medium tracking-wide">Turbo Stream Engine</span>
                         <span class="text-zinc-600 text-[10px]">•</span>
                         <span id="header-server-tag" class="text-[11px] text-[#00ff6a] font-semibold mono-font">SERVER 1 ACTIVE</span>
                     </div>
                 </div>
             </div>
             
+            <!-- Controls (Ad-Shield Toggle, Theatre & Fullscreen) -->
+            <div class="flex items-center gap-2">
+                <!-- Built-in Popup/Ad Shield Toggle (Works without AdGuard DNS) -->
+                <button 
+                    onclick="toggleAdShield()" 
+                    id="adshield-btn"
+                    title="Blocks popups and redirect scripts inside stream iframes without needing AdGuard DNS" 
+                    class="bg-[#00ff6a]/15 text-[#00ff6a] border border-[#00ff6a]/30 hover:bg-[#00ff6a]/25 px-2.5 py-2 rounded-xl active:scale-95 transition-all flex items-center gap-1.5 text-xs font-bold">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <span class="hidden sm:inline" id="adshield-label">Shield: ON</span>
+                </button>
+
+                <button 
+                    onclick="toggleTheatre()" 
+                    id="theatre-btn"
+                    title="Toggle Wide/Theatre Mode" 
+                    class="bg-white/5 hover:bg-white/10 text-white/80 hover:text-white p-2.5 rounded-xl border border-white/10 active:scale-95 transition-all hidden md:flex items-center gap-1.5 text-xs font-semibold">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="4" width="20" height="16" rx="3"/>
+                        <path d="M7 8h10v8H7z" fill="rgba(255,255,255,0.15)"/>
+                    </svg>
+                    <span>Theatre</span>
+                </button>
+
+                <button 
             <!-- Controls (Theatre & Fullscreen) -->
             <div class="flex items-center gap-2">
                 <button 
@@ -161,29 +191,20 @@
         <!-- Main Video Streaming Box -->
         <main class="w-full flex flex-col items-center">
             <div id="player-container" class="player-frame-wrapper w-full">
-                <!-- Fallback / External Player Notice for Restricted iFrames -->
-                <div id="embed-notice-bar" class="absolute top-3 left-3 right-3 z-20 flex items-center justify-between bg-black/80 backdrop-blur-md border border-white/10 px-3 py-2 rounded-xl text-xs hidden">
-                    <span class="text-zinc-300 flex items-center gap-1.5 text-[11px]">
-                        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                        Stream blocked by provider in iframe?
-                    </span>
-                    <a id="direct-stream-link" href="#" target="_blank" rel="noopener noreferrer" class="bg-[#00ff6a] hover:bg-[#00e65f] text-black px-2.5 py-1 rounded-lg font-black text-[10px] uppercase tracking-wider flex items-center gap-1 transition-all">
-                        <span>Open Direct Stream</span>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
-                    </a>
-                </div>
 
-                <!-- Stream Loading Overlay -->
-                <div id="player-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#07090c]/95 z-20 transition-opacity duration-300">
-                    <div class="relative w-14 h-14 mb-3.5">
+                <!-- Stream Loading Overlay (Auto-clears in max 1.8s even if third-party ad scripts hang) -->
+                <div id="player-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#07090c]/90 backdrop-blur-sm z-20 transition-opacity duration-200">
+                    <div class="relative w-12 h-12 mb-3">
                         <div class="absolute inset-0 rounded-full border-4 border-white/10"></div>
                         <div class="absolute inset-0 rounded-full border-4 border-t-[#00ff6a] border-r-[#00ff6a] animate-spin"></div>
                     </div>
-                    <p class="text-xs font-bold text-white/70 uppercase tracking-widest mono-font flex items-center gap-2">
-                        <span>Establishing Secure Connection</span>
+                    <p class="text-xs font-bold text-white/90 uppercase tracking-widest mono-font flex items-center gap-1.5">
+                        <span>Connecting Stream</span>
                         <span class="animate-pulse">...</span>
                     </p>
-                    <p class="text-[10px] text-zinc-500 mt-1">Prigames High-Speed Content Delivery</p>
+                    <button onclick="hideLoader()" class="mt-3 bg-white/10 hover:bg-white/20 text-white/80 hover:text-white text-[10px] uppercase font-bold tracking-wider px-3 py-1.5 rounded-lg border border-white/10 transition-all">
+                        Show Player Now
+                    </button>
                 </div>
 
                 <!-- Server 3 Custom URL Form Setup Modal / Overlay -->
@@ -215,17 +236,8 @@
                     </div>
                 </div>
 
-                <!-- Live Stream Video Frame -->
-                <iframe 
-                    id="stream"
-                    src="https://live.khantv.pk/update/?id=star_sports1" 
-                    allow="autoplay; encrypted-media; fullscreen; picture-in-picture; cross-origin-isolated" 
-                    allowfullscreen="true"
-                    scrolling="no"
-                    referrerpolicy="no-referrer"
-                    
-                    onload="hideLoader()">
-                </iframe>
+                <!-- Dynamic Container for Live Stream Video Frame -->
+                <div id="iframe-mount" class="w-full h-full"></div>
             </div>
         </main>
 
@@ -237,7 +249,7 @@
                     <span class="text-[11px] text-white/50 uppercase font-black tracking-widest">Select Streaming Server</span>
                 </div>
                 <div class="flex items-center gap-1.5">
-                    <span class="text-[10px] text-zinc-400">Current:</span>
+                    <span class="text-[10px] text-zinc-400">Active:</span>
                     <span id="active-server-badge" class="text-[10px] bg-[#00ff6a]/15 text-[#00ff6a] border border-[#00ff6a]/30 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider mono-font">
                         Server 1
                     </span>
@@ -291,6 +303,39 @@
                         Willow 
                     </span>
                     <span class="text-[10px] text-[#00ff6a] font-bold">HD</span>
+                </button>
+            </div>
+
+            <!-- Kid-Friendly / Easy Popup & Ad Blocker Toggle Card -->
+            <div class="bg-white/[0.03] border border-white/10 rounded-xl p-3 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <div id="shield-icon-box" class="w-10 h-10 rounded-xl bg-[#00ff6a]/15 border border-[#00ff6a]/30 text-[#00ff6a] flex items-center justify-center shrink-0 transition-colors">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <path d="M9 12l2 2 4-4"/>
+                        </svg>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs sm:text-sm font-extrabold text-white">Popup & Ad Blocker</span>
+                            <span id="shield-status-pill" class="text-[10px] bg-[#00ff6a]/20 text-[#00ff6a] px-2 py-0.5 rounded-full font-extrabold uppercase tracking-wide">ON</span>
+                        </div>
+                        <p id="shield-helper-text" class="text-[11px] text-zinc-400 leading-snug mt-0.5">
+                            Blocks annoying popups automatically. <span class="text-zinc-200 font-semibold">Turn OFF if a video refuses to play.</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Large Easy-to-Tap Switch -->
+                <button 
+                    type="button"
+                    role="switch"
+                    aria-checked="true"
+                    onclick="toggleAdShield()" 
+                    id="adshield-switch"
+                    class="relative inline-flex h-8 w-14 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-[#00ff6a] transition-colors duration-200 ease-in-out focus:outline-none active:scale-95">
+                    <span class="sr-only">Toggle Popup Blocker</span>
+                    <span id="adshield-knob" class="pointer-events-none inline-block h-7 w-7 transform rounded-full bg-black shadow-md ring-0 transition duration-200 ease-in-out translate-x-6"></span>
                 </button>
             </div>
         </section>
@@ -357,7 +402,7 @@
     </div>
 
     <script>
-        // Server URL Configurations
+        // Server URL Configurations (Aligned immediately with Server 1 so it doesn't double-load)
         const SERVERS = {
             1: "https://webcric.im/frame1.htm",
             2: "https://trendy48.online/live-tv?ch=sonysportsnetwork-in",
@@ -373,29 +418,117 @@
         };
 
         let currentActiveServer = 1;
+        let adShieldEnabled = true; // Blocks popups/redirects inside third-party frames
+        let loaderTimeout = null;
 
+        // Safe, guaranteed loader dismissal (Fixes stuck "Establishing connection" overlay)
         function hideLoader() {
+            clearTimeout(loaderTimeout);
             const loader = document.getElementById('player-loader');
+            if (!loader || loader.style.display === 'none') return;
+            
             loader.style.opacity = '0';
             setTimeout(() => {
                 loader.style.display = 'none';
-            }, 300);
+            }, 200);
         }
 
         function showLoader() {
+            clearTimeout(loaderTimeout);
             const loader = document.getElementById('player-loader');
             loader.style.display = 'flex';
+            // Force reflow
+            void loader.offsetWidth;
             loader.style.opacity = '1';
+
+            // Hard failsafe: Even if external ad/tracker scripts hang onload, reveal video in 1.8s
+            loaderTimeout = setTimeout(() => {
+                hideLoader();
+            }, 1800);
+        }
+
+        // Builds an optimized iframe with optional popup-blocking sandbox for ad-heavy networks
+        function mountStreamFrame(url) {
+            const mount = document.getElementById('iframe-mount');
+
+            // Replace iframe cleanly to abort any lingering background ad requests from previous server
+            mount.innerHTML = '';
+
+            const iframe = document.createElement('iframe');
+            iframe.id = 'stream';
+            iframe.src = url;
+            iframe.allow = 'autoplay; encrypted-media; fullscreen; picture-in-picture';
+            iframe.allowFullscreen = true;
+            iframe.scrolling = 'no';
+            iframe.loading = 'eager';
+            iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+
+            // Ad-Shield: Prevents popups, top-level redirects, and malicious ad overlays
+            if (adShieldEnabled) {
+                iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-presentation');
+            }
+
+            iframe.onload = () => {
+                hideLoader();
+            };
+
+            iframe.onerror = () => {
+                hideLoader();
+            };
+
+            mount.appendChild(iframe);
+        }
+
+        function toggleAdShield() {
+            adShieldEnabled = !adShieldEnabled;
+            const sw = document.getElementById('adshield-switch');
+            const knob = document.getElementById('adshield-knob');
+            const pill = document.getElementById('shield-status-pill');
+            const iconBox = document.getElementById('shield-icon-box');
+            const helperText = document.getElementById('shield-helper-text');
+
+            sw.setAttribute('aria-checked', adShieldEnabled ? 'true' : 'false');
+
+            if (adShieldEnabled) {
+                sw.classList.remove('bg-zinc-700');
+                sw.classList.add('bg-[#00ff6a]');
+                knob.classList.remove('translate-x-0', 'bg-white');
+                knob.classList.add('translate-x-6', 'bg-black');
+                
+                pill.innerText = 'ON';
+                pill.className = 'text-[10px] bg-[#00ff6a]/20 text-[#00ff6a] px-2 py-0.5 rounded-full font-extrabold uppercase tracking-wide';
+                
+                iconBox.className = 'w-10 h-10 rounded-xl bg-[#00ff6a]/15 border border-[#00ff6a]/30 text-[#00ff6a] flex items-center justify-center shrink-0 transition-colors';
+                helperText.innerHTML = 'Blocks annoying popups automatically. <span class="text-zinc-200 font-semibold">Turn OFF if a video refuses to play.</span>';
+                
+                showToast("Popup Blocker Turned ON");
+            } else {
+                sw.classList.remove('bg-[#00ff6a]');
+                sw.classList.add('bg-zinc-700');
+                knob.classList.remove('translate-x-6', 'bg-black');
+                knob.classList.add('translate-x-0', 'bg-white');
+                
+                pill.innerText = 'OFF';
+                pill.className = 'text-[10px] bg-zinc-700/60 text-zinc-300 px-2 py-0.5 rounded-full font-extrabold uppercase tracking-wide';
+                
+                iconBox.className = 'w-10 h-10 rounded-xl bg-white/5 border border-white/10 text-zinc-400 flex items-center justify-center shrink-0 transition-colors';
+                helperText.innerHTML = 'Normal video mode active. <span class="text-zinc-200 font-semibold">Turn ON to block popups again.</span>';
+                
+                showToast("Popup Blocker Turned OFF");
+            }
+
+            // Reload current server with updated shield setting
+            if (SERVERS[currentActiveServer]) {
+                showLoader();
+                mountStreamFrame(SERVERS[currentActiveServer]);
+            }
         }
 
         function switchServer(index) {
             currentActiveServer = index;
-            const iframe = document.getElementById('stream');
             const customOverlay = document.getElementById('custom-setup-overlay');
             const activeBadge = document.getElementById('active-server-badge');
             const headerTag = document.getElementById('header-server-tag');
-            const embedNotice = document.getElementById('embed-notice-bar');
-            const directLink = document.getElementById('direct-stream-link');
             
             showLoader();
 
@@ -417,20 +550,15 @@
             activeBadge.innerText = SERVER_NAMES[index] || `Server ${index}`;
             headerTag.innerText = `SERVER ${index} ACTIVE`;
 
-            // Always link the fallback popup to the selected server's direct URL
-            if (SERVERS[index]) {
-                directLink.href = SERVERS[index];
-            }
-
             if (index === 3 && !SERVERS[3]) {
-                iframe.src = "about:blank";
+                document.getElementById('iframe-mount').innerHTML = '';
                 customOverlay.classList.remove('hidden');
                 hideLoader();
                 showToast("Server 3: Setup Backup URL");
             } else {
                 customOverlay.classList.add('hidden');
-                iframe.src = SERVERS[index];
-                showToast(`Switched to Server ${index}`);
+                mountStreamFrame(SERVERS[index]);
+                showToast(`Switched to ${SERVER_NAMES[index]}`);
             }
         }
 
@@ -460,9 +588,9 @@
 
         function resetCustomServer() {
             const customOverlay = document.getElementById('custom-setup-overlay');
-            const iframe = document.getElementById('stream');
-            iframe.src = "about:blank";
+            document.getElementById('iframe-mount').innerHTML = '';
             customOverlay.classList.remove('hidden');
+            hideLoader();
             showToast("Enter custom server link");
         }
 
@@ -491,19 +619,13 @@
         }
 
         function refreshStream() {
-            const frame = document.getElementById('stream');
-            
             if (currentActiveServer === 3 && !SERVERS[3]) {
                 showToast("No active link set for Server 3");
                 return;
             }
 
             showLoader();
-            const currentSrc = frame.src;
-            frame.src = 'about:blank';
-            setTimeout(() => { 
-                frame.src = currentSrc; 
-            }, 120);
+            mountStreamFrame(SERVERS[currentActiveServer]);
             showToast("Reconnecting stream...");
         }
 
@@ -545,15 +667,14 @@
             toastTimer = setTimeout(() => {
                 toast.classList.add('opacity-0', 'translate-y-6');
                 toast.classList.remove('opacity-100', 'translate-y-0');
-            }, 2500);
+            }, 2200);
         }
 
-        // Prevent common accidental shortcut interruptions
-        document.onkeydown = (e) => {
-            if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) {
-                return false;
-            }
-        };
+        // Boot Server 1 immediately on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            showLoader();
+            mountStreamFrame(SERVERS[1]);
+        });
     </script>
 </body>
 </html>
