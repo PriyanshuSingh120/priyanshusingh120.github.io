@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamPulse TV - Global Live Channels</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        dark: {
+                            950: '#09090b',
+                            900: '#121216',
+                            800: '#1c1c22',
+                            700: '#27272f',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-dark-950 text-zinc-100 font-sans antialiased min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-40 bg-dark-950/90 backdrop-blur-md border-b border-zinc-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-2.5 shrink-0 cursor-pointer" onclick="resetFilters()">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                    <i data-lucide="tv" class="w-5 h-5 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
+                        StreamPulse
+                    </h1>
+                    <p class="text-[10px] font-medium text-indigo-400 uppercase tracking-wider leading-none">Live TV Hub</p>
+                </div>
+            </div>
+
+            <!-- Search Input -->
+            <div class="relative flex-1 max-w-md">
+                <i data-lucide="search" class="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Search 210+ channels (e.g., ESPN, Sky, HBO)..." 
+                    class="w-full bg-dark-800/90 border border-zinc-700/80 text-sm text-zinc-100 placeholder-zinc-400 rounded-xl pl-10 pr-9 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500/60 focus:border-indigo-500 transition-all"
+                >
+                <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white p-1">
+                    <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                </button>
+            </div>
+
+            <!-- Stats & Favorites Toggle -->
+            <div class="flex items-center gap-2 shrink-0">
+                <button 
+                    id="favToggleBtn"
+                    onclick="toggleFavoritesOnly()" 
+                    class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-dark-800 hover:bg-dark-700 border border-zinc-700/70 text-zinc-300 transition-all"
+                    title="Show Favorite Channels"
+                >
+                    <i data-lucide="heart" id="favHeaderIcon" class="w-4 h-4 text-rose-500"></i>
+                    <span class="hidden sm:inline">Favorites</span>
+                    <span id="favCountBadge" class="bg-zinc-700 text-zinc-200 px-1.5 py-0.5 rounded-md text-[10px]">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+        <!-- Video Player Section -->
+        <section id="playerSection" class="bg-dark-900 border border-zinc-800/90 rounded-2xl overflow-hidden shadow-2xl transition-all duration-300">
+            <!-- Player Top Bar -->
+            <div class="px-4 py-3 bg-dark-800/60 border-b border-zinc-800/80 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-3 min-w-0">
+                    <span class="relative flex h-2.5 w-2.5 shrink-0">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
+                    </span>
+                    <div class="truncate">
+                        <span class="text-xs font-medium text-zinc-400 mr-1.5">NOW PLAYING:</span>
+                        <span id="currentChannelTitle" class="text-sm sm:text-base font-bold text-white truncate">ESPN</span>
+                    </div>
+                    <span id="currentChannelCategory" class="hidden sm:inline-block text-[11px] font-medium px-2 py-0.5 rounded-md bg-indigo-500/15 text-indigo-300 border border-indigo-500/20">
+                        Sports
+                    </span>
+                </div>
+
+                <!-- Player Controls -->
+                <div class="flex items-center gap-2">
+                    <button 
+                        id="playerFavBtn" 
+                        onclick="toggleCurrentFavorite()" 
+                        class="p-2 rounded-xl bg-dark-800 hover:bg-dark-700 border border-zinc-700/70 text-zinc-300 hover:text-rose-400 transition-colors"
+                        title="Add to Favorites"
+                    >
+                        <i data-lucide="heart" class="w-4 h-4"></i>
+                    </button>
+                    <button 
+                        onclick="reloadStream()" 
+                        class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-dark-800 hover:bg-dark-700 border border-zinc-700/70 text-xs font-medium text-zinc-200 transition-colors"
+                        title="Reload Stream"
+                    >
+                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                        <span class="hidden sm:inline">Reload</span>
+                    </button>
+                    <a 
+                        id="externalLinkBtn" 
+                        href="https://trend8.st/live-tv?ch=espn-usa" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold text-white shadow-md shadow-indigo-600/20 transition-colors"
+                        title="Open stream directly in new tab if embed is blocked"
+                    >
+                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                        <span>Open Direct</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Responsive 16:9 Iframe Container -->
+            <div class="relative w-full aspect-video bg-black overflow-hidden">
+                <!-- Loading Overlay -->
+                <div id="playerLoader" class="absolute inset-0 flex flex-col items-center justify-center bg-dark-950/90 z-10 pointer-events-none transition-opacity duration-300">
+                    <div class="w-10 h-10 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin mb-3"></div>
+                    <p class="text-xs font-medium text-zinc-400">Connecting to live broadcast...</p>
+                </div>
+
+                <!-- Embed Iframe -->
+                <iframe 
+                    id="tvIframe"
+                    src="https://trend8.st/live-tv?ch=espn-usa"
+                    class="w-full h-full border-0"
+                    allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+                    allowfullscreen
+                    referrerpolicy="no-referrer"
+                    onload="hideLoader()"
+                ></iframe>
+            </div>
+
+            <!-- Helpful Notice Banner -->
+            <div class="px-4 py-2.5 bg-dark-950/70 border-t border-zinc-800/60 flex flex-wrap items-center justify-between gap-2 text-xs text-zinc-400">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="info" class="w-4 h-4 text-indigo-400 shrink-0"></i>
+                    <span>Tip: If a channel displays a blank screen due to provider frame restrictions, click <strong class="text-zinc-200">Open Direct</strong> above.</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="playPrevChannel()" class="px-2.5 py-1 rounded-lg bg-dark-800 hover:bg-dark-700 text-zinc-300 transition-colors flex items-center gap-1">
+                        <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> Prev
+                    </button>
+                    <button onclick="playNextChannel()" class="px-2.5 py-1 rounded-lg bg-dark-800 hover:bg-dark-700 text-zinc-300 transition-colors flex items-center gap-1">
+                        Next <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Category Filter Pills & Channel Counter -->
+        <section class="space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <!-- Category Pills -->
+                <div id="categoryTabs" class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+                    <!-- Populated via JavaScript -->
+                </div>
+
+                <!-- Channel Count Display -->
+                <div class="text-xs font-medium text-zinc-400 shrink-0">
+                    Showing <span id="visibleCount" class="text-white font-bold">0</span> of <span id="totalCount">0</span> channels
+                </div>
+            </div>
+        </section>
+
+        <!-- Channel Grid -->
+        <section>
+            <div id="channelGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5">
+                <!-- Channel Cards Rendered Dynamically -->
+            </div>
+
+            <!-- Empty Search State -->
+            <div id="emptyState" class="hidden py-16 text-center bg-dark-900/50 border border-zinc-800/60 rounded-2xl">
+                <div class="w-12 h-12 rounded-2xl bg-dark-800 flex items-center justify-center mx-auto mb-3 text-zinc-400">
+                    <i data-lucide="tv-2" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-base font-semibold text-white mb-1">No channels found</h3>
+                <p class="text-xs text-zinc-400 max-w-sm mx-auto mb-4">We couldn't find any channels matching your current search or filter criteria.</p>
+                <button onclick="resetFilters()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold text-white transition-colors">
+                    Reset Filters
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Footer -->
+    <footer class="border-t border-zinc-800/80 bg-dark-950 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
+            <div class="flex items-center gap-2">
+                <i data-lucide="radio" class="w-4 h-4 text-indigo-500"></i>
+                <span>StreamPulse Live TV Directory &bull; 213 Channels Available</span>
+            </div>
+            <p>All streams are embedded from third-party public links provided by the user.</p>
+        </div>
+    </footer>
+
+    <!-- Application Logic -->
+    <script>
+        // Complete Raw Channel Dataset (Google Search redirect wrappers stripped & decoded)
+        const rawChannels = [
+            { name: "ABC", url: "https://trend8.st/live-tv?ch=abc-usa" },
+            { name: "ACC Network", url: "https://trend8.st/live-tv?ch=accn-usa" },
+            { name: "AE", url: "https://trend8.st/live-tv?ch=ae-usa" },
+            { name: "AMC", url: "https://trend8.st/live-tv?ch=amc-usa" },
+            { name: "American Heroes Channel", url: "https://trend8.st/live-tv?ch=ahc-usa" },
+            { name: "Animal Planet", url: "https://trend8.st/live-tv?ch=wmsxcqty" },
+            { name: "ARENA SPORT 1 BiH", url: "https://trend8.st/live-tv?ch=pmk4006b" },
+            { name: "AXS TV", url: "https://trend8.st/live-tv?ch=axs-usa" },
+            { name: "Bahrain Sports 2", url: "https://trend8.st/live-tv?ch=bah2" },
+            { name: "BBC America", url: "https://trend8.st/live-tv?ch=bbc-usa" },
+            { name: "BBC News", url: "https://trend8.st/live-tv?ch=2hiftim8" },
+            { name: "BBC One London", url: "https://trend8.st/live-tv?ch=bbcone-uk" },
+            { name: "BBC Two", url: "https://trend8.st/live-tv?ch=bbctwo-uk" },
+            { name: "beIN Max 4 Francais", url: "https://trend8.st/live-tv?ch=g8f0wpqc" },
+            { name: "beIN Max 5 Francais", url: "https://trend8.st/live-tv?ch=kckkoedv" },
+            { name: "beIN Max 6 Francais", url: "https://trend8.st/live-tv?ch=wqjlbwll" },
+            { name: "beIN Max 7 Francais", url: "https://trend8.st/live-tv?ch=np4biwf3" },
+            { name: "beIN Sports", url: "https://trend8.st/live-tv?ch=beinsports-usa" },
+            { name: "beIN Sports 1 MENA", url: "https://trend8.st/live-tv?ch=beinsports1-sa" },
+            { name: "beIN Sports 2 MENA", url: "https://trend8.st/live-tv?ch=beinsports2-sa" },
+            { name: "beIN Sports 3 MENA", url: "https://trend8.st/live-tv?ch=beinsports3-sa" },
+            { name: "beIN Sports 4 MENA", url: "https://trend8.st/live-tv?ch=beinsports4-sa" },
+            { name: "beIN Sports Francais 1", url: "https://trend8.st/live-tv?ch=beinsports1-fr" },
+            { name: "beIN Sports Francais 2", url: "https://trend8.st/live-tv?ch=beinsports2-fr" },
+            { name: "beIN Sports Francais 3", url: "https://trend8.st/live-tv?ch=beinsports3-fr" },
+            { name: "beIN Sports MENA 5", url: "https://trend8.st/live-tv?ch=59b89cub" },
+            { name: "beIN Sports MENA 6", url: "https://trend8.st/live-tv?ch=5u81h0on" },
+            { name: "beIN Sports MENA 7", url: "https://trend8.st/live-tv?ch=mmww1kss" },
+            { name: "beIN Sports MENA 8", url: "https://trend8.st/live-tv?ch=80ynbnuv" },
+            { name: "beIN Sports MENA 9", url: "https://trend8.st/live-tv?ch=ltcqnszh" },
+            { name: "beIN Sports Turkey", url: "https://trend8.st/live-tv?ch=beinsports1-tr" },
+            { name: "Big Ten Network", url: "https://trend8.st/live-tv?ch=big10-usa" },
+            { name: "Boomerang", url: "https://trend8.st/live-tv?ch=boomerang-usa" },
+            { name: "Bravo", url: "https://trend8.st/live-tv?ch=bravo-usa" },
+            { name: "BTN Alt", url: "https://trend8.st/live-tv?ch=btnalt-usa" },
+            { name: "CANAL+ Extra 1", url: "https://trend8.st/live-tv?ch=canalextra1-pl" },
+            { name: "CANAL+ Extra 2", url: "https://trend8.st/live-tv?ch=fudllnwj" },
+            { name: "CANAL+ Sport 2 PL", url: "https://trend8.st/live-tv?ch=canalsport2-pl" },
+            { name: "CANAL+ Sport 3 PL", url: "https://trend8.st/live-tv?ch=canalsport3-pl" },
+            { name: "CANAL+ Sport 4 PL", url: "https://trend8.st/live-tv?ch=canalsport4-pl" },
+            { name: "CANAL+ Sport 5 PL", url: "https://trend8.st/live-tv?ch=canalsport5-pl" },
+            { name: "CANAL+ Sport 6 PL", url: "https://trend8.st/live-tv?ch=canalsport6-pl" },
+            { name: "CANAL+ Sport PL", url: "https://trend8.st/live-tv?ch=canalsport-pl" },
+            { name: "Cartoon Network", url: "https://trend8.st/live-tv?ch=cartoonnetwork-usa" },
+            { name: "CBeebies", url: "https://trend8.st/live-tv?ch=t38chq57" },
+            { name: "CBS", url: "https://trend8.st/live-tv?ch=cbs-usa" },
+            { name: "CBS Sports Network", url: "https://trend8.st/live-tv?ch=cbssn-usa" },
+            { name: "CNBC", url: "https://trend8.st/live-tv?ch=cnbc-usa" },
+            { name: "CNN", url: "https://trend8.st/live-tv?ch=jmbt4tra" },
+            { name: "Comedy Central", url: "https://trend8.st/live-tv?ch=aoeb77xq" },
+            { name: "CW", url: "https://trend8.st/live-tv?ch=cw-usa" },
+            { name: "DAZN 1 Germany", url: "https://trend8.st/live-tv?ch=dazn1-de" },
+            { name: "DAZN 1 Italia", url: "https://trend8.st/live-tv?ch=dazn1-it" },
+            { name: "DAZN 1 Portugal", url: "https://trend8.st/live-tv?ch=dazn1-pt" },
+            { name: "DAZN 1 Spain", url: "https://trend8.st/live-tv?ch=dazn1-es" },
+            { name: "DAZN 1 USA", url: "https://trend8.st/live-tv?ch=dazn1-usa" },
+            { name: "DAZN 2 Germany", url: "https://trend8.st/live-tv?ch=dazn2-de" },
+            { name: "DAZN 2 Spain", url: "https://trend8.st/live-tv?ch=dazn2-es" },
+            { name: "DAZN F1", url: "https://trend8.st/live-tv?ch=daznf1-es" },
+            { name: "DAZN LaLiga", url: "https://trend8.st/live-tv?ch=daznlaliga-es" },
+            { name: "Dirtvision Now 24/7", url: "https://trend8.st/live-tv?ch=2uhz8pq7" },
+            { name: "Discovery Channel", url: "https://trend8.st/live-tv?ch=discovery-usa" },
+            { name: "Discovery Family", url: "https://trend8.st/live-tv?ch=mcop8cbp" },
+            { name: "Discovery Turbo", url: "https://trend8.st/live-tv?ch=discoveryturbo-usa" },
+            { name: "Disney Channel", url: "https://trend8.st/live-tv?ch=epuze5e9" },
+            { name: "Disney Junior", url: "https://trend8.st/live-tv?ch=mxh9xhyk" },
+            { name: "Disney XD", url: "https://trend8.st/live-tv?ch=disneyxd-usa" },
+            { name: "Eleven Sports 1", url: "https://trend8.st/live-tv?ch=elevensports1-pl" },
+            { name: "Eleven Sports 2", url: "https://trend8.st/live-tv?ch=elevensports2-pl" },
+            { name: "Eleven Sports 3", url: "https://trend8.st/live-tv?ch=elevensports3-pl" },
+            { name: "Eleven Sports 4", url: "https://trend8.st/live-tv?ch=elevensports4-pl" },
+            { name: "ESPN", url: "https://trend8.st/live-tv?ch=espn-usa" },
+            { name: "ESPN Deportes", url: "https://trend8.st/live-tv?ch=espndeportes-usa" },
+            { name: "ESPN2", url: "https://trend8.st/live-tv?ch=espn2-usa" },
+            { name: "ESPNEWS", url: "https://trend8.st/live-tv?ch=espnews-usa" },
+            { name: "ESPNU", url: "https://trend8.st/live-tv?ch=u2zt5c5h" },
+            { name: "Food Network", url: "https://trend8.st/live-tv?ch=foodnetwork-usa" },
+            { name: "Fox", url: "https://trend8.st/live-tv?ch=fox-usa" },
+            { name: "Fox Deportes", url: "https://trend8.st/live-tv?ch=foxdeportes-usa" },
+            { name: "Fox News", url: "https://trend8.st/live-tv?ch=mtyz736v" },
+            { name: "Fox Sports 1", url: "https://trend8.st/live-tv?ch=fox-sports-1" },
+            { name: "Fox Sports 2", url: "https://trend8.st/live-tv?ch=fox-sports-2" },
+            { name: "Fox Sports 501 (Cricket)", url: "https://trend8.st/live-tv?ch=fox-sports-501" },
+            { name: "Fox Sports 502 (League)", url: "https://trend8.st/live-tv?ch=fox-sports-502" },
+            { name: "Fox Sports 503", url: "https://trend8.st/live-tv?ch=fox-sports-503" },
+            { name: "Fox Sports 504 (Footy)", url: "https://trend8.st/live-tv?ch=fox-sports-504" },
+            { name: "Fox Sports 505", url: "https://trend8.st/live-tv?ch=fox-sports-505" },
+            { name: "Fox Sports 506", url: "https://trend8.st/live-tv?ch=fox-sports-506" },
+            { name: "Fox Sports 507", url: "https://trend8.st/live-tv?ch=fox-sports-507" },
+            { name: "Freeform", url: "https://trend8.st/live-tv?ch=freeform-usa" },
+            { name: "FX", url: "https://trend8.st/live-tv?ch=fx-usa" },
+            { name: "FXM", url: "https://trend8.st/live-tv?ch=fxm-usa" },
+            { name: "FXX", url: "https://trend8.st/live-tv?ch=fxx-usa" },
+            { name: "Go3 Sport 1", url: "https://trend8.st/live-tv?ch=go3sport1-lt" },
+            { name: "Go3 Sport 2", url: "https://trend8.st/live-tv?ch=go3sport2-lt" },
+            { name: "GOLF Channel", url: "https://trend8.st/live-tv?ch=golfchannel-usa" },
+            { name: "HBO", url: "https://trend8.st/live-tv?ch=hbo-usa" },
+            { name: "HBO Comedy", url: "https://trend8.st/live-tv?ch=hbocomedy-usa" },
+            { name: "HBO Drama", url: "https://trend8.st/live-tv?ch=hbodrama-usa" },
+            { name: "HBO Latino", url: "https://trend8.st/live-tv?ch=hbolatino-usa" },
+            { name: "HBO Movies", url: "https://trend8.st/live-tv?ch=hbomovies-usa" },
+            { name: "HGTV", url: "https://trend8.st/live-tv?ch=hgtv-usa" },
+            { name: "Hub Sports 1 Singapore", url: "https://trend8.st/live-tv?ch=2670rnlp" },
+            { name: "Hub Sports 2 Singapore", url: "https://trend8.st/live-tv?ch=uxjju28j" },
+            { name: "Hub Sports 3 Singapore", url: "https://trend8.st/live-tv?ch=91ieccpw" },
+            { name: "Hub Sports 4 Singapore", url: "https://trend8.st/live-tv?ch=pgb1kdmf" },
+            { name: "Hub Sports 5 Singapore", url: "https://trend8.st/live-tv?ch=tfrrx715" },
+            { name: "MLB Network", url: "https://trend8.st/live-tv?ch=mlbnetwork-usa" },
+            { name: "MotoGP Channel", url: "https://trend8.st/live-tv?ch=motpgp-tv" },
+            { name: "Movistar Deportes", url: "https://trend8.st/live-tv?ch=movistardeportes-es" },
+            { name: "Movistar Deportes 2", url: "https://trend8.st/live-tv?ch=movistardeportes2-es" },
+            { name: "Movistar Deportes 3", url: "https://trend8.st/live-tv?ch=movistardeportes3-es" },
+            { name: "Movistar LaLiga", url: "https://trend8.st/live-tv?ch=movistarlaliga-es" },
+            { name: "Movistar Plus", url: "https://trend8.st/live-tv?ch=movistarplus-es" },
+            { name: "MTV", url: "https://trend8.st/live-tv?ch=mtv-usa" },
+            { name: "NBA TV", url: "https://trend8.st/live-tv?ch=nbatv-usa" },
+            { name: "NBC", url: "https://trend8.st/live-tv?ch=nbc-usa" },
+            { name: "NBC Sports Bay Area", url: "https://trend8.st/live-tv?ch=nbc-sports-bayarea" },
+            { name: "NBC Sports Philadelphia", url: "https://trend8.st/live-tv?ch=nbc-sports-philly" },
+            { name: "NFL Network", url: "https://trend8.st/live-tv?ch=nflnetwork-usa" },
+            { name: "NHL Network", url: "https://trend8.st/live-tv?ch=nhlnetwork-usa" },
+            { name: "Nick Jr.", url: "https://trend8.st/live-tv?ch=nickjr-usa" },
+            { name: "Nickelodeon", url: "https://trend8.st/live-tv?ch=nickelodeon-usa" },
+            { name: "Nicktoons", url: "https://trend8.st/live-tv?ch=nicktoons-usa" },
+            { name: "Polsat", url: "https://trend8.st/live-tv?ch=dnr1b6k5" },
+            { name: "Polsat Sport 1", url: "https://trend8.st/live-tv?ch=polsatsport1-pl" },
+            { name: "Polsat Sport 2", url: "https://trend8.st/live-tv?ch=polsatsport2-pl" },
+            { name: "Polsat Sport 3", url: "https://trend8.st/live-tv?ch=polsatsport3-pl" },
+            { name: "Polsat Sport Fight", url: "https://trend8.st/live-tv?ch=polsatsportfight-pl" },
+            { name: "Premier Sports 1 IE", url: "https://trend8.st/live-tv?ch=nf1skh2l" },
+            { name: "Premier Sports 2 IE", url: "https://trend8.st/live-tv?ch=c8prf9yh" },
+            { name: "Premiere", url: "https://trend8.st/live-tv?ch=premiere-br" },
+            { name: "RACER Network", url: "https://trend8.st/live-tv?ch=racernetwork-usa" },
+            { name: "RTE 2", url: "https://trend8.st/live-tv?ch=rte2" },
+            { name: "SEC Network (Alt)", url: "https://trend8.st/live-tv?ch=2p9ptshb" },
+            { name: "SEC Network", url: "https://trend8.st/live-tv?ch=sec-usa" },
+            { name: "Showtime", url: "https://trend8.st/live-tv?ch=showtime-usa" },
+            { name: "Showtime 2", url: "https://trend8.st/live-tv?ch=showtime2-usa" },
+            { name: "Showtime Extreme", url: "https://trend8.st/live-tv?ch=showtimeextreme-usa" },
+            { name: "Showtime Family Zone", url: "https://trend8.st/live-tv?ch=showtimefamilyzone-usa" },
+            { name: "Showtime Next", url: "https://trend8.st/live-tv?ch=showtimenext-usa" },
+            { name: "Showtime Women", url: "https://trend8.st/live-tv?ch=showtimewomen-usa" },
+            { name: "Sky Arts", url: "https://trend8.st/live-tv?ch=bjpuxy0v" },
+            { name: "Sky Atlantic", url: "https://trend8.st/live-tv?ch=lkz8kkmu" },
+            { name: "Sky Comedy", url: "https://trend8.st/live-tv?ch=yeelvfrn" },
+            { name: "Sky Crime", url: "https://trend8.st/live-tv?ch=lj7sa6yf" },
+            { name: "Sky Documentaries", url: "https://trend8.st/live-tv?ch=9z4cqq8i" },
+            { name: "Sky Kids", url: "https://trend8.st/live-tv?ch=8duxc8wz" },
+            { name: "Sky Nature", url: "https://trend8.st/live-tv?ch=adfmf81h" },
+            { name: "Sky News", url: "https://trend8.st/live-tv?ch=ys99t6uq" },
+            { name: "Sky One", url: "https://trend8.st/live-tv?ch=0aegx40g" },
+            { name: "Sky Sci-Fi", url: "https://trend8.st/live-tv?ch=n1bvkqup" },
+            { name: "Sky Sport 1 NZ", url: "https://trend8.st/live-tv?ch=skysport1-nz" },
+            { name: "Sky Sport 2 NZ", url: "https://trend8.st/live-tv?ch=skysport2-nz" },
+            { name: "Sky Sport 24", url: "https://trend8.st/live-tv?ch=skysport24-it" },
+            { name: "Sky Sport 3 NZ", url: "https://trend8.st/live-tv?ch=skysport3-nz" },
+            { name: "Sky Sport 4 NZ", url: "https://trend8.st/live-tv?ch=skysport4-nz" },
+            { name: "Sky Sport 5 NZ", url: "https://trend8.st/live-tv?ch=skysport5-nz" },
+            { name: "Sky Sport 6 NZ", url: "https://trend8.st/live-tv?ch=skysport6-nz" },
+            { name: "Sky Sport 7 NZ", url: "https://trend8.st/live-tv?ch=skysport7-nz" },
+            { name: "Sky Sport 8 NZ", url: "https://trend8.st/live-tv?ch=asxdfczr" },
+            { name: "Sky Sport 9 NZ", url: "https://trend8.st/live-tv?ch=skysport9-nz" },
+            { name: "Sky Sport Arena IT", url: "https://trend8.st/live-tv?ch=skysportarena-it" },
+            { name: "Sky Sport Bundesliga", url: "https://trend8.st/live-tv?ch=skysportbundesliga-de" },
+            { name: "Sky Sport Calcio IT", url: "https://trend8.st/live-tv?ch=skysportcalcio-it" },
+            { name: "Sky Sport F1 Italia", url: "https://trend8.st/live-tv?ch=skysportf1-it" },
+            { name: "Sky Sport Max IT", url: "https://trend8.st/live-tv?ch=skysportmax-it" },
+            { name: "Sky Sport MotoGP IT", url: "https://trend8.st/live-tv?ch=skysportmotogp-it" },
+            { name: "Sky Sport Select NZ", url: "https://trend8.st/live-tv?ch=skysportselect-nz" },
+            { name: "Sky Sport Tennis IT", url: "https://trend8.st/live-tv?ch=skysporttennis-it" },
+            { name: "Sky Sport Uno", url: "https://trend8.st/live-tv?ch=skysportuno-it" },
+            { name: "Sky Sports Action", url: "https://trend8.st/live-tv?ch=skysportsaction-uk" },
+            { name: "Sky Sports Cricket", url: "https://trend8.st/live-tv?ch=skysportscricket-uk" },
+            { name: "Sky Sports F1", url: "https://trend8.st/live-tv?ch=skysportsf1-uk" },
+            { name: "Sky Sports F1 2", url: "https://trend8.st/live-tv?ch=skyf1" },
+            { name: "Sky Sports F1 4K HEVC", url: "https://trend8.st/live-tv?ch=skysportsf1uhd-uk" },
+            { name: "Sky Sports F1 German", url: "https://trend8.st/live-tv?ch=skysportf1-de" },
+            { name: "Sky Sports Football", url: "https://trend8.st/live-tv?ch=skysportsfootball-uk" },
+            { name: "Sky Sports Golf", url: "https://trend8.st/live-tv?ch=skysportsgolf-uk" },
+            { name: "Sky Sports Main Event", url: "https://trend8.st/live-tv?ch=skysportsmainevent-uk" },
+            { name: "Sky Sports Main Event 4K HEVC", url: "https://trend8.st/live-tv?ch=skysportsmaineventuhd-uk" },
+            { name: "Sky Sports Mix", url: "https://trend8.st/live-tv?ch=skysportsmix-uk" },
+            { name: "Sky Sports News", url: "https://trend8.st/live-tv?ch=skysportsnews-uk" },
+            { name: "Sky Sports Premier League", url: "https://trend8.st/live-tv?ch=skysportspremierleague-uk" },
+            { name: "Sky Sports Racing", url: "https://trend8.st/live-tv?ch=skysportsracing-uk" },
+            { name: "Sky Sports Tennis", url: "https://trend8.st/live-tv?ch=skysportstennis-uk" },
+            { name: "Sky Sports+", url: "https://trend8.st/live-tv?ch=skysportsplus-uk" },
+            { name: "Sky Uno", url: "https://trend8.st/live-tv?ch=wmexaezp" },
+            { name: "Sky Witness", url: "https://trend8.st/live-tv?ch=bje2rae0" },
+            { name: "Sony Sports Network", url: "https://trend8.st/live-tv?ch=sonysportsnetwork-in" },
+            { name: "Sony Sports Network 2", url: "https://trend8.st/live-tv?ch=sonysportsnetwork2-in" },
+            { name: "Sony Sports Network 3", url: "https://trend8.st/live-tv?ch=sonysportsnetwork3-in" },
+            { name: "Sony Sports Network 4", url: "https://trend8.st/live-tv?ch=sonysportsnetwork4-in" },
+            { name: "Sony Sports Network 5", url: "https://trend8.st/live-tv?ch=sonysportsnetwork5-in" },
+            { name: "Sport TV1", url: "https://trend8.st/live-tv?ch=sporttv1-pt" },
+            { name: "Sport TV2", url: "https://trend8.st/live-tv?ch=sporttv2-pt" },
+            { name: "Sport TV3", url: "https://trend8.st/live-tv?ch=sporttv3-pt" },
+            { name: "Sport TV4", url: "https://trend8.st/live-tv?ch=sporttv4-pt" },
+            { name: "Sport TV5", url: "https://trend8.st/live-tv?ch=sporttv5-pt" },
+            { name: "SPORTDIGITAL FUSSBALL", url: "https://trend8.st/live-tv?ch=sportdigitalfussball-de" },
+            { name: "SporTV 3", url: "https://trend8.st/live-tv?ch=live1sport" },
+            { name: "STARZ", url: "https://trend8.st/live-tv?ch=mmuqk3b6" },
+            { name: "STARZ Cinema", url: "https://trend8.st/live-tv?ch=starzcinema-usa" },
+            { name: "STARZ Comedy", url: "https://trend8.st/live-tv?ch=starzcomedy-usa" },
+            { name: "STARZ Kids and Family", url: "https://trend8.st/live-tv?ch=starzkidsfamily-usa" },
+            { name: "SYFY", url: "https://trend8.st/live-tv?ch=syfy-usa" },
+            { name: "TBS", url: "https://trend8.st/live-tv?ch=tbs-usa" },
+            { name: "TeenNick", url: "https://trend8.st/live-tv?ch=teenick-usa" },
+            { name: "Telemundo", url: "https://trend8.st/live-tv?ch=ha535kz3" },
+            { name: "Tennis Channel", url: "https://trend8.st/live-tv?ch=tennischannel-usa" },
+            { name: "The Weather Channel", url: "https://trend8.st/live-tv?ch=twc-usa" },
+            { name: "TNT", url: "https://trend8.st/live-tv?ch=tnt-usa" },
+            { name: "TNT Sports 1", url: "https://trend8.st/live-tv?ch=tntsports1-uk" },
+            { name: "TNT Sports 1 4K HEVC (Select Events Only)", url: "https://trend8.st/live-tv?ch=tntsportsultimate-uk" },
+            { name: "TNT Sports 2", url: "https://trend8.st/live-tv?ch=tntsports2-uk" },
+            { name: "TNT Sports 3", url: "https://trend8.st/live-tv?ch=tntsports3-uk" },
+            { name: "TNT Sports 4", url: "https://trend8.st/live-tv?ch=tntsports4-uk" },
+            { name: "TruTV", url: "https://trend8.st/live-tv?ch=trutv-usa" },
+            { name: "TSN1", url: "https://trend8.st/live-tv?ch=tsn1-ca" },
+            { name: "TSN2", url: "https://trend8.st/live-tv?ch=tsn2-ca" },
+            { name: "TSN3", url: "https://trend8.st/live-tv?ch=tsn3-ca" },
+            { name: "TSN4", url: "https://trend8.st/live-tv?ch=tsn4-ca" },
+            { name: "TSN5", url: "https://trend8.st/live-tv?ch=tsn5-ca" },
+            { name: "TUDN", url: "https://trend8.st/live-tv?ch=tudn-usa" },
+            { name: "TYC Sports Internacional", url: "https://trend8.st/live-tv?ch=tycsports-usa" },
+            { name: "UFC Fight Pass 24/7", url: "https://trend8.st/live-tv?ch=ufc-fight-pass" },
+            { name: "UniMas", url: "https://trend8.st/live-tv?ch=bwmdfd5u" },
+            { name: "Unite8 Sports 1 / ZEE CAFÉ", url: "https://trend8.st/live-tv?ch=tnxwmkhb" },
+            { name: "Univision", url: "https://trend8.st/live-tv?ch=13knzaci" },
+            { name: "USA Network", url: "https://trend8.st/live-tv?ch=usanetwork-usa" },
+            { name: "WAPA America", url: "https://trend8.st/live-tv?ch=wapaamerica-usa" },
+            { name: "WAPA Deportes", url: "https://trend8.st/live-tv?ch=wapadeportes-usa" },
+            { name: "Willow Cricket", url: "https://trend8.st/live-tv?ch=willow-usa" },
+            { name: "Willow Cricket 2", url: "https://trend8.st/live-tv?ch=willow2-usa" }
+        ];
+
+        // Auto-categorize channels based on keywords
+        function categorizeChannel(name) {
+            const n = name.toLowerCase();
+            if (n.includes('news') || n.includes('cnbc') || n.includes('cnn') || n.includes('weather')) {
+                return 'News';
+            }
+            if (
+                n.includes('cartoon') || n.includes('disney') || n.includes('nick') ||
+                n.includes('boomerang') || n.includes('cbeebies') || n.includes('kids')
+            ) {
+                return 'Kids';
+            }
+            if (
+                n.includes('hbo') || n.includes('showtime') || n.includes('starz') ||
+                n.includes('fx') || n.includes('amc') || n.includes('tnt') && !n.includes('sports') ||
+                n.includes('syfy') || n.includes('comedy') || n.includes('premiere')
+            ) {
+                return 'Movies & Series';
+            }
+            if (
+                n.includes('discovery') || n.includes('animal') || n.includes('nature') ||
+                n.includes('documentar') || n.includes('heroes') || n.includes('crime') ||
+                n.includes('food') || n.includes('hgtv')
+            ) {
+                return 'Documentary & Lifestyle';
+            }
+            if (
+                n.includes('sport') || n.includes('espn') || n.includes('bein') ||
+                n.includes('dazn') || n.includes('fox sports') || n.includes('sky sport') ||
+                n.includes('canal+') || n.includes('tsn') || n.includes('nfl') ||
+                n.includes('nba') || n.includes('mlb') || n.includes('nhl') ||
+                n.includes('golf') || n.includes('tennis') || n.includes('cricket') ||
+                n.includes('willow') || n.includes('ufc') || n.includes('motogp') ||
+                n.includes('f1') || n.includes('racer') || n.includes('dirtvision') ||
+                n.includes('eleven') || n.includes('movistar') || n.includes('polsat sport') ||
+                n.includes('tudn') || n.includes('tyc') || n.includes('acc') ||
+                n.includes('big ten') || n.includes('btn') || n.includes('sec network') ||
+                n.includes('deportes') || n.includes('fussball')
+            ) {
+                return 'Sports';
+            }
+            return 'Entertainment';
+        }
+
+        // Enrich channel objects with ID, category, and badge styling
+        const channels = rawChannels.map((ch, idx) => ({
+            id: idx,
+            name: ch.name,
+            url: ch.url,
+            category: categorizeChannel(ch.name),
+            is4K: ch.name.toLowerCase().includes('4k')
+        }));
+
+        // State Management
+        let currentChannel = channels.find(c => c.name === "ESPN") || channels[0];
+        let activeCategory = 'All';
+        let searchQuery = '';
+        let showFavoritesOnly = false;
+        let favorites = JSON.parse(localStorage.getItem('streampulse_favorites') || '[]');
+
+        const categories = ['All', 'Sports', 'Entertainment', 'Movies & Series', 'News', 'Kids', 'Documentary & Lifestyle'];
+
+        // DOM Elements
+        const tvIframe = document.getElementById('tvIframe');
+        const playerLoader = document.getElementById('playerLoader');
+        const currentChannelTitle = document.getElementById('currentChannelTitle');
+        const currentChannelCategory = document.getElementById('currentChannelCategory');
+        const externalLinkBtn = document.getElementById('externalLinkBtn');
+        const playerFavBtn = document.getElementById('playerFavBtn');
+        const channelGrid = document.getElementById('channelGrid');
+        const categoryTabs = document.getElementById('categoryTabs');
+        const searchInput = document.getElementById('searchInput');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
+        const visibleCountEl = document.getElementById('visibleCount');
+        const totalCountEl = document.getElementById('totalCount');
+        const emptyState = document.getElementById('emptyState');
+        const favCountBadge = document.getElementById('favCountBadge');
+        const favToggleBtn = document.getElementById('favToggleBtn');
+
+        // Initialize App
+        function init() {
+            totalCountEl.textContent = channels.length;
+            updateFavBadge();
+            renderCategoryTabs();
+            selectChannel(currentChannel, false);
+            renderChannels();
+            lucide.createIcons();
+        }
+
+        // Render Category Filter Pills
+        function renderCategoryTabs() {
+            categoryTabs.innerHTML = categories.map(cat => {
+                const isActive = activeCategory === cat;
+                const count = cat === 'All' 
+                    ? channels.length 
+                    : channels.filter(c => c.category === cat).length;
+
+                return `
+                    <button 
+                        onclick="setCategory('${cat}')"
+                        class="px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 border ${
+                            isActive 
+                            ? 'bg-indigo-600 text-white border-indigo-500 shadow-md shadow-indigo-600/20' 
+                            : 'bg-dark-900 text-zinc-400 border-zinc-800 hover:bg-dark-800 hover:text-zinc-200'
+                        }"
+                    >
+                        <span>${cat}</span>
+                        <span class="text-[10px] px-1.5 py-0.2 rounded-md ${isActive ? 'bg-indigo-500 text-white' : 'bg-dark-800 text-zinc-500'}">
+                            ${count}
+                        </span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        // Filter & Render Channels Grid
+        function getFilteredChannels() {
+            return channels.filter(ch => {
+                const matchesCategory = activeCategory === 'All' || ch.category === activeCategory;
+                const matchesSearch = ch.name.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchesFav = !showFavoritesOnly || favorites.includes(ch.name);
+                return matchesCategory && matchesSearch && matchesFav;
+            });
+        }
+
+        function renderChannels() {
+            const filtered = getFilteredChannels();
+            visibleCountEl.textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                channelGrid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            channelGrid.innerHTML = filtered.map(ch => {
+                const isPlaying = currentChannel.id === ch.id;
+                const isFav = favorites.includes(ch.name);
+                const initials = ch.name.replace(/[^a-zA-Z0-9]/g, '').slice(0, 3).toUpperCase() || 'TV';
+
+                return `
+                    <div 
+                        onclick="selectChannelById(${ch.id})"
+                        class="group relative flex items-center justify-between p-3.5 rounded-2xl border cursor-pointer transition-all duration-200 ${
+                            isPlaying 
+                            ? 'bg-indigo-600/15 border-indigo-500 shadow-lg shadow-indigo-500/10' 
+                            : 'bg-dark-900/90 border-zinc-800/80 hover:bg-dark-800/90 hover:border-zinc-700'
+                        }"
+                    >
+                        <div class="flex items-center gap-3 min-w-0 pr-2">
+                            <!-- Channel Avatar Badge -->
+                            <div class="w-11 h-11 rounded-xl shrink-0 flex items-center justify-center font-bold text-xs tracking-wider transition-colors ${
+                                isPlaying 
+                                ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30' 
+                                : 'bg-dark-800 text-zinc-300 group-hover:bg-dark-700 group-hover:text-white border border-zinc-700/60'
+                            }">
+                                ${isPlaying ? '<i data-lucide="play" class="w-5 h-5 fill-current"></i>' : initials}
+                            </div>
+
+                            <!-- Channel Details -->
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-1.5">
+                                    <h4 class="text-sm font-semibold truncate ${isPlaying ? 'text-white' : 'text-zinc-200 group-hover:text-white'}">
+                                        ${ch.name}
+                                    </h4>
+                                    ${ch.is4K ? '<span class="px-1.5 py-0.2 text-[9px] font-extrabold bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded">4K</span>' : ''}
+                                </div>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <span class="text-[11px] text-zinc-400 truncate">${ch.category}</span>
+                                    ${isPlaying ? '<span class="text-[10px] font-bold text-indigo-400 uppercase tracking-wider">&bull; Live</span>' : ''}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Favorite Action Button -->
+                        <button 
+                            onclick="toggleFavorite(event, '${ch.name.replace(/'/g, "\\'")}')"
+                            class="p-2 rounded-xl hover:bg-dark-700/80 transition-colors shrink-0 ${isFav ? 'text-rose-500' : 'text-zinc-500 hover:text-zinc-300'}"
+                            title="${isFav ? 'Remove from Favorites' : 'Add to Favorites'}"
+                        >
+                            <i data-lucide="heart" class="w-4 h-4 ${isFav ? 'fill-current' : ''}"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // Select and Load Channel into Iframe
+        function selectChannelById(id) {
+            const ch = channels.find(c => c.id === id);
+            if (ch) selectChannel(ch, true);
+        }
+
+        function selectChannel(ch, shouldScroll = true) {
+            currentChannel = ch;
+            playerLoader.classList.remove('opacity-0');
+            tvIframe.src = ch.url;
+            currentChannelTitle.textContent = ch.name;
+            currentChannelCategory.textContent = ch.category;
+            externalLinkBtn.href = ch.url;
+
+            updatePlayerFavIcon();
+            renderChannels();
+
+            if (shouldScroll) {
+                document.getElementById('playerSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function hideLoader() {
+            playerLoader.classList.add('opacity-0');
+        }
+
+        function reloadStream() {
+            playerLoader.classList.remove('opacity-0');
+            const currentSrc = tvIframe.src;
+            tvIframe.src = '';
+            setTimeout(() => {
+                tvIframe.src = currentSrc;
+            }, 100);
+            showToast(`Reloading ${currentChannel.name}...`);
+        }
+
+        // Next / Previous Channel Navigation
+        function playNextChannel() {
+            const list = getFilteredChannels();
+            if (list.length === 0) return;
+            const idx = list.findIndex(c => c.id === currentChannel.id);
+            const next = list[(idx + 1) % list.length];
+            selectChannel(next, false);
+        }
+
+        function playPrevChannel() {
+            const list = getFilteredChannels();
+            if (list.length === 0) return;
+            const idx = list.findIndex(c => c.id === currentChannel.id);
+            const prev = list[(idx - 1 + list.length) % list.length];
+            selectChannel(prev, false);
+        }
+
+        // Favorites Logic
+        function toggleFavorite(event, channelName) {
+            event.stopPropagation();
+            const index = favorites.indexOf(channelName);
+            if (index > -1) {
+                favorites.splice(index, 1);
+                showToast(`Removed ${channelName} from favorites`);
+            } else {
+                favorites.push(channelName);
+                showToast(`Added ${channelName} to favorites`);
+            }
+            localStorage.setItem('streampulse_favorites', JSON.stringify(favorites));
+            updateFavBadge();
+            updatePlayerFavIcon();
+            renderChannels();
+        }
+
+        function toggleCurrentFavorite() {
+            toggleFavorite(new Event('click'), currentChannel.name);
+        }
+
+        function updateFavBadge() {
+            favCountBadge.textContent = favorites.length;
+        }
+
+        function updatePlayerFavIcon() {
+            const isFav = favorites.includes(currentChannel.name);
+            playerFavBtn.innerHTML = `<i data-lucide="heart" class="w-4 h-4 ${isFav ? 'text-rose-500 fill-current' : ''}"></i>`;
+            lucide.createIcons();
+        }
+
+        function toggleFavoritesOnly() {
+            showFavoritesOnly = !showFavoritesOnly;
+            if (showFavoritesOnly) {
+                favToggleBtn.classList.add('bg-rose-500/15', 'border-rose-500/50', 'text-rose-300');
+                favToggleBtn.classList.remove('bg-dark-800', 'border-zinc-700/70', 'text-zinc-300');
+            } else {
+                favToggleBtn.classList.remove('bg-rose-500/15', 'border-rose-500/50', 'text-rose-300');
+                favToggleBtn.classList.add('bg-dark-800', 'border-zinc-700/70', 'text-zinc-300');
+            }
+            renderChannels();
+        }
+
+        // Search & Filter Handlers
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value.trim();
+            clearSearchBtn.classList.toggle('hidden', searchQuery === '');
+            renderChannels();
+        });
+
+        function clearSearch() {
+            searchInput.value = '';
+            searchQuery = '';
+            clearSearchBtn.classList.add('hidden');
+            renderChannels();
+        }
+
+        function setCategory(cat) {
+            activeCategory = cat;
+            renderCategoryTabs();
+            renderChannels();
+        }
+
+        function resetFilters() {
+            activeCategory = 'All';
+            showFavoritesOnly = false;
+            favToggleBtn.classList.remove('bg-rose-500/15', 'border-rose-500/50', 'text-rose-300');
+            favToggleBtn.classList.add('bg-dark-800', 'border-zinc-700/70', 'text-zinc-300');
+            clearSearch();
+            renderCategoryTabs();
+            renderChannels();
+        }
+
+        // Custom Toast Notification (No alert() used)
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'bg-dark-800 border border-zinc-700 text-zinc-100 text-xs font-medium px-4 py-2.5 rounded-xl shadow-xl flex items-center gap-2 transition-all duration-300 transform translate-y-2 opacity-0';
+            toast.innerHTML = `<i data-lucide="check-circle-2" class="w-4 h-4 text-indigo-400"></i><span>${message}</span>`;
+            
+            const container = document.getElementById('toastContainer');
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            });
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        // Start Application on Load
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
