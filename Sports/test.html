@@ -1,1694 +1,968 @@
 <!DOCTYPE html>
-<html lang="en" class="">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      MHDTV - Watch Live TV, Movies, and Shows Online
-    </title>
-    <link rel="canonical" href="https://live.mhdtv.online/watch/icc-international-odi-1791985909" />
-    <link rel="alternate" hreflang="en-US" href="https://live.mhdtv.online/watch/icc-international-odi-1791985909" />
-    <!-- Primary Meta Tags -->
-    <meta name="description" content="MHDTV  is your ultimate destination for streaming live TV channels, movies, and shows online. Enjoy a wide range of entertainment options from the comfort of your home. Watch your favorite programs anytime, anywhere with MHDTV ." />
-    <meta name="keywords" content="live tv, movies, shows, streaming, MHDTV" />
-    <!-- Open Graph / Facebook -->
-    <meta property="og:title" content="MHDTV - Watch Live TV, Movies, and Shows Online - MHDTV - Watch Live TV, Movies, and Shows Online" />
-    <meta property="og:description" content="MHDTV  is your ultimate destination for streaming live TV channels, movies, and shows online. Enjoy a wide range of entertainment options from the comfort of your home. Watch your favorite programs anytime, anywhere with MHDTV ." />
-    <meta property="og:image" content="https://live.mhdtv.online/img/cover.png" />
-    <meta property="og:url" content="https://live.mhdtv.online/watch/icc-international-odi-1791985909" />
-    <meta property="og:type" content="website" />
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="MHDTV - Watch Live TV, Movies, and Shows Online - MHDTV - Watch Live TV, Movies, and Shows Online" />
-    <meta name="twitter:description" content="MHDTV  is your ultimate destination for streaming live TV channels, movies, and shows online. Enjoy a wide range of entertainment options from the comfort of your home. Watch your favorite programs anytime, anywhere with MHDTV ." />
-    <meta name="twitter:image" content="https://live.mhdtv.online/img/cover.png" />
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://live.mhdtv.online/img/favicon.png" />
-    <meta name="author" content="Sohel Rana" />
-    <meta name="robots" content="index, follow" />
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;family=Space+Grotesk:wght@300..700&amp;family=Stack+Sans+Notch:wght@200..700&amp;display=swap" rel="stylesheet" />
-    <!-- Progressive Web App (PWA) -->
-    <link rel="manifest" href="https://live.mhdtv.online/manifest.json" />
-    <meta name="theme-color" content="#F61500" />
-    <link rel="preload" as="style" href="https://live.mhdtv.online/build/assets/app-DwOxQ0aW.css" />
-    <link rel="modulepreload" as="script" href="https://live.mhdtv.online/build/assets/app-B3LTBHDJ.js" />
-    <link rel="stylesheet" href="https://live.mhdtv.online/build/assets/app-DwOxQ0aW.css" data-navigate-track="reload" />
-    <script type="module" src="https://live.mhdtv.online/build/assets/app-B3LTBHDJ.js" data-navigate-track="reload">
-    </script>
-    <!-- Global header code come from backend -->
-    <!-- Google tag (gtag.js) -->
-    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-BQQ39J7YLY">
-    </script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag(&#39;js&#39;, new Date());
-
-  gtag(&#39;config&#39;, &#39;G-BQQ39J7YLY&#39;);
-    </script>
-    <script data-cfasync="false" src="https://capitalhospitals.org/1/c4620332441d5a531fb52a99f95ece90">
-    </script>
-    <!-- Global js code come from backend -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.14.2/shaka-player.compiled.min.js">
-    </script>
-    <script>
-      (function() {
-            function formatDelta(ms) {
-                if (ms &lt;= 0) return null;
-                const s = Math.floor(ms / 1000);
-                const days = Math.floor(s / 86400);
-                const hours = Math.floor((s % 86400) / 3600);
-                const minutes = Math.floor((s % 3600) / 60);
-                const seconds = s % 60;
-                return `${days}d ${hours}h ${minutes}m ${seconds}s`;
-            }
-
-            function formatDateInBrowserTimezone(dateTimeString) {
-                const date = new Date(dateTimeString);
-                return date.toLocaleString(&#39;en-US&#39;, {
-                    month: &#39;short&#39;,
-                    day: &#39;numeric&#39;,
-                    year: &#39;numeric&#39;,
-                    hour: &#39;numeric&#39;,
-                    minute: &#39;2-digit&#39;,
-                    hour12: true
-                });
-            }
-
-            function updateRecommendedMatches() {
-                const datetimeNodes = document.querySelectorAll(&#39;.event-datetime&#39;);
-                datetimeNodes.forEach((node) =&gt; {
-                    const datetime = node.getAttribute(&#39;data-datetime&#39;);
-                    if (!datetime) return;
-                    node.textContent = formatDateInBrowserTimezone(datetime);
-                });
-
-                const infoContainers = document.querySelectorAll(&#39;.event-info&#39;);
-                infoContainers.forEach((container) =&gt; {
-                    const start = container.getAttribute(&#39;data-start&#39;);
-                    if (!start) return;
-                    const target = new Date(start).getTime();
-                    const now = Date.now();
-                    const diff = target - now;
-                    const datetimeNode = container.querySelector(&#39;.event-datetime&#39;);
-                    const countdownNode = container.querySelector(&#39;.event-countdown&#39;);
-                    const countdownWrapper = container.querySelector(&#39;.event-countdown-wrapper&#39;);
-                    const liveBadge = container.querySelector(&#39;.event-live-badge&#39;);
-
-                    if (diff &lt;= 0) {
-                        datetimeNode?.classList.add(&#39;hidden&#39;);
-                        countdownWrapper?.classList.add(&#39;hidden&#39;);
-                        liveBadge?.classList.remove(&#39;hidden&#39;);
-                    } else {
-                        datetimeNode?.classList.remove(&#39;hidden&#39;);
-                        countdownWrapper?.classList.remove(&#39;hidden&#39;);
-                        liveBadge?.classList.add(&#39;hidden&#39;);
-                        if (countdownNode) {
-                            countdownNode.textContent = formatDelta(diff);
-                        }
-                    }
-                });
-            }
-
-            document.addEventListener(&#39;DOMContentLoaded&#39;, function() {
-                updateRecommendedMatches();
-                setInterval(updateRecommendedMatches, 1000);
-            });
-        })();
-
-        const shakaPlayers = window.shakaPlayers || {};
-        window.shakaPlayers = shakaPlayers;
-
-        function destroyShakaPlayer(video) {
-            if (!video || !video.dataset.playerKey) {
-                return;
-            }
-
-            const player = shakaPlayers[video.dataset.playerKey];
-
-            if (player &amp;&amp; typeof player.destroy === &#39;function&#39;) {
-                player.destroy();
-            }
-
-            if (video.dataset.seekLoop) {
-                window.clearInterval(Number(video.dataset.seekLoop));
-            }
-
-            delete shakaPlayers[video.dataset.playerKey];
-            delete video.dataset.playerKey;
-            delete video.dataset.playerInitialized;
-            delete video.dataset.seekLoop;
-        }
-
-        function setPlayIcon(video, playBtn) {
-            if (!playBtn) {
-                return;
-            }
-
-            const icon = playBtn.querySelector(&#39;svg&#39;);
-            if (!icon) {
-                return;
-            }
-
-            if (video.paused || video.ended) {
-                icon.setAttribute(&#39;class&#39;, &#39;lucide lucide-play&#39;);
-                icon.innerHTML =
-                    &#39;&lt;path d=&#34;M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z&#34;/&gt;&#39;;
-            } else {
-                icon.setAttribute(&#39;class&#39;, &#39;lucide lucide-pause&#39;);
-                icon.innerHTML =
-                    &#39;&lt;rect x=&#34;14&#34; y=&#34;3&#34; width=&#34;5&#34; height=&#34;18&#34; rx=&#34;1&#34;/&gt;&lt;rect x=&#34;5&#34; y=&#34;3&#34; width=&#34;5&#34; height=&#34;18&#34; rx=&#34;1&#34;/&gt;&#39;;
-            }
-        }
-
-        function setOverlayState(video, overlay) {
-            if (!overlay) {
-                return;
-            }
-
-            const shouldShowOverlay = video.paused || video.ended || video.readyState &lt; 2;
-            overlay.style.display = shouldShowOverlay ? &#39;flex&#39; : &#39;none&#39;;
-
-            const icon = overlay.querySelector(&#39;[data-player-overlay-icon]&#39;);
-            if (!icon) {
-                return;
-            }
-
-            if (video.paused || video.ended) {
-                icon.setAttribute(&#39;class&#39;, &#39;lucide lucide-play lg:size-12&#39;);
-                icon.innerHTML =
-                    &#39;&lt;path d=&#34;M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z&#34;/&gt;&#39;;
-            } else {
-                icon.setAttribute(&#39;class&#39;, &#39;lucide lucide-pause lg:size-12&#39;);
-                icon.innerHTML =
-                    &#39;&lt;rect x=&#34;14&#34; y=&#34;3&#34; width=&#34;5&#34; height=&#34;18&#34; rx=&#34;1&#34;/&gt;&lt;rect x=&#34;5&#34; y=&#34;3&#34; width=&#34;5&#34; height=&#34;18&#34; rx=&#34;1&#34;/&gt;&#39;;
-            }
-        }
-
-        function setVolumeIcon(video, volumeBtn) {
-            if (!volumeBtn) {
-                return;
-            }
-
-            const icon = volumeBtn.querySelector(&#39;svg&#39;);
-            if (!icon) {
-                return;
-            }
-
-            if (video.muted || video.volume === 0) {
-                icon.setAttribute(&#39;class&#39;, &#39;lucide lucide-volume-off-icon lucide-volume-off&#39;);
-                icon.innerHTML =
-                    &#39;&lt;path d=&#34;M16 9a5 5 0 0 1 .95 2.293&#34; /&gt;&#39; +
-                    &#39;&lt;path d=&#34;M19.364 5.636a9 9 0 0 1 1.889 9.96&#34; /&gt;&#39; +
-                    &#39;&lt;path d=&#34;m2 2 20 20&#34; /&gt;&#39; +
-                    &#39;&lt;path d=&#34;m7 7-.587.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298V11&#34; /&gt;&#39; +
-                    &#39;&lt;path d=&#34;M9.828 4.172A.686.686 0 0 1 11 4.657v.686&#34; /&gt;&#39;;
-                volumeBtn.setAttribute(&#39;aria-label&#39;, &#39;Unmute&#39;);
-            } else {
-                icon.setAttribute(&#39;class&#39;, &#39;lucide lucide-volume2-icon lucide-volume-2&#39;);
-                icon.innerHTML =
-                    &#39;&lt;path d=&#34;M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z&#34; /&gt;&#39; +
-                    &#39;&lt;path d=&#34;M16 9a5 5 0 0 1 0 6&#34; /&gt;&#39; +
-                    &#39;&lt;path d=&#34;M19.364 18.364a9 9 0 0 0 0-12.728&#34; /&gt;&#39;;
-                volumeBtn.setAttribute(&#39;aria-label&#39;, &#39;Mute&#39;);
-            }
-        }
-
-        let shakaInitScheduled = false;
-
-        function scheduleInitShakaPlayers() {
-            if (shakaInitScheduled) {
-                return;
-            }
-
-            shakaInitScheduled = true;
-            window.requestAnimationFrame(() =&gt; {
-                shakaInitScheduled = false;
-                initShakaPlayers();
-            });
-        }
-
-        function getStreamPlayerWrapper() {
-            return document.querySelector(&#39;[data-stream-player-wrapper]&#39;);
-        }
-
-        function createShakaVideoStream(stream) {
-            const video = document.createElement(&#39;video&#39;);
-            video.id = &#39;stream-video&#39;;
-            video.className = &#39;block h-full w-full object-fill js-shaka-player&#39;;
-            video.setAttribute(&#39;autoplay&#39;, &#39;&#39;);
-            video.setAttribute(&#39;playsinline&#39;, &#39;&#39;);
-            video.setAttribute(&#39;preload&#39;, &#39;metadata&#39;);
-            video.setAttribute(&#39;crossorigin&#39;, &#39;anonymous&#39;);
-            video.src = stream.url || &#39;&#39;;
-            video.dataset.src = stream.url || &#39;&#39;;
-            video.dataset.streamType = stream.type || &#39;default&#39;;
-
-            if (stream.type === &#39;dash&#39;) {
-                if (stream.kid) {
-                    video.dataset.kid = stream.kid;
-                }
-                if (stream.key) {
-                    video.dataset.key = stream.key;
-                }
-            }
-
-            return video;
-        }
-
-        function createIframeStream(stream) {
-            const iframe = document.createElement(&#39;iframe&#39;);
-            iframe.width = &#39;100%&#39;;
-            iframe.height = &#39;100%&#39;;
-            iframe.src = stream.url || &#39;&#39;;
-            iframe.setAttribute(&#39;frameborder&#39;, &#39;0&#39;);
-            iframe.setAttribute(&#39;allowfullscreen&#39;, &#39;&#39;);
-            iframe.setAttribute(&#39;marginwidth&#39;, &#39;0&#39;);
-            iframe.setAttribute(&#39;marginheight&#39;, &#39;0&#39;);
-            iframe.setAttribute(&#39;scrolling&#39;, &#39;no&#39;);
-            iframe.setAttribute(&#39;allow&#39;,
-                stream.type === &#39;youtube&#39; ?
-                &#39;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen&#39; :
-                &#39;encrypted-media; autoplay; fullscreen; picture-in-picture&#39;
-            );
-
-            if (stream.type === &#39;youtube&#39;) {
-                iframe.setAttribute(&#39;title&#39;, &#39;YouTube video player&#39;);
-                iframe.setAttribute(&#39;referrerpolicy&#39;, &#39;strict-origin-when-cross-origin&#39;);
-            }
-
-            return iframe;
-        }
-
-        function clearExistingStreamElements() {
-            const wrapper = getStreamPlayerWrapper();
-            if (!wrapper) {
-                return;
-            }
-
-            wrapper.querySelectorAll(&#39;video.js-shaka-player&#39;).forEach((video) =&gt; {
-                destroyShakaPlayer(video);
-                video.remove();
-            });
-
-            wrapper.querySelectorAll(&#39;iframe&#39;).forEach((iframe) =&gt; {
-                iframe.remove();
-            });
-        }
-
-        function updateActiveStreamButton(activeButton) {
-            document.querySelectorAll(&#39;[data-stream-button]&#39;).forEach((button) =&gt; {
-                const isActive = button === activeButton;
-                button.setAttribute(&#39;aria-pressed&#39;, isActive ? &#39;true&#39; : &#39;false&#39;);
-                button.classList.toggle(&#39;border-accent/70&#39;, isActive);
-                button.classList.toggle(&#39;bg-accent&#39;, isActive);
-                button.classList.toggle(&#39;bg-white/5&#39;, !isActive);
-            });
-        }
-
-        async function switchStream(button) {
-            const url = button?.dataset?.streamUrl;
-            const type = button?.dataset?.streamType || &#39;default&#39;;
-            const kid = button?.dataset?.streamKid || &#39;&#39;;
-            const key = button?.dataset?.streamKey || &#39;&#39;;
-            const wrapper = getStreamPlayerWrapper();
-
-            if (!wrapper || !url) {
-                return;
-            }
-
-            clearExistingStreamElements();
-            updateActiveStreamButton(button);
-
-            const overlay = wrapper.querySelector(&#39;[data-player-overlay]&#39;);
-            const controls = wrapper.querySelector(&#39;[data-player-controls]&#39;);
-
-            if ([&#39;hls&#39;, &#39;dash&#39;, &#39;default&#39;].includes(type)) {
-                const video = createShakaVideoStream({
-                    url,
-                    type,
-                    kid,
-                    key
-                });
-                if (overlay) {
-                    wrapper.insertBefore(video, overlay);
-                    overlay.style.display = &#39;flex&#39;;
-                } else {
-                    wrapper.prepend(video);
-                }
-                if (controls) {
-                    controls.style.display = &#39;&#39;;
-                }
-                setOverlayState(video, overlay);
-                scheduleInitShakaPlayers();
-                video.play().catch(() =&gt; {});
-            } else {
-                const iframe = createIframeStream({
-                    url,
-                    type
-                });
-                wrapper.prepend(iframe);
-                if (controls) {
-                    controls.style.display = &#39;none&#39;;
-                }
-                if (overlay) {
-                    overlay.style.display = &#39;none&#39;;
-                }
-            }
-        }
-
-        function setupStreamButtons() {
-            document.body.addEventListener(&#39;click&#39;, (event) =&gt; {
-                const button = event.target.closest(&#39;[data-stream-button]&#39;);
-                if (!button) {
-                    return;
-                }
-
-                event.preventDefault();
-                switchStream(button);
-            });
-        }
-
-        async function initShakaPlayers() {
-            if (!window.shaka || !window.shaka.Player) {
-                return;
-            }
-
-            document.querySelectorAll(&#39;video.js-shaka-player&#39;).forEach((video) =&gt; {
-                if (!video.dataset.src) {
-                    return;
-                }
-
-                const existingPlayerKey = video.dataset.playerKey;
-                const existingPlayer = existingPlayerKey ? shakaPlayers[existingPlayerKey] : null;
-
-                if (existingPlayer &amp;&amp; video.dataset.playerInitialized === &#39;true&#39;) {
-                    const src = video.dataset.src || video.getAttribute(&#39;src&#39;);
-                    if (src) {
-                        existingPlayer.load(src).catch((error) =&gt; {
-                            console.error(&#39;Unable to reload stream with Shaka Player&#39;, error);
-                        });
-                    }
-                    return;
-                }
-
-                const container = video.closest(&#39;.group&#39;);
-                const controls = container?.querySelector(&#39;[data-player-controls]&#39;);
-                const overlay = container?.querySelector(&#39;[data-player-overlay]&#39;);
-                const playBtn = controls?.querySelector(&#39;[data-play-btn]&#39;);
-                const volumeBtn = controls?.querySelector(&#39;[data-volume-btn]&#39;);
-                const volumeSlider = controls?.querySelector(&#39;[data-volume]&#39;);
-                const seekBar = controls?.querySelector(&#39;[data-seek-bar]&#39;);
-                const currentTimeLabel = controls?.querySelector(&#39;[data-current-time]&#39;);
-                const pipBtn = controls?.querySelector(&#39;[data-pip-btn]&#39;);
-                const fullscreenBtn = controls?.querySelector(&#39;[data-fullscreen-btn]&#39;);
-                const settingsBtn = controls?.querySelector(&#39;[data-settings-btn]&#39;);
-                const settingsMenu = controls?.querySelector(&#39;[data-settings-menu]&#39;);
-                const settingsOptions = controls?.querySelector(&#39;[data-settings-options]&#39;);
-
-                const player = new window.shaka.Player();
-                const playerKey = `shaka-${Math.random().toString(36).slice(2, 10)}`;
-                video.dataset.playerKey = playerKey;
-                video.dataset.playerInitialized = &#39;true&#39;;
-                shakaPlayers[playerKey] = player;
-
-                player.addEventListener(&#39;error&#39;, (event) =&gt; {
-                    console.error(&#39;Shaka Player error&#39;, event.detail);
-                });
-
-                const kid = (video.dataset.kid || &#39;&#39;).trim();
-                const key = (video.dataset.key || &#39;&#39;).trim();
-
-                if (kid &amp;&amp; key) {
-                    player.configure({
-                        drm: {
-                            clearKeys: {
-                                [kid]: key,
-                            },
-                        },
-                    });
-                }
-
-                const isTouchDevice = window.matchMedia(&#39;(hover: none), (pointer: coarse)&#39;).matches ||
-                    &#39;ontouchstart&#39; in window;
-                let controlsHideTimer = null;
-                let controlsAutoHideEnabled = true;
-
-                const attemptOrientationLock = async () =&gt; {
-                    if (!document.fullscreenElement || !window.screen?.orientation?.lock) {
-                        return false;
-                    }
-
-                    const orientation = window.screen.orientation;
-                    const modes = [&#39;landscape&#39;, &#39;landscape-primary&#39;, &#39;landscape-secondary&#39;];
-
-                    for (const mode of modes) {
-                        try {
-                            await orientation.lock(mode);
-                            return true;
-                        } catch (error) {
-                            console.warn(`Unable to lock orientation to ${mode}`, error);
-                        }
-                    }
-
-                    return false;
-                };
-
-                const requestLandscapeFullscreen = async () =&gt; {
-                    const targets = [
-                        () =&gt; video.requestFullscreen?.({
-                            navigationUI: &#39;hide&#39;
-                        }),
-                        () =&gt; container?.requestFullscreen?.({
-                            navigationUI: &#39;hide&#39;
-                        }),
-                        () =&gt; document.documentElement.requestFullscreen?.({
-                            navigationUI: &#39;hide&#39;
-                        }),
-                    ];
-
-                    for (const requestFullscreen of targets) {
-                        try {
-                            const result = requestFullscreen();
-                            if (result &amp;&amp; typeof result.then === &#39;function&#39;) {
-                                await result;
-                            }
-                            return true;
-                        } catch (error) {
-                            console.warn(&#39;Fullscreen request attempt failed&#39;, error);
-                        }
-                    }
-
-                    return false;
-                };
-
-                const showControls = () =&gt; {
-                    if (!controls) {
-                        return;
-                    }
-
-                    controls.classList.remove(&#39;player-controls-hidden&#39;);
-                    controls.style.opacity = &#39;1&#39;;
-                    controls.style.pointerEvents = &#39;auto&#39;;
-                };
-
-                const hideControls = () =&gt; {
-                    if (!controls || isTouchDevice) {
-                        return;
-                    }
-
-                    controls.classList.add(&#39;player-controls-hidden&#39;);
-                    controls.style.opacity = &#39;0&#39;;
-                    controls.style.pointerEvents = &#39;none&#39;;
-                };
-
-                const scheduleControlsHide = () =&gt; {
-                    if (!controls || isTouchDevice || !controlsAutoHideEnabled) {
-                        return;
-                    }
-
-                    if (controlsHideTimer) {
-                        window.clearTimeout(controlsHideTimer);
-                    }
-
-                    controlsHideTimer = window.setTimeout(() =&gt; {
-                        if (!video.paused &amp;&amp; !video.ended) {
-                            hideControls();
-                        }
-                    }, 2200);
-                };
-
-                const togglePlay = async () =&gt; {
-                    try {
-                        if (video.paused) {
-                            await video.play();
-                        } else {
-                            video.pause();
-                        }
-                    } catch (error) {
-                        console.error(&#39;Play toggle failed&#39;, error);
-                    }
-                };
-
-                if (playBtn) {
-                    playBtn.addEventListener(&#39;click&#39;, (event) =&gt; {
-                        event.stopPropagation();
-                        showControls();
-                        togglePlay();
-                    });
-                }
-
-                if (container) {
-                    container.addEventListener(&#39;click&#39;, (event) =&gt; {
-                        const target = event.target;
-                        if (target &amp;&amp; target.closest(&#39;button,input,a,[data-player-controls]&#39;)) {
-                            return;
-                        }
-
-                        showControls();
-                        togglePlay();
-                    });
-                }
-
-                const syncVolumeUi = () =&gt; {
-                    if (!volumeSlider) {
-                        return;
-                    }
-
-                    const safeVolume = Number.isFinite(video.volume) ? Math.max(0, Math.min(1, video
-                        .volume)) : 1;
-                    const displayValue = video.muted ? 0 : Math.round(safeVolume * 100);
-                    volumeSlider.value = String(displayValue);
-                    volumeSlider.style.setProperty(&#39;--value&#39;, `${displayValue}%`);
-                    setVolumeIcon(video, volumeBtn);
-                };
-
-                if (volumeBtn) {
-                    volumeBtn.addEventListener(&#39;click&#39;, (event) =&gt; {
-                        event.stopPropagation();
-                        showControls();
-
-                        if (video.muted) {
-                            video.muted = false;
-                            if (video.volume &lt;= 0) {
-                                video.volume = 1;
-                            }
-                        } else {
-                            video.muted = true;
-                            if (volumeSlider) {
-                                volumeSlider.value = &#39;0&#39;;
-                                volumeSlider.style.setProperty(&#39;--value&#39;, &#39;0%&#39;);
-                            }
-                        }
-
-                        syncVolumeUi();
-                    });
-                }
-
-                if (volumeSlider) {
-                    volumeSlider.addEventListener(&#39;input&#39;, (event) =&gt; {
-                        event.stopPropagation();
-                        showControls();
-                        const nextVolume = Number(volumeSlider.value) / 100;
-                        video.volume = nextVolume;
-                        video.muted = nextVolume &lt;= 0;
-                        syncVolumeUi();
-                    });
-                }
-
-                if (seekBar) {
-                    seekBar.addEventListener(&#39;input&#39;, (event) =&gt; {
-                        event.stopPropagation();
-                        showControls();
-                        const nextTime = Number(seekBar.value);
-                        if (Number.isFinite(nextTime)) {
-                            video.currentTime = nextTime;
-                        }
-                    });
-
-                    seekBar.addEventListener(&#39;pointerdown&#39;, (event) =&gt; {
-                        event.stopPropagation();
-                        showControls();
-                    });
-                }
-
-                const formatTime = (seconds) =&gt; {
-                    const safeSeconds = Number.isFinite(seconds) ? Math.max(0, Math.floor(seconds)) : 0;
-                    const minutes = Math.floor(safeSeconds / 60);
-                    const remainingSeconds = safeSeconds % 60;
-                    return `${minutes}:${remainingSeconds.toString().padStart(2, &#39;0&#39;)}`;
-                };
-
-                const getSeekWindow = () =&gt; {
-                    try {
-                        if (video.seekable &amp;&amp; video.seekable.length) {
-                            const index = video.seekable.length - 1;
-                            const start = video.seekable.start(index);
-                            const end = video.seekable.end(index);
-                            if (Number.isFinite(start) &amp;&amp; Number.isFinite(end) &amp;&amp; end &gt; start) {
-                                return {
-                                    start,
-                                    end
-                                };
-                            }
-                        }
-                    } catch (error) {
-                        console.warn(&#39;Unable to read seek range&#39;, error);
-                    }
-
-                    if (Number.isFinite(video.duration) &amp;&amp; video.duration &gt; 0 &amp;&amp; video.duration &lt; 86400) {
-                        return {
-                            start: 0,
-                            end: video.duration
-                        };
-                    }
-
-                    return {
-                        start: 0,
-                        end: 100
-                    };
-                };
-
-                const updateSeekBar = () =&gt; {
-                    if (!seekBar) {
-                        return;
-                    }
-
-                    const seekWindow = getSeekWindow();
-                    const min = Number(seekWindow.start || 0);
-                    const max = Number(seekWindow.end || 100);
-                    const currentTime = Number.isFinite(video.currentTime) ? video.currentTime : min;
-                    const clampedCurrent = max &gt; min ? Math.min(Math.max(currentTime, min), max) : min;
-
-                    seekBar.min = String(min);
-                    seekBar.max = String(max);
-                    seekBar.value = String(clampedCurrent);
-
-                    const playedPercent = max &gt; min ? ((clampedCurrent - min) / (max - min)) * 100 : 0;
-                    seekBar.style.setProperty(&#39;--seek-progress&#39;, `${playedPercent}%`);
-                    seekBar.style.background =
-                        `linear-gradient(to right, var(--accent, #38bdf8) 0%, var(--accent, #38bdf8) ${playedPercent}%, rgba(255,255,255,.26) ${playedPercent}%, rgba(255,255,255,.26) 100%)`;
-
-                    if (currentTimeLabel) {
-                        currentTimeLabel.textContent = formatTime(clampedCurrent);
-                    }
-                };
-
-                if (controls) {
-                    const handleControlInteraction = () =&gt; {
-                        showControls();
-                        scheduleControlsHide();
-                    };
-
-                    controls.addEventListener(&#39;mouseenter&#39;, handleControlInteraction);
-                    controls.addEventListener(&#39;mousemove&#39;, handleControlInteraction);
-                    controls.addEventListener(&#39;touchstart&#39;, handleControlInteraction, {
-                        passive: true
-                    });
-                    container?.addEventListener(&#39;mousemove&#39;, handleControlInteraction);
-                    container?.addEventListener(&#39;touchstart&#39;, handleControlInteraction, {
-                        passive: true
-                    });
-                    container?.addEventListener(&#39;mouseleave&#39;, () =&gt; {
-                        if (!isTouchDevice) {
-                            hideControls();
-                        }
-                    });
-
-                    document.addEventListener(&#39;fullscreenchange&#39;, async () =&gt; {
-                        if (document.fullscreenElement) {
-                            showControls();
-                            scheduleControlsHide();
-                            await attemptOrientationLock();
-                        } else {
-                            showControls();
-                            controlsAutoHideEnabled = true;
-                            try {
-                                window.screen?.orientation?.unlock?.();
-                            } catch (error) {
-                                console.warn(&#39;Unable to unlock orientation&#39;, error);
-                            }
-                        }
-                    });
-
-                    window.addEventListener(&#39;orientationchange&#39;, () =&gt; {
-                        if (document.fullscreenElement) {
-                            attemptOrientationLock();
-                        }
-                    });
-                }
-
-                if (pipBtn) {
-                    const supportsPiP = typeof document.exitPictureInPicture === &#39;function&#39; &amp;&amp; typeof video
-                        .requestPictureInPicture === &#39;function&#39;;
-
-                    if (!supportsPiP) {
-                        pipBtn.style.display = &#39;none&#39;;
-                    } else {
-                        pipBtn.addEventListener(&#39;click&#39;, async (event) =&gt; {
-                            event.preventDefault();
-                            event.stopPropagation();
-
-                            try {
-                                if (document.pictureInPictureElement === video) {
-                                    await document.exitPictureInPicture();
-                                } else {
-                                    await video.requestPictureInPicture();
-                                }
-                            } catch (error) {
-                                console.error(&#39;Picture-in-Picture failed:&#39;, error);
-                            }
-                        });
-                    }
-                }
-
-                if (fullscreenBtn) {
-                    fullscreenBtn.addEventListener(&#39;click&#39;, async () =&gt; {
-                        if (!container || !video) {
-                            return;
-                        }
-
-                        if (document.fullscreenElement) {
-                            await document.exitFullscreen().catch((error) =&gt; {
-                                console.error(&#39;Fullscreen exit failed:&#39;, error);
-                            });
-                            return;
-                        }
-
-                        try {
-                            const enteredFullscreen = await requestLandscapeFullscreen();
-                            if (enteredFullscreen) {
-                                await attemptOrientationLock();
-                            }
-                        } catch (error) {
-                            console.error(&#39;Fullscreen request failed:&#39;, error);
-                        }
-                    });
-                }
-
-                const closeSettingsMenu = () =&gt; {
-                    if (settingsMenu) {
-                        settingsMenu.style.display = &#39;none&#39;;
-                    }
-                };
-
-                const updateSettingsMenu = () =&gt; {
-                    if (!settingsOptions || !player || typeof player.getVariantTracks !== &#39;function&#39;) {
-                        return;
-                    }
-
-                    settingsOptions.innerHTML = &#39;&#39;;
-                    const abrEnabled = player.getConfiguration?.().abr?.enabled !== false;
-                    const tracks = (player.getVariantTracks() || []).filter((track) =&gt; track &amp;&amp; Number
-                        .isFinite(track.height));
-
-                    if (!tracks.length) {
-                        const emptyItem = document.createElement(&#39;div&#39;);
-                        emptyItem.className = &#39;rounded px-2 py-1 text-xs text-white/60&#39;;
-                        emptyItem.textContent = &#39;No quality options&#39;;
-                        settingsOptions.appendChild(emptyItem);
-                        return;
-                    }
-
-                    const addOption = (label, track, isActive) =&gt; {
-                        const button = document.createElement(&#39;button&#39;);
-                        button.type = &#39;button&#39;;
-                        button.className =
-                            `flex w-full items-center justify-between rounded px-2 py-1 text-left text-xs transition ${isActive ? &#39;bg-white/20 text-white&#39; : &#39;text-white/80 hover:bg-white/10 hover:text-white&#39;}`;
-                        button.innerHTML = `
-                            &lt;span&gt;${label}&lt;/span&gt;
-                            ${isActive ? &#39;&lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;18&#34; height=&#34;18&#34; viewBox=&#34;0 0 24 24&#34; fill=&#34;none&#34; stroke=&#34;currentColor&#34; stroke-width=&#34;2&#34; stroke-linecap=&#34;round&#34; stroke-linejoin=&#34;round&#34; class=&#34;lucide lucide-check text-white&#34;&gt;&lt;path d=&#34;M20 6 9 17l-5-5&#34;/&gt;&lt;/svg&gt;&#39; : &#39;&#39;}
-                        `;
-
-                        button.addEventListener(&#39;click&#39;, async () =&gt; {
-                            try {
-                                if (track) {
-                                    player.configure({
-                                        abr: {
-                                            enabled: false
-                                        }
-                                    });
-                                    await player.selectVariantTrack(track, true);
-                                } else {
-                                    player.configure({
-                                        abr: {
-                                            enabled: true
-                                        }
-                                    });
-                                }
-
-                                updateSettingsMenu();
-                                closeSettingsMenu();
-                            } catch (error) {
-                                console.error(&#39;Unable to change quality&#39;, error);
-                            }
-                        });
-
-                        settingsOptions.appendChild(button);
-                    };
-
-                    addOption(&#39;Auto&#39;, null, abrEnabled);
-
-                    tracks
-                        .slice()
-                        .sort((a, b) =&gt; (a.height || 0) - (b.height || 0))
-                        .forEach((track) =&gt; {
-                            const label = `${track.height || &#39;Unknown&#39;}p`;
-                            addOption(label, track, !abrEnabled &amp;&amp; Boolean(track.active));
-                        });
-                };
-
-                if (settingsBtn &amp;&amp; settingsMenu) {
-                    settingsBtn.addEventListener(&#39;click&#39;, (event) =&gt; {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        const isVisible = settingsMenu.style.display === &#39;flex&#39;;
-                        closeSettingsMenu();
-                        if (!isVisible) {
-                            updateSettingsMenu();
-                            settingsMenu.style.display = &#39;flex&#39;;
-                        }
-                    });
-
-                    settingsMenu.addEventListener(&#39;click&#39;, (event) =&gt; {
-                        event.stopPropagation();
-                    });
-                }
-
-                document.addEventListener(&#39;click&#39;, (event) =&gt; {
-                    if (!container?.contains(event.target)) {
-                        closeSettingsMenu();
-                    }
-                });
-
-                video.addEventListener(&#39;play&#39;, () =&gt; {
-                    controlsAutoHideEnabled = true;
-                    showControls();
-                    scheduleControlsHide();
-                    setPlayIcon(video, playBtn);
-                    setOverlayState(video, overlay);
-                });
-
-                video.addEventListener(&#39;pause&#39;, () =&gt; {
-                    controlsAutoHideEnabled = true;
-                    showControls();
-                    if (controlsHideTimer) {
-                        window.clearTimeout(controlsHideTimer);
-                    }
-                    setPlayIcon(video, playBtn);
-                    setOverlayState(video, overlay);
-                });
-
-                video.addEventListener(&#39;playing&#39;, () =&gt; {
-                    setOverlayState(video, overlay);
-                });
-
-                video.addEventListener(&#39;ended&#39;, () =&gt; {
-                    controlsAutoHideEnabled = false;
-                    showControls();
-                    if (controlsHideTimer) {
-                        window.clearTimeout(controlsHideTimer);
-                    }
-                    setPlayIcon(video, playBtn);
-                    setOverlayState(video, overlay);
-                });
-
-                video.addEventListener(&#39;volumechange&#39;, () =&gt; {
-                    syncVolumeUi();
-                });
-
-                video.addEventListener(&#39;loadedmetadata&#39;, updateSeekBar);
-                video.addEventListener(&#39;loadeddata&#39;, updateSeekBar);
-                video.addEventListener(&#39;canplay&#39;, updateSeekBar);
-                video.addEventListener(&#39;timeupdate&#39;, updateSeekBar);
-                video.addEventListener(&#39;progress&#39;, updateSeekBar);
-                video.addEventListener(&#39;seeked&#39;, updateSeekBar);
-                video.addEventListener(&#39;playing&#39;, updateSeekBar);
-
-                const seekLoop = window.setInterval(() =&gt; {
-                    if (video.readyState &gt;= 1) {
-                        updateSeekBar();
-                    }
-                }, 250);
-
-                video.dataset.seekLoop = String(seekLoop);
-
-                player.configure({
-                    abr: {
-                        enabled: true
-                    }
-                });
-
-                const loadStream = () =&gt; {
-                    const src = video.dataset.src || video.getAttribute(&#39;src&#39;);
-                    if (!src) {
-                        return Promise.resolve();
-                    }
-
-                    return player.load(src).then(() =&gt; {
-                        updateSettingsMenu();
-                    });
-                };
-
-                if (typeof player.attach === &#39;function&#39;) {
-                    player.attach(video)
-                        .then(() =&gt; loadStream())
-                        .catch((error) =&gt; {
-                            console.error(&#39;Unable to attach/load stream with Shaka Player&#39;, error);
-                        });
-                } else {
-                    loadStream().catch((error) =&gt; {
-                        console.error(&#39;Unable to load stream with Shaka Player&#39;, error);
-                    });
-                }
-
-                showControls();
-                setPlayIcon(video, playBtn);
-                setOverlayState(video, overlay);
-                syncVolumeUi();
-                updateSeekBar();
-            });
-        }
-
-        document.addEventListener(&#39;DOMContentLoaded&#39;, () =&gt; {
-            scheduleInitShakaPlayers();
-            setupStreamButtons();
-        });
-
-        window.addEventListener(&#39;load&#39;, () =&gt; {
-            scheduleInitShakaPlayers();
-            setupStreamButtons();
-        });
-
-        document.addEventListener(&#39;livewire:navigated&#39;, () =&gt; {
-            scheduleInitShakaPlayers();
-            setupStreamButtons();
-        });
-
-        window.addEventListener(&#39;resize&#39;, scheduleInitShakaPlayers);
-
-        if (window.Livewire &amp;&amp; window.Livewire.hook) {
-            window.Livewire.hook(&#39;message.processed&#39;, () =&gt; {
-                scheduleInitShakaPlayers();
-                setupStreamButtons();
-            });
-        }
-
-        const shakaObserver = new MutationObserver((mutations) =&gt; {
-            mutations.forEach((mutation) =&gt; {
-                mutation.removedNodes.forEach((node) =&gt; {
-                    if (node.nodeType === 1 &amp;&amp; node.matches(&#39;video.js-shaka-player&#39;)) {
-                        destroyShakaPlayer(node);
-                    }
-                });
-            });
-
-            scheduleInitShakaPlayers();
-        });
-
-        if (document.body) {
-            shakaObserver.observe(document.body, {
-                childList: true,
-                subtree: true,
-            });
-        }
-    </script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Prigames Sports Live | Official Streaming Hub</title>
+    
+    <!-- Preconnect & DNS-Prefetch for instant handshake with streaming hosts -->
+    <link rel="dns-prefetch" href="https://webcric.im">
+    <link rel="preconnect" href="https://webcric.im" crossorigin>
+    <link rel="dns-prefetch" href="https://trendy48.online">
+    <link rel="preconnect" href="https://trendy48.online" crossorigin>
+    <link rel="dns-prefetch" href="https://freecdn.st">
+    <link rel="preconnect" href="https://freecdn.st" crossorigin>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <style>
-      [data-player-controls].player-controls-hidden {
-            opacity: 0 !important;
-            pointer-events: none !important;
+        :root { 
+            --neon: #00ff6a; 
+            --neon-glow: rgba(0, 255, 106, 0.35);
+            --bg-dark: #07090c;
+        }
+        
+        * {
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body { 
+            background: radial-gradient(circle at 50% 0%, #111a14 0%, var(--bg-dark) 55%); 
+            color: #ffffff; 
+            overflow-x: hidden;
+            overscroll-behavior: none;
+            min-height: 100vh;
         }
 
-        input[data-volume] {
-            --value: 100%;
+        .mono-font {
+            font-family: 'JetBrains Mono', monospace;
         }
 
-        input[data-seek-bar] {
-            --seek-progress: 0%;
-            --buffered-progress: 0%;
-            accent-color: var(--accent, #38bdf8);
+        /* Glassmorphism styling */
+        .glass-panel {
+            background: rgba(18, 22, 28, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
 
-        input[data-seek-bar]::-webkit-slider-thumb {
-            appearance: none;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.3);
-            border: 1.5px solid rgba(255, 255, 255, 0.95);
-            transition: all 0.2s ease;
-            margin-top: -4px;
+        /* Stream frame styling */
+        .player-frame-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.95), 0 0 35px -5px rgba(0, 255, 106, 0.08);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        input[data-seek-bar]::-moz-range-thumb {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
-            cursor: pointer;
-            border: 1.5px solid rgba(255, 255, 255, 0.95);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.3);
-            transition: all 0.2s ease;
+        .player-frame-wrapper.theatre {
+            max-width: 100vw !important;
+            border-radius: 0;
+            border-left: none;
+            border-right: none;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.95);
         }
 
-        input[data-seek-bar]::-webkit-slider-runnable-track {
-            background: linear-gradient(to right, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.22) var(--buffered-progress), var(--accent, #38bdf8) var(--buffered-progress), var(--accent, #38bdf8) var(--seek-progress), rgba(255, 255, 255, 0.12) var(--seek-progress), rgba(255, 255, 255, 0.12) 100%);
-            height: 4px;
-            border-radius: 2px;
-            border: none;
+        iframe {
+            position: absolute;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            border: 0;
+            z-index: 2;
+            background: #000;
         }
 
-        input[data-seek-bar]::-moz-range-track {
-            background: linear-gradient(to right, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.22) var(--buffered-progress), var(--accent, #38bdf8) var(--buffered-progress), var(--accent, #38bdf8) var(--seek-progress), rgba(255, 255, 255, 0.12) var(--seek-progress), rgba(255, 255, 255, 0.12) 100%);
-            height: 4px;
-            border-radius: 2px;
-            border: none;
+        /* Ambient background grid */
+        .bg-grid {
+            background-size: 32px 32px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
         }
 
-        input[data-seek-bar]::-moz-range-progress {
-            background: var(--accent, #38bdf8);
-            height: 4px;
-            border-radius: 2px;
-        }
-
-        input[data-volume]::-webkit-slider-thumb {
-            appearance: none;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.3);
-            border: 1.5px solid rgba(255, 255, 255, 0.95);
-            transition: all 0.2s ease;
-            margin-top: -4px;
-        }
-
-        input[data-volume]::-webkit-slider-thumb:hover {
-            width: 14px;
-            height: 14px;
-            margin-top: -5px;
-            box-shadow: 0 3px 8px rgba(255, 255, 255, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.3);
-            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
-        }
-
-        input[data-volume]::-webkit-slider-thumb:active {
-            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.3);
-            background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%);
-        }
-
-        input[data-volume]::-moz-range-thumb {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
-            cursor: pointer;
-            border: 1.5px solid rgba(255, 255, 255, 0.95);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.3);
-            transition: all 0.2s ease;
-        }
-
-        input[data-volume]::-moz-range-thumb:hover {
-            width: 14px;
-            height: 14px;
-            box-shadow: 0 3px 8px rgba(255, 255, 255, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.3);
-            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
-        }
-
-        input[data-volume]::-moz-range-thumb:active {
-            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.3);
-            background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%);
-        }
-
-        input[data-volume]::-webkit-slider-runnable-track {
-            background: linear-gradient(to right, #ffffff 0%, #ffffff var(--value), rgba(255, 255, 255, 0.15) var(--value), rgba(255, 255, 255, 0.15) 100%);
-            height: 4px;
-            border-radius: 2px;
-            border: none;
-        }
-
-        input[data-volume]::-moz-range-track {
-            background: rgba(255, 255, 255, 0.15);
-            height: 4px;
-            border-radius: 2px;
-            border: none;
-        }
-
-        input[data-volume]::-moz-range-progress {
-            background: #ffffff;
-            height: 4px;
-            border-radius: 2px;
-        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #07090c; }
+        ::-webkit-scrollbar-thumb { background: #1f2730; border-radius: 3px; }
     </style>
-    <style>
-      :root.dark {
-        color-scheme: dark;
-    }
-    </style>
-    <script>
-      window.Flux = {
-        applyAppearance (appearance) {
-            let applyDark = () =&gt; document.documentElement.classList.add(&#39;dark&#39;)
-            let applyLight = () =&gt; document.documentElement.classList.remove(&#39;dark&#39;)
+</head>
+<body class="flex flex-col items-center justify-start min-h-screen px-3 sm:px-6 py-4 md:py-8 bg-grid">
 
-            if (appearance === &#39;system&#39;) {
-                let media = window.matchMedia(&#39;(prefers-color-scheme: dark)&#39;)
+    <!-- Ambient Glowing Orb behind player -->
+    <div class="fixed top-12 left-1/2 -translate-x-1/2 w-[550px] h-[320px] bg-[#00ff6a]/10 blur-[130px] rounded-full pointer-events-none -z-10"></div>
 
-                window.localStorage.removeItem(&#39;flux.appearance&#39;)
-
-                media.matches ? applyDark() : applyLight()
-            } else if (appearance === &#39;dark&#39;) {
-                window.localStorage.setItem(&#39;flux.appearance&#39;, &#39;dark&#39;)
-
-                applyDark()
-            } else if (appearance === &#39;light&#39;) {
-                window.localStorage.setItem(&#39;flux.appearance&#39;, &#39;light&#39;)
-
-                applyLight()
-            }
-        }
-    }
-
-    window.Flux.applyAppearance(window.localStorage.getItem(&#39;flux.appearance&#39;) || &#39;system&#39;)
-    </script>
-    <!-- Livewire Styles -->
-    <style>
-      [wire\:loading][wire\:loading], [wire\:loading\.delay][wire\:loading\.delay], [wire\:loading\.list-item][wire\:loading\.list-item], [wire\:loading\.inline-block][wire\:loading\.inline-block], [wire\:loading\.inline][wire\:loading\.inline], [wire\:loading\.block][wire\:loading\.block], [wire\:loading\.flex][wire\:loading\.flex], [wire\:loading\.table][wire\:loading\.table], [wire\:loading\.grid][wire\:loading\.grid], [wire\:loading\.inline-flex][wire\:loading\.inline-flex] {display: none;}[wire\:loading\.delay\.none][wire\:loading\.delay\.none], [wire\:loading\.delay\.shortest][wire\:loading\.delay\.shortest], [wire\:loading\.delay\.shorter][wire\:loading\.delay\.shorter], [wire\:loading\.delay\.short][wire\:loading\.delay\.short], [wire\:loading\.delay\.default][wire\:loading\.delay\.default], [wire\:loading\.delay\.long][wire\:loading\.delay\.long], [wire\:loading\.delay\.longer][wire\:loading\.delay\.longer], [wire\:loading\.delay\.longest][wire\:loading\.delay\.longest] {display: none;}[wire\:offline][wire\:offline] {display: none;}[wire\:dirty]:not(textarea):not(input):not(select) {display: none;}:root {--livewire-progress-bar-color: #2299dd;}[x-cloak] {display: none !important;}[wire\:cloak] {display: none !important;}dialog#livewire-error::backdrop {background-color: rgba(0, 0, 0, .6);}
-    </style>
-  </head>
-  <body class="min-h-screen bg-white dark:bg-zinc-800">
-    <main id="main">
-      <div wire:snapshot="{&#34;data&#34;:{&#34;slug&#34;:&#34;icc-international-odi-1791985909&#34;,&#34;currentStreamIndex&#34;:0},&#34;memo&#34;:{&#34;id&#34;:&#34;CDO3tsvCQrpm1zT88Fj2&#34;,&#34;name&#34;:&#34;frontend::watch&#34;,&#34;path&#34;:&#34;watch\/icc-international-odi-1791985909&#34;,&#34;method&#34;:&#34;GET&#34;,&#34;release&#34;:&#34;a-a-a&#34;,&#34;children&#34;:[],&#34;scripts&#34;:[],&#34;assets&#34;:[],&#34;errors&#34;:[],&#34;locale&#34;:&#34;en&#34;,&#34;islands&#34;:[]},&#34;checksum&#34;:&#34;54fc47a0817e506ae8e1a4b05a4cec333e653d8b0af9c5cfc8dc00c840d4af4f&#34;}" wire:effects="[]" wire:id="CDO3tsvCQrpm1zT88Fj2" wire:name="frontend::watch">
-        <section class="w-full p-3 bg-[linear-gradient(90deg,#ff3758_0%,#ff7048_100%)]">
-          <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <a aria-label="Download the official Rongy TV Android app" class="rongy-app-topbar" href="https://github.com/rongytv247/rongytv/raw/main/RongyTV_V3.1.apk" rel="noopener noreferrer" target="_blank">            <div class="flex justify-between items-center gap-2 flex-wrap">
-              <div class="flex justify-between items-center gap-2">
-                <div class="w-12 h-12 rounded-lg bg-white shrink-0 overflow-hidden flex justify-center items-center">
-                  <img src="https://bartatimes24.com/wp-content/uploads/2026/07/Black-and-White-Monogram-Business-Logo-1.png" alt="Rongy TV" class="w-full h-full" />
-                </div>
-                <span class="text-white! font-bold! lg:text-lg">                Get the official Rongy TV Android app — faster,
-                            lighter,
-                            better.
-</span>
-              </div>
-              <button type="button" class="relative items-center font-medium justify-center gap-2 whitespace-nowrap disabled:opacity-75 dark:disabled:opacity-75 disabled:cursor-default disabled:pointer-events-none justify-center h-10 text-sm rounded-lg ps-4 pe-4 inline-flex  bg-zinc-800/5 hover:bg-zinc-800/10 dark:bg-white/10 dark:hover:bg-white/20 text-zinc-800 dark:text-white   [[data-flux-button-group]_&amp;]:border-e [:is([data-flux-button-group]&gt;&amp;:last-child,_[data-flux-button-group]_:last-child&gt;&amp;)]:border-e-0 [[data-flux-button-group]_&amp;]:border-zinc-200/80 dark:[[data-flux-button-group]_&amp;]:border-zinc-900/50   text-white! font-bold! text-lg rounded-full! bg-[#70392385]! w-full lg:w-auto" data-flux-button="data-flux-button" data-flux-group-target="data-flux-group-target">
-                Download Now
-              </button>
-            </div>
-</a>
-          </div>
-        </section>
-        <!-- Breadcrumbs Section -->
-        <section class="pt-5">
-          <div class="container mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
-            <div class="flex" data-flux-breadcrumbs="">
-              <div class="flex items-center text-sm font-medium group/breadcrumb" data-flux-breadcrumbs-item="">
-                <a class="text-zinc-800 dark:text-white hover:underline decoration-zinc-800/20 underline-offset-4" href="https://live.mhdtv.online">                Home
-</a>
-                <svg class="shrink-0 [:where(&amp;)]:size-5 mx-1 text-zinc-300 dark:text-white/80 group-last/breadcrumb:hidden rtl:-scale-x-100" data-flux-icon="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                  <path fill-rule="evenodd" d="M12.528 3.047a.75.75 0 0 1 .449.961L8.433 16.504a.75.75 0 1 1-1.41-.512l4.544-12.496a.75.75 0 0 1 .961-.449Z" clip-rule="evenodd">
-                  </path>
-                </svg>
-              </div>
-              <!--[if BLOCK]><![endif]-->
-              <div class="flex items-center text-sm font-medium group/breadcrumb" data-flux-breadcrumbs-item="">
-                <div class="text-gray-500 dark:text-white/80">
-                  Match
-                </div>
-                <svg class="shrink-0 [:where(&amp;)]:size-5 mx-1 text-zinc-300 dark:text-white/80 group-last/breadcrumb:hidden rtl:-scale-x-100" data-flux-icon="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                  <path fill-rule="evenodd" d="M12.528 3.047a.75.75 0 0 1 .449.961L8.433 16.504a.75.75 0 1 1-1.41-.512l4.544-12.496a.75.75 0 0 1 .961-.449Z" clip-rule="evenodd">
-                  </path>
-                </svg>
-              </div>
-              <!--[if ENDBLOCK]><![endif]-->
-            </div>
-          </div>
-        </section>
-        <section class="pt-5">
-          <div class="container mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
-            <!--[if BLOCK]><![endif]-->
-            <div wire:ignore="" wire:key="ads-one-slot" class="max-w-7xl w-full h-auto mx-auto flex justify-center items-center ads-one">
-              <script>
-                atOptions = {
-    &#39;key&#39; : &#39;c2ce12213332e5682291c01d7e709232&#39;,
-    &#39;format&#39; : &#39;iframe&#39;,
-    &#39;height&#39; : 50,
-    &#39;width&#39; : 320,
-    &#39;params&#39; : {}
-  };
-              </script>
-              <script src="https://braverybreezebinding.com/c2ce12213332e5682291c01d7e709232/invoke.js">
-              </script>
-            </div>
-            <!--[if ENDBLOCK]><![endif]-->
-            <div class="flex justify-center items-center">
-              <a class="relative items-center font-medium justify-center gap-2 whitespace-nowrap disabled:opacity-75 dark:disabled:opacity-75 disabled:cursor-default disabled:pointer-events-none justify-center h-10 text-sm rounded-lg ps-4 pe-4 inline-flex  bg-[var(--color-accent)] hover:bg-[color-mix(in_oklab,_var(--color-accent),_transparent_10%)] text-[var(--color-accent-foreground)] border border-black/10 dark:border-0 shadow-[inset_0px_1px_--theme(--color-white/.2)] [[data-flux-button-group]_&amp;]:border-e-0 [:is([data-flux-button-group]&gt;&amp;:last-child,_[data-flux-button-group]_:last-child&gt;&amp;)]:border-e-[1px] dark:[:is([data-flux-button-group]&gt;&amp;:last-child,_[data-flux-button-group]_:last-child&gt;&amp;)]:border-e-0 dark:[:is([data-flux-button-group]&gt;&amp;:last-child,_[data-flux-button-group]_:last-child&gt;&amp;)]:border-s-[1px] [:is([data-flux-button-group]&gt;&amp;:not(:first-child),_[data-flux-button-group]_:not(:first-child)&gt;&amp;)]:border-s-[color-mix(in_srgb,var(--color-accent-foreground),transparent_85%)]  [--color-accent:var(--color-sky-600)] [--color-accent-content:var(--color-sky-600)] [--color-accent-foreground:var(--color-white)] dark:[--color-accent:var(--color-sky-600)] dark:[--color-accent-content:var(--color-sky-400)] dark:[--color-accent-foreground:var(--color-white)]" data-flux-button="data-flux-button" data-flux-group-target="data-flux-group-target" href="https://t.me/rongytv" target="_blank">              Join Telegram
-</a>
-            </div>
-            <div class="w-full overflow-hidden">
-              <a aria-label="Download the official Rongy TV Android app" class="rongy-app-topbar" href="https://github.com/rongytv247/rongytv/raw/main/RongyTV_V3.1.apk" rel="noopener noreferrer" target="_blank">              <img src="https://live.mhdtv.online/img/bannar.png" alt="Banner" class="w-full h-full object-contain" />
-</a>
-            </div>
-            <div class="w-full bg-accent/10 rounded-lg p-2 text-center border flex justify-center items-center gap-2 flex-wrap">
-              Download the
-              <a class="inline font-medium underline-offset-[6px] hover:decoration-current underline [[data-color]&gt;&amp;]:text-inherit [[data-color]&gt;&amp;]:decoration-current/20 dark:[[data-color]&gt;&amp;]:decoration-current/50 [[data-color]&gt;&amp;]:hover:decoration-current text-[var(--color-accent-content)] decoration-[color-mix(in_oklab,var(--color-accent-content),transparent_80%)] text-accent" data-flux-link="" href="https://rongytv.com" rel="noopener noreferrer" target="_blank">              Rongy TV app
-</a>
-              .
-                Buffering হলে
-              <a class="inline font-medium underline-offset-[6px] hover:decoration-current underline [[data-color]&gt;&amp;]:text-inherit [[data-color]&gt;&amp;]:decoration-current/20 dark:[[data-color]&gt;&amp;]:decoration-current/50 [[data-color]&gt;&amp;]:hover:decoration-current text-[var(--color-accent-content)] decoration-[color-mix(in_oklab,var(--color-accent-content),transparent_80%)] text-accent" data-flux-link="" href="https://1.1.1.1" rel="noopener noreferrer" target="_blank">              1.1.1.1
-</a>
-              try করুন.
-            </div>
-          </div>
-        </section>
-        <section class="py-5">
-          <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid gap-4 lg:grid-cols-[160px_minmax(0,1fr)_160px] lg:gap-6 xl:grid-cols-[160px_minmax(0,1fr)_160px]">
-              <aside class="space-y-3 hidden lg:block">
-                <!--[if BLOCK]><![endif]-->
-                <!--[if ENDBLOCK]><![endif]-->
-              </aside>
-              <div class="min-w-0 space-y-5">
-                <div class="space-y-5">
-                  <div class="relative aspect-video w-full bg-black">
-                    <div class="h-full w-full relative group" data-stream-player-wrapper="">
-                      <!--[if BLOCK]><![endif]-->
-                      <iframe src="https://api.touchcric.vip/DRM2/player.php?id=270" width="100%" height="100%" marginheight="0" marginwidth="0" scrolling="no" frameborder="0" allowfullscreen="" allow="encrypted-media; autoplay; fullscreen; picture-in-picture">
-                      </iframe>
-                      <!--[if ENDBLOCK]><![endif]-->
-                    </div>
-                  </div>
-                  <!--[if BLOCK]><![endif]-->
-                  <div class="flex flex-wrap gap-2 justify-start items-center" wire:ignore="">
-                    <!--[if BLOCK]><![endif]-->
-                    <button type="button" data-stream-button="" data-stream-index="0" data-stream-url="https://api.touchcric.vip/DRM2/player.php?id=270" data-stream-type="embed" data-stream-kid="" data-stream-key="" aria-pressed="true" class="border-2 border-accent/30 rounded-lg px-3 py-2 text-sm font-medium transition text-white hover:bg-accent cursor-pointer border-accent/70 bg-accent text-white">
-                      TNT Sports  2 AQ
-                    </button>
-                    <button type="button" data-stream-button="" data-stream-index="1" data-stream-url="https://api.touchcric.vip/DRM2/player.php?id=347" data-stream-type="embed" data-stream-kid="" data-stream-key="" aria-pressed="false" class="border-2 border-accent/30 rounded-lg px-3 py-2 text-sm font-medium transition text-white hover:bg-accent cursor-pointer ">
-                      SONY LIv AQ
-                    </button>
-                    <button type="button" data-stream-button="" data-stream-index="2" data-stream-url="https://api.touchcric.vip/DRM2/player.php?id=348" data-stream-type="embed" data-stream-kid="" data-stream-key="" aria-pressed="false" class="border-2 border-accent/30 rounded-lg px-3 py-2 text-sm font-medium transition text-white hover:bg-accent cursor-pointer ">
-                      SONLiv Hindi AQ
-                    </button>
-                    <button type="button" data-stream-button="" data-stream-index="3" data-stream-url="https://api.touchcric.vip/DRM2/player.php?id=265" data-stream-type="embed" data-stream-kid="" data-stream-key="" aria-pressed="false" class="border-2 border-accent/30 rounded-lg px-3 py-2 text-sm font-medium transition text-white hover:bg-accent cursor-pointer ">
-                      Willow  AQ
-                    </button>
-                    <button type="button" data-stream-button="" data-stream-index="4" data-stream-url="https://freecdn.st/hembedplayer/csstream1/1/960/540" data-stream-type="embed" data-stream-kid="" data-stream-key="" aria-pressed="false" class="border-2 border-accent/30 rounded-lg px-3 py-2 text-sm font-medium transition text-white hover:bg-accent cursor-pointer ">
-                      Cricbuzz fast iOS
-                    </button>
-                    <button type="button" data-stream-button="" data-stream-index="5" data-stream-url="https://api.touchcric.vip/m3u8.php?id=https://tencent-cdn.tapmad.com/v1/01a145abfb3a1ea540a81c2b41b751/01a145ae0ac115fc600b1e3e9683da/main.m3u8" data-stream-type="embed" data-stream-kid="" data-stream-key="" aria-pressed="false" class="border-2 border-accent/30 rounded-lg px-3 py-2 text-sm font-medium transition text-white hover:bg-accent cursor-pointer ">
-                      TapMad 🇵🇰🇧🇩
-                    </button>
-                    <button type="button" data-stream-button="" data-stream-index="6" data-stream-url="https://taifood-blog.asia/embed/247-willow" data-stream-type="embed" data-stream-kid="" data-stream-key="" aria-pressed="false" class="border-2 border-accent/30 rounded-lg px-3 py-2 text-sm font-medium transition text-white hover:bg-accent cursor-pointer ">
-                      Willow SD iOS
-                    </button>
-                    <button type="button" data-stream-button="" data-stream-index="7" data-stream-url="https://api.touchcric.vip/DRM2/player.php?id=263" data-stream-type="embed" data-stream-kid="" data-stream-key="" aria-pressed="false" class="border-2 border-accent/30 rounded-lg px-3 py-2 text-sm font-medium transition text-white hover:bg-accent cursor-pointer ">
-                      Willow AQ
-                    </button>
-                    <!--[if ENDBLOCK]><![endif]-->
-                  </div>
-                  <!--[if ENDBLOCK]><![endif]-->
-                </div>
-                <!--[if BLOCK]><![endif]-->
-                <div wire:ignore="" wire:key="ads-four-slot" class="max-w-7xl w-full h-auto mx-auto flex justify-center items-center ads-four">
-                  <script>
-                    atOptions = {
-    &#39;key&#39; : &#39;3264187ecac9fa39f332b3d7bdb183d5&#39;,
-    &#39;format&#39; : &#39;iframe&#39;,
-    &#39;height&#39; : 60,
-    &#39;width&#39; : 468,
-    &#39;params&#39; : {}
-  };
-                  </script>
-                  <script src="https://braverybreezebinding.com/3264187ecac9fa39f332b3d7bdb183d5/invoke.js">
-                  </script>
-                </div>
-                <!--[if ENDBLOCK]><![endif]-->
-              </div>
-              <aside class="space-y-3 hidden lg:block">
-                <!--[if BLOCK]><![endif]-->
-                <div wire:ignore="" wire:key="ads-three-slot" class="max-w-7xl w-full h-auto mx-auto flex justify-center items-center ads-three">
-                  <script>
-                    atOptions = {
-    &#39;key&#39; : &#39;0f9ccb4bcdbf6aa3aa2d903a00dc0b54&#39;,
-    &#39;format&#39; : &#39;iframe&#39;,
-    &#39;height&#39; : 250,
-    &#39;width&#39; : 300,
-    &#39;params&#39; : {}
-  };
-                  </script>
-                  <script src="https://braverybreezebinding.com/0f9ccb4bcdbf6aa3aa2d903a00dc0b54/invoke.js">
-                  </script>
-                </div>
-                <!--[if ENDBLOCK]><![endif]-->
-              </aside>
-            </div>
-          </div>
-        </section>
-        <section class="pb-5">
-          <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div>
-              <h2 class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 mb-4 lg:text-xl uppercase font-bold!" data-flux-heading="">
-                Recommended Matches
-              </h2>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <!--[if BLOCK]><![endif]-->
-              <a aria-label="WCL Cricket League T20 2026" href="https://live.mhdtv.online/watch/wcl-cricket-league-t20-2026-1791997406">              <div class="[:where(&amp;)]:bg-white dark:[:where(&amp;)]:bg-white/10 border border-zinc-200 dark:border-white/10 [:where(&amp;)]:p-6 [:where(&amp;)]:rounded-xl space-y-2" data-flux-card="">
-                <div>
-                  <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center! font-bold!" data-flux-heading="">
-                    WCL Cricket League T20 2026
-                  </div>
-                </div>
-                <div class="flex justify-around items-center gap-2">
-                  <div class="flex justify-center items-center flex-col gap-1">
-                    <div class="h-10 w-10 overflow-hidden bg-white border-2 border-accent/30 rounded-full shadow-xl">
-                      <img src="https://live.mhdtv.online/storage/images/events/bPH2WRzw1yr9ngimw1TZfxvcy1Hi4p91CrZ3GGRD.png" alt="TEAM 1" class="h-full w-full object-contain" />
-                    </div>
-                    <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center!" data-flux-heading="">
-                      TEAM 1
-                    </div>
-                  </div>
-                  <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2" data-flux-heading="">
-                    VS
-                  </div>
-                  <div class="flex justify-center items-center flex-col gap-1">
-                    <div class="h-10 w-10 overflow-hidden bg-white border-2 border-accent/30 rounded-full shadow-xl">
-                      <img src="https://live.mhdtv.online/storage/images/events/zGEQOalU9ZryjXq4Xjordd9GJNugIwRKtmb8Wz6J.png" alt="TEAM 2" class="h-full w-full object-contain" />
-                    </div>
-                    <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center!" data-flux-heading="">
-                      TEAM 2
-                    </div>
-                  </div>
-                </div>
-                <div class="event-info" data-start="2026-10-25T11:30:00">
-                  <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center! font-bold! event-datetime" data-datetime="2026-10-25T11:30:00" data-flux-heading="">
-                  </div>
-                  <div class="text-xs text-center text-muted-foreground mt-1 event-countdown-wrapper">
-                    <span class="countdown-label">                    Starts in:
-</span>
-                    <span class="event-countdown font-medium" data-start="2026-10-25T11:30:00">                    --:--:--
-</span>
-                  </div>
-                  <div class="flex items-center justify-center gap-2 event-live-badge hidden py-2">
-                    <span class="relative flex size-3">                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
-                    <span class="relative inline-flex size-3 rounded-full bg-red-500"></span>
-</span>
-                    <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-red-500 animate-pulse" data-flux-heading="">
-                      LIVE
-                    </div>
-                  </div>
-                </div>
-              </div>
-</a>
-              <a aria-label="Hong Kong Sixes 2026" href="https://live.mhdtv.online/watch/hong-kong-sixes-2026-1793517333">              <div class="[:where(&amp;)]:bg-white dark:[:where(&amp;)]:bg-white/10 border border-zinc-200 dark:border-white/10 [:where(&amp;)]:p-6 [:where(&amp;)]:rounded-xl space-y-2" data-flux-card="">
-                <div>
-                  <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center! font-bold!" data-flux-heading="">
-                    Hong Kong Sixes 2026
-                  </div>
-                </div>
-                <div class="flex justify-around items-center gap-2">
-                  <div class="flex justify-center items-center flex-col gap-1">
-                    <div class="h-10 w-10 overflow-hidden bg-white border-2 border-accent/30 rounded-full shadow-xl">
-                      <img src="https://live.mhdtv.online/storage/images/events/GMSFpw0EdNVGBcP5CpkATlnYzzwVjpgn3tRId9kb.png" alt="Hong Kong Sixes" class="h-full w-full object-contain" />
-                    </div>
-                    <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center!" data-flux-heading="">
-                      Hong Kong Sixes
-                    </div>
-                  </div>
-                  <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2" data-flux-heading="">
-                    VS
-                  </div>
-                  <div class="flex justify-center items-center flex-col gap-1">
-                    <div class="h-10 w-10 overflow-hidden bg-white border-2 border-accent/30 rounded-full shadow-xl">
-                      <img src="https://live.mhdtv.online/storage/images/events/ijtDzHTi9LsjqDf9e7wKLq2jgHOdXHtybdhn96U0.png" alt="Hong Kong Sixes" class="h-full w-full object-contain" />
-                    </div>
-                    <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center!" data-flux-heading="">
-                      Hong Kong Sixes
-                    </div>
-                  </div>
-                </div>
-                <div class="event-info" data-start="2026-11-01T12:30:00">
-                  <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center! font-bold! event-datetime" data-datetime="2026-11-01T12:30:00" data-flux-heading="">
-                  </div>
-                  <div class="text-xs text-center text-muted-foreground mt-1 event-countdown-wrapper">
-                    <span class="countdown-label">                    Starts in:
-</span>
-                    <span class="event-countdown font-medium" data-start="2026-11-01T12:30:00">                    --:--:--
-</span>
-                  </div>
-                  <div class="flex items-center justify-center gap-2 event-live-badge hidden py-2">
-                    <span class="relative flex size-3">                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
-                    <span class="relative inline-flex size-3 rounded-full bg-red-500"></span>
-</span>
-                    <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-red-500 animate-pulse" data-flux-heading="">
-                      LIVE
-                    </div>
-                  </div>
-                </div>
-              </div>
-</a>
-              <a aria-label="Women&#39;s Big Bash 2026" href="https://live.mhdtv.online/watch/womens-big-bash-2026-1793523117">              <div class="[:where(&amp;)]:bg-white dark:[:where(&amp;)]:bg-white/10 border border-zinc-200 dark:border-white/10 [:where(&amp;)]:p-6 [:where(&amp;)]:rounded-xl space-y-2" data-flux-card="">
-                <div>
-                  <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center! font-bold!" data-flux-heading="">
-                    Women&#39;s Big Bash 2026
-                  </div>
-                </div>
-                <div class="flex justify-around items-center gap-2">
-                  <div class="flex justify-center items-center flex-col gap-1">
-                    <div class="h-10 w-10 overflow-hidden bg-white border-2 border-accent/30 rounded-full shadow-xl">
-                      <img src="https://live.mhdtv.online/storage/images/events/blipKWCTNkCReBDvviuXCpLsyXBWAwe0oxdqycNI.jpg" alt="Big Bash" class="h-full w-full object-contain" />
-                    </div>
-                    <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center!" data-flux-heading="">
-                      Big Bash
-                    </div>
-                  </div>
-                  <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2" data-flux-heading="">
-                    VS
-                  </div>
-                  <div class="flex justify-center items-center flex-col gap-1">
-                    <div class="h-10 w-10 overflow-hidden bg-white border-2 border-accent/30 rounded-full shadow-xl">
-                      <img src="https://live.mhdtv.online/storage/images/events/7Po3KkwmxQ9ZmRSZs9qZwoh2r0LBVQ0mweplBGpW.jpg" alt="Big Bash" class="h-full w-full object-contain" />
-                    </div>
-                    <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center!" data-flux-heading="">
-                      Big Bash
-                    </div>
-                  </div>
-                </div>
-                <div class="event-info" data-start="2026-11-01T14:59:00">
-                  <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center! font-bold! event-datetime" data-datetime="2026-11-01T14:59:00" data-flux-heading="">
-                  </div>
-                  <div class="text-xs text-center text-muted-foreground mt-1 event-countdown-wrapper">
-                    <span class="countdown-label">                    Starts in:
-</span>
-                    <span class="event-countdown font-medium" data-start="2026-11-01T14:59:00">                    --:--:--
-</span>
-                  </div>
-                  <div class="flex items-center justify-center gap-2 event-live-badge hidden py-2">
-                    <span class="relative flex size-3">                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
-                    <span class="relative inline-flex size-3 rounded-full bg-red-500"></span>
-</span>
-                    <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-red-500 animate-pulse" data-flux-heading="">
-                      LIVE
-                    </div>
-                  </div>
-                </div>
-              </div>
-</a>
-              <!--[if ENDBLOCK]><![endif]-->
-            </div>
-          </div>
-        </section>
-        <section class="pb-5">
-          <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div>
-              <h2 class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 mb-4 lg:text-xl uppercase font-bold!" data-flux-heading="">
-                Live TV Channels
-              </h2>
-            </div>
-            <div class="grid grid-cols-2 md:grid-cols-6 lg:grid-cols-10 gap-4">
-              <!--[if BLOCK]><![endif]-->
-              <a aria-label="Latest on our blog" href="https://live.mhdtv.online/watch/sports-first">              <div class="[:where(&amp;)]:bg-white dark:[:where(&amp;)]:bg-white/10 border border-zinc-200 dark:border-white/10 [:where(&amp;)]:p-6 [:where(&amp;)]:rounded-xl space-y-6" data-flux-card="">
-                <div class="flex justify-center items-center flex-col gap-2">
-                  <div class="h-10 w-10 overflow-hidden bg-white  border-2 border-accent/30 rounded-full shadow-xl">
-                    <img src="https://live.mhdtv.online/storage/images/logos/R21IVfhy3rtP0wYFi1arN6C1c8xf2nkWXGflarlL.jpg" alt="SPORTS FIRST" class="h-full w-full object-contain" />
-                  </div>
-                  <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center!" data-flux-heading="">
-                    SPORTS FIRST
-                  </div>
-                </div>
-              </div>
-</a>
-              <a aria-label="Latest on our blog" href="https://live.mhdtv.online/watch/independent">              <div class="[:where(&amp;)]:bg-white dark:[:where(&amp;)]:bg-white/10 border border-zinc-200 dark:border-white/10 [:where(&amp;)]:p-6 [:where(&amp;)]:rounded-xl space-y-6" data-flux-card="">
-                <div class="flex justify-center items-center flex-col gap-2">
-                  <div class="h-10 w-10 overflow-hidden bg-white  border-2 border-accent/30 rounded-full shadow-xl">
-                    <img src="https://live.mhdtv.online/storage/images/logos/3uBpuuZQfVJF51PP3HTPzxxIzIwHWv6ZWBSTa8tM.png" alt="Independent" class="h-full w-full object-contain" />
-                  </div>
-                  <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center!" data-flux-heading="">
-                    Independent
-                  </div>
-                </div>
-              </div>
-</a>
-              <a aria-label="Latest on our blog" href="https://live.mhdtv.online/watch/tnt-sports">              <div class="[:where(&amp;)]:bg-white dark:[:where(&amp;)]:bg-white/10 border border-zinc-200 dark:border-white/10 [:where(&amp;)]:p-6 [:where(&amp;)]:rounded-xl space-y-6" data-flux-card="">
-                <div class="flex justify-center items-center flex-col gap-2">
-                  <div class="h-10 w-10 overflow-hidden bg-white  border-2 border-accent/30 rounded-full shadow-xl">
-                    <img src="https://live.mhdtv.online/storage/images/logos/7hyom6RdfyblRAoVw9UnXjlckIlHZFq0YFEKS897.jpg" alt="TNT Sports" class="h-full w-full object-contain" />
-                  </div>
-                  <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center!" data-flux-heading="">
-                    TNT Sports
-                  </div>
-                </div>
-              </div>
-</a>
-              <a aria-label="Latest on our blog" href="https://live.mhdtv.online/watch/bein-sports">              <div class="[:where(&amp;)]:bg-white dark:[:where(&amp;)]:bg-white/10 border border-zinc-200 dark:border-white/10 [:where(&amp;)]:p-6 [:where(&amp;)]:rounded-xl space-y-6" data-flux-card="">
-                <div class="flex justify-center items-center flex-col gap-2">
-                  <div class="h-10 w-10 overflow-hidden bg-white  border-2 border-accent/30 rounded-full shadow-xl">
-                    <img src="https://live.mhdtv.online/storage/images/logos/9v2l1HFshNm4qmP6MZlifjXbr7AvfDGKAOUVjJlD.png" alt="Bein Sports" class="h-full w-full object-contain" />
-                  </div>
-                  <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center!" data-flux-heading="">
-                    Bein Sports
-                  </div>
-                </div>
-              </div>
-</a>
-              <a aria-label="Latest on our blog" href="https://live.mhdtv.online/watch/dw">              <div class="[:where(&amp;)]:bg-white dark:[:where(&amp;)]:bg-white/10 border border-zinc-200 dark:border-white/10 [:where(&amp;)]:p-6 [:where(&amp;)]:rounded-xl space-y-6" data-flux-card="">
-                <div class="flex justify-center items-center flex-col gap-2">
-                  <div class="h-10 w-10 overflow-hidden bg-white  border-2 border-accent/30 rounded-full shadow-xl">
-                    <img src="https://live.mhdtv.online/storage/images/logos/5Ds25KUr7GcMW7e5WzfikGKTB2KfACjBCYS9B1wr.jpg" alt="DW" class="h-full w-full object-contain" />
-                  </div>
-                  <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center!" data-flux-heading="">
-                    DW
-                  </div>
-                </div>
-              </div>
-</a>
-              <a aria-label="Latest on our blog" href="https://live.mhdtv.online/watch/ntv">              <div class="[:where(&amp;)]:bg-white dark:[:where(&amp;)]:bg-white/10 border border-zinc-200 dark:border-white/10 [:where(&amp;)]:p-6 [:where(&amp;)]:rounded-xl space-y-6" data-flux-card="">
-                <div class="flex justify-center items-center flex-col gap-2">
-                  <div class="h-10 w-10 overflow-hidden bg-white  border-2 border-accent/30 rounded-full shadow-xl">
-                    <img src="https://live.mhdtv.online/storage/images/logos/Mzx5zwb7GGZNenn8YKe2jEhTUjFSUu15B3g0SwlU.png" alt="NTV" class="h-full w-full object-contain" />
-                  </div>
-                  <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center!" data-flux-heading="">
-                    NTV
-                  </div>
-                </div>
-              </div>
-</a>
-              <a aria-label="Latest on our blog" href="https://live.mhdtv.online/watch/satv">              <div class="[:where(&amp;)]:bg-white dark:[:where(&amp;)]:bg-white/10 border border-zinc-200 dark:border-white/10 [:where(&amp;)]:p-6 [:where(&amp;)]:rounded-xl space-y-6" data-flux-card="">
-                <div class="flex justify-center items-center flex-col gap-2">
-                  <div class="h-10 w-10 overflow-hidden bg-white  border-2 border-accent/30 rounded-full shadow-xl">
-                    <img src="https://live.mhdtv.online/storage/images/logos/AD8Z7vbMJywc9l9lzkzYtEY2aEaAXX6HWp5A4Bcx.jpg" alt="SATV" class="h-full w-full object-contain" />
-                  </div>
-                  <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center!" data-flux-heading="">
-                    SATV
-                  </div>
-                </div>
-              </div>
-</a>
-              <a aria-label="Latest on our blog" href="https://live.mhdtv.online/watch/somoy-tv">              <div class="[:where(&amp;)]:bg-white dark:[:where(&amp;)]:bg-white/10 border border-zinc-200 dark:border-white/10 [:where(&amp;)]:p-6 [:where(&amp;)]:rounded-xl space-y-6" data-flux-card="">
-                <div class="flex justify-center items-center flex-col gap-2">
-                  <div class="h-10 w-10 overflow-hidden bg-white  border-2 border-accent/30 rounded-full shadow-xl">
-                    <img src="https://live.mhdtv.online/storage/images/logos/2sEV8m0kihwuzgiJMWUOi4FQr5j15eOgMN14XyP8.png" alt="Somoy TV" class="h-full w-full object-contain" />
-                  </div>
-                  <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center!" data-flux-heading="">
-                    Somoy TV
-                  </div>
-                </div>
-              </div>
-</a>
-              <a aria-label="Latest on our blog" href="https://live.mhdtv.online/watch/deepto-tv">              <div class="[:where(&amp;)]:bg-white dark:[:where(&amp;)]:bg-white/10 border border-zinc-200 dark:border-white/10 [:where(&amp;)]:p-6 [:where(&amp;)]:rounded-xl space-y-6" data-flux-card="">
-                <div class="flex justify-center items-center flex-col gap-2">
-                  <div class="h-10 w-10 overflow-hidden bg-white  border-2 border-accent/30 rounded-full shadow-xl">
-                    <img src="https://live.mhdtv.online/storage/images/logos/19455rIwwRB2PSWn18EEGfQk2ERJESnHV3DJkLgH.jpg" alt="Deepto TV" class="h-full w-full object-contain" />
-                  </div>
-                  <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center!" data-flux-heading="">
-                    Deepto TV
-                  </div>
-                </div>
-              </div>
-</a>
-              <a aria-label="Latest on our blog" href="https://live.mhdtv.online/watch/cricbuzz">              <div class="[:where(&amp;)]:bg-white dark:[:where(&amp;)]:bg-white/10 border border-zinc-200 dark:border-white/10 [:where(&amp;)]:p-6 [:where(&amp;)]:rounded-xl space-y-6" data-flux-card="">
-                <div class="flex justify-center items-center flex-col gap-2">
-                  <div class="h-10 w-10 overflow-hidden bg-white  border-2 border-accent/30 rounded-full shadow-xl">
-                    <img src="https://live.mhdtv.online/storage/images/logos/tIOjmIiUu9G9KiygQIICe8pl7R6AcDbdKwofXVaQ.jpg" alt="CricBuzz" class="h-full w-full object-contain" />
-                  </div>
-                  <div class="font-medium [:where(&amp;)]:text-zinc-800 [:where(&amp;)]:dark:text-white text-sm [&amp;:has(+[data-flux-subheading])]:mb-2 [[data-flux-subheading]+&amp;]:mt-2 text-center!" data-flux-heading="">
-                    CricBuzz
-                  </div>
-                </div>
-              </div>
-</a>
-              <!--[if ENDBLOCK]><![endif]-->
-            </div>
-          </div>
-        </section>
-      </div>
-    </main>
-    <div x-persist="toast">
-      <ui-toast-group x-data="" x-on:toast-show.document="$el.showToast($event.detail)" popover="manual" position="bottom center" wire:ignore="">
-        <ui-toast x-data="" x-on:toast-show.document="! $el.closest(&#39;ui-toast-group&#39;) &amp;&amp; $el.showToast($event.detail)" popover="manual" position="bottom end" wire:ignore="">
-          <template>
-            <div class="max-w-sm in-[ui-toast-group]:max-w-auto in-[ui-toast-group]:w-xs sm:in-[ui-toast-group]:w-sm" data-variant="" data-flux-toast-dialog="">
-              <div class="p-2 flex rounded-xl shadow-lg bg-white border border-zinc-200 border-b-zinc-300/80 dark:bg-zinc-700 dark:border-zinc-600">
-                <div class="flex-1 flex items-start gap-4 overflow-hidden">
-                  <div class="flex-1 py-1.5 ps-2.5 flex gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="hidden [[data-flux-toast-dialog][data-variant=success]_&amp;]:block shrink-0 mt-0.5 size-4 text-lime-600 dark:text-lime-400">
-                      <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14Zm3.844-8.791a.75.75 0 0 0-1.188-.918l-3.7 4.79-1.649-1.833a.75.75 0 1 0-1.114 1.004l2.25 2.5a.75.75 0 0 0 1.15-.043l4.25-5.5Z" clip-rule="evenodd">
-                      </path>
+    <div class="w-full max-w-5xl flex flex-col gap-4 md:gap-6">
+        
+        <!-- Top Navigation Header -->
+        <header class="glass-panel w-full rounded-2xl px-4 sm:px-6 py-3.5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <!-- Brand Logo Icon -->
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#00ff6a] to-emerald-600 flex items-center justify-center text-black font-black text-xl shadow-lg shadow-[#00ff6a]/20">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
                     </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="hidden [[data-flux-toast-dialog][data-variant=warning]_&amp;]:block shrink-0 mt-0.5 size-4 text-amber-500 dark:text-amber-400">
-                      <path fill-rule="evenodd" d="M6.701 2.25c.577-1 2.02-1 2.598 0l5.196 9a1.5 1.5 0 0 1-1.299 2.25H2.804a1.5 1.5 0 0 1-1.3-2.25l5.197-9ZM8 4a.75.75 0 0 1 .75.75v3a.75.75 0 1 1-1.5 0v-3A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd">
-                      </path>
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="hidden [[data-flux-toast-dialog][data-variant=info]_&amp;]:block shrink-0 mt-0.5 size-4 text-cyan-500 dark:text-cyan-400">
-                      <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z" clip-rule="evenodd">
-                      </path>
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="hidden [[data-flux-toast-dialog][data-variant=danger]_&amp;]:block shrink-0 mt-0.5 size-4 text-rose-500 dark:text-rose-400">
-                      <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14ZM8 4a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-1.5 0v-3A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd">
-                      </path>
-                    </svg>
-                    <div>
-                      <div class="font-medium text-sm text-zinc-800 dark:text-white [&amp;:not(:empty)+div]:font-normal [&amp;:not(:empty)+div]:text-zinc-500 [&amp;:not(:empty)+div]:dark:text-zinc-300 [&amp;:not(:empty)]:pb-2">
-                        <slot name="heading">
-                        </slot>
-                      </div>
-                      <div class="font-medium text-sm text-zinc-800 dark:text-white">
-                        <slot name="text">
-                        </slot>
-                      </div>
-                      <template name="link">
-                        <a class="block mt-2 font-medium text-sm text-[var(--color-accent-content)] decoration-[color-mix(in_oklab,var(--color-accent-content),transparent_80%)] underline underline-offset-[6px] hover:decoration-current">                        <slot name="text">
-                        </slot>
-</a>
-                      </template>
+                </div>
+
+                <div class="flex flex-col">
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-xl sm:text-2xl font-black tracking-tight leading-none uppercase">
+                            Prigames <span class="text-[#00ff6a]">Sports</span>
+                        </h1>
+                        <span class="text-[10px] bg-[#ff0055]/20 text-[#ff3377] border border-[#ff0055]/30 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider flex items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#ff0055] animate-pulse"></span>
+                            Live
+                        </span>
                     </div>
-                  </div>
-                  <ui-close class="flex items-center">
-                    <button type="button" class="inline-flex items-center font-medium justify-center gap-2 truncate disabled:opacity-50 dark:disabled:opacity-75 disabled:cursor-default h-8 text-sm rounded-md w-8 bg-transparent hover:bg-zinc-800/5 dark:hover:bg-white/15 text-zinc-400 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-white" as="button">
-                      <div>
-                        <svg class="[:where(&amp;)]:size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                          <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z">
-                          </path>
+                    <div class="flex items-center gap-2 mt-1">
+                        <span class="flex h-2 w-2 relative">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ff6a] opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#00ff6a]"></span>
+                        </span>
+                        <span class="text-[11px] text-zinc-400 font-medium tracking-wide">Turbo Stream Engine</span>
+                        <span class="text-zinc-600 text-[10px]">•</span>
+                        <span id="header-server-tag" class="text-[11px] text-[#00ff6a] font-semibold mono-font">SERVER 1 ACTIVE</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Controls (Ad-Shield Toggle, Theatre & Fullscreen) -->
+            <div class="flex items-center gap-2">
+                <!-- Built-in Popup/Ad Shield Toggle -->
+                <button 
+                    onclick="toggleAdShield()" 
+                    id="adshield-btn"
+                    title="Blocks popups and redirect scripts inside stream iframes" 
+                    class="bg-[#00ff6a]/15 text-[#00ff6a] border border-[#00ff6a]/30 hover:bg-[#00ff6a]/25 px-2.5 py-2 rounded-xl active:scale-95 transition-all hidden sm:flex items-center gap-1.5 text-xs font-bold">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <span id="adshield-label">Shield: ON</span>
+                </button>
+
+                <button 
+                    onclick="toggleTheatre()" 
+                    id="theatre-btn"
+                    title="Toggle Wide/Theatre Mode" 
+                    class="bg-white/5 hover:bg-white/10 text-white/80 hover:text-white p-2.5 rounded-xl border border-white/10 active:scale-95 transition-all hidden md:flex items-center gap-1.5 text-xs font-semibold">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="4" width="20" height="16" rx="3"/>
+                        <path d="M7 8h10v8H7z" fill="rgba(255,255,255,0.15)"/>
+                    </svg>
+                    <span>Theatre</span>
+                </button>
+
+                <button 
+                    onclick="toggleFS()" 
+                    title="Fullscreen Mode" 
+                    class="bg-white/5 hover:bg-white/10 text-white/80 hover:text-white p-2.5 rounded-xl border border-white/10 active:scale-95 transition-all flex items-center gap-1.5 text-xs font-semibold">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                    </svg>
+                    <span class="hidden sm:inline">Fullscreen</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Video Streaming Box -->
+        <main class="w-full flex flex-col items-center">
+            <div id="player-container" class="player-frame-wrapper w-full">
+
+                <!-- Stream Loading Overlay -->
+                <div id="player-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#07090c]/90 backdrop-blur-sm z-20 transition-opacity duration-200">
+                    <div class="relative w-12 h-12 mb-3">
+                        <div class="absolute inset-0 rounded-full border-4 border-white/10"></div>
+                        <div class="absolute inset-0 rounded-full border-4 border-t-[#00ff6a] border-r-[#00ff6a] animate-spin"></div>
+                    </div>
+                    <p class="text-xs font-bold text-white/90 uppercase tracking-widest mono-font flex items-center gap-1.5">
+                        <span>Connecting Stream</span>
+                        <span class="animate-pulse">...</span>
+                    </p>
+                    <button onclick="hideLoader()" class="mt-3 bg-white/10 hover:bg-white/20 text-white/80 hover:text-white text-[10px] uppercase font-bold tracking-wider px-3 py-1.5 rounded-lg border border-white/10 transition-all">
+                        Show Player Now
+                    </button>
+                </div>
+
+                <!-- Server 3 Custom URL Form Setup Modal / Overlay -->
+                <div id="custom-setup-overlay" class="absolute inset-0 flex flex-col items-center justify-center bg-zinc-950/95 p-6 text-center z-10 hidden">
+                    <div class="max-w-md w-full flex flex-col items-center gap-4">
+                        <div class="w-14 h-14 rounded-2xl bg-[#00ff6a]/10 flex items-center justify-center border border-[#00ff6a]/30 text-[#00ff6a]">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-black uppercase tracking-tight text-white">Custom Backup Server</h3>
+                            <p class="text-xs text-zinc-400 mt-1 max-w-sm mx-auto">
+                                Enter a live stream URL, web page, or HLS/iframe embed to broadcast on Server 3.
+                            </p>
+                        </div>
+                        <div class="w-full flex flex-col sm:flex-row gap-2 mt-2">
+                            <input 
+                                type="url" 
+                                id="custom-url-input" 
+                                placeholder="https://example.com/stream-link" 
+                                class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-[#00ff6a]/50 focus:border-[#00ff6a] text-white placeholder-zinc-500 mono-font"
+                            >
+                            <button onclick="saveCustomServer()" class="bg-[#00ff6a] hover:bg-[#00e65f] text-black font-extrabold px-6 py-3 rounded-xl text-xs uppercase tracking-wider active:scale-95 transition-all shadow-md shadow-[#00ff6a]/20">
+                                Connect
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Container for Live Stream Video Frame -->
+                <div id="iframe-mount" class="w-full h-full"></div>
+            </div>
+        </main>
+
+        <!-- Server Selector Hub -->
+        <section class="glass-panel p-4 rounded-2xl flex flex-col gap-3">
+            <div class="flex items-center justify-between px-1">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-[#00ff6a]"></span>
+                    <span class="text-[11px] text-white/50 uppercase font-black tracking-widest">Select Streaming Server</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="text-[10px] text-zinc-400">Active:</span>
+                    <span id="active-server-badge" class="text-[10px] bg-[#00ff6a]/15 text-[#00ff6a] border border-[#00ff6a]/30 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider mono-font">
+                        Server 1
+                    </span>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                <!-- Server 1 (TNT Sports 2) -->
+                <button 
+                    onclick="switchServer(1)" 
+                    id="srv-btn-1" 
+                    class="py-3 px-3 rounded-xl text-xs font-bold uppercase tracking-wider bg-[#00ff6a] text-black text-center transition-all flex items-center justify-between shadow-lg shadow-[#00ff6a]/15">
+                    <span class="flex items-center gap-2 font-black">
+                        <span class="w-2 h-2 rounded-full bg-black"></span>
+                        TNT Sports 2
+                    </span>
+                    <span class="text-[10px] opacity-80 font-bold">HD</span>
+                </button>
+
+                <!-- Server 2 -->
+                <button 
+                    onclick="switchServer(2)" 
+                    id="srv-btn-2" 
+                    class="py-3 px-3 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/5 text-white/70 hover:bg-white/10 hover:text-white border border-white/5 text-center transition-all flex items-center justify-between">
+                    <span class="flex items-center gap-2 font-black">
+                        <span class="w-2 h-2 rounded-full bg-zinc-500"></span>
+                        Sony Sports
+                    </span>
+                    <span class="text-[10px] text-[#00ff6a] font-bold">SONY</span>
+                </button>
+
+                <!-- Server 3 -->
+                <button 
+                    onclick="switchServer(3)" 
+                    id="srv-btn-3" 
+                    class="py-3 px-3 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/5 text-white/70 hover:bg-white/10 hover:text-white border border-white/5 text-center transition-all flex items-center justify-between">
+                    <span class="flex items-center gap-2 font-black">
+                        <span class="w-2 h-2 rounded-full bg-zinc-500"></span>
+                        Server 3
+                    </span>
+                    <span id="srv3-indicator" class="text-[10px] text-zinc-400 font-bold">Backup</span>
+                </button>
+
+                <!-- Server 4 (Willow 2 by Cricbuzz) -->
+                <button 
+                    onclick="switchServer(4)" 
+                    id="srv-btn-4" 
+                    class="py-3 px-3 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/5 text-white/70 hover:bg-white/10 hover:text-white border border-white/5 text-center transition-all flex items-center justify-between">
+                    <span class="flex items-center gap-2 font-black">
+                        <span class="w-2 h-2 rounded-full bg-zinc-500"></span>
+                        Willow 2
+                    </span>
+                    <span class="text-[10px] text-[#00ff6a] font-bold">HD</span>
+                </button>
+            </div>
+
+            <!-- Kid-Friendly / Easy Popup & Ad Blocker Toggle Card -->
+            <div class="bg-white/[0.03] border border-white/10 rounded-xl p-3 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <div id="shield-icon-box" class="w-10 h-10 rounded-xl bg-[#00ff6a]/15 border border-[#00ff6a]/30 text-[#00ff6a] flex items-center justify-center shrink-0 transition-colors">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <path d="M9 12l2 2 4-4"/>
                         </svg>
-                      </div>
-                    </button>
-                  </ui-close>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs sm:text-sm font-extrabold text-white">Popup & Ad Blocker</span>
+                            <span id="shield-status-pill" class="text-[10px] bg-[#00ff6a]/20 text-[#00ff6a] px-2 py-0.5 rounded-full font-extrabold uppercase tracking-wide">ON</span>
+                        </div>
+                        <p id="shield-helper-text" class="text-[11px] text-zinc-400 leading-snug mt-0.5">
+                            Blocks annoying popups automatically. <span class="text-zinc-200 font-semibold">Turn OFF if a video refuses to play.</span>
+                        </p>
+                    </div>
                 </div>
-              </div>
+
+                <!-- Large Easy-to-Tap Switch -->
+                <button 
+                    type="button"
+                    role="switch"
+                    aria-checked="true"
+                    onclick="toggleAdShield()" 
+                    id="adshield-switch"
+                    class="relative inline-flex h-8 w-14 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-[#00ff6a] transition-colors duration-200 ease-in-out focus:outline-none active:scale-95">
+                    <span class="sr-only">Toggle Popup Blocker</span>
+                    <span id="adshield-knob" class="pointer-events-none inline-block h-7 w-7 transform rounded-full bg-black shadow-md ring-0 transition duration-200 ease-in-out translate-x-6"></span>
+                </button>
             </div>
-          </template>
-        </ui-toast>
-      </ui-toast-group>
+        </section>
+
+        <!-- DYNAMIC CHANNEL SCOREBOARD & HIGHLIGHTS SECTION -->
+        <section class="glass-panel p-4 sm:p-6 rounded-2xl flex flex-col gap-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3.5">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-3 h-3 rounded-full bg-[#00ff6a] animate-pulse"></div>
+                    <div>
+                        <h2 class="text-sm font-extrabold tracking-wider uppercase text-white" id="scorecard-main-title">TNT Sports 2 Live Match Center</h2>
+                        <p class="text-[11px] text-zinc-400" id="scorecard-sub-title">UEFA Champions League • Live Football Match</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <!-- Mode Toggle: Live Scorecard vs Highlights Feed -->
+                    <div class="bg-white/5 border border-white/10 p-1 rounded-xl flex items-center gap-1">
+                        <button onclick="setChannelMode('live')" id="mode-btn-live" class="px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#00ff6a] text-black transition-all">
+                            Live Score
+                        </button>
+                        <button onclick="setChannelMode('highlights')" id="mode-btn-highlights" class="px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider text-zinc-400 hover:text-white transition-all">
+                            Highlights
+                        </button>
+                    </div>
+                    <button onclick="refreshLiveScorecard()" class="text-[11px] bg-[#00ff6a]/15 text-[#00ff6a] hover:bg-[#00ff6a]/25 px-3 py-2 rounded-xl border border-[#00ff6a]/30 transition-all font-bold uppercase tracking-wider">
+                        Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- DYNAMIC SCOREBOARD OR HIGHLIGHTS CONTAINER -->
+            <div id="scoreboard-content" class="flex flex-col gap-4 transition-all duration-300">
+                <!-- Javascript injects content here -->
+            </div>
+        </section>
+
+        <!-- Social Action Buttons & Stream Controls -->
+        <footer class="flex flex-col gap-3 w-full pb-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <a href="https://t.me/prigames" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white py-3.5 px-4 rounded-xl font-bold uppercase text-xs flex items-center justify-center gap-2.5 active:scale-95 transition-all shadow-lg shadow-sky-500/20">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.69-.52.35-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.24.35-.49.96-.75 3.78-1.65 6.31-2.74 7.58-3.27 3.61-1.5 4.35-1.76 4.84-1.77.11 0 .35.03.51.16.13.11.17.26.18.37 0 .04 0 .09-.01.13z"/>
+                    </svg>
+                    <span>Join Official Telegram Channel</span>
+                </a>
+                
+                <button onclick="shareStream()" class="bg-[#00ff6a] hover:bg-[#00e65f] text-black py-3.5 px-4 rounded-xl font-black uppercase text-xs flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-[#00ff6a]/20">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/>
+                    </svg>
+                    <span>Share Live Stream</span>
+                </button>
+            </div>
+
+            <!-- Broadcaster Meta & Stream Tools -->
+            <div class="glass-panel p-3.5 sm:p-4 rounded-2xl flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-base font-black text-[#00ff6a]">
+                        ⚡
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-zinc-400 uppercase font-bold tracking-wider leading-none">Official Broadcaster</span>
+                        <span class="text-sm font-extrabold text-white mt-1">Prigames Sports Network</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button 
+                        id="reset-custom-btn" 
+                        onclick="resetCustomServer()" 
+                        class="bg-white/5 hover:bg-white/10 text-white/80 hover:text-white px-3 py-2 rounded-xl border border-white/10 transition-all flex items-center gap-1.5 text-xs font-semibold" 
+                        title="Configure custom server 3">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                        </svg>
+                        <span class="hidden sm:inline">Server URL</span>
+                    </button>
+
+                    <button 
+                        onclick="refreshStream()" 
+                        title="Reconnect Stream" 
+                        class="bg-white/5 hover:bg-white/10 text-white/80 hover:text-white p-2.5 rounded-xl border border-white/10 hover:border-white/20 transition-all active:scale-95 flex items-center justify-center">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </footer>
     </div>
-    <footer class="border-t border-zinc-300 dark:border-zinc-500 px-4 py-4 sm:px-8 lg:px-12">
-      <div class="mx-auto max-w-[1600px]">
-        <div class="text-center">
-          <p>
-            © 2026 MHDTV - Watch Live TV, Movies, and Shows Online. All rights reserved.
-          </p>
-        </div>
-      </div>
-    </footer>
-    <script src="https://live.mhdtv.online/flux/flux.min.js?id=f705ecf0" data-navigate-once="">
-    </script>
-    <!-- Global footer code come from backend -->
-    <script src="https://braverybreezebinding.com/fb/2c/0c/fb2c0c051c4610824b2cb2c55c77ef79.js">
-    </script>
-    <!-- Global js code come from backend -->
+
+    <!-- Notification Toast Popup -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-zinc-900 border border-white/20 text-white px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider opacity-0 translate-y-6 transition-all duration-300 z-50 pointer-events-none shadow-2xl flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-[#00ff6a]"></span>
+        <span id="toast-msg">Server Loaded</span>
+    </div>
+
     <script>
-      if (&#39;serviceWorker&#39; in navigator) {
-        window.addEventListener(&#39;load&#39;, () =&gt; {
-            navigator.serviceWorker.register(&#39;/sw.js&#39;).catch(() =&gt; {});
+        // Server URL Configurations
+        const SERVERS = {
+            1: "https://webcric.im/frame1.htm", // TNT Sports 2 (Football Live / Match Highlights)
+            2: "https://trendy48.online/live-tv?ch=sonysportsnetwork-in",
+            3: "https://freecdn.st/hembedplayer/csstream1/1/960/540",
+            4: "https://webcric.im/frame4.htm"  // Willow 2 (England vs Pakistan Test Match)
+        };
+
+        const SERVER_NAMES = {
+            1: "TNT Sports 2",
+            2: "Sony Sports",
+            3: "Server 3",
+            4: "Willow 2 by Cricbuzz"
+        };
+
+        let currentChannelMode = 'live'; // 'live' or 'highlights'
+
+        // Match Data mapped for both channels (Live and Highlights modes)
+        const CHANNEL_DATA = {
+            tnt2: {
+                title: "TNT Sports 2 Broadcast Hub",
+                subtitle: "UEFA Champions League • Group Stage Live Feed",
+                live: {
+                    teams: "Arsenal vs AC Milan",
+                    statusBadge: "Live • 2nd Half (78')",
+                    statusColor: "bg-blue-500/20 text-blue-400 border border-blue-500/30",
+                    scoreHeader: "2 - 1",
+                    subScore: "Agg: 3-2 • Possession: 54% - 46%",
+                    summaryText: "Bukayo Saka scores a stunning curling strike into the top corner in the 72nd minute to put Arsenal ahead!",
+                    keyStats: [
+                        { label: "Shots on Target", val1: "7", val2: "4" },
+                        { label: "Corner Kicks", val1: "6", val2: "3" },
+                        { label: "Yellow Cards", val1: "1", val2: "2" },
+                        { label: "Fouls Committed", val1: "9", val2: "11" }
+                    ],
+                    events: [
+                        { time: "78'", desc: "Substitution for Milan: Pulisic comes on for Okafor." },
+                        { time: "72'", desc: "⚽ GOAL! Arsenal 2-1 AC Milan (Bukayo Saka)." },
+                        { time: "58'", desc: "🟡 Yellow card shown to Fikayo Tomori (Milan)." },
+                        { time: "46'", desc: "Second half kicks off at Emirates Stadium." },
+                        { time: "34'", desc: "⚽ GOAL! AC Milan equalizes via Rafael Leão." },
+                        { time: "12'", desc: "⚽ GOAL! Arsenal opens scoring through Gabriel Jesus." }
+                    ]
+                },
+                highlights: {
+                    title: "TNT Sports 2 • Match Highlights Reel",
+                    desc: "Catch up on all goals, controversial VAR decisions, and post-match analysis from tonight's blockbuster UEFA fixtures.",
+                    timeline: [
+                        { time: "00:00 - 05:00", event: "Opening whistle and high-intensity early pressing from Arsenal." },
+                        { time: "12:00", event: "Gabriel Jesus clinical tap-in goal assist by Martin Ødegaard." },
+                        { time: "34:00", event: "Rafael Leão counter-attack equalizer past David Raya." },
+                        { time: "72:00", event: "Goal of the night: Bukayo Saka top-bins curler (2-1)." },
+                        { time: "FT", event: "Full-time whistle: Arsenal takes crucial 3 points home." }
+                    ]
+                }
+            },
+            willow2: {
+                title: "Willow 2 Live Match Center",
+                subtitle: "England tour of Pakistan • 1st Test, Day 3 (Multan)",
+                live: {
+                    teams: "England vs Pakistan",
+                    statusBadge: "Test Day 3 • Tea Break",
+                    statusColor: "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30",
+                    battingTeam: "England (1st Innings)",
+                    score: "412/6",
+                    overs: "98.4 Ov",
+                    runRate: "4.18",
+                    extras: "18 (b 4, lb 8, w 4, nb 2)",
+                    target: "Lead by 84 runs",
+                    batters: [
+                        { name: "Joe Root", runs: 142, balls: 210, fours: 14, sixes: 1, strikeRate: "67.61", status: "batting*" },
+                        { name: "Ben Stokes", runs: 56, balls: 72, fours: 7, sixes: 2, strikeRate: "77.77", status: "batting*" },
+                        { name: "Zak Crawley", runs: 88, balls: 115, fours: 12, sixes: 0, strikeRate: "76.52", status: "c Rizwan b Shaheen" },
+                        { name: "Ben Duckett", runs: 44, balls: 58, fours: 8, sixes: 0, strikeRate: "75.86", status: "lbw b Abrar" }
+                    ],
+                    yetToBat: ["Harry Brook", "Jamie Smith", "Chris Woakes", "Gus Atkinson", "Jack Leach", "Shoaib Bashir"],
+                    bowlers: [
+                        { name: "Shaheen Afridi", overs: 22.0, maidens: 3, runs: 94, wickets: 2, economy: "4.27" },
+                        { name: "Naseem Shah", overs: 20.0, maidens: 2, runs: 88, wickets: 1, economy: "4.40" },
+                        { name: "Abrar Ahmed", overs: 28.0, maidens: 1, runs: 124, wickets: 2, economy: "4.42" },
+                        { name: "Agha Salman", overs: 14.0, maidens: 1, runs: 62, wickets: 0, economy: "4.42" },
+                        { name: "Amer Jamal", overs: 14.4, maidens: 1, runs: 36, wickets: 1, economy: "2.45" }
+                    ]
+                },
+                highlights: {
+                    title: "Willow 2 • Test Match Highlights & Replays",
+                    desc: "Extended highlights of Day 2 and morning session masterclass by Joe Root and Zak Crawley in Multan.",
+                    timeline: [
+                        { time: "Session 1", event: "Crawley and Duckett quickfire opening stand of 100 runs." },
+                        { time: "Session 2", event: "Joe Root brings up his magnificent Test Century with a sweep shot." },
+                        { time: "Milestone", event: "Ben Stokes counter-attacks with consecutive sixes off Abrar Ahmed." }
+                    ]
+                }
+            }
+        };
+
+        let currentActiveServer = 1;
+        let adShieldEnabled = true; 
+        let loaderTimeout = null;
+
+        function hideLoader() {
+            clearTimeout(loaderTimeout);
+            const loader = document.getElementById('player-loader');
+            if (!loader || loader.style.display === 'none') return;
+            
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 200);
+        }
+
+        function showLoader() {
+            clearTimeout(loaderTimeout);
+            const loader = document.getElementById('player-loader');
+            loader.style.display = 'flex';
+            void loader.offsetWidth;
+            loader.style.opacity = '1';
+
+            loaderTimeout = setTimeout(() => {
+                hideLoader();
+            }, 1800);
+        }
+
+        function mountStreamFrame(url) {
+            const mount = document.getElementById('iframe-mount');
+            mount.innerHTML = '';
+
+            const iframe = document.createElement('iframe');
+            iframe.id = 'stream';
+            iframe.src = url;
+            iframe.allow = 'autoplay; encrypted-media; fullscreen; picture-in-picture';
+            iframe.allowFullscreen = true;
+            iframe.scrolling = 'no';
+            iframe.loading = 'eager';
+            iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+
+            if (adShieldEnabled) {
+                iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-presentation');
+            }
+
+            iframe.onload = () => hideLoader();
+            iframe.onerror = () => hideLoader();
+
+            mount.appendChild(iframe);
+        }
+
+        function toggleAdShield() {
+            adShieldEnabled = !adShieldEnabled;
+            const sw = document.getElementById('adshield-switch');
+            const knob = document.getElementById('adshield-knob');
+            const pill = document.getElementById('shield-status-pill');
+            const iconBox = document.getElementById('shield-icon-box');
+            const helperText = document.getElementById('shield-helper-text');
+            const btnLabel = document.getElementById('adshield-label');
+
+            sw.setAttribute('aria-checked', adShieldEnabled ? 'true' : 'false');
+
+            if (adShieldEnabled) {
+                sw.classList.remove('bg-zinc-700');
+                sw.classList.add('bg-[#00ff6a]');
+                knob.classList.remove('translate-x-0', 'bg-white');
+                knob.classList.add('translate-x-6', 'bg-black');
+                
+                pill.innerText = 'ON';
+                pill.className = 'text-[10px] bg-[#00ff6a]/20 text-[#00ff6a] px-2 py-0.5 rounded-full font-extrabold uppercase tracking-wide';
+                iconBox.className = 'w-10 h-10 rounded-xl bg-[#00ff6a]/15 border border-[#00ff6a]/30 text-[#00ff6a] flex items-center justify-center shrink-0 transition-colors';
+                helperText.innerHTML = 'Blocks annoying popups automatically. <span class="text-zinc-200 font-semibold">Turn OFF if a video refuses to play.</span>';
+                btnLabel.innerText = "Shield: ON";
+                showToast("Popup Blocker Turned ON");
+            } else {
+                sw.classList.remove('bg-[#00ff6a]');
+                sw.classList.add('bg-zinc-700');
+                knob.classList.remove('translate-x-6', 'bg-black');
+                knob.classList.add('translate-x-0', 'bg-white');
+                
+                pill.innerText = 'OFF';
+                pill.className = 'text-[10px] bg-zinc-700/60 text-zinc-300 px-2 py-0.5 rounded-full font-extrabold uppercase tracking-wide';
+                iconBox.className = 'w-10 h-10 rounded-xl bg-white/5 border border-white/10 text-zinc-400 flex items-center justify-center shrink-0 transition-colors';
+                helperText.innerHTML = 'Normal video mode active. <span class="text-zinc-200 font-semibold">Turn ON to block popups again.</span>';
+                btnLabel.innerText = "Shield: OFF";
+                showToast("Popup Blocker Turned OFF");
+            }
+
+            if (SERVERS[currentActiveServer]) {
+                showLoader();
+                mountStreamFrame(SERVERS[currentActiveServer]);
+            }
+        }
+
+        function setChannelMode(mode) {
+            currentChannelMode = mode;
+            const liveBtn = document.getElementById('mode-btn-live');
+            const hlBtn = document.getElementById('mode-btn-highlights');
+
+            if (mode === 'live') {
+                liveBtn.className = "px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#00ff6a] text-black transition-all";
+                hlBtn.className = "px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider text-zinc-400 hover:text-white transition-all";
+                showToast("Switched to Live Match Score");
+            } else {
+                hlBtn.className = "px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-[#00ff6a] text-black transition-all";
+                liveBtn.className = "px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider text-zinc-400 hover:text-white transition-all";
+                showToast("Switched to Highlights Mode");
+            }
+
+            renderActivePanel();
+        }
+
+        function renderActivePanel() {
+            const key = (currentActiveServer === 4) ? 'willow2' : 'tnt2';
+            const channel = CHANNEL_DATA[key];
+            
+            document.getElementById('scorecard-main-title').innerText = channel.title;
+            document.getElementById('scorecard-sub-title').innerText = channel.subtitle;
+
+            const container = document.getElementById('scoreboard-content');
+
+            if (currentChannelMode === 'highlights') {
+                // Render Highlights running mode
+                let timelineHtml = channel.highlights.timeline.map(t => `
+                    <div class="flex items-start gap-3 bg-white/5 border border-white/5 p-3 rounded-xl">
+                        <span class="text-xs font-mono font-bold text-[#00ff6a] bg-[#00ff6a]/10 px-2 py-0.5 rounded">${t.time}</span>
+                        <span class="text-xs text-zinc-200 font-medium">${t.event}</span>
+                    </div>
+                `).join('');
+
+                container.innerHTML = `
+                    <div class="bg-gradient-to-r from-amber-500/10 via-zinc-900/80 to-black/80 border border-amber-500/20 rounded-2xl p-4 sm:p-5 flex flex-col gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded font-extrabold uppercase">Highlights Replay Active</span>
+                            <span class="text-xs text-zinc-400 font-bold">${channel.highlights.title}</span>
+                        </div>
+                        <p class="text-xs text-zinc-300">${channel.highlights.desc}</p>
+                    </div>
+                    <div class="flex flex-col gap-2.5">
+                        <span class="text-xs font-black uppercase tracking-wider text-zinc-400 px-1">Running Timeline & Key Moments</span>
+                        ${timelineHtml}
+                    </div>
+                `;
+            } else {
+                // Render Live Score mode (Football for TNT Sports 2, Cricket for Willow 2)
+                if (key === 'tnt2') {
+                    let statsHtml = channel.live.keyStats.map(s => `
+                        <div class="flex items-center justify-between py-2 border-b border-white/5 text-xs">
+                            <span class="text-zinc-400">${s.val1}</span>
+                            <span class="font-bold text-white">${s.label}</span>
+                            <span class="text-zinc-400">${s.val2}</span>
+                        </div>
+                    `).join('');
+
+                    let eventsHtml = channel.live.events.map(e => `
+                        <div class="flex items-center gap-3 bg-white/5 border border-white/5 px-3 py-2.5 rounded-xl text-xs">
+                            <span class="font-mono font-bold text-[#00ff6a]">${e.time}</span>
+                            <span class="text-zinc-200">${e.desc}</span>
+                        </div>
+                    `).join('');
+
+                    container.innerHTML = `
+                        <div class="bg-gradient-to-r from-blue-600/20 via-zinc-900/80 to-black/80 border border-blue-500/30 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div class="flex flex-col gap-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-black uppercase text-zinc-400">${channel.live.teams}</span>
+                                    <span class="text-[10px] ${channel.live.statusColor} font-extrabold px-2 py-0.5 rounded uppercase tracking-wider">${channel.live.statusBadge}</span>
+                                </div>
+                                <h3 class="text-lg sm:text-xl font-black text-white">${channel.live.summaryText}</h3>
+                            </div>
+                            <div class="bg-white/5 px-5 py-3 rounded-xl border border-white/5 text-center">
+                                <span class="text-3xl font-black text-white mono-font tracking-tight">${channel.live.scoreHeader}</span>
+                                <p class="text-[11px] text-zinc-400 mt-0.5">${channel.live.subScore}</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-4 flex flex-col gap-2">
+                                <span class="text-xs font-black uppercase tracking-wider text-zinc-400">Match Statistics</span>
+                                <div class="flex flex-col mt-1">
+                                    ${statsHtml}
+                                </div>
+                            </div>
+
+                            <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-4 flex flex-col gap-2">
+                                <span class="text-xs font-black uppercase tracking-wider text-zinc-400">Key Match Events</span>
+                                <div class="flex flex-col gap-2 mt-1">
+                                    ${eventsHtml}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Willow 2 Cricket Scorecard
+                    let battersHtml = channel.live.batters.map(b => `
+                        <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+                            <td class="py-2.5 px-3 font-bold text-white flex items-center gap-1.5">
+                                <span>${b.name}</span>
+                                <span class="text-[10px] text-zinc-400 font-normal">(${b.status})</span>
+                            </td>
+                            <td class="py-2.5 px-2 text-right font-black text-white mono-font text-xs">${b.runs}</td>
+                            <td class="py-2.5 px-2 text-right text-zinc-400 mono-font text-xs">${b.balls}</td>
+                            <td class="py-2.5 px-2 text-right text-zinc-400 mono-font text-xs">${b.fours}</td>
+                            <td class="py-2.5 px-2 text-right text-zinc-400 mono-font text-xs">${b.sixes}</td>
+                            <td class="py-2.5 px-3 text-right text-[#00ff6a] mono-font font-bold text-xs">${b.strikeRate}</td>
+                        </tr>
+                    `).join('');
+
+                    let bowlersHtml = channel.live.bowlers.map(bo => `
+                        <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+                            <td class="py-2.5 px-3 font-bold text-white">${bo.name}</td>
+                            <td class="py-2.5 px-2 text-right text-zinc-300 mono-font text-xs">${bo.overs}</td>
+                            <td class="py-2.5 px-2 text-right text-zinc-400 mono-font text-xs">${bo.maidens}</td>
+                            <td class="py-2.5 px-2 text-right text-white mono-font text-xs">${bo.runs}</td>
+                            <td class="py-2.5 px-2 text-right font-black text-[#00ff6a] mono-font text-xs">${bo.wickets}</td>
+                            <td class="py-2.5 px-3 text-right text-zinc-400 mono-font text-xs">${bo.economy}</td>
+                        </tr>
+                    `).join('');
+
+                    let yetToBatHtml = channel.live.yetToBat.map(p => `<span class="bg-white/5 border border-white/10 px-2.5 py-1 rounded-lg text-zinc-300 text-xs font-semibold">${p}</span>`).join('');
+
+                    container.innerHTML = `
+                        <div class="bg-gradient-to-r from-black/80 via-zinc-900/80 to-black/80 border border-white/10 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div class="flex flex-col gap-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-black uppercase text-zinc-400">${channel.live.teams}</span>
+                                    <span class="text-[10px] ${channel.live.statusColor} font-extrabold px-2 py-0.5 rounded uppercase tracking-wider">${channel.live.statusBadge}</span>
+                                </div>
+                                <h3 class="text-lg sm:text-xl font-black text-white">${channel.live.battingTeam}</h3>
+                            </div>
+                            <div class="flex items-center gap-4 bg-white/5 px-4 py-3 rounded-xl border border-white/5">
+                                <div class="flex flex-col text-right">
+                                    <span class="text-2xl sm:text-3xl font-black text-white mono-font tracking-tight">${channel.live.score}</span>
+                                    <span class="text-xs text-zinc-400 mono-font">${channel.live.overs} • RR: ${channel.live.runRate}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white/[0.02] border border-white/10 rounded-2xl overflow-hidden">
+                            <div class="bg-white/5 px-4 py-2.5 border-b border-white/10 flex items-center justify-between">
+                                <span class="text-xs font-black uppercase tracking-wider text-white">Batting Scorecard</span>
+                                <span class="text-[11px] text-zinc-400">Extras: ${channel.live.extras}</span>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse text-xs">
+                                    <thead>
+                                        <tr class="border-b border-white/10 text-zinc-400 uppercase font-bold text-[10px]">
+                                            <th class="py-2 px-3">Batter</th>
+                                            <th class="py-2 px-2 text-right">R</th>
+                                            <th class="py-2 px-2 text-right">B</th>
+                                            <th class="py-2 px-2 text-right">4s</th>
+                                            <th class="py-2 px-2 text-right">6s</th>
+                                            <th class="py-2 px-3 text-right">SR</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>${battersHtml}</tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="bg-white/[0.02] border border-white/10 rounded-2xl overflow-hidden">
+                            <div class="bg-white/5 px-4 py-2.5 border-b border-white/10">
+                                <span class="text-xs font-black uppercase tracking-wider text-white">Bowling Figures</span>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse text-xs">
+                                    <thead>
+                                        <tr class="border-b border-white/10 text-zinc-400 uppercase font-bold text-[10px]">
+                                            <th class="py-2 px-3">Bowler</th>
+                                            <th class="py-2 px-2 text-right">O</th>
+                                            <th class="py-2 px-2 text-right">M</th>
+                                            <th class="py-2 px-2 text-right">R</th>
+                                            <th class="py-2 px-2 text-right">W</th>
+                                            <th class="py-2 px-3 text-right">Eco</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>${bowlersHtml}</tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-4 flex flex-col gap-2">
+                            <span class="text-[11px] font-black uppercase tracking-wider text-zinc-400">Yet to Bat</span>
+                            <div class="flex flex-wrap gap-1.5 mt-1">${yetToBatHtml}</div>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function switchServer(index) {
+            currentActiveServer = index;
+            const customOverlay = document.getElementById('custom-setup-overlay');
+            const activeBadge = document.getElementById('active-server-badge');
+            const headerTag = document.getElementById('header-server-tag');
+            
+            showLoader();
+
+            for (let i = 1; i <= 4; i++) {
+                const btn = document.getElementById(`srv-btn-${i}`);
+                if (!btn) continue;
+                const dot = btn.querySelector('span > span');
+                
+                if (i === index) {
+                    btn.className = "py-3 px-3 rounded-xl text-xs font-bold uppercase tracking-wider bg-[#00ff6a] text-black text-center transition-all flex items-center justify-between shadow-lg shadow-[#00ff6a]/15";
+                    if (dot) dot.className = "w-2 h-2 rounded-full bg-black";
+                } else {
+                    btn.className = "py-3 px-3 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/5 text-white/70 hover:bg-white/10 hover:text-white border border-white/5 text-center transition-all flex items-center justify-between";
+                    if (dot) dot.className = "w-2 h-2 rounded-full bg-zinc-500";
+                }
+            }
+
+            activeBadge.innerText = SERVER_NAMES[index] || `Server ${index}`;
+            headerTag.innerText = `SERVER ${index} ACTIVE`;
+
+            renderActivePanel();
+            showToast(`Switched to ${SERVER_NAMES[index]}`);
+
+            if (index === 3 && !SERVERS[3]) {
+                document.getElementById('iframe-mount').innerHTML = '';
+                customOverlay.classList.remove('hidden');
+                hideLoader();
+                showToast("Server 3: Setup Backup URL");
+            } else {
+                customOverlay.classList.add('hidden');
+                mountStreamFrame(SERVERS[index]);
+            }
+        }
+
+        function saveCustomServer() {
+            const inputField = document.getElementById('custom-url-input');
+            let urlVal = inputField.value.trim();
+
+            if (!urlVal) {
+                showToast("Please enter a valid URL");
+                return;
+            }
+
+            if (!/^https?:\/\//i.test(urlVal)) {
+                urlVal = 'https://' + urlVal;
+            }
+
+            SERVERS[3] = urlVal;
+            SERVER_NAMES[3] = "Server 3 (Custom)";
+            
+            const indicator = document.getElementById('srv3-indicator');
+            indicator.innerText = "Custom";
+            indicator.className = "text-[10px] text-[#00ff6a] font-bold";
+
+            switchServer(3);
+            inputField.value = '';
+        }
+
+        function resetCustomServer() {
+            const customOverlay = document.getElementById('custom-setup-overlay');
+            document.getElementById('iframe-mount').innerHTML = '';
+            customOverlay.classList.remove('hidden');
+            hideLoader();
+            showToast("Enter custom server link");
+        }
+
+        async function shareStream() {
+            const shareData = {
+                title: 'Prigames Sports Streaming Live',
+                text: 'Watch sports live with ultra-low latency on Prigames Sports!',
+                url: window.location.href
+            };
+
+            try {
+                if (navigator.share) {
+                    await navigator.share(shareData);
+                } else {
+                    const tempInput = document.createElement('input');
+                    document.body.appendChild(tempInput);
+                    tempInput.value = window.location.href;
+                    tempInput.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(tempInput);
+                    showToast("Stream link copied to clipboard!");
+                }
+            } catch (err) {
+                showToast("Sharing cancelled or unavailable");
+            }
+        }
+
+        function refreshStream() {
+            if (currentActiveServer === 3 && !SERVERS[3]) {
+                showToast("No active link set for Server 3");
+                return;
+            }
+
+            showLoader();
+            mountStreamFrame(SERVERS[currentActiveServer]);
+            showToast("Reconnecting stream...");
+        }
+
+        function refreshLiveScorecard() {
+            renderActivePanel();
+            showToast("Scoreboard & highlights synchronized!");
+        }
+
+        function toggleFS() {
+            const container = document.getElementById('player-container');
+            if (!document.fullscreenElement) {
+                if (container.requestFullscreen) {
+                    container.requestFullscreen();
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        function toggleTheatre() {
+            const wrapper = document.getElementById('player-container');
+            wrapper.classList.toggle('theatre');
+            if (wrapper.classList.contains('theatre')) {
+                showToast("Theatre mode activated");
+            } else {
+                showToast("Standard view activated");
+            }
+        }
+
+        let toastTimer;
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-msg');
+            msgEl.textContent = msg;
+            
+            toast.classList.remove('opacity-0', 'translate-y-6');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-6');
+                toast.classList.remove('opacity-100', 'translate-y-0');
+            }, 2200);
+        }
+
+        // Boot Server 1 (TNT Sports 2) immediately on load and render its panel
+        window.addEventListener('DOMContentLoaded', () => {
+            showLoader();
+            renderActivePanel();
+            mountStreamFrame(SERVERS[1]);
         });
-    }
     </script>
-    <script src="https://live.mhdtv.online/livewire-782f8037/livewire.min.js?id=657d57c2" data-csrf="4MDXWPThGncEG1Bsw6uiKK3r0VVZncx3y7PUwHTB" data-module-url="https://live.mhdtv.online/livewire-782f8037" data-update-uri="https://live.mhdtv.online/livewire-782f8037/update" data-navigate-once="true">
-    </script>
-  </body>
+</body>
 </html>
